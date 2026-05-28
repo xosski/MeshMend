@@ -7,6 +7,7 @@ import sys
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+import webbrowser
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -33,6 +34,9 @@ MESH_FILE_TYPES = (
     ("All files", "*.*"),
 )
 
+DONATION_URL = "https://buy.stripe.com/28EbJ1f7ceo3ckyeES5kk00"
+DONATION_SUPPRESS_FILE = Path.home() / ".meshmend_ai" / "hide_donation_popup"
+
 
 class MeshMendGUI:
     def __init__(self) -> None:
@@ -57,7 +61,10 @@ class MeshMendGUI:
         self.training_status = tk.StringVar(value="Choose a folder of STL/OBJ/PLY files and optional matching images.")
         self._result_queue: queue.Queue[tuple[str, object]] = queue.Queue()
         self.sculptor = get_sculptor_foundation()
+        self._donation_dialog: tk.Toplevel | None = None
         self._build_ui()
+        if os.environ.get("MESHMEND_DONATION_POPUP", "1").strip().lower() not in {"0", "false", "no", "off"}:
+            self.root.after(700, self._show_donation_popup)
 
     def run(self) -> int:
         self.root.mainloop()
@@ -67,8 +74,11 @@ class MeshMendGUI:
         outer = ttk.Frame(self.root, padding=14)
         outer.pack(fill=tk.BOTH, expand=True)
 
-        title = ttk.Label(outer, text="MeshMend AI Repair", font=("Segoe UI", 16, "bold"))
-        title.pack(anchor=tk.W)
+        header = ttk.Frame(outer)
+        header.pack(fill=tk.X)
+        title = ttk.Label(header, text="MeshMend AI Repair", font=("Segoe UI", 16, "bold"))
+        title.pack(side=tk.LEFT, anchor=tk.W)
+        ttk.Button(header, text="Donate / Support MeshMend", command=self.open_donation_page).pack(side=tk.RIGHT)
         subtitle = ttk.Label(
             outer,
             text="Import or create an STL/OBJ/PLY, let the AI assistant repair detached pieces and holes, then save the fixed model.",
@@ -178,6 +188,65 @@ class MeshMendGUI:
         ttk.Entry(row, textvariable=variable).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 8))
         ttk.Button(row, text="Browse", command=command).pack(side=tk.LEFT)
         return row
+
+    def _show_donation_popup(self) -> None:
+        if DONATION_SUPPRESS_FILE.exists() or self._donation_dialog is not None:
+            return
+
+        dialog = tk.Toplevel(self.root)
+        self._donation_dialog = dialog
+        dialog.title("Support MeshMend")
+        dialog.resizable(False, False)
+        dialog.transient(self.root)
+
+        frame = ttk.Frame(dialog, padding=18)
+        frame.pack(fill=tk.BOTH, expand=True)
+        ttk.Label(frame, text="Help keep MeshMend free", font=("Segoe UI", 13, "bold")).pack(anchor=tk.W)
+        ttk.Label(
+            frame,
+            text=(
+                "MeshMend is currently a free project working toward studio-level AI miniature "
+                "creation for home users. Donations help fund model-service improvements, quality "
+                "updates, testing, and future features while keeping the project free."
+            ),
+            wraplength=420,
+            justify=tk.LEFT,
+        ).pack(anchor=tk.W, pady=(8, 12))
+
+        hide_popup = tk.BooleanVar(value=False)
+        ttk.Checkbutton(frame, text="Don't show this again", variable=hide_popup).pack(anchor=tk.W, pady=(0, 12))
+
+        buttons = ttk.Frame(frame)
+        buttons.pack(fill=tk.X)
+
+        def close_dialog() -> None:
+            if hide_popup.get():
+                try:
+                    DONATION_SUPPRESS_FILE.parent.mkdir(parents=True, exist_ok=True)
+                    DONATION_SUPPRESS_FILE.write_text("hidden\n", encoding="utf-8")
+                except OSError:
+                    pass
+            self._donation_dialog = None
+            dialog.destroy()
+
+        def donate() -> None:
+            self.open_donation_page()
+            close_dialog()
+
+        ttk.Button(buttons, text="Donate", command=donate).pack(side=tk.RIGHT)
+        ttk.Button(buttons, text="Maybe later", command=close_dialog).pack(side=tk.RIGHT, padx=(0, 8))
+        dialog.protocol("WM_DELETE_WINDOW", close_dialog)
+
+        self.root.update_idletasks()
+        dialog.update_idletasks()
+        x = self.root.winfo_x() + max((self.root.winfo_width() - dialog.winfo_width()) // 2, 0)
+        y = self.root.winfo_y() + max((self.root.winfo_height() - dialog.winfo_height()) // 3, 0)
+        dialog.geometry(f"+{x}+{y}")
+        dialog.lift(self.root)
+
+    @staticmethod
+    def open_donation_page() -> None:
+        webbrowser.open(DONATION_URL, new=2)
 
     def _build_training_tab(self, parent: ttk.Frame) -> None:
         ttk.Label(

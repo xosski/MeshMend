@@ -1,0 +1,38 @@
+{
+  "model_file": "meshmend_hunyuan.stl",
+  "model_format": "stl",
+  "provider": "free_local_hunyuan3d",
+  "source_image": "input_image.png",
+  "model_path": "tencent/Hunyuan3D-2",
+  "subfolder": "hunyuan3d-dit-v2-0",
+  "mesh_info": {
+    "target_scale_mm": 32.0,
+    "extents_mm": [
+      32.0,
+      27.685114406778176,
+      15.178412505912117
+    ],
+    "max_extent_mm": 32.0,
+    "faces": 920322,
+    "vertices": 460033,
+    "units": "mm",
+    "single_subject_enforced": true,
+    "detail_faces_target": 500000,
+    "relief_mm": 0.08,
+    "detail_style": "postprocess_backend:single_subject+scale+sheet_guard+structured_sculpt",
+    "export_info": {
+      "target_scale_mm": 32.0,
+      "extents_mm": [
+        32.0,
+        27.685114406778176,
+        15.178412505912117
+      ],
+      "max_extent_mm": 32.0,
+      "faces": 920322,
+      "vertices": 460033,
+      "units": "mm",
+      "detail_style": "single_subject_crop+minimum_density+structured_grooves"
+    }
+  },
+  "consumed_credits": 0
+}

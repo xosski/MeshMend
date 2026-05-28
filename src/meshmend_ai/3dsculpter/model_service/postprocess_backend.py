@@ -43,6 +43,7 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     before_faces = len(mesh.faces)
     mesh, single_subject_enforced = enforce_single_subject(mesh)
     mesh = normalize_to_scale(mesh, requested_scale_mm(request))
+    mesh = complete_front_shell_volume(mesh, request)
     mesh = thicken_if_sheet(mesh)
     mesh = normalize_to_scale(mesh, requested_scale_mm(request))
     detail_target = detail_face_target(request)
@@ -179,6 +180,59 @@ def normalize_to_scale(mesh: trimesh.Trimesh, scale_mm: float) -> trimesh.Trimes
     return mesh
 
 
+def complete_front_shell_volume(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+    """Synthesize a rear shell when single-image generation returns only the front half.
+
+    Local image-to-3D models often reconstruct the visible face of a subject and
+    leave the hidden side as a shallow relief. For miniatures that should be a
+    full body, so when depth is suspiciously thin we mirror the visible shell
+    into a rear volume before final scaling/detailing. This is intentionally
+    conservative and only runs for thin character-like outputs.
+    """
+    try:
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        if len(vertices) < 100 or len(mesh.faces) < 100:
+            return mesh
+        extents = vertices.max(axis=0) - vertices.min(axis=0)
+        max_extent = float(np.max(extents))
+        if max_extent <= 1e-8:
+            return mesh
+        thin_axis = int(np.argmin(extents))
+        thin_ratio = float(extents[thin_axis] / max_extent)
+        required_ratio = float(os.environ.get("MESHMEND_MIN_FULL_BODY_DEPTH_RATIO", "0.34"))
+        if thin_ratio >= required_ratio:
+            return mesh
+
+        prompt = str(request.get("prompt") or "").lower()
+        if any(term in prompt for term in ("relief", "plaque", "coin", "badge", "bas relief", "bas-relief")):
+            return mesh
+
+        center = (vertices.max(axis=0) + vertices.min(axis=0)) * 0.5
+        mirrored_vertices = vertices.copy()
+        mirrored_vertices[:, thin_axis] = (2.0 * center[thin_axis]) - mirrored_vertices[:, thin_axis]
+        mirrored_faces = np.asarray(mesh.faces)[:, ::-1].copy()
+        completed = trimesh.util.concatenate(
+            [
+                trimesh.Trimesh(vertices=vertices.copy(), faces=np.asarray(mesh.faces).copy(), process=False),
+                trimesh.Trimesh(vertices=mirrored_vertices, faces=mirrored_faces, process=False),
+            ]
+        )
+        # Spread the mirrored halves to a printable body depth instead of a
+        # coincident double shell. normalize_to_scale runs again after this.
+        completed_vertices = np.asarray(completed.vertices, dtype=float)
+        completed_extents = completed_vertices.max(axis=0) - completed_vertices.min(axis=0)
+        current = float(completed_extents[thin_axis])
+        target = max_extent * required_ratio
+        if current > 1e-8 and current < target:
+            completed_vertices[:, thin_axis] = center[thin_axis] + (completed_vertices[:, thin_axis] - center[thin_axis]) * (target / current)
+            completed.vertices = completed_vertices
+        completed.metadata.update(mesh.metadata)
+        completed.metadata["meshmend_rear_volume_completed"] = True
+        return cleanup(completed)
+    except Exception:
+        return mesh
+
+
 def thicken_if_sheet(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
     vertices = np.asarray(mesh.vertices, dtype=float)
     extents = vertices.max(axis=0) - vertices.min(axis=0)
@@ -283,7 +337,9 @@ def requested_scale_mm(request: dict[str, Any]) -> float:
 
 def detail_face_target(request: dict[str, Any]) -> int:
     quality = str(request.get("quality") or "standard").lower()
-    default = "500000" if quality == "high" else "150000"
+    prompt = str(request.get("prompt") or "").lower()
+    wants_8k = any(term in prompt for term in ("8k", "8 k", "studio", "production", "display quality", "maximum detail"))
+    default = "1200000" if quality == "high" or wants_8k else "450000"
     return int(os.environ.get("MESHMEND_MIN_EXPORT_FACES", default))
 
 

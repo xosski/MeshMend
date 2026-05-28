@@ -101,9 +101,96 @@ def run_free_local_hunyuan(request: dict[str, Any], input_path: Path, output_dir
     image_path = None
     if workflow == "image_to_3d" and request.get("image_data_uri"):
         image_path = write_image_data_uri(str(request["image_data_uri"]), output_dir / "input_image.png")
+        isolated = preprocess_reference_image_for_3d(image_path, output_dir / "input_subject.png")
+        if isolated is not None:
+            image_path = isolated
     if image_path is None:
         image_path = generate_local_concept_image(request, input_path, output_dir)
+        isolated = preprocess_reference_image_for_3d(image_path, output_dir / "concept_subject.png")
+        if isolated is not None:
+            image_path = isolated
     return run_hunyuan_image_to_3d(image_path, request, output_dir)
+
+
+def preprocess_reference_image_for_3d(input_path: Path, output_path: Path) -> Path | None:
+    """Remove flat backgrounds before image-to-3D.
+
+    Hunyuan3D is single-image driven, so a flat image backdrop can become a thin
+    rear plane or plaque in the final STL. This step keeps only the largest
+    foreground subject, crops it tightly, and writes an alpha-masked square image
+    so the 3D modeler sees a miniature subject instead of the photo background.
+    """
+    try:
+        from PIL import Image, ImageFilter
+        import numpy as np
+        from scipy.ndimage import binary_closing, binary_fill_holes, binary_opening, label
+
+        image = Image.open(input_path).convert("RGBA")
+        image.thumbnail((1024, 1024), Image.Resampling.LANCZOS)
+        rgba = np.asarray(image, dtype=np.float32) / 255.0
+        rgb = rgba[:, :, :3]
+        alpha = rgba[:, :, 3]
+        h, w = alpha.shape
+
+        if np.mean(alpha < 0.98) > 0.01:
+            mask = alpha > 0.08
+        else:
+            border = np.concatenate([rgb[0], rgb[-1], rgb[:, 0], rgb[:, -1]], axis=0)
+            bg = np.median(border, axis=0)
+            color_dist = np.linalg.norm(rgb - bg[None, None, :], axis=2)
+            gray = rgb @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+            # Use both background-color distance and tonal contrast so white,
+            # gray, and busy-but-flat backdrops are rejected more aggressively.
+            mask = (color_dist > max(0.08, float(np.quantile(color_dist, 0.64)))) | (
+                np.abs(gray - np.median(gray[[0, -1], :])) > max(0.10, float(np.std(gray) * 0.45))
+            )
+
+        mask = binary_fill_holes(binary_closing(binary_opening(mask, iterations=1), iterations=2))
+        labeled, count = label(mask)
+        if count <= 0:
+            return None
+        yy, xx = np.indices((h, w))
+        cx, cy = w * 0.5, h * 0.52
+        best_label = 0
+        best_score = -1.0
+        for idx in range(1, count + 1):
+            comp = labeled == idx
+            area = int(comp.sum())
+            if area < h * w * 0.01:
+                continue
+            mean_x = float(xx[comp].mean())
+            mean_y = float(yy[comp].mean())
+            center_penalty = (((mean_x - cx) / w) ** 2 + ((mean_y - cy) / h) ** 2) ** 0.5
+            score = area * (1.0 - min(center_penalty * 1.5, 0.80))
+            if score > best_score:
+                best_score = score
+                best_label = idx
+        if best_label <= 0:
+            return None
+
+        subject = labeled == best_label
+        rows, cols = np.where(subject)
+        pad_x = max(8, int((cols.max() - cols.min() + 1) * 0.10))
+        pad_y = max(8, int((rows.max() - rows.min() + 1) * 0.10))
+        left = max(0, int(cols.min()) - pad_x)
+        right = min(w, int(cols.max()) + pad_x + 1)
+        top = max(0, int(rows.min()) - pad_y)
+        bottom = min(h, int(rows.max()) + pad_y + 1)
+
+        cropped = image.crop((left, top, right, bottom)).convert("RGBA")
+        cropped_mask = subject[top:bottom, left:right]
+        alpha_crop = (cropped_mask.astype(np.uint8) * 255)
+        alpha_image = Image.fromarray(alpha_crop, mode="L").filter(ImageFilter.GaussianBlur(radius=0.8))
+        cropped.putalpha(alpha_image)
+
+        canvas_size = max(cropped.size)
+        canvas = Image.new("RGBA", (canvas_size, canvas_size), (255, 255, 255, 0))
+        canvas.paste(cropped, ((canvas_size - cropped.size[0]) // 2, (canvas_size - cropped.size[1]) // 2), cropped)
+        canvas = canvas.resize((1024, 1024), Image.Resampling.LANCZOS).filter(ImageFilter.SHARPEN)
+        canvas.save(output_path)
+        return output_path
+    except Exception:
+        return None
 
 
 def generate_local_concept_image(request: dict[str, Any], input_path: Path, output_dir: Path) -> Path:
@@ -151,9 +238,10 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
     import torch
 
     quality = str(request.get("quality") or "standard").lower()
+    use_sdxl = os.environ.get("MESHMEND_USE_SDXL_CONCEPT", "0").strip().lower() in {"1", "true", "yes"}
     model_id = os.environ.get(
         "MESHMEND_FREE_LOCAL_IMAGE_MODEL",
-        "stabilityai/stable-diffusion-xl-base-1.0" if quality == "high" else "runwayml/stable-diffusion-v1-5",
+        "stabilityai/stable-diffusion-xl-base-1.0" if use_sdxl else "runwayml/stable-diffusion-v1-5",
     )
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = torch.float16 if device == "cuda" else torch.float32
@@ -179,10 +267,10 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
     if hasattr(pipe, "enable_vae_slicing"):
         pipe.enable_vae_slicing()
 
-    steps = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_STEPS", "42" if quality == "high" else "30"))
+    steps = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_STEPS", "34" if use_sdxl else "28"))
     guidance = float(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_GUIDANCE", "7.0" if "xl" in model_id.lower() else "8.0"))
-    size = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_SIZE", "1024" if quality == "high" else "768"))
-    candidates = max(1, int(os.environ.get("MESHMEND_CONCEPT_CANDIDATES", "3" if quality == "high" else "1")))
+    size = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_SIZE", "768" if use_sdxl else "640"))
+    candidates = max(1, int(os.environ.get("MESHMEND_CONCEPT_CANDIDATES", "1")))
     best_path = None
     best_score = -1.0
     for index in range(candidates):

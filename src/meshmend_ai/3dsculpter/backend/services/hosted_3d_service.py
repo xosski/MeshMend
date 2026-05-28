@@ -137,6 +137,7 @@ class SelfHostedProvider:
             "quality": quality,
             "target_formats": HOSTED_TARGET_FORMATS,
             "target_polycount": self._target_polycount(quality),
+            "scale_mm": self._scale_mm_from_prompt(prompt),
             "workflow": "image_to_3d",
             "product": "meshmend",
         }
@@ -241,10 +242,10 @@ class SelfHostedProvider:
             return int(override)
         q = (quality or "standard").lower()
         if q == "high":
-            return 150000
+            return 1200000
         if q == "low":
             return 50000
-        return 100000
+        return 450000
 
     @staticmethod
     def _scale_mm_from_prompt(prompt: str) -> float:

@@ -175,6 +175,17 @@ If sculpt relief is too subtle:
 $env:MESHMEND_DETAIL_RELIEF_MM = '0.10'
 ```
 
+Concept image generation defaults to a faster SD 1.5 path to avoid long local
+generation stalls. To opt into slower SDXL concepts and multiple candidate
+images:
+
+```powershell
+$env:MESHMEND_USE_SDXL_CONCEPT = '1'
+$env:MESHMEND_FREE_LOCAL_IMAGE_SIZE = '1024'
+$env:MESHMEND_FREE_LOCAL_IMAGE_STEPS = '42'
+$env:MESHMEND_CONCEPT_CANDIDATES = '3'
+```
+
 If the GPU cannot run the larger Hunyuan model, switch to the smaller model:
 
 ```powershell
