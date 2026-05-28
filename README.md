@@ -218,8 +218,8 @@ Useful generated files include:
 
 ## AI-Generated 3D Miniatures & Model Files
 
-**Effective Date:** 5/28/2026
-**Licensor:** Erick King/GhostCore
+**Effective Date:** 5/28/2026  
+**Licensor:** Erick King/GhostCore  
 **Product Name:** MeshMend
 
 ---
@@ -251,10 +251,28 @@ The Licensee may NOT:
 * Mint the files or derivatives as NFTs or blockchain assets
 * Commercially license or sublicense the files to third parties
 * Reverse engineer branding, metadata, or creator identification systems
+* Uploading, selling, redistributing, mirroring, or otherwise publishing the digital assets or derivative works on Cults3D.com is expressly prohibited under this license. The Licensor reserves the right to deny authorization for distribution on specific marketplaces, platforms, or repositories deemed inconsistent with the protection, attribution, or intended use of the intellectual property.
 
 ---
 
-## 3. AI-Generated Content Notice
+## 3. Authorized Distribution Platforms
+
+Unless explicitly approved in writing by the Licensor, distribution of MeshMend-generated files is prohibited on unauthorized third-party marketplaces or repositories, including but not limited to:
+
+* Cults3D
+* Torrent repositories
+* Public STL aggregation sites
+* Unauthorized merchant storefronts
+
+Approved distribution channels may include:
+
+* Direct storefront sales
+* Official GhostCore/MeshMend storefronts
+* Licensed partner platforms authorized by the Licensor
+
+---
+
+## 4. AI-Generated Content Notice
 
 Some or all assets covered under this license may include AI-assisted or AI-generated components, including but not limited to:
 
@@ -269,7 +287,7 @@ Final curation, modification, assembly, and publishing rights remain exclusively
 
 ---
 
-## 4. Intellectual Property
+## 5. Intellectual Property
 
 All digital assets, derivatives, renders, promotional imagery, naming conventions, faction concepts, lore, and associated branding remain the intellectual property of the Licensor unless otherwise stated in writing.
 
@@ -277,7 +295,7 @@ Purchase of the files does not transfer ownership of the intellectual property.
 
 ---
 
-## 5. No Warranty
+## 6. No Warranty
 
 The files are provided “as is” without warranties of any kind, expressed or implied.
 
@@ -294,7 +312,7 @@ The Licensee assumes all responsibility for safe operation of 3D printing equipm
 
 ---
 
-## 6. Termination
+## 7. Termination
 
 Violation of this agreement automatically terminates the license.
 
@@ -302,7 +320,7 @@ Upon termination, the Licensee must destroy all digital copies of the files and 
 
 ---
 
-## 7. Commercial Licensing
+## 8. Commercial Licensing
 
 Commercial licenses for physical print sales or merchant distribution may be available separately through direct agreement with the Licensor.
 
@@ -310,11 +328,10 @@ Contact: [Your Email / Store URL]
 
 ---
 
-## 8. Acceptance of Terms
+## 9. Acceptance of Terms
 
 By downloading, accessing, printing, or using these files, the Licensee agrees to all terms outlined in this agreement.
 
 ---
 
 **Copyright © [2026] [Ghost Division]. All Rights Reserved.**
-

@@ -21,6 +21,7 @@ class PostprocessReport:
     detail_faces_target: int
     relief_mm: float
     detail_style: str
+    geometry_upscaled: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -34,6 +35,7 @@ class PostprocessReport:
             "detail_faces_target": self.detail_faces_target,
             "relief_mm": self.relief_mm,
             "detail_style": self.detail_style,
+            "geometry_upscaled": self.geometry_upscaled,
         }
 
 
@@ -49,6 +51,9 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     detail_target = detail_face_target(request)
     mesh = subdivide_to_faces(mesh, detail_target)
     mesh = apply_miniature_sculpt_detail(mesh, request)
+    mesh = apply_image_guided_surface_detail(mesh, request)
+    mesh = add_high_resolution_geometry(mesh, request)
+    mesh = remove_floating_artifacts(mesh, request)
     mesh = cleanup(mesh)
     report = build_report(
         mesh,
@@ -257,8 +262,9 @@ def thicken_if_sheet(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
 
 def subdivide_to_faces(mesh: trimesh.Trimesh, target_faces: int) -> trimesh.Trimesh:
     target_faces = max(target_faces, len(mesh.faces))
+    max_faces = max(target_faces, int(os.environ.get("MESHMEND_MAX_EXPORT_FACES", "5000000")))
     while len(mesh.faces) < target_faces:
-        if len(mesh.faces) * 4 > target_faces * 1.8:
+        if len(mesh.faces) * 4 > max_faces:
             break
         vertices, faces = trimesh.remesh.subdivide(mesh.vertices, mesh.faces)
         mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
@@ -312,6 +318,215 @@ def apply_miniature_sculpt_detail(mesh: trimesh.Trimesh, request: dict[str, Any]
     return cleanup(mesh)
 
 
+def apply_image_guided_surface_detail(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+    """Project high-contrast 2D reference edges into printable front-shell relief."""
+    image_path = str(request.get("_meshmend_source_image_path") or "").strip()
+    if not image_path:
+        return mesh
+    enabled = os.environ.get("MESHMEND_ENABLE_IMAGE_GUIDED_DETAIL", "auto").strip().lower()
+    quality = str(request.get("quality") or "standard").lower()
+    prompt = str(request.get("prompt") or "").lower()
+    source_workflow = str(request.get("_meshmend_source_workflow") or "").lower()
+    wants_8k = any(term in prompt for term in ("8k", "8 k", "studio", "production", "display quality", "maximum detail"))
+    is_text_concept = source_workflow == "text_to_3d"
+    if enabled in {"0", "false", "no"} or (enabled == "auto" and quality != "high" and not wants_8k and not is_text_concept):
+        return mesh
+    try:
+        from PIL import Image
+
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        if len(vertices) < 1000:
+            return mesh
+        normals = np.asarray(mesh.vertex_normals, dtype=float)
+        if normals.shape != vertices.shape:
+            return mesh
+
+        sample_size = int(os.environ.get("MESHMEND_IMAGE_DETAIL_SAMPLE_SIZE", "768"))
+        image = Image.open(image_path).convert("RGB").resize((sample_size, sample_size))
+        arr = np.asarray(image, dtype=np.float32) / 255.0
+        gray = arr @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+        gx = np.abs(np.diff(gray, axis=1, prepend=gray[:, :1]))
+        gy = np.abs(np.diff(gray, axis=0, prepend=gray[:1, :]))
+        edges = gx + gy
+        edge_scale = float(np.percentile(edges, 97.5))
+        if edge_scale > 1e-6:
+            edges = np.clip(edges / edge_scale, 0.0, 1.0)
+        contrast = gray - float(np.mean(gray))
+        contrast_scale = float(np.percentile(np.abs(contrast), 93.0))
+        if contrast_scale > 1e-6:
+            contrast = np.clip(contrast / contrast_scale, -1.0, 1.0)
+
+        mins = vertices.min(axis=0)
+        maxs = vertices.max(axis=0)
+        ext = np.maximum(maxs - mins, 1e-6)
+        # The Hunyuan reference image is a front view; apply projected relief to
+        # the visible/front half and avoid the base so image texture becomes
+        # sculpted detail rather than all-over STL noise.
+        front = vertices[:, 1] <= mins[1] + ext[1] * 0.55
+        not_base = vertices[:, 2] > mins[2] + ext[2] * 0.07
+        u = (vertices[:, 0] - mins[0]) / ext[0]
+        v = 1.0 - ((vertices[:, 2] - mins[2]) / ext[2])
+        max_index = sample_size - 1
+        ix = np.clip((u * max_index).astype(int), 0, max_index)
+        iy = np.clip((v * max_index).astype(int), 0, max_index)
+        sampled_edges = edges[iy, ix]
+        sampled_contrast = contrast[iy, ix]
+        edge_cutoff = float(os.environ.get("MESHMEND_IMAGE_DETAIL_EDGE_CUTOFF", "0.56"))
+        grooves = sampled_edges > edge_cutoff
+        relief = (sampled_contrast * 0.07) - grooves.astype(float) * 0.34
+        amplitude = float(os.environ.get("MESHMEND_IMAGE_DETAIL_RELIEF_MM", "0.045"))
+        active = (front & not_base).astype(float)
+        mesh.vertices = vertices + normals * (relief * amplitude * active)[:, None]
+        mesh.metadata["meshmend_image_guided_detail"] = True
+        return cleanup(mesh)
+    except Exception:
+        return mesh
+
+
+def add_high_resolution_geometry(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+    """Add deterministic miniature-scale geometry after resolution upscaling.
+
+    This is intentionally geometry-first: it creates raised/recessed STL surface
+    detail from prompt/category cues instead of only increasing polygon count.
+    It cannot invent a perfect sculpt from a bad concept, but it prevents high
+    resolution exports from remaining visually smooth/480p.
+    """
+    enabled = os.environ.get("MESHMEND_ENABLE_GEOMETRY_UPSCALE", "1").strip().lower() not in {"0", "false", "no"}
+    if not enabled:
+        return mesh
+    quality = str(request.get("quality") or "standard").lower()
+    prompt = str(request.get("prompt") or "").lower()
+    wants_detail = quality == "high" or any(
+        term in prompt for term in ("8k", "8 k", "studio", "production", "display quality", "maximum detail", "high detail")
+    )
+    if not wants_detail:
+        return mesh
+    try:
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        if len(vertices) < 1000:
+            return mesh
+        normals = np.asarray(mesh.vertex_normals, dtype=float)
+        if normals.shape != vertices.shape:
+            return mesh
+        mins = vertices.min(axis=0)
+        maxs = vertices.max(axis=0)
+        ext = np.maximum(maxs - mins, 1e-6)
+        coords = (vertices - mins) / ext
+        x = coords[:, 0] - 0.5
+        y = coords[:, 1] - 0.5
+        z = coords[:, 2]
+        seed = (sum(ord(ch) for ch in prompt) % 997) + 1
+        relief = np.zeros(len(vertices), dtype=float)
+
+        armored = any(term in prompt for term in ("space marine", "chaos", "armor", "armour", "robot", "mech", "soldier", "knight"))
+        creature = any(term in prompt for term in ("dragon", "demon", "beast", "monster", "orc", "ork", "undead"))
+        if armored:
+            torso = (z > 0.25) & (z < 0.76)
+            legs = (z > 0.07) & (z < 0.45)
+            upper = (z > 0.55) & (z < 0.90)
+            # Fine recessed armor seams and larger raised trim read better than
+            # random noise on resin miniatures.
+            fine_h = np.abs(np.sin((z * 34.0 + seed * 0.011) * math.pi)) < 0.014
+            fine_v = np.abs(np.sin((x * 28.0 + seed * 0.017) * math.pi)) < 0.013
+            trim = np.abs(np.sin((z * 14.0 + np.abs(x) * 3.0 + seed * 0.023) * math.pi)) < 0.024
+            vents = (np.abs(np.sin((x * 46.0 + seed * 0.031) * math.pi)) < 0.010) & (np.abs(y) < 0.42)
+            rivets = (np.abs(np.sin((x * 38.0 + seed * 0.043) * math.pi)) < 0.012) & (
+                np.abs(np.sin((z * 42.0 + seed * 0.059) * math.pi)) < 0.012
+            )
+            relief -= (fine_h & torso).astype(float) * 0.44
+            relief -= (fine_v & (torso | legs)).astype(float) * 0.30
+            relief += (trim & (torso | upper)).astype(float) * 0.42
+            relief -= (vents & upper).astype(float) * 0.34
+            relief += (rivets & (torso | upper | legs)).astype(float) * 0.52
+        elif creature:
+            scale_rows = np.abs(np.sin((z * 40.0 + seed * 0.019) * math.pi)) < 0.018
+            scale_cols = np.abs(np.sin((x * 32.0 + y * 8.0 + seed * 0.037) * math.pi)) < 0.020
+            wrinkles = np.abs(np.sin((z * 22.0 + x * 5.0 + seed * 0.041) * math.pi)) < 0.018
+            relief += (scale_rows & scale_cols).astype(float) * 0.42
+            relief -= wrinkles.astype(float) * 0.24
+        else:
+            folds = np.abs(np.sin((z * 24.0 + x * 6.0 + seed * 0.029) * math.pi)) < 0.018
+            seams = np.abs(np.sin((x * 20.0 + seed * 0.033) * math.pi)) < 0.014
+            relief -= folds.astype(float) * 0.28
+            relief -= (seams & (z > 0.18)).astype(float) * 0.18
+
+        active = z > 0.06
+        amplitude = float(os.environ.get("MESHMEND_GEOMETRY_UPSCALE_RELIEF_MM", "0.055"))
+        mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float))[:, None]
+        mesh.metadata["meshmend_geometry_upscale"] = True
+        return cleanup(mesh)
+    except Exception:
+        return mesh
+
+
+def remove_floating_artifacts(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+    """Remove disconnected generated debris while keeping the main miniature."""
+    try:
+        if len(mesh.faces) < 1000:
+            return mesh
+        components = [component for component in mesh.split(only_watertight=False) if len(component.faces) > 20]
+        if len(components) <= 1:
+            return trim_extreme_outlier_faces(mesh, request)
+        components.sort(key=lambda component: float(component.area), reverse=True)
+        main = components[0]
+        main_area = max(float(main.area), 1e-6)
+        main_center = np.asarray(main.bounds, dtype=float).mean(axis=0)
+        main_radius = float(np.linalg.norm(np.asarray(main.extents, dtype=float)))
+        kept = [main]
+        min_area_ratio = float(os.environ.get("MESHMEND_ARTIFACT_MIN_AREA_RATIO", "0.018"))
+        max_distance_ratio = float(os.environ.get("MESHMEND_ARTIFACT_MAX_DISTANCE_RATIO", "0.85"))
+        for component in components[1:]:
+            area_ratio = float(component.area) / main_area
+            if area_ratio < min_area_ratio:
+                continue
+            center = np.asarray(component.bounds, dtype=float).mean(axis=0)
+            if main_radius > 1e-6 and float(np.linalg.norm(center - main_center)) > main_radius * max_distance_ratio:
+                continue
+            kept.append(component)
+        if len(kept) == len(components):
+            return trim_extreme_outlier_faces(mesh, request)
+        merged = trimesh.util.concatenate(kept)
+        merged.metadata.update(mesh.metadata)
+        merged.metadata["meshmend_artifact_components_removed"] = len(components) - len(kept)
+        return trim_extreme_outlier_faces(cleanup(merged), request)
+    except Exception:
+        return mesh
+
+
+def trim_extreme_outlier_faces(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+    """Conservatively trim far-edge debris from text-generated concepts."""
+    source_workflow = str(request.get("_meshmend_source_workflow") or "").lower()
+    if source_workflow != "text_to_3d":
+        return mesh
+    try:
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        if len(vertices) < 1000 or len(mesh.faces) < 1000:
+            return mesh
+        face_centers = vertices[np.asarray(mesh.faces)].mean(axis=1)
+        z_min, z_max = float(vertices[:, 2].min()), float(vertices[:, 2].max())
+        z_span = max(z_max - z_min, 1e-6)
+        body = face_centers[:, 2] > z_min + z_span * 0.07
+        keep = np.ones(len(mesh.faces), dtype=bool)
+        for axis in (0, 1):
+            values = face_centers[body, axis] if int(body.sum()) > 500 else face_centers[:, axis]
+            low, high = np.percentile(values, [0.35, 99.65])
+            pad = max((high - low) * 0.08, 0.35)
+            keep &= (face_centers[:, axis] >= low - pad) & (face_centers[:, axis] <= high + pad)
+        if int(keep.sum()) < len(mesh.faces) * 0.82:
+            return mesh
+        if int((~keep).sum()) < max(100, len(mesh.faces) * 0.002):
+            return mesh
+        trimmed = trimesh.Trimesh(vertices=vertices.copy(), faces=np.asarray(mesh.faces)[keep].copy(), process=False)
+        trimmed.remove_unreferenced_vertices()
+        if len(trimmed.faces) < len(mesh.faces) * 0.82:
+            return mesh
+        trimmed.metadata.update(mesh.metadata)
+        trimmed.metadata["meshmend_outlier_faces_removed"] = int((~keep).sum())
+        return cleanup(trimmed)
+    except Exception:
+        return mesh
+
+
 def cleanup(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
     try:
         mesh.remove_unreferenced_vertices()
@@ -339,7 +554,11 @@ def detail_face_target(request: dict[str, Any]) -> int:
     quality = str(request.get("quality") or "standard").lower()
     prompt = str(request.get("prompt") or "").lower()
     wants_8k = any(term in prompt for term in ("8k", "8 k", "studio", "production", "display quality", "maximum detail"))
-    default = "1200000" if quality == "high" or wants_8k else "450000"
+    requested_polycount = int(request.get("target_polycount") or 0)
+    if quality == "high" or wants_8k:
+        default = str(max(3_000_000, requested_polycount))
+    else:
+        default = str(max(450_000, min(requested_polycount, 1_200_000)))
     return int(os.environ.get("MESHMEND_MIN_EXPORT_FACES", default))
 
 
@@ -362,4 +581,5 @@ def build_report(
         detail_faces_target=detail_faces_target,
         relief_mm=float(os.environ.get("MESHMEND_DETAIL_RELIEF_MM", "0.08")),
         detail_style="postprocess_backend:single_subject+scale+sheet_guard+structured_sculpt",
+        geometry_upscaled=bool(mesh.metadata.get("meshmend_geometry_upscale")),
     )

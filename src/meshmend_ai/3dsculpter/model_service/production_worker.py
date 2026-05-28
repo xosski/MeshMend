@@ -125,8 +125,10 @@ def preprocess_reference_image_for_3d(input_path: Path, output_path: Path) -> Pa
         import numpy as np
         from scipy.ndimage import binary_closing, binary_fill_holes, binary_opening, label
 
+        quality = os.environ.get("MESHMEND_REFERENCE_IMAGE_QUALITY", "high").strip().lower()
+        max_size = int(os.environ.get("MESHMEND_REFERENCE_IMAGE_SIZE", "1536" if quality == "high" else "1024"))
         image = Image.open(input_path).convert("RGBA")
-        image.thumbnail((1024, 1024), Image.Resampling.LANCZOS)
+        image.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
         rgba = np.asarray(image, dtype=np.float32) / 255.0
         rgb = rgba[:, :, :3]
         alpha = rgba[:, :, 3]
@@ -186,7 +188,7 @@ def preprocess_reference_image_for_3d(input_path: Path, output_path: Path) -> Pa
         canvas_size = max(cropped.size)
         canvas = Image.new("RGBA", (canvas_size, canvas_size), (255, 255, 255, 0))
         canvas.paste(cropped, ((canvas_size - cropped.size[0]) // 2, (canvas_size - cropped.size[1]) // 2), cropped)
-        canvas = canvas.resize((1024, 1024), Image.Resampling.LANCZOS).filter(ImageFilter.SHARPEN)
+        canvas = canvas.resize((max_size, max_size), Image.Resampling.LANCZOS).filter(ImageFilter.SHARPEN)
         canvas.save(output_path)
         return output_path
     except Exception:
@@ -238,27 +240,36 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
     import torch
 
     quality = str(request.get("quality") or "standard").lower()
-    use_sdxl = os.environ.get("MESHMEND_USE_SDXL_CONCEPT", "0").strip().lower() in {"1", "true", "yes"}
+    prompt = str(request.get("prompt") or "")
+    prompt_lower = prompt.lower()
+    wants_studio_detail = quality == "high" or any(
+        term in prompt_lower
+        for term in ("8k", "8 k", "studio", "production", "display quality", "maximum detail", "ultra detail", "high detail")
+    )
+    use_sdxl_env = os.environ.get("MESHMEND_USE_SDXL_CONCEPT", "").strip().lower()
+    use_sdxl = wants_studio_detail if not use_sdxl_env else use_sdxl_env in {"1", "true", "yes"}
     model_id = os.environ.get(
         "MESHMEND_FREE_LOCAL_IMAGE_MODEL",
         "stabilityai/stable-diffusion-xl-base-1.0" if use_sdxl else "runwayml/stable-diffusion-v1-5",
     )
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = torch.float16 if device == "cuda" else torch.float32
-    prompt = str(request.get("prompt") or "")
     miniature_prompt = (
         f"solo single character: {prompt}, one single centered full-body subject only, exactly one miniature figure, "
         "one person, isolated single model, centered product render, no extra characters, "
         "no duplicate models, no lineup, no army, no multiple views, no turnaround sheet, no collage, "
-        "production concept art for a resin tabletop miniature, orthographic three-quarter front view, full subject visible, "
+        "production concept art for a resin tabletop miniature, orthographic three-quarter front view, full subject visible head to toe, "
+        "feet and weapon fully inside frame, clean readable silhouette, simple physically plausible weapon shape, "
         "crisp silhouette, highly detailed armor trim, weapon bevels, face details, pouches, straps, panel lines, "
         "engraved recesses, layered cloth leather metal material texture, sharp focus, ultra crisp details, "
-        "studio product render, high contrast, plain white background"
+        "plain white background, no border, no logo, no text, no emblem, no UI overlay, no decorative frame"
     )
     negative_prompt = (
         "multiple characters, duplicate, duplicates, lineup, army, squad, group, crowd, four views, reference sheet, "
         "turnaround, collage, split screen, grid, extra bodies, extra heads, extra weapons, blurry, cropped, text, "
-        "watermark, low detail, smooth blob, blocky, cube, cheese, holes, malformed, plain smooth armor"
+        "letters, logo, watermark, signature, emblem, badge, crest, label, UI, border, frame, decorative corner, "
+        "cut off feet, cropped weapon, off-frame sword, ornate background, filigree noise, random greebles, "
+        "low detail, smooth blob, blocky, cube, cheese, holes, malformed, plain smooth armor"
     )
     pipe = load_text_to_image_pipeline(model_id, dtype)
     pipe = pipe.to(device)
@@ -266,27 +277,67 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
         pipe.enable_attention_slicing()
     if hasattr(pipe, "enable_vae_slicing"):
         pipe.enable_vae_slicing()
+    if hasattr(pipe, "enable_vae_tiling"):
+        pipe.enable_vae_tiling()
 
-    steps = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_STEPS", "34" if use_sdxl else "28"))
+    steps_default = "42" if wants_studio_detail and use_sdxl else ("34" if use_sdxl else "28")
+    steps = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_STEPS", steps_default))
     guidance = float(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_GUIDANCE", "7.0" if "xl" in model_id.lower() else "8.0"))
-    size = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_SIZE", "768" if use_sdxl else "640"))
-    candidates = max(1, int(os.environ.get("MESHMEND_CONCEPT_CANDIDATES", "1")))
+    size_default = "1024" if wants_studio_detail and use_sdxl else ("768" if use_sdxl else "640")
+    size = int(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_SIZE", size_default))
+    candidates_default = "3" if wants_studio_detail else "1"
+    candidates = max(1, int(os.environ.get("MESHMEND_CONCEPT_CANDIDATES", candidates_default)))
     best_path = None
     best_score = -1.0
-    for index in range(candidates):
+    index = 0
+    while index < candidates:
         generator = None
         seed_text = os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_SEED", "").strip()
         if seed_text:
             generator = torch.Generator(device=device).manual_seed(int(seed_text) + index)
-        result = pipe(
-            prompt=miniature_prompt,
-            negative_prompt=negative_prompt,
-            num_inference_steps=steps,
-            guidance_scale=guidance,
-            height=size,
-            width=size,
-            generator=generator,
-        )
+        try:
+            result = pipe(
+                prompt=miniature_prompt,
+                negative_prompt=negative_prompt,
+                num_inference_steps=steps,
+                guidance_scale=guidance,
+                height=size,
+                width=size,
+                generator=generator,
+            )
+        except Exception as exc:
+            fallback_disabled = os.environ.get("MESHMEND_DISABLE_CONCEPT_FALLBACK", "0").strip().lower() in {"1", "true", "yes"}
+            can_fallback = use_sdxl and not fallback_disabled and not os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_MODEL", "").strip()
+            if not can_fallback:
+                raise
+            (output_dir / "concept_fallback.txt").write_text(
+                "SDXL concept decode failed; retried with lighter Stable Diffusion 1.5 settings.\n"
+                f"Original error: {exc}\n",
+                encoding="utf-8",
+            )
+            try:
+                del pipe
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except Exception:
+                pass
+            use_sdxl = False
+            model_id = "runwayml/stable-diffusion-v1-5"
+            guidance = float(os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_GUIDANCE", "8.0"))
+            steps = min(steps, int(os.environ.get("MESHMEND_FALLBACK_IMAGE_STEPS", "30")))
+            size = min(size, int(os.environ.get("MESHMEND_FALLBACK_IMAGE_SIZE", "640")))
+            candidates = min(candidates, int(os.environ.get("MESHMEND_FALLBACK_CONCEPT_CANDIDATES", "1")))
+            pipe = load_text_to_image_pipeline(model_id, dtype).to(device)
+            if hasattr(pipe, "enable_attention_slicing"):
+                pipe.enable_attention_slicing()
+            if hasattr(pipe, "enable_vae_slicing"):
+                pipe.enable_vae_slicing()
+            if hasattr(pipe, "enable_vae_tiling"):
+                pipe.enable_vae_tiling()
+            index = 0
+            best_path = None
+            best_score = -1.0
+            continue
         image = result.images[0]
         concept_path = output_dir / f"concept_{index + 1}.png"
         image.save(concept_path)
@@ -297,6 +348,7 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
         if score > best_score:
             best_score = score
             best_path = candidate_path
+        index += 1
 
     final_path = output_dir / "concept_single_subject.png"
     if best_path is not None:
@@ -333,11 +385,22 @@ def concept_quality_score(image_path: Path) -> float:
         fg = arr < np.quantile(arr, 0.82)
         rows, cols = np.where(fg)
         width_penalty = 0.0
+        edge_contact_penalty = 0.0
         if rows.size and cols.size:
             fg_w = (cols.max() - cols.min() + 1) / arr.shape[1]
             fg_h = (rows.max() - rows.min() + 1) / arr.shape[0]
             width_penalty = max(0.0, (fg_w / max(fg_h, 1e-6)) - 0.75) * 0.08
-        return sharpness + contrast * 0.35 - width_penalty
+            margin = max(4, int(arr.shape[0] * 0.035))
+            edge_contact = (
+                float(fg[:margin, :].mean())
+                + float(fg[-margin:, :].mean())
+                + float(fg[:, :margin].mean())
+                + float(fg[:, -margin:].mean())
+            )
+            edge_contact_penalty = edge_contact * 0.18
+        border = np.concatenate([arr[:12, :].ravel(), arr[-12:, :].ravel(), arr[:, :12].ravel(), arr[:, -12:].ravel()])
+        border_penalty = max(0.0, 0.92 - float(border.mean())) * 0.20 + float(border.std()) * 0.12
+        return sharpness + contrast * 0.35 - width_penalty - edge_contact_penalty - border_penalty
     except Exception:
         return 0.0
 
@@ -514,7 +577,10 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
         # rejects our quality knobs, still generate rather than failing.
         mesh_result = pipeline(image=str(image_path))
     mesh = mesh_result[0] if isinstance(mesh_result, (list, tuple)) else mesh_result
-    mesh, postprocess_report = postprocess_miniature(mesh, request)
+    postprocess_request = dict(request)
+    postprocess_request["_meshmend_source_image_path"] = str(image_path)
+    postprocess_request["_meshmend_source_workflow"] = str(request.get("workflow") or "text_to_3d")
+    mesh, postprocess_report = postprocess_miniature(mesh, postprocess_request)
 
     output_format = os.environ.get("MESHMEND_HUNYUAN3D_OUTPUT_FORMAT", "stl").strip().lower().lstrip(".") or "stl"
     if f".{output_format}" not in SUPPORTED_MODEL_SUFFIXES:
@@ -539,8 +605,12 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
 def hunyuan_generation_kwargs(request: dict[str, Any]) -> dict[str, Any]:
     kwargs: dict[str, Any] = {}
     quality = str(request.get("quality") or "standard").lower()
+    prompt = str(request.get("prompt") or "").lower()
+    wants_8k = quality == "high" or any(
+        term in prompt for term in ("8k", "8 k", "studio", "production", "display quality", "maximum detail")
+    )
     steps = os.environ.get("MESHMEND_HUNYUAN3D_STEPS", "").strip()
-    kwargs["num_inference_steps"] = int(steps or (48 if quality == "high" else 36))
+    kwargs["num_inference_steps"] = int(steps or (64 if wants_8k else 36))
     guidance = os.environ.get("MESHMEND_HUNYUAN3D_GUIDANCE", "").strip()
     if guidance:
         kwargs["guidance_scale"] = float(guidance)
@@ -553,7 +623,7 @@ def hunyuan_generation_kwargs(request: dict[str, Any]) -> dict[str, Any]:
         except Exception:
             pass
     octree_resolution = os.environ.get("MESHMEND_HUNYUAN3D_OCTREE_RESOLUTION", "").strip()
-    kwargs["octree_resolution"] = int(octree_resolution or (384 if quality == "high" else 256))
+    kwargs["octree_resolution"] = int(octree_resolution or (512 if wants_8k else 256))
     target_polycount = int(request.get("target_polycount") or 0)
     if target_polycount:
         # Hunyuan versions expose different names for this knob. Prefer the
