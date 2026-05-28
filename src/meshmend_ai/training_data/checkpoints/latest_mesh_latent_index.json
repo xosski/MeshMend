@@ -1,0 +1,5091 @@
+{
+  "version": 1,
+  "source_dir": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl",
+  "assets": [
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmPointing (repaired).stl",
+      "name": "ArmPointing (repaired).stl",
+      "tags": [
+        "arm",
+        "pointing"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 66402,
+      "faces": 22134,
+      "extents": [
+        10.116,
+        12.642,
+        7.692
+      ],
+      "watertight": false,
+      "file_size_bytes": 1106784,
+      "latent": [
+        0.8001898427462507,
+        0.9999999992089859,
+        0.6084480298936498,
+        0.022134,
+        0.07021063189568706,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmRifle (repaired).stl",
+      "name": "ArmRifle (repaired).stl",
+      "tags": [
+        "arm",
+        "rifle"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm",
+        "weapon"
+      ],
+      "vertices": 223590,
+      "faces": 74530,
+      "extents": [
+        11.088,
+        20.926,
+        19.216
+      ],
+      "watertight": false,
+      "file_size_bytes": 3726584,
+      "latent": [
+        0.5298671506595302,
+        0.9999999995221256,
+        0.9182834746639189,
+        0.07453,
+        0.38415245737211634,
+        0.375
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_L (repaired).stl",
+      "name": "ArmSet08_L (repaired).stl",
+      "tags": [
+        "arm",
+        "set08"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 59964,
+      "faces": 19988,
+      "extents": [
+        7.142,
+        11.46,
+        12.214
+      ],
+      "watertight": false,
+      "file_size_bytes": 999484,
+      "latent": [
+        0.5847388238212389,
+        0.9382675610461212,
+        0.9999999991812674,
+        0.019988,
+        0.19558676028084251,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_R (repaired).stl",
+      "name": "ArmSet08_R (repaired).stl",
+      "tags": [
+        "arm",
+        "set08"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 63684,
+      "faces": 21228,
+      "extents": [
+        9.544,
+        7.382,
+        12.866
+      ],
+      "watertight": false,
+      "file_size_bytes": 1061484,
+      "latent": [
+        0.7418000926925229,
+        0.5737602980151093,
+        0.9999999992227576,
+        0.021228,
+        0.19558676028084251,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_L (repaired).stl",
+      "name": "ArmSet09_L (repaired).stl",
+      "tags": [
+        "arm",
+        "set09"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 63168,
+      "faces": 21056,
+      "extents": [
+        9.412,
+        7.638,
+        12.816
+      ],
+      "watertight": false,
+      "file_size_bytes": 1052884,
+      "latent": [
+        0.7343945062933875,
+        0.5959737823065122,
+        0.9999999992197253,
+        0.021056,
+        0.19759277833500502,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_R (repaired).stl",
+      "name": "ArmSet09_R (repaired).stl",
+      "tags": [
+        "arm",
+        "set09"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 70602,
+      "faces": 23534,
+      "extents": [
+        6.598,
+        12.168,
+        8.874
+      ],
+      "watertight": false,
+      "file_size_bytes": 1176784,
+      "latent": [
+        0.5422419456424704,
+        0.9999999991781722,
+        0.7292899402290517,
+        0.023534,
+        0.19759277833500502,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_00 (repaired).stl",
+      "name": "AutoRifle_DoubleGrip_00 (repaired).stl",
+      "tags": [
+        "00",
+        "auto",
+        "double",
+        "grip",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 260430,
+      "faces": 86810,
+      "extents": [
+        7.464,
+        23.546,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4340584,
+      "latent": [
+        0.3169965173205655,
+        0.9999999995752994,
+        0.4856026499254214,
+        0.08681,
+        0.29087261785356067,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_01 (repaired).stl",
+      "name": "AutoRifle_DoubleGrip_01 (repaired).stl",
+      "tags": [
+        "01",
+        "auto",
+        "double",
+        "grip",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 332736,
+      "faces": 110912,
+      "extents": [
+        7.464,
+        23.546,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 5545684,
+      "latent": [
+        0.3169965173205655,
+        0.9999999995752994,
+        0.4856026499254214,
+        0.110912,
+        0.29187562688064195,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_02 (repaired).stl",
+      "name": "AutoRifle_DoubleGrip_02 (repaired).stl",
+      "tags": [
+        "02",
+        "auto",
+        "double",
+        "grip",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 280476,
+      "faces": 93492,
+      "extents": [
+        7.464,
+        23.548,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4674684,
+      "latent": [
+        0.3169695938861179,
+        0.9999999995753355,
+        0.4855614062826731,
+        0.093492,
+        0.2928786359077232,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_03 (repaired).stl",
+      "name": "AutoRifle_DoubleGrip_03 (repaired).stl",
+      "tags": [
+        "03",
+        "auto",
+        "double",
+        "grip",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 271284,
+      "faces": 90428,
+      "extents": [
+        7.464,
+        23.548,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4521484,
+      "latent": [
+        0.3169695938861179,
+        0.9999999995753355,
+        0.4855614062826731,
+        0.090428,
+        0.2938816449348044,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_04 (repaired).stl",
+      "name": "AutoRifle_DoubleGrip_04 (repaired).stl",
+      "tags": [
+        "04",
+        "auto",
+        "double",
+        "grip",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 271548,
+      "faces": 90516,
+      "extents": [
+        7.464,
+        23.54799,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4525884,
+      "latent": [
+        0.3169697284919139,
+        0.9999999995753353,
+        0.4855616124834597,
+        0.090516,
+        0.2948846539618857,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_00 (repaired).stl",
+      "name": "AutoRifle_SingleGrip_00 (repaired).stl",
+      "tags": [
+        "00",
+        "auto",
+        "grip",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 203988,
+      "faces": 67996,
+      "extents": [
+        6.196,
+        23.54602,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 3399884,
+      "latent": [
+        0.26314425951258674,
+        0.9999999995752997,
+        0.4856022374543119,
+        0.067996,
+        0.6328986960882648,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_01 (repaired).stl",
+      "name": "AutoRifle_SingleGrip_01 (repaired).stl",
+      "tags": [
+        "01",
+        "auto",
+        "grip",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 276486,
+      "faces": 92162,
+      "extents": [
+        6.196,
+        23.54602,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4608184,
+      "latent": [
+        0.26314425951258674,
+        0.9999999995752997,
+        0.4856022374543119,
+        0.092162,
+        0.633901705115346,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_02 (repaired).stl",
+      "name": "AutoRifle_SingleGrip_02 (repaired).stl",
+      "tags": [
+        "02",
+        "auto",
+        "grip",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 224118,
+      "faces": 74706,
+      "extents": [
+        6.196,
+        23.54599,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 3735384,
+      "latent": [
+        0.2631445947852927,
+        0.9999999995752992,
+        0.48560285616123894,
+        0.074706,
+        0.6349047141424273,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_03 (repaired).stl",
+      "name": "AutoRifle_SingleGrip_03 (repaired).stl",
+      "tags": [
+        "03",
+        "auto",
+        "grip",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 214800,
+      "faces": 71600,
+      "extents": [
+        6.196,
+        23.548,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 3580084,
+      "latent": [
+        0.2631221334027849,
+        0.9999999995753355,
+        0.4855614062826731,
+        0.0716,
+        0.6359077231695085,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_04 (repaired).stl",
+      "name": "AutoRifle_SingleGrip_04 (repaired).stl",
+      "tags": [
+        "04",
+        "auto",
+        "grip",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 215064,
+      "faces": 71688,
+      "extents": [
+        6.196,
+        23.54602,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 3584484,
+      "latent": [
+        0.26314425951258674,
+        0.9999999995752997,
+        0.4856022374543119,
+        0.071688,
+        0.6369107321965898,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BearKin.stl",
+      "name": "BearKin.stl",
+      "tags": [
+        "bear",
+        "fantasy",
+        "kin"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 7322898,
+      "faces": 2440966,
+      "extents": [
+        51.07434,
+        55.04578,
+        32.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 122048384,
+      "latent": [
+        0.9278520531586886,
+        0.999999999818333,
+        0.5813343001804435,
+        1.0,
+        0.9007021063189569,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_01 (repaired).stl",
+      "name": "BoltRifle_1H_01 (repaired).stl",
+      "tags": [
+        "01",
+        "1h",
+        "bolt",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 309582,
+      "faces": 103194,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 5159784,
+      "latent": [
+        0.19302146575172263,
+        0.9999999995723937,
+        0.5782091847352223,
+        0.103194,
+        0.8335005015045135,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_02 (repaired).stl",
+      "name": "BoltRifle_1H_02 (repaired).stl",
+      "tags": [
+        "02",
+        "1h",
+        "bolt",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 381618,
+      "faces": 127206,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 6360384,
+      "latent": [
+        0.19302146575172263,
+        0.9999999995723937,
+        0.5782091847352223,
+        0.127206,
+        0.8345035105315948,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_03 (repaired).stl",
+      "name": "BoltRifle_1H_03 (repaired).stl",
+      "tags": [
+        "03",
+        "1h",
+        "bolt",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 329658,
+      "faces": 109886,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 5494384,
+      "latent": [
+        0.19302146575172263,
+        0.9999999995723937,
+        0.5782091847352223,
+        0.109886,
+        0.835506519558676,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_04 (repaired).stl",
+      "name": "BoltRifle_1H_04 (repaired).stl",
+      "tags": [
+        "04",
+        "1h",
+        "bolt",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 320214,
+      "faces": 106738,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 5336984,
+      "latent": [
+        0.19302146575172263,
+        0.9999999995723937,
+        0.5782091847352223,
+        0.106738,
+        0.8365095285857572,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_05 (repaired).stl",
+      "name": "BoltRifle_1H_05 (repaired).stl",
+      "tags": [
+        "05",
+        "1h",
+        "bolt",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 320478,
+      "faces": 106826,
+      "extents": [
+        4.514,
+        23.386,
+        13.52
+      ],
+      "watertight": false,
+      "file_size_bytes": 5341384,
+      "latent": [
+        0.19302146575172263,
+        0.9999999995723937,
+        0.5781236634832277,
+        0.106826,
+        0.8375125376128385,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\crimson leviathan.stl",
+      "name": "crimson leviathan.stl",
+      "tags": [
+        "crimson",
+        "leviathan"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 7359114,
+      "faces": 2453038,
+      "extents": [
+        64.32273,
+        50.37299,
+        60.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 122651984,
+      "latent": [
+        0.999999999844534,
+        0.783128918691242,
+        0.9327962291195047,
+        1.0,
+        0.683049147442327,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Crimson Maw Juggernaut.stl",
+      "name": "Crimson Maw Juggernaut.stl",
+      "tags": [
+        "chaos",
+        "crimson",
+        "juggernaut",
+        "maw"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 7304139,
+      "faces": 2434713,
+      "extents": [
+        67.12651,
+        53.14233,
+        64.99999
+      ],
+      "watertight": false,
+      "file_size_bytes": 121735734,
+      "latent": [
+        0.9999999998510276,
+        0.7916742579359968,
+        0.96832071249223,
+        1.0,
+        0.6238716148445336,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_1.stl",
+      "name": "DA_back_pack_1.stl",
+      "tags": [
+        "back",
+        "backpack",
+        "da",
+        "marine",
+        "pack"
+      ],
+      "roles": [
+        "backpack"
+      ],
+      "vertices": 1160418,
+      "faces": 386806,
+      "extents": [
+        21.34398,
+        27.79597,
+        11.28479
+      ],
+      "watertight": false,
+      "file_size_bytes": 19340384,
+      "latent": [
+        0.7678803795054173,
+        0.9999999996402356,
+        0.405986551141771,
+        0.386806,
+        0.26479438314944836,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_2.stl",
+      "name": "DA_back_pack_2.stl",
+      "tags": [
+        "back",
+        "backpack",
+        "da",
+        "marine",
+        "pack"
+      ],
+      "roles": [
+        "backpack"
+      ],
+      "vertices": 927192,
+      "faces": 309064,
+      "extents": [
+        21.34271,
+        29.77386,
+        13.95584
+      ],
+      "watertight": false,
+      "file_size_bytes": 15453284,
+      "latent": [
+        0.7168271091766982,
+        0.9999999996641349,
+        0.4687279377048431,
+        0.309064,
+        0.26479438314944836,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_3.stl",
+      "name": "DA_back_pack_3.stl",
+      "tags": [
+        "back",
+        "backpack",
+        "da",
+        "marine",
+        "pack"
+      ],
+      "roles": [
+        "backpack"
+      ],
+      "vertices": 1050774,
+      "faces": 350258,
+      "extents": [
+        34.24591,
+        23.4565,
+        11.85945
+      ],
+      "watertight": false,
+      "file_size_bytes": 17512984,
+      "latent": [
+        0.9999999997079944,
+        0.6849431068746769,
+        0.34630266786711095,
+        0.350258,
+        0.26479438314944836,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_4.stl",
+      "name": "DA_back_pack_4.stl",
+      "tags": [
+        "back",
+        "backpack",
+        "da",
+        "marine",
+        "pack"
+      ],
+      "roles": [
+        "backpack"
+      ],
+      "vertices": 1058898,
+      "faces": 352966,
+      "extents": [
+        21.34148,
+        22.93514,
+        11.731
+      ],
+      "watertight": false,
+      "file_size_bytes": 17648384,
+      "latent": [
+        0.9305144852263756,
+        0.9999999995639878,
+        0.5114858681867711,
+        0.352966,
+        0.26479438314944836,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_5.stl",
+      "name": "DA_back_pack_5.stl",
+      "tags": [
+        "back",
+        "backpack",
+        "da",
+        "marine",
+        "pack"
+      ],
+      "roles": [
+        "backpack"
+      ],
+      "vertices": 989802,
+      "faces": 329934,
+      "extents": [
+        21.33437,
+        26.93374,
+        11.43506
+      ],
+      "watertight": false,
+      "file_size_bytes": 16496784,
+      "latent": [
+        0.7921057377133269,
+        0.9999999996287184,
+        0.4245626487726685,
+        0.329934,
+        0.26479438314944836,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_cloak_.stl",
+      "name": "DA_cloak_.stl",
+      "tags": [
+        "cloak",
+        "da",
+        "marine"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 2441940,
+      "faces": 813980,
+      "extents": [
+        23.31061,
+        23.1542,
+        10.47141
+      ],
+      "watertight": false,
+      "file_size_bytes": 40699084,
+      "latent": [
+        0.9999999995710107,
+        0.9932901794533517,
+        0.4492121825858645,
+        0.81398,
+        0.8324974924774323,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_1.stl",
+      "name": "DA_hand_1.stl",
+      "tags": [
+        "da",
+        "hand",
+        "marine"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 1070046,
+      "faces": 356682,
+      "extents": [
+        9.41411,
+        14.92568,
+        8.48693
+      ],
+      "watertight": false,
+      "file_size_bytes": 17834184,
+      "latent": [
+        0.63073240171923,
+        0.9999999993300137,
+        0.568612618943584,
+        0.356682,
+        0.9358074222668004,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_2.stl",
+      "name": "DA_hand_2.stl",
+      "tags": [
+        "da",
+        "hand",
+        "marine"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 2189742,
+      "faces": 729914,
+      "extents": [
+        19.70495,
+        12.73118,
+        36.91614
+      ],
+      "watertight": false,
+      "file_size_bytes": 36495784,
+      "latent": [
+        0.5337760121903926,
+        0.3448675835705283,
+        0.9999999997291158,
+        0.729914,
+        0.9358074222668004,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_3.stl",
+      "name": "DA_hand_3.stl",
+      "tags": [
+        "da",
+        "hand",
+        "marine"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 690462,
+      "faces": 230154,
+      "extents": [
+        13.3735,
+        40.54173,
+        18.4516
+      ],
+      "watertight": false,
+      "file_size_bytes": 11507784,
+      "latent": [
+        0.3298699881998449,
+        0.9999999997533405,
+        0.45512611315424223,
+        0.230154,
+        0.9358074222668004,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_4.stl",
+      "name": "DA_hand_4.stl",
+      "tags": [
+        "da",
+        "hand",
+        "marine"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 715260,
+      "faces": 238420,
+      "extents": [
+        12.4605,
+        40.54241,
+        20.55653
+      ],
+      "watertight": false,
+      "file_size_bytes": 11921084,
+      "latent": [
+        0.30734482722972195,
+        0.9999999997533446,
+        0.5070376920101598,
+        0.23842,
+        0.9358074222668004,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_5.stl",
+      "name": "DA_hand_5.stl",
+      "tags": [
+        "da",
+        "hand",
+        "marine"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 1117500,
+      "faces": 372500,
+      "extents": [
+        12.22451,
+        40.54227,
+        5.85936
+      ],
+      "watertight": false,
+      "file_size_bytes": 18625084,
+      "latent": [
+        0.3015250502003156,
+        0.9999999997533439,
+        0.14452471454002827,
+        0.3725,
+        0.9358074222668004,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_6.stl",
+      "name": "DA_hand_6.stl",
+      "tags": [
+        "da",
+        "hand",
+        "marine"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 1087290,
+      "faces": 362430,
+      "extents": [
+        9.13954,
+        8.35057,
+        16.21938
+      ],
+      "watertight": false,
+      "file_size_bytes": 18121584,
+      "latent": [
+        0.5634950284391296,
+        0.5148513688471128,
+        0.9999999993834535,
+        0.36243,
+        0.9358074222668004,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_1.stl",
+      "name": "DA_helmet_1.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 512028,
+      "faces": 170676,
+      "extents": [
+        7.03528,
+        8.15685,
+        8.71507
+      ],
+      "watertight": false,
+      "file_size_bytes": 8533884,
+      "latent": [
+        0.8072545592780612,
+        0.9359477308433003,
+        0.9999999988525622,
+        0.170676,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_10.stl",
+      "name": "DA_helmet_10.stl",
+      "tags": [
+        "10",
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 674688,
+      "faces": 224896,
+      "extents": [
+        8.13779,
+        8.93164,
+        8.92378
+      ],
+      "watertight": false,
+      "file_size_bytes": 11244884,
+      "latent": [
+        0.9111193454828908,
+        0.9999999988803847,
+        0.9991199813258036,
+        0.224896,
+        0.966900702106319,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_2.stl",
+      "name": "DA_helmet_2.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 320298,
+      "faces": 106766,
+      "extents": [
+        7.05389,
+        8.18416,
+        16.58593
+      ],
+      "watertight": false,
+      "file_size_bytes": 5338384,
+      "latent": [
+        0.4252936070360277,
+        0.4934399213710416,
+        0.9999999993970793,
+        0.106766,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_3.stl",
+      "name": "DA_helmet_3.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 663228,
+      "faces": 221076,
+      "extents": [
+        8.14375,
+        8.65156,
+        8.78001
+      ],
+      "watertight": false,
+      "file_size_bytes": 11053884,
+      "latent": [
+        0.9275331110926602,
+        0.9853701749936842,
+        0.9999999988610491,
+        0.221076,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_4.stl",
+      "name": "DA_helmet_4.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 288486,
+      "faces": 96162,
+      "extents": [
+        6.68487,
+        8.11942,
+        14.57915
+      ],
+      "watertight": false,
+      "file_size_bytes": 4808184,
+      "latent": [
+        0.458522615887399,
+        0.5569199846651416,
+        0.9999999993140889,
+        0.096162,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_5.stl",
+      "name": "DA_helmet_5.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 989844,
+      "faces": 329948,
+      "extents": [
+        8.1332,
+        9.28546,
+        9.19677
+      ],
+      "watertight": false,
+      "file_size_bytes": 16497484,
+      "latent": [
+        0.8759070623578077,
+        0.9999999989230474,
+        0.9904485066001593,
+        0.329948,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_6.stl",
+      "name": "DA_helmet_6.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 878130,
+      "faces": 292710,
+      "extents": [
+        8.1411,
+        8.65165,
+        9.32333
+      ],
+      "watertight": false,
+      "file_size_bytes": 14635584,
+      "latent": [
+        0.8731965929842699,
+        0.9279570701370035,
+        0.9999999989274218,
+        0.29271,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_7.stl",
+      "name": "DA_helmet_7.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 502836,
+      "faces": 167612,
+      "extents": [
+        7.91606,
+        8.24276,
+        8.44154
+      ],
+      "watertight": false,
+      "file_size_bytes": 8380684,
+      "latent": [
+        0.9377506936675645,
+        0.9764521627849276,
+        0.9999999988153819,
+        0.167612,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_8.stl",
+      "name": "DA_helmet_8.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 962622,
+      "faces": 320874,
+      "extents": [
+        7.052,
+        8.454,
+        16.604
+      ],
+      "watertight": false,
+      "file_size_bytes": 16043784,
+      "latent": [
+        0.4247169354223579,
+        0.5091544203148913,
+        0.9999999993977354,
+        0.320874,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_9.stl",
+      "name": "DA_helmet_9.stl",
+      "tags": [
+        "da",
+        "helmet",
+        "marine"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 915210,
+      "faces": 305070,
+      "extents": [
+        6.70148,
+        8.00597,
+        16.18313
+      ],
+      "watertight": false,
+      "file_size_bytes": 15253584,
+      "latent": [
+        0.4141028339918775,
+        0.49471084982033087,
+        0.9999999993820725,
+        0.30507,
+        0.39317953861584753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_1.stl",
+      "name": "DA_legs_1.stl",
+      "tags": [
+        "da",
+        "legs",
+        "marine"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 1627416,
+      "faces": 542472,
+      "extents": [
+        29.20922,
+        25.31815,
+        16.17007
+      ],
+      "watertight": false,
+      "file_size_bytes": 27123684,
+      "latent": [
+        0.9999999996576423,
+        0.8667862404861252,
+        0.5535947209293521,
+        0.542472,
+        0.9679037111334002,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_2.stl",
+      "name": "DA_legs_2.stl",
+      "tags": [
+        "da",
+        "legs",
+        "marine"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 2437206,
+      "faces": 812402,
+      "extents": [
+        24.84104,
+        24.42453,
+        24.02125
+      ],
+      "watertight": false,
+      "file_size_bytes": 40620184,
+      "latent": [
+        0.9999999995974403,
+        0.9832329882391265,
+        0.966998563277947,
+        0.812402,
+        0.9679037111334002,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_3.stl",
+      "name": "DA_legs_3.stl",
+      "tags": [
+        "da",
+        "legs",
+        "marine"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 1734972,
+      "faces": 578324,
+      "extents": [
+        31.0,
+        24.066,
+        18.172
+      ],
+      "watertight": false,
+      "file_size_bytes": 28916284,
+      "latent": [
+        0.9999999996774194,
+        0.7763225803947346,
+        0.5861935481980021,
+        0.578324,
+        0.9679037111334002,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_4.stl",
+      "name": "DA_legs_4.stl",
+      "tags": [
+        "da",
+        "legs",
+        "marine"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 1381008,
+      "faces": 460336,
+      "extents": [
+        25.09726,
+        17.83091,
+        26.89295
+      ],
+      "watertight": false,
+      "file_size_bytes": 23016884,
+      "latent": [
+        0.9332282248941718,
+        0.6630328763995645,
+        0.9999999996281553,
+        0.460336,
+        0.9679037111334002,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_5.stl",
+      "name": "DA_legs_5.stl",
+      "tags": [
+        "da",
+        "legs",
+        "marine"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 1811868,
+      "faces": 603956,
+      "extents": [
+        31.00144,
+        23.82375,
+        18.79134
+      ],
+      "watertight": false,
+      "file_size_bytes": 30197884,
+      "latent": [
+        0.9999999996774344,
+        0.7684723674872934,
+        0.6061441014978195,
+        0.603956,
+        0.9679037111334002,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_1_bent_weapon.stl",
+      "name": "DA_rifle_1_bent_weapon.stl",
+      "tags": [
+        "bent",
+        "da",
+        "marine",
+        "rifle",
+        "weapon"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 1195674,
+      "faces": 398558,
+      "extents": [
+        31.874,
+        14.212,
+        24.72
+      ],
+      "watertight": false,
+      "file_size_bytes": 19927984,
+      "latent": [
+        0.9999999996862646,
+        0.44588065493948653,
+        0.7755537426192025,
+        0.398558,
+        0.1213640922768305,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_2_bent_weapon.stl",
+      "name": "DA_rifle_2_bent_weapon.stl",
+      "tags": [
+        "bent",
+        "da",
+        "marine",
+        "rifle",
+        "weapon"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 1038522,
+      "faces": 346174,
+      "extents": [
+        31.83972,
+        18.04464,
+        24.8778
+      ],
+      "watertight": false,
+      "file_size_bytes": 17308784,
+      "latent": [
+        0.9999999996859269,
+        0.5667336268765135,
+        0.7813448105758013,
+        0.346174,
+        0.1213640922768305,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_3_bent_weapon.stl",
+      "name": "DA_rifle_3_bent_weapon.stl",
+      "tags": [
+        "bent",
+        "da",
+        "marine",
+        "rifle",
+        "weapon"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 1043430,
+      "faces": 347810,
+      "extents": [
+        32.12345,
+        17.93946,
+        25.01257
+      ],
+      "watertight": false,
+      "file_size_bytes": 17390584,
+      "latent": [
+        0.9999999996887009,
+        0.5584537151026886,
+        0.7786389691086608,
+        0.34781,
+        0.1213640922768305,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_1.stl",
+      "name": "DA_shoulder_pad_1.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 743922,
+      "faces": 247974,
+      "extents": [
+        16.56573,
+        25.40797,
+        18.13826
+      ],
+      "watertight": false,
+      "file_size_bytes": 12398784,
+      "latent": [
+        0.6519895132700528,
+        0.9999999996064227,
+        0.7138807229724056,
+        0.247974,
+        0.8936810431293881,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.1.stl",
+      "name": "DA_shoulder_pad_2.1.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 829302,
+      "faces": 276434,
+      "extents": [
+        19.00316,
+        25.17155,
+        14.32456
+      ],
+      "watertight": false,
+      "file_size_bytes": 13821784,
+      "latent": [
+        0.7549459605169543,
+        0.999999999602726,
+        0.5690773907172672,
+        0.276434,
+        0.8936810431293881,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.2.stl",
+      "name": "DA_shoulder_pad_2.2.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 878076,
+      "faces": 292692,
+      "extents": [
+        19.62336,
+        25.487,
+        13.82707
+      ],
+      "watertight": false,
+      "file_size_bytes": 14634684,
+      "latent": [
+        0.7699360455251949,
+        0.9999999996076431,
+        0.5425146150812122,
+        0.292692,
+        0.8936810431293881,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_3.stl",
+      "name": "DA_shoulder_pad_3.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 373386,
+      "faces": 124462,
+      "extents": [
+        6.07242,
+        10.12803,
+        10.38431
+      ],
+      "watertight": false,
+      "file_size_bytes": 6223184,
+      "latent": [
+        0.5847687515253601,
+        0.9753204584846558,
+        0.9999999990370086,
+        0.124462,
+        0.8936810431293881,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_4.stl",
+      "name": "DA_shoulder_pad_4.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 975486,
+      "faces": 325162,
+      "extents": [
+        6.83927,
+        13.27614,
+        11.82109
+      ],
+      "watertight": false,
+      "file_size_bytes": 16258184,
+      "latent": [
+        0.5151550070162298,
+        0.999999999246769,
+        0.8904011249577052,
+        0.325162,
+        0.8936810431293881,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_5.stl",
+      "name": "DA_shoulder_pad_5.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 537318,
+      "faces": 179106,
+      "extents": [
+        6.79,
+        13.212,
+        11.124
+      ],
+      "watertight": false,
+      "file_size_bytes": 8955384,
+      "latent": [
+        0.5139267328837975,
+        0.9999999992431122,
+        0.8419618522237649,
+        0.179106,
+        0.8936810431293881,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoylder_pad_6.stl",
+      "name": "DA_shoylder_pad_6.stl",
+      "tags": [
+        "da",
+        "marine",
+        "pad",
+        "shoulder",
+        "shoylder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 317196,
+      "faces": 105732,
+      "extents": [
+        6.78539,
+        12.0233,
+        10.63514
+      ],
+      "watertight": false,
+      "file_size_bytes": 5286684,
+      "latent": [
+        0.5643533800501082,
+        0.9999999991682815,
+        0.8845441759878366,
+        0.105732,
+        0.2768304914744233,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_1.stl",
+      "name": "DA_torso_1.stl",
+      "tags": [
+        "da",
+        "marine",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 1587252,
+      "faces": 529084,
+      "extents": [
+        12.53207,
+        17.89342,
+        15.15987
+      ],
+      "watertight": false,
+      "file_size_bytes": 26454284,
+      "latent": [
+        0.7003730976524482,
+        0.9999999994411353,
+        0.8472315516836739,
+        0.529084,
+        0.17953861584754263,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_2.stl",
+      "name": "DA_torso_2.stl",
+      "tags": [
+        "da",
+        "marine",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 1605612,
+      "faces": 535204,
+      "extents": [
+        12.53202,
+        17.88936,
+        15.16892
+      ],
+      "watertight": false,
+      "file_size_bytes": 26760284,
+      "latent": [
+        0.7005292527510601,
+        0.9999999994410085,
+        0.8479297186439706,
+        0.535204,
+        0.17953861584754263,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_3_with_cloak_.stl",
+      "name": "DA_torso_3_with_cloak_.stl",
+      "tags": [
+        "cloak",
+        "da",
+        "marine",
+        "torso",
+        "with"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 4832346,
+      "faces": 1610782,
+      "extents": [
+        32.0522,
+        36.66851,
+        22.84605
+      ],
+      "watertight": false,
+      "file_size_bytes": 80539184,
+      "latent": [
+        0.874106965111452,
+        0.9999999997272864,
+        0.6230427686799811,
+        1.0,
+        0.3340020060180542,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_4.stl",
+      "name": "DA_torso_4.stl",
+      "tags": [
+        "da",
+        "marine",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 1589514,
+      "faces": 529838,
+      "extents": [
+        12.53219,
+        17.86286,
+        15.10996
+      ],
+      "watertight": false,
+      "file_size_bytes": 26491984,
+      "latent": [
+        0.7015780223874687,
+        0.9999999994401791,
+        0.8458869403634764,
+        0.529838,
+        0.17953861584754263,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_5.stl",
+      "name": "DA_torso_5.stl",
+      "tags": [
+        "da",
+        "marine",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 1597374,
+      "faces": 532458,
+      "extents": [
+        12.53216,
+        17.86813,
+        15.10994
+      ],
+      "watertight": false,
+      "file_size_bytes": 26622984,
+      "latent": [
+        0.7013694210298618,
+        0.9999999994403443,
+        0.8456363364013826,
+        0.532458,
+        0.17953861584754263,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\desolation squad_1775889987.stl",
+      "name": "desolation squad_1775889987.stl",
+      "tags": [
+        "1775889987",
+        "desolation",
+        "squad"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 5101896,
+      "faces": 1700632,
+      "extents": [
+        70.04211,
+        75.71873,
+        100.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 85031684,
+      "latent": [
+        0.7004210999299578,
+        0.7571872999242812,
+        0.9999999999000001,
+        1.0,
+        0.33600802407221664,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DoomClaw Mercedes.stl",
+      "name": "DoomClaw Mercedes.stl",
+      "tags": [
+        "chaos",
+        "claw",
+        "doom",
+        "mercedes"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 12542922,
+      "faces": 4180974,
+      "extents": [
+        139.27383,
+        105.50738,
+        95.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 209048784,
+      "latent": [
+        0.999999999928199,
+        0.757553518794051,
+        0.6821094816820855,
+        1.0,
+        0.04312938816449348,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite assassin lieutenant.stl",
+      "name": "Elite assassin lieutenant.stl",
+      "tags": [
+        "assassin",
+        "elite",
+        "lieutenant"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 16099554,
+      "faces": 5366518,
+      "extents": [
+        33.59577,
+        49.39622,
+        47.6092
+      ],
+      "watertight": false,
+      "file_size_bytes": 268325984,
+      "latent": [
+        0.6801283578621748,
+        0.9999999997975554,
+        0.9638227376580997,
+        1.0,
+        0.18956870611835505,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with grenade launcher.stl",
+      "name": "Elite Assassin with grenade launcher.stl",
+      "tags": [
+        "assassin",
+        "elite",
+        "grenade",
+        "launcher",
+        "with"
+      ],
+      "roles": [
+        "full",
+        "weapon"
+      ],
+      "vertices": 6566742,
+      "faces": 2188914,
+      "extents": [
+        36.94774,
+        43.61551,
+        50.08083
+      ],
+      "watertight": false,
+      "file_size_bytes": 109445784,
+      "latent": [
+        0.7377621335872905,
+        0.870902299168983,
+        0.9999999998003228,
+        1.0,
+        0.7582748244734202,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with heavy gun.stl",
+      "name": "Elite Assassin with heavy gun.stl",
+      "tags": [
+        "assassin",
+        "elite",
+        "gun",
+        "heavy",
+        "with"
+      ],
+      "roles": [
+        "full",
+        "weapon"
+      ],
+      "vertices": 6251430,
+      "faces": 2083810,
+      "extents": [
+        50.04579,
+        54.83561,
+        45.05623
+      ],
+      "watertight": false,
+      "file_size_bytes": 104190584,
+      "latent": [
+        0.9126512861053881,
+        0.9999999998176368,
+        0.8216600488584589,
+        1.0,
+        0.32698094282848544,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with jump pack.stl",
+      "name": "Elite Assassin with jump pack.stl",
+      "tags": [
+        "assassin",
+        "backpack",
+        "elite",
+        "jump",
+        "pack",
+        "with"
+      ],
+      "roles": [
+        "backpack",
+        "full"
+      ],
+      "vertices": 5458638,
+      "faces": 1819546,
+      "extents": [
+        51.59244,
+        33.19273,
+        53.02449
+      ],
+      "watertight": false,
+      "file_size_bytes": 90977384,
+      "latent": [
+        0.9729926679213714,
+        0.625988670400038,
+        0.9999999998114079,
+        1.0,
+        0.6409227683049148,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Eradicator.stl",
+      "name": "Eradicator.stl",
+      "tags": [
+        "eradicator"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 5208408,
+      "faces": 1736136,
+      "extents": [
+        34.60599,
+        37.88988,
+        50.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 86806884,
+      "latent": [
+        0.692119799861576,
+        0.7577975998484404,
+        0.9999999998,
+        1.0,
+        0.05717151454363089,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Flammer carl.stl",
+      "name": "Flammer carl.stl",
+      "tags": [
+        "carl",
+        "flamer",
+        "flammer"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 5460390,
+      "faces": 1820130,
+      "extents": [
+        36.52499,
+        42.60512,
+        32.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 91006584,
+      "latent": [
+        0.8572910953290847,
+        0.9999999997652864,
+        0.7510834376828223,
+        1.0,
+        0.9117352056168505,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Gobby Pistoler.stl",
+      "name": "Gobby Pistoler.stl",
+      "tags": [
+        "gobby",
+        "orc",
+        "pistoler"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 4959714,
+      "faces": 1653238,
+      "extents": [
+        25.45012,
+        29.56458,
+        28.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 82661984,
+      "latent": [
+        0.8608314405748935,
+        0.9999999996617573,
+        0.9470792411233039,
+        1.0,
+        0.8365095285857572,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Grak'Guk.stl",
+      "name": "Grak'Guk.stl",
+      "tags": [
+        "grak",
+        "guk",
+        "orc"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 8760618,
+      "faces": 2920206,
+      "extents": [
+        59.95239,
+        59.19429,
+        60.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 146010384,
+      "latent": [
+        0.9992064998334655,
+        0.9865714998355715,
+        0.9999999998333333,
+        1.0,
+        0.05315947843530592,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Grab (repaired).stl",
+      "name": "Hand_Grab (repaired).stl",
+      "tags": [
+        "grab",
+        "hand"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 32190,
+      "faces": 10730,
+      "extents": [
+        5.47,
+        3.784,
+        3.78
+      ],
+      "watertight": false,
+      "file_size_bytes": 536584,
+      "latent": [
+        0.9999999981718465,
+        0.6917733076932846,
+        0.6910420462686617,
+        0.01073,
+        0.23771313941825475,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Order (repaired).stl",
+      "name": "Hand_Order (repaired).stl",
+      "tags": [
+        "hand",
+        "order"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 33012,
+      "faces": 11004,
+      "extents": [
+        7.024,
+        3.308,
+        4.088
+      ],
+      "watertight": false,
+      "file_size_bytes": 550284,
+      "latent": [
+        0.9999999985763098,
+        0.47095671914727116,
+        0.5820045549800619,
+        0.011004,
+        0.4954864593781344,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Point (repaired).stl",
+      "name": "Hand_Point (repaired).stl",
+      "tags": [
+        "hand",
+        "point"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 32532,
+      "faces": 10844,
+      "extents": [
+        6.894,
+        3.308,
+        4.088
+      ],
+      "watertight": false,
+      "file_size_bytes": 542284,
+      "latent": [
+        0.9999999985494633,
+        0.47983753919373723,
+        0.5929794015187418,
+        0.010844,
+        0.5235707121364093,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Rest (repaired).stl",
+      "name": "Hand_Rest (repaired).stl",
+      "tags": [
+        "hand",
+        "rest"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 33132,
+      "faces": 11044,
+      "extents": [
+        6.476,
+        3.788,
+        3.924
+      ],
+      "watertight": false,
+      "file_size_bytes": 552284,
+      "latent": [
+        0.999999998455837,
+        0.5849289675958478,
+        0.6059295852286448,
+        0.011044,
+        0.3069207622868606,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hurricane.stl",
+      "name": "Hurricane.stl",
+      "tags": [
+        "hurricane"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 7184244,
+      "faces": 2394748,
+      "extents": [
+        142.0594,
+        83.91936,
+        80.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 119737484,
+      "latent": [
+        0.9999999999296069,
+        0.5907342984279298,
+        0.563144712665044,
+        1.0,
+        0.9638916750250752,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\IronBound Wrecker.stl",
+      "name": "IronBound Wrecker.stl",
+      "tags": [
+        "bound",
+        "iron",
+        "wrecker"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 4143570,
+      "faces": 1381190,
+      "extents": [
+        51.57008,
+        32.99818,
+        38.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 69059584,
+      "latent": [
+        0.9999999998060891,
+        0.6398706380444105,
+        0.7368613737390244,
+        1.0,
+        0.6920762286860582,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\judgment.stl",
+      "name": "judgment.stl",
+      "tags": [
+        "judgment"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 9430674,
+      "faces": 3143558,
+      "extents": [
+        183.55761,
+        166.67294,
+        94.99999
+      ],
+      "watertight": false,
+      "file_size_bytes": 157177984,
+      "latent": [
+        0.9999999999455211,
+        0.90801432853108,
+        0.5175486322513378,
+        1.0,
+        0.8645937813440321,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\librarian_0303233309_generate.stl",
+      "name": "librarian_0303233309_generate.stl",
+      "tags": [
+        "0303233309",
+        "librarian"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 3973215,
+      "faces": 1324405,
+      "extents": [
+        1898.36926,
+        1203.55798,
+        1338.91577
+      ],
+      "watertight": false,
+      "file_size_bytes": 66220334,
+      "latent": [
+        0.9999999999947323,
+        0.6339957169310991,
+        0.7052978565365872,
+        1.0,
+        0.4092276830491474,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_agressor_1774311700_generate.stl",
+      "name": "Meshy_AI_agressor_1774311700_generate.stl",
+      "tags": [
+        "1774311700",
+        "agressor",
+        "ai",
+        "meshy"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 7089054,
+      "faces": 2363018,
+      "extents": [
+        70.61123,
+        69.61189,
+        90.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 118150984,
+      "latent": [
+        0.784569222135048,
+        0.773465444358504,
+        0.999999999888889,
+        1.0,
+        0.07221664994984955,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blade guard vet_1774680902_generate.stl",
+      "name": "Meshy_AI_blade guard vet_1774680902_generate.stl",
+      "tags": [
+        "1774680902",
+        "ai",
+        "blade",
+        "guard",
+        "meshy",
+        "vet"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 7354824,
+      "faces": 2451608,
+      "extents": [
+        131.9504,
+        114.12232,
+        150.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 122580484,
+      "latent": [
+        0.8796693332746887,
+        0.7608154666159456,
+        0.9999999999333333,
+        1.0,
+        0.3520561685055166,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blood_angel_0305134448_generate.stl",
+      "name": "Meshy_AI_blood_angel_0305134448_generate.stl",
+      "tags": [
+        "0305134448",
+        "ai",
+        "angel",
+        "blood",
+        "meshy"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 2931786,
+      "faces": 977262,
+      "extents": [
+        1381.96765,
+        1381.73279,
+        2000.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 48863184,
+      "latent": [
+        0.6909838249965451,
+        0.6908663949965457,
+        0.999999999995,
+        0.977262,
+        0.35707121364092276,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_eliminators_1774311880_generate.stl",
+      "name": "Meshy_AI_eliminators_1774311880_generate.stl",
+      "tags": [
+        "1774311880",
+        "ai",
+        "eliminators",
+        "meshy"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 4494276,
+      "faces": 1498092,
+      "extents": [
+        75.90783,
+        107.62167,
+        90.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 74904684,
+      "latent": [
+        0.7053210565580965,
+        0.999999999907082,
+        0.8362628083325354,
+        1.0,
+        0.7171514543630892,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_interssesor_0306083406_generate.stl",
+      "name": "Meshy_AI_interssesor_0306083406_generate.stl",
+      "tags": [
+        "0306083406",
+        "ai",
+        "interssesor",
+        "meshy"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 8817795,
+      "faces": 2939265,
+      "extents": [
+        7029.51807,
+        6542.56787,
+        10000.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 146963334,
+      "latent": [
+        0.702951806999297,
+        0.6542567869993456,
+        0.9999999999989999,
+        1.0,
+        0.7853560682046138,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_power armor_1774311535_generate.stl",
+      "name": "Meshy_AI_power armor_1774311535_generate.stl",
+      "tags": [
+        "1774311535",
+        "ai",
+        "armor",
+        "marine",
+        "meshy",
+        "power"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 4796244,
+      "faces": 1598748,
+      "extents": [
+        77.74728,
+        60.35192,
+        90.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 79937484,
+      "latent": [
+        0.8638586665706824,
+        0.6705768888143804,
+        0.999999999888889,
+        1.0,
+        0.22567703109327983,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_praetor_0304052441_generate.stl",
+      "name": "Meshy_AI_praetor_0304052441_generate.stl",
+      "tags": [
+        "0304052441",
+        "ai",
+        "meshy",
+        "praetor"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 3427998,
+      "faces": 1142666,
+      "extents": [
+        175.80875,
+        190.05604,
+        240.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 57133384,
+      "latent": [
+        0.732536458302811,
+        0.7919001666336708,
+        0.9999999999583333,
+        1.0,
+        0.633901705115346,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary priest_1774311478_generate.stl",
+      "name": "Meshy_AI_sanguinary priest_1774311478_generate.stl",
+      "tags": [
+        "1774311478",
+        "ai",
+        "meshy",
+        "priest",
+        "sanguinary"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 6620142,
+      "faces": 2206714,
+      "extents": [
+        84.55729,
+        68.8116,
+        90.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 110335784,
+      "latent": [
+        0.9395254443400527,
+        0.7645733332483807,
+        0.999999999888889,
+        1.0,
+        0.7061183550651956,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary_guard_0305100033_generate.stl",
+      "name": "Meshy_AI_sanguinary_guard_0305100033_generate.stl",
+      "tags": [
+        "0305100033",
+        "ai",
+        "guard",
+        "meshy",
+        "sanguinary"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 2628963,
+      "faces": 876321,
+      "extents": [
+        1008.93274,
+        980.85373,
+        1800.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 43816134,
+      "latent": [
+        0.5605181888857749,
+        0.5449187388858616,
+        0.9999999999944446,
+        0.876321,
+        0.1675025075225677,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Bearmastaaaa.stl",
+      "name": "Orc Bearmastaaaa.stl",
+      "tags": [
+        "bearmastaaaa",
+        "orc"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 8401326,
+      "faces": 2800442,
+      "extents": [
+        51.92052,
+        41.04393,
+        50.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 140022184,
+      "latent": [
+        0.999999999807398,
+        0.7905146171897903,
+        0.9630103856889317,
+        1.0,
+        0.8886659979939819,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Behemoth.stl",
+      "name": "Orc Behemoth.stl",
+      "tags": [
+        "behemoth",
+        "orc"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 5770326,
+      "faces": 1923442,
+      "extents": [
+        41.47001,
+        54.95456,
+        42.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 96172184,
+      "latent": [
+        0.7546236380102719,
+        0.9999999998180314,
+        0.7642677876477825,
+        1.0,
+        0.49648946840521563,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\orc clappa.stl",
+      "name": "orc clappa.stl",
+      "tags": [
+        "clappa",
+        "orc"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 4845600,
+      "faces": 1615200,
+      "extents": [
+        29.39632,
+        23.54831,
+        32.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 80760084,
+      "latent": [
+        0.9186349997129265,
+        0.7358846872700361,
+        0.9999999996875,
+        1.0,
+        0.2768304914744233,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Heavy Bolter.stl",
+      "name": "Orc Heavy Bolter.stl",
+      "tags": [
+        "bolter",
+        "heavy",
+        "orc",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 6738726,
+      "faces": 2246242,
+      "extents": [
+        31.04291,
+        31.58591,
+        32.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 112312184,
+      "latent": [
+        0.9700909371968466,
+        0.9870596871915438,
+        0.9999999996875,
+        1.0,
+        0.8365095285857572,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Nail Gunner.stl",
+      "name": "Orc Nail Gunner.stl",
+      "tags": [
+        "gunner",
+        "nail",
+        "orc"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 5620422,
+      "faces": 1873474,
+      "extents": [
+        29.89636,
+        31.5488,
+        32.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 93673784,
+      "latent": [
+        0.9342612497080434,
+        0.9858999996919062,
+        0.9999999996875,
+        1.0,
+        0.4744232698094283,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc War Boss Clobba.stl",
+      "name": "Orc War Boss Clobba.stl",
+      "tags": [
+        "boss",
+        "clobba",
+        "orc",
+        "war"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 8814162,
+      "faces": 2938054,
+      "extents": [
+        48.27403,
+        40.85746,
+        48.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 146902784,
+      "latent": [
+        0.9999999997928493,
+        0.8463652193847572,
+        0.9943234486546236,
+        1.0,
+        0.9648946840521565,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc warlord.stl",
+      "name": "Orc warlord.stl",
+      "tags": [
+        "orc",
+        "warlord"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 5498862,
+      "faces": 1832954,
+      "extents": [
+        33.6083,
+        32.7344,
+        32.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 91647784,
+      "latent": [
+        0.9999999997024545,
+        0.9739974943766875,
+        0.9521457494273302,
+        1.0,
+        0.8555667001003009,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_00 (repaired).stl",
+      "name": "Prime_Rifle_00 (repaired).stl",
+      "tags": [
+        "00",
+        "marine",
+        "prime",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 366708,
+      "faces": 122236,
+      "extents": [
+        5.914,
+        23.546,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 6111884,
+      "latent": [
+        0.25116792650506753,
+        0.9999999995752994,
+        0.5742801322626857,
+        0.122236,
+        0.12637913741223672,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_01 (repaired).stl",
+      "name": "Prime_Rifle_01 (repaired).stl",
+      "tags": [
+        "01",
+        "marine",
+        "prime",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 386910,
+      "faces": 128970,
+      "extents": [
+        5.914,
+        23.546,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 6448584,
+      "latent": [
+        0.25116792650506753,
+        0.9999999995752994,
+        0.5742801322626857,
+        0.12897,
+        0.12738214643931794,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_02 (repaired).stl",
+      "name": "Prime_Rifle_02 (repaired).stl",
+      "tags": [
+        "02",
+        "marine",
+        "prime",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 438996,
+      "faces": 146332,
+      "extents": [
+        5.914,
+        23.548,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 7316684,
+      "latent": [
+        0.25114659408393636,
+        0.9999999995753355,
+        0.5742313569839343,
+        0.146332,
+        0.1283851554663992,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_03 (repaired).stl",
+      "name": "Prime_Rifle_03 (repaired).stl",
+      "tags": [
+        "03",
+        "marine",
+        "prime",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 377406,
+      "faces": 125802,
+      "extents": [
+        5.914,
+        23.546,
+        13.522
+      ],
+      "watertight": false,
+      "file_size_bytes": 6290184,
+      "latent": [
+        0.25116792650506753,
+        0.9999999995752994,
+        0.5742801322626857,
+        0.125802,
+        0.12938816449348045,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_04 (repaired).stl",
+      "name": "Prime_Rifle_04 (repaired).stl",
+      "tags": [
+        "04",
+        "marine",
+        "prime",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 377724,
+      "faces": 125908,
+      "extents": [
+        5.914,
+        23.546,
+        13.52
+      ],
+      "watertight": false,
+      "file_size_bytes": 6295484,
+      "latent": [
+        0.25116792650506753,
+        0.9999999995752994,
+        0.5741951921455044,
+        0.125908,
+        0.13039117352056168,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHead (repaired).stl",
+      "name": "PrimeHead (repaired).stl",
+      "tags": [
+        "head",
+        "marine",
+        "prime"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 278370,
+      "faces": 92790,
+      "extents": [
+        7.24,
+        7.986,
+        8.41
+      ],
+      "watertight": false,
+      "file_size_bytes": 4639584,
+      "latent": [
+        0.8608799038515101,
+        0.9495838276461547,
+        0.9999999988109393,
+        0.09279,
+        0.3069207622868606,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadSgt (repaired).stl",
+      "name": "PrimeHeadSgt (repaired).stl",
+      "tags": [
+        "head",
+        "marine",
+        "prime",
+        "sgt"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 284472,
+      "faces": 94824,
+      "extents": [
+        7.24,
+        7.986,
+        8.41
+      ],
+      "watertight": false,
+      "file_size_bytes": 4741284,
+      "latent": [
+        0.8608799038515101,
+        0.9495838276461547,
+        0.9999999988109393,
+        0.094824,
+        0.6469408224674023,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStudded (repaired).stl",
+      "name": "PrimeHeadStudded (repaired).stl",
+      "tags": [
+        "head",
+        "marine",
+        "prime",
+        "studded"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 280392,
+      "faces": 93464,
+      "extents": [
+        7.24,
+        7.986,
+        8.408
+      ],
+      "watertight": false,
+      "file_size_bytes": 4673284,
+      "latent": [
+        0.8610846802318213,
+        0.9498097039131663,
+        0.9999999988106564,
+        0.093464,
+        0.3119358074222668,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStuddedSgt (repaired).stl",
+      "name": "PrimeHeadStuddedSgt (repaired).stl",
+      "tags": [
+        "head",
+        "marine",
+        "prime",
+        "sgt",
+        "studded"
+      ],
+      "roles": [
+        "head"
+      ],
+      "vertices": 286242,
+      "faces": 95414,
+      "extents": [
+        7.24,
+        7.986,
+        8.408
+      ],
+      "watertight": false,
+      "file_size_bytes": 4770784,
+      "latent": [
+        0.8610846802318213,
+        0.9498097039131663,
+        0.9999999988106564,
+        0.095414,
+        0.40320962888665995,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_01 (repaired).stl",
+      "name": "PrimeInfantry_Body_01 (repaired).stl",
+      "tags": [
+        "01",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 292986,
+      "faces": 97662,
+      "extents": [
+        13.05,
+        13.722,
+        11.92
+      ],
+      "watertight": false,
+      "file_size_bytes": 4883184,
+      "latent": [
+        0.9510275463117421,
+        0.9999999992712432,
+        0.8686780346387712,
+        0.097662,
+        0.37612838515546637,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_02 (repaired).stl",
+      "name": "PrimeInfantry_Body_02 (repaired).stl",
+      "tags": [
+        "02",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 294444,
+      "faces": 98148,
+      "extents": [
+        12.934,
+        13.598,
+        11.794
+      ],
+      "watertight": false,
+      "file_size_bytes": 4907484,
+      "latent": [
+        0.9511692889019198,
+        0.9999999992645977,
+        0.8673334307491296,
+        0.098148,
+        0.37713139418254765,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_03 (repaired).stl",
+      "name": "PrimeInfantry_Body_03 (repaired).stl",
+      "tags": [
+        "03",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 294294,
+      "faces": 98098,
+      "extents": [
+        12.804,
+        13.758,
+        11.578
+      ],
+      "watertight": false,
+      "file_size_bytes": 4904984,
+      "latent": [
+        0.93065852527209,
+        0.9999999992731501,
+        0.8415467358325724,
+        0.098098,
+        0.3781344032096289,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_04 (repaired).stl",
+      "name": "PrimeInfantry_Body_04 (repaired).stl",
+      "tags": [
+        "04",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 292818,
+      "faces": 97606,
+      "extents": [
+        13.082,
+        13.854,
+        12.06
+      ],
+      "watertight": false,
+      "file_size_bytes": 4880384,
+      "latent": [
+        0.9442760206840797,
+        0.9999999992781867,
+        0.8705067122343679,
+        0.097606,
+        0.3791374122367101,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_05 (repaired).stl",
+      "name": "PrimeInfantry_Body_05 (repaired).stl",
+      "tags": [
+        "05",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 305862,
+      "faces": 101954,
+      "extents": [
+        13.412,
+        13.796,
+        12.092
+      ],
+      "watertight": false,
+      "file_size_bytes": 5097784,
+      "latent": [
+        0.9721658444678416,
+        0.9999999992751522,
+        0.876485937317711,
+        0.101954,
+        0.3801404212637914,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_06 (repaired).stl",
+      "name": "PrimeInfantry_Body_06 (repaired).stl",
+      "tags": [
+        "06",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 292212,
+      "faces": 97404,
+      "extents": [
+        13.212,
+        13.704,
+        11.734
+      ],
+      "watertight": false,
+      "file_size_bytes": 4870284,
+      "latent": [
+        0.9640980728516504,
+        0.9999999992702859,
+        0.8562463508054243,
+        0.097404,
+        0.3811434302908726,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_07 (repaired).stl",
+      "name": "PrimeInfantry_Body_07 (repaired).stl",
+      "tags": [
+        "07",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 291336,
+      "faces": 97112,
+      "extents": [
+        12.826,
+        13.348,
+        11.69
+      ],
+      "watertight": false,
+      "file_size_bytes": 4855684,
+      "latent": [
+        0.9608930169606734,
+        0.9999999992508241,
+        0.8757866340457096,
+        0.097112,
+        0.38214643931795383,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_08 (repaired).stl",
+      "name": "PrimeInfantry_Body_08 (repaired).stl",
+      "tags": [
+        "08",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 294228,
+      "faces": 98076,
+      "extents": [
+        12.782,
+        13.812,
+        11.768
+      ],
+      "watertight": false,
+      "file_size_bytes": 4903884,
+      "latent": [
+        0.9254271641142288,
+        0.9999999992759918,
+        0.8520127419258524,
+        0.098076,
+        0.3831494483450351,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_09 (repaired).stl",
+      "name": "PrimeInfantry_Body_09 (repaired).stl",
+      "tags": [
+        "09",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 293454,
+      "faces": 97818,
+      "extents": [
+        12.82,
+        13.838,
+        11.554
+      ],
+      "watertight": false,
+      "file_size_bytes": 4890984,
+      "latent": [
+        0.9264344551767347,
+        0.9999999992773522,
+        0.8349472461085798,
+        0.097818,
+        0.38415245737211634,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_10 (repaired).stl",
+      "name": "PrimeInfantry_Body_10 (repaired).stl",
+      "tags": [
+        "10",
+        "body",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "torso"
+      ],
+      "roles": [
+        "torso"
+      ],
+      "vertices": 295776,
+      "faces": 98592,
+      "extents": [
+        12.994,
+        13.85,
+        11.71
+      ],
+      "watertight": false,
+      "file_size_bytes": 4929684,
+      "latent": [
+        0.9381949451709783,
+        0.9999999992779783,
+        0.8454873640104784,
+        0.098592,
+        0.37612838515546637,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterEmpty (repaired).stl",
+      "name": "PrimeInfantry_HolsterEmpty (repaired).stl",
+      "tags": [
+        "empty",
+        "holster",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 36750,
+      "faces": 12250,
+      "extents": [
+        5.13,
+        2.69,
+        9.784
+      ],
+      "watertight": false,
+      "file_size_bytes": 612584,
+      "latent": [
+        0.5243254287363803,
+        0.2749386751073807,
+        0.999999998977923,
+        0.01225,
+        0.5386158475426279,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterPistol (repaired).stl",
+      "name": "PrimeInfantry_HolsterPistol (repaired).stl",
+      "tags": [
+        "holster",
+        "infantry",
+        "marine",
+        "pistol",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 55608,
+      "faces": 18536,
+      "extents": [
+        7.03,
+        2.69,
+        10.258
+      ],
+      "watertight": false,
+      "file_size_bytes": 926884,
+      "latent": [
+        0.6853187749217013,
+        0.2622343534195415,
+        0.999999999025151,
+        0.018536,
+        0.36710130391173523,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_01 (repaired).stl",
+      "name": "PrimeInfantry_Legs_01 (repaired).stl",
+      "tags": [
+        "01",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 574692,
+      "faces": 191564,
+      "extents": [
+        24.088,
+        20.298,
+        23.21
+      ],
+      "watertight": false,
+      "file_size_bytes": 9578284,
+      "latent": [
+        0.9999999995848555,
+        0.8426602454157005,
+        0.9635503151097848,
+        0.191564,
+        0.9398194583751254,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_02 (repaired).stl",
+      "name": "PrimeInfantry_Legs_02 (repaired).stl",
+      "tags": [
+        "02",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 541092,
+      "faces": 180364,
+      "extents": [
+        19.036,
+        23.188,
+        23.574
+      ],
+      "watertight": false,
+      "file_size_bytes": 9018284,
+      "latent": [
+        0.8074997875593876,
+        0.9836260282584091,
+        0.9999999995758038,
+        0.180364,
+        0.9408224674022067,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_03 (repaired).stl",
+      "name": "PrimeInfantry_Legs_03 (repaired).stl",
+      "tags": [
+        "03",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 546000,
+      "faces": 182000,
+      "extents": [
+        17.728,
+        21.818,
+        24.456
+      ],
+      "watertight": false,
+      "file_size_bytes": 9100084,
+      "latent": [
+        0.7248936863244629,
+        0.892132809579599,
+        0.9999999995911023,
+        0.182,
+        0.9418254764292878,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_04 (repaired).stl",
+      "name": "PrimeInfantry_Legs_04 (repaired).stl",
+      "tags": [
+        "04",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 542826,
+      "faces": 180942,
+      "extents": [
+        18.228,
+        23.556,
+        23.87
+      ],
+      "watertight": false,
+      "file_size_bytes": 9047184,
+      "latent": [
+        0.7636363633164489,
+        0.9868454122384392,
+        0.9999999995810641,
+        0.180942,
+        0.9428284854563691,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_05 (repaired).stl",
+      "name": "PrimeInfantry_Legs_05 (repaired).stl",
+      "tags": [
+        "05",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 570072,
+      "faces": 190024,
+      "extents": [
+        24.158,
+        21.928,
+        22.966
+      ],
+      "watertight": false,
+      "file_size_bytes": 9501284,
+      "latent": [
+        0.9999999995860585,
+        0.9076910336502645,
+        0.9506581666732932,
+        0.190024,
+        0.9438314944834504,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_06 (repaired).stl",
+      "name": "PrimeInfantry_Legs_06 (repaired).stl",
+      "tags": [
+        "06",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 574464,
+      "faces": 191488,
+      "extents": [
+        23.852,
+        19.992,
+        23.758
+      ],
+      "watertight": false,
+      "file_size_bytes": 9574484,
+      "latent": [
+        0.9999999995807479,
+        0.8381687066752604,
+        0.9960590302716505,
+        0.191488,
+        0.9448345035105316,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_07 (repaired).stl",
+      "name": "PrimeInfantry_Legs_07 (repaired).stl",
+      "tags": [
+        "07",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 564432,
+      "faces": 188144,
+      "extents": [
+        24.192,
+        19.948,
+        23.242
+      ],
+      "watertight": false,
+      "file_size_bytes": 9407284,
+      "latent": [
+        0.9999999995866402,
+        0.8245701054792617,
+        0.9607308197086926,
+        0.188144,
+        0.9458375125376128,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_08 (repaired).stl",
+      "name": "PrimeInfantry_Legs_08 (repaired).stl",
+      "tags": [
+        "08",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 541806,
+      "faces": 180602,
+      "extents": [
+        25.73,
+        16.608,
+        23.484
+      ],
+      "watertight": false,
+      "file_size_bytes": 9030184,
+      "latent": [
+        0.9999999996113486,
+        0.6454722111754869,
+        0.9127088997618699,
+        0.180602,
+        0.9468405215646941,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_09 (repaired).stl",
+      "name": "PrimeInfantry_Legs_09 (repaired).stl",
+      "tags": [
+        "09",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 544488,
+      "faces": 181496,
+      "extents": [
+        19.324,
+        22.0,
+        24.066
+      ],
+      "watertight": false,
+      "file_size_bytes": 9074884,
+      "latent": [
+        0.8029585303735733,
+        0.9141527462336272,
+        0.9999999995844759,
+        0.181496,
+        0.9478435305917753,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_10 (repaired).stl",
+      "name": "PrimeInfantry_Legs_10 (repaired).stl",
+      "tags": [
+        "10",
+        "infantry",
+        "legs",
+        "marine",
+        "prime",
+        "soldier"
+      ],
+      "roles": [
+        "legs"
+      ],
+      "vertices": 511878,
+      "faces": 170626,
+      "extents": [
+        17.472,
+        21.876,
+        23.896
+      ],
+      "watertight": false,
+      "file_size_bytes": 8531384,
+      "latent": [
+        0.7311683960783527,
+        0.9154670233865638,
+        0.9999999995815199,
+        0.170626,
+        0.9398194583751254,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_01 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_01 (repaired).stl",
+      "tags": [
+        "01",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 84990,
+      "faces": 28330,
+      "extents": [
+        1.802,
+        2.21,
+        6.828
+      ],
+      "watertight": false,
+      "file_size_bytes": 1416584,
+      "latent": [
+        0.26391329779743217,
+        0.3236672520157187,
+        0.9999999985354423,
+        0.02833,
+        0.3460381143430291,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_02 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_02 (repaired).stl",
+      "tags": [
+        "02",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 29994,
+      "faces": 9998,
+      "extents": [
+        2.582,
+        2.506,
+        7.052
+      ],
+      "watertight": false,
+      "file_size_bytes": 499984,
+      "latent": [
+        0.36613726550462666,
+        0.35536018100487776,
+        0.9999999985819625,
+        0.009998,
+        0.34704112337011034,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_03 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_03 (repaired).stl",
+      "tags": [
+        "03",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 50868,
+      "faces": 16956,
+      "extents": [
+        3.11,
+        2.552,
+        6.574
+      ],
+      "watertight": false,
+      "file_size_bytes": 847884,
+      "latent": [
+        0.4730757522466143,
+        0.38819592274384557,
+        0.9999999984788561,
+        0.016956,
+        0.34804413239719156,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_04 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_04 (repaired).stl",
+      "tags": [
+        "04",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 29400,
+      "faces": 9800,
+      "extents": [
+        3.51,
+        2.344,
+        5.424
+      ],
+      "watertight": false,
+      "file_size_bytes": 490084,
+      "latent": [
+        0.6471238926122347,
+        0.43215339153364046,
+        0.9999999981563422,
+        0.0098,
+        0.34904714142427284,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_05 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_05 (repaired).stl",
+      "tags": [
+        "05",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 87000,
+      "faces": 29000,
+      "extents": [
+        3.632,
+        2.202,
+        5.494
+      ],
+      "watertight": false,
+      "file_size_bytes": 1450084,
+      "latent": [
+        0.6610848186001369,
+        0.4008008729508539,
+        0.9999999981798325,
+        0.029,
+        0.35005015045135407,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_06 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_06 (repaired).stl",
+      "tags": [
+        "06",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 105132,
+      "faces": 35044,
+      "extents": [
+        2.41,
+        2.41,
+        7.25
+      ],
+      "watertight": false,
+      "file_size_bytes": 1752284,
+      "latent": [
+        0.3324137926449465,
+        0.3324137926449465,
+        0.9999999986206897,
+        0.035044,
+        0.3510531594784353,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_07 (repaired).stl",
+      "name": "PrimeInfantry_Trinket_07 (repaired).stl",
+      "tags": [
+        "07",
+        "infantry",
+        "marine",
+        "prime",
+        "soldier",
+        "trinket"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 38802,
+      "faces": 12934,
+      "extents": [
+        4.708,
+        5.74,
+        8.386
+      ],
+      "watertight": false,
+      "file_size_bytes": 646784,
+      "latent": [
+        0.5614118762682901,
+        0.6844741227230215,
+        0.9999999988075363,
+        0.012934,
+        0.3520561685055166,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimePowerPack_repaired.stl",
+      "name": "PrimePowerPack_repaired.stl",
+      "tags": [
+        "backpack",
+        "marine",
+        "pack",
+        "power",
+        "prime"
+      ],
+      "roles": [
+        "backpack"
+      ],
+      "vertices": 272754,
+      "faces": 90918,
+      "extents": [
+        18.644,
+        7.906,
+        15.68
+      ],
+      "watertight": false,
+      "file_size_bytes": 4545984,
+      "latent": [
+        0.9999999994636344,
+        0.4240506326839462,
+        0.8410212396261418,
+        0.090918,
+        0.29087261785356067,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_01_L (repaired).stl",
+      "tags": [
+        "01",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 164814,
+      "faces": 54938,
+      "extents": [
+        5.696,
+        15.78,
+        8.076
+      ],
+      "watertight": false,
+      "file_size_bytes": 2746984,
+      "latent": [
+        0.3609632443846874,
+        0.9999999993662864,
+        0.5117870719190196,
+        0.054938,
+        0.9558676028084253,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_01_R (repaired).stl",
+      "tags": [
+        "01",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 146664,
+      "faces": 48888,
+      "extents": [
+        8.532,
+        13.036,
+        7.046
+      ],
+      "watertight": false,
+      "file_size_bytes": 2444484,
+      "latent": [
+        0.6544952434377913,
+        0.9999999992328935,
+        0.5405032214325689,
+        0.048888,
+        0.9558676028084253,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_02_L (repaired).stl",
+      "tags": [
+        "02",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 136752,
+      "faces": 45584,
+      "extents": [
+        7.302,
+        14.18,
+        10.70601
+      ],
+      "watertight": false,
+      "file_size_bytes": 2279284,
+      "latent": [
+        0.5149506343336032,
+        0.9999999992947813,
+        0.7550077568723499,
+        0.045584,
+        0.9568706118355065,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_02_R (repaired).stl",
+      "tags": [
+        "02",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 117108,
+      "faces": 39036,
+      "extents": [
+        7.442,
+        11.012,
+        9.868
+      ],
+      "watertight": false,
+      "file_size_bytes": 1951884,
+      "latent": [
+        0.6758082086125969,
+        0.9999999990918996,
+        0.8961133300979718,
+        0.039036,
+        0.9568706118355065,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_03_L (repaired).stl",
+      "tags": [
+        "03",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 153978,
+      "faces": 51326,
+      "extents": [
+        7.902,
+        12.104,
+        14.02
+      ],
+      "watertight": false,
+      "file_size_bytes": 2566384,
+      "latent": [
+        0.5636233947477722,
+        0.863338087829288,
+        0.9999999992867332,
+        0.051326,
+        0.9578736208625878,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_03_R (repaired).stl",
+      "tags": [
+        "03",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 136014,
+      "faces": 45338,
+      "extents": [
+        7.626,
+        9.766,
+        11.152
+      ],
+      "watertight": false,
+      "file_size_bytes": 2266984,
+      "latent": [
+        0.6838235287985801,
+        0.8757173593295218,
+        0.9999999991032997,
+        0.045338,
+        0.9578736208625878,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_04_L (repaired).stl",
+      "tags": [
+        "04",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 207030,
+      "faces": 69010,
+      "extents": [
+        9.47,
+        13.49,
+        11.88
+      ],
+      "watertight": false,
+      "file_size_bytes": 3450584,
+      "latent": [
+        0.7020014820593021,
+        0.9999999992587101,
+        0.880652334410191,
+        0.06901,
+        0.958876629889669,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_04_R (repaired).stl",
+      "tags": [
+        "04",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 146820,
+      "faces": 48940,
+      "extents": [
+        7.014,
+        9.092,
+        10.61
+      ],
+      "watertight": false,
+      "file_size_bytes": 2447084,
+      "latent": [
+        0.6610744574353681,
+        0.8569274261480421,
+        0.9999999990574928,
+        0.04894,
+        0.958876629889669,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_05_L (repaired).stl",
+      "tags": [
+        "05",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 155538,
+      "faces": 51846,
+      "extents": [
+        6.344,
+        13.242,
+        10.058
+      ],
+      "watertight": false,
+      "file_size_bytes": 2592384,
+      "latent": [
+        0.4790817093497344,
+        0.999999999244827,
+        0.7595529370491216,
+        0.051846,
+        0.9598796389167502,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_05_R (repaired).stl",
+      "tags": [
+        "05",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 176976,
+      "faces": 58992,
+      "extents": [
+        8.634,
+        11.458,
+        11.1
+      ],
+      "watertight": false,
+      "file_size_bytes": 2949684,
+      "latent": [
+        0.7535346476230278,
+        0.9999999991272472,
+        0.9687554538586528,
+        0.058992,
+        0.9598796389167502,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_06_L (repaired).stl",
+      "tags": [
+        "06",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 192036,
+      "faces": 64012,
+      "extents": [
+        6.382,
+        13.162,
+        13.14
+      ],
+      "watertight": false,
+      "file_size_bytes": 3200684,
+      "latent": [
+        0.48488071684783407,
+        0.999999999240237,
+        0.9983285207427985,
+        0.064012,
+        0.9608826479438315,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_06_R (repaired).stl",
+      "tags": [
+        "06",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 139248,
+      "faces": 46416,
+      "extents": [
+        8.15,
+        11.334,
+        10.242
+      ],
+      "watertight": false,
+      "file_size_bytes": 2320884,
+      "latent": [
+        0.7190753478744704,
+        0.9999999991176989,
+        0.9036527255129233,
+        0.046416,
+        0.9608826479438315,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_L (repaired).stl",
+      "name": "PrimeRanged_ArmSet_07_L (repaired).stl",
+      "tags": [
+        "07",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 186624,
+      "faces": 62208,
+      "extents": [
+        7.178,
+        14.856,
+        9.066
+      ],
+      "watertight": false,
+      "file_size_bytes": 3110484,
+      "latent": [
+        0.48317178211956663,
+        0.9999999993268712,
+        0.6102584810108653,
+        0.062208,
+        0.9618856569709128,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_R (repaired).stl",
+      "name": "PrimeRanged_ArmSet_07_R (repaired).stl",
+      "tags": [
+        "07",
+        "arm",
+        "marine",
+        "prime",
+        "ranged",
+        "set"
+      ],
+      "roles": [
+        "left_arm",
+        "right_arm"
+      ],
+      "vertices": 130962,
+      "faces": 43654,
+      "extents": [
+        7.244,
+        10.224,
+        10.608
+      ],
+      "watertight": false,
+      "file_size_bytes": 2182784,
+      "latent": [
+        0.682880844001809,
+        0.963800904068815,
+        0.9999999990573152,
+        0.043654,
+        0.9618856569709128,
+        0.25
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeShoulder (repaired).stl",
+      "name": "PrimeShoulder (repaired).stl",
+      "tags": [
+        "marine",
+        "prime",
+        "shoulder"
+      ],
+      "roles": [
+        "shoulder"
+      ],
+      "vertices": 179040,
+      "faces": 59680,
+      "extents": [
+        9.756,
+        5.644,
+        8.352
+      ],
+      "watertight": false,
+      "file_size_bytes": 2984084,
+      "latent": [
+        0.9999999989749897,
+        0.578515784564867,
+        0.8560885600081093,
+        0.05968,
+        0.3410230692076229,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Reaper Gladation.stl",
+      "name": "Reaper Gladation.stl",
+      "tags": [
+        "gladation",
+        "reaper"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 10706664,
+      "faces": 3568888,
+      "extents": [
+        124.93391,
+        94.99492,
+        90.00001
+      ],
+      "watertight": false,
+      "file_size_bytes": 178444484,
+      "latent": [
+        0.9999999999199577,
+        0.7603613782070567,
+        0.7203809597634158,
+        1.0,
+        0.2316950852557673,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_00 (repaired).stl",
+      "name": "RifleGrenadeLauncher_DoubleGrip_00 (repaired).stl",
+      "tags": [
+        "00",
+        "double",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 276198,
+      "faces": 92066,
+      "extents": [
+        7.464,
+        24.444,
+        11.436
+      ],
+      "watertight": false,
+      "file_size_bytes": 4603384,
+      "latent": [
+        0.30535100625701567,
+        0.9999999995909016,
+        0.467844869715331,
+        0.092066,
+        0.7482447342026078,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_01 (repaired).stl",
+      "name": "RifleGrenadeLauncher_DoubleGrip_01 (repaired).stl",
+      "tags": [
+        "01",
+        "double",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 348504,
+      "faces": 116168,
+      "extents": [
+        7.464,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 5808484,
+      "latent": [
+        0.30535100625701567,
+        0.9999999995909016,
+        0.4677630500459159,
+        0.116168,
+        0.7492477432296891,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_02 (repaired).stl",
+      "name": "RifleGrenadeLauncher_DoubleGrip_02 (repaired).stl",
+      "tags": [
+        "02",
+        "double",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 296436,
+      "faces": 98812,
+      "extents": [
+        7.464,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4940684,
+      "latent": [
+        0.30535100625701567,
+        0.9999999995909016,
+        0.4677630500459159,
+        0.098812,
+        0.7502507522567703,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_03 (repaired).stl",
+      "name": "RifleGrenadeLauncher_DoubleGrip_03 (repaired).stl",
+      "tags": [
+        "03",
+        "double",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 286920,
+      "faces": 95640,
+      "extents": [
+        7.464,
+        24.446,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4782084,
+      "latent": [
+        0.3053260245826204,
+        0.9999999995909351,
+        0.4677247809589606,
+        0.09564,
+        0.7512537612838516,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_04 (repaired).stl",
+      "name": "RifleGrenadeLauncher_DoubleGrip_04 (repaired).stl",
+      "tags": [
+        "04",
+        "double",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 287394,
+      "faces": 95798,
+      "extents": [
+        7.464,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4789984,
+      "latent": [
+        0.30535100625701567,
+        0.9999999995909016,
+        0.4677630500459159,
+        0.095798,
+        0.7522567703109327,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_00 (repaired).stl",
+      "name": "RifleGrenadeLauncher_SingleGrip_00 (repaired).stl",
+      "tags": [
+        "00",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 221682,
+      "faces": 73894,
+      "extents": [
+        6.196,
+        24.444,
+        11.436
+      ],
+      "watertight": false,
+      "file_size_bytes": 3694784,
+      "latent": [
+        0.2534773358478656,
+        0.9999999995909016,
+        0.467844869715331,
+        0.073894,
+        0.7903711133400201,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_01 (repaired).stl",
+      "name": "RifleGrenadeLauncher_SingleGrip_01 (repaired).stl",
+      "tags": [
+        "01",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 294000,
+      "faces": 98000,
+      "extents": [
+        6.196,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4900084,
+      "latent": [
+        0.2534773358478656,
+        0.9999999995909016,
+        0.4677630500459159,
+        0.098,
+        0.7913741223671013,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_02 (repaired).stl",
+      "name": "RifleGrenadeLauncher_SingleGrip_02 (repaired).stl",
+      "tags": [
+        "02",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 241764,
+      "faces": 80588,
+      "extents": [
+        6.196,
+        24.44403,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 4029484,
+      "latent": [
+        0.25347702475677003,
+        0.9999999995909021,
+        0.46776247596334863,
+        0.080588,
+        0.7923771313941825,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_03 (repaired).stl",
+      "name": "RifleGrenadeLauncher_SingleGrip_03 (repaired).stl",
+      "tags": [
+        "03",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 232434,
+      "faces": 77478,
+      "extents": [
+        6.196,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 3873984,
+      "latent": [
+        0.2534773358478656,
+        0.9999999995909016,
+        0.4677630500459159,
+        0.077478,
+        0.7933801404212638,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_04 (repaired).stl",
+      "name": "RifleGrenadeLauncher_SingleGrip_04 (repaired).stl",
+      "tags": [
+        "04",
+        "grenade",
+        "grip",
+        "launcher",
+        "rifle",
+        "single"
+      ],
+      "roles": [
+        "weapon"
+      ],
+      "vertices": 232626,
+      "faces": 77542,
+      "extents": [
+        6.196,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "file_size_bytes": 3877184,
+      "latent": [
+        0.2534773358478656,
+        0.9999999995909016,
+        0.4677630500459159,
+        0.077542,
+        0.794383149448345,
+        0.125
+      ]
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Warboss with plasmacannon.stl",
+      "name": "Warboss with plasmacannon.stl",
+      "tags": [
+        "orc",
+        "plasmacannon",
+        "warboss",
+        "with"
+      ],
+      "roles": [
+        "full"
+      ],
+      "vertices": 6743898,
+      "faces": 2247966,
+      "extents": [
+        31.89215,
+        38.01856,
+        38.0
+      ],
+      "watertight": false,
+      "file_size_bytes": 112398384,
+      "latent": [
+        0.8388573894332512,
+        0.9999999997369705,
+        0.9995118171231335,
+        1.0,
+        0.9779338014042126,
+        0.125
+      ]
+    }
+  ]
+}

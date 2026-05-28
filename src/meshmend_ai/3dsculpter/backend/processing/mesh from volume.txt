@@ -1,0 +1,53 @@
+# app/mesh_from_volume.py
+from __future__ import annotations
+import numpy as np
+
+def _sigmoid(x: np.ndarray) -> np.ndarray:
+    x = np.clip(x, -60, 60)
+    return 1 / (1 + np.exp(-x))
+
+def volume_to_mesh_trimesh(
+    volume: np.ndarray,
+    *,
+    kind: str = "occupancy",   # "occupancy" or "sdf"
+    iso: float = 0.5,          # occupancy default
+    voxel_size_mm: float = 0.2 # your resolution in mm
+):
+    """
+    volume: (D,H,W) float
+      occupancy: probs [0..1] OR logits (any range)
+      sdf: signed distance field (iso typically 0.0)
+    returns: trimesh.Trimesh
+    """
+    if volume.ndim != 3:
+        raise ValueError(f"Expected (D,H,W), got {volume.shape}")
+
+    vol = volume.astype(np.float32)
+
+    if kind == "occupancy":
+        # if it looks like logits, squash
+        if vol.min() < -0.5 or vol.max() > 1.5:
+            vol = _sigmoid(vol)
+        vol = np.clip(vol, 0.0, 1.0)
+        iso_level = iso
+    elif kind == "sdf":
+        iso_level = iso  # usually 0.0
+    else:
+        raise ValueError("kind must be 'occupancy' or 'sdf'")
+
+    from skimage.measure import marching_cubes
+    verts, faces, normals, _ = marching_cubes(vol, level=float(iso_level))
+
+    # scale voxels into mm
+    verts = verts * float(voxel_size_mm)
+
+    import trimesh
+    mesh = trimesh.Trimesh(vertices=verts, faces=faces, vertex_normals=normals, process=True)
+
+    # basic cleanup
+    mesh.remove_degenerate_faces()
+    mesh.remove_duplicate_faces()
+    mesh.remove_infinite_values()
+    mesh.merge_vertices()
+
+    return mesh

@@ -1,0 +1,4298 @@
+{
+  "version": 1,
+  "source_dir": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl",
+  "examples": [
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmPointing (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmPointing (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armpointing, repaired",
+      "tags": [
+        "armpointing",
+        "repaired"
+      ],
+      "vertices": 66402,
+      "faces": 22134,
+      "extents": [
+        10.116,
+        12.642,
+        7.692
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.395063,
+      "voxel_filled": 2354,
+      "voxel_fill_ratio": 0.071838,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmRifle (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmRifle (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armrifle, repaired",
+      "tags": [
+        "armrifle",
+        "repaired"
+      ],
+      "vertices": 223590,
+      "faces": 74530,
+      "extents": [
+        11.088,
+        20.926,
+        19.216
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.653938,
+      "voxel_filled": 2514,
+      "voxel_fill_ratio": 0.076721,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset08, repaired",
+      "tags": [
+        "armset08",
+        "repaired"
+      ],
+      "vertices": 59964,
+      "faces": 19988,
+      "extents": [
+        7.142,
+        11.46,
+        12.214
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.381687,
+      "voxel_filled": 2473,
+      "voxel_fill_ratio": 0.07547,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset08, repaired",
+      "tags": [
+        "armset08",
+        "repaired"
+      ],
+      "vertices": 63684,
+      "faces": 21228,
+      "extents": [
+        9.544,
+        7.382,
+        12.866
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.402062,
+      "voxel_filled": 2180,
+      "voxel_fill_ratio": 0.066528,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset09, repaired",
+      "tags": [
+        "armset09",
+        "repaired"
+      ],
+      "vertices": 63168,
+      "faces": 21056,
+      "extents": [
+        9.412,
+        7.638,
+        12.816
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.4005,
+      "voxel_filled": 2203,
+      "voxel_fill_ratio": 0.06723,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset09, repaired",
+      "tags": [
+        "armset09",
+        "repaired"
+      ],
+      "vertices": 70602,
+      "faces": 23534,
+      "extents": [
+        6.598,
+        12.168,
+        8.874
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.38025,
+      "voxel_filled": 2463,
+      "voxel_fill_ratio": 0.075165,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_00 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_00 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, doublegrip, repaired",
+      "tags": [
+        "autorifle",
+        "doublegrip",
+        "repaired"
+      ],
+      "vertices": 260430,
+      "faces": 86810,
+      "extents": [
+        7.464,
+        23.546,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735812,
+      "voxel_filled": 1373,
+      "voxel_fill_ratio": 0.041901,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, doublegrip, repaired",
+      "tags": [
+        "autorifle",
+        "doublegrip",
+        "repaired"
+      ],
+      "vertices": 332736,
+      "faces": 110912,
+      "extents": [
+        7.464,
+        23.546,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735812,
+      "voxel_filled": 1389,
+      "voxel_fill_ratio": 0.042389,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, doublegrip, repaired",
+      "tags": [
+        "autorifle",
+        "doublegrip",
+        "repaired"
+      ],
+      "vertices": 280476,
+      "faces": 93492,
+      "extents": [
+        7.464,
+        23.548,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735875,
+      "voxel_filled": 1378,
+      "voxel_fill_ratio": 0.042053,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, doublegrip, repaired",
+      "tags": [
+        "autorifle",
+        "doublegrip",
+        "repaired"
+      ],
+      "vertices": 271284,
+      "faces": 90428,
+      "extents": [
+        7.464,
+        23.548,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735875,
+      "voxel_filled": 1378,
+      "voxel_fill_ratio": 0.042053,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, doublegrip, repaired",
+      "tags": [
+        "autorifle",
+        "doublegrip",
+        "repaired"
+      ],
+      "vertices": 271548,
+      "faces": 90516,
+      "extents": [
+        7.464,
+        23.54799,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735875,
+      "voxel_filled": 1403,
+      "voxel_fill_ratio": 0.042816,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_00 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_00 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, repaired, singlegrip",
+      "tags": [
+        "autorifle",
+        "repaired",
+        "singlegrip"
+      ],
+      "vertices": 203988,
+      "faces": 67996,
+      "extents": [
+        6.196,
+        23.54602,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735813,
+      "voxel_filled": 1244,
+      "voxel_fill_ratio": 0.037964,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, repaired, singlegrip",
+      "tags": [
+        "autorifle",
+        "repaired",
+        "singlegrip"
+      ],
+      "vertices": 276486,
+      "faces": 92162,
+      "extents": [
+        6.196,
+        23.54602,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735813,
+      "voxel_filled": 1258,
+      "voxel_fill_ratio": 0.038391,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, repaired, singlegrip",
+      "tags": [
+        "autorifle",
+        "repaired",
+        "singlegrip"
+      ],
+      "vertices": 224118,
+      "faces": 74706,
+      "extents": [
+        6.196,
+        23.54599,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735812,
+      "voxel_filled": 1249,
+      "voxel_fill_ratio": 0.038116,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, repaired, singlegrip",
+      "tags": [
+        "autorifle",
+        "repaired",
+        "singlegrip"
+      ],
+      "vertices": 214800,
+      "faces": 71600,
+      "extents": [
+        6.196,
+        23.548,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735875,
+      "voxel_filled": 1251,
+      "voxel_fill_ratio": 0.038177,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: autorifle, repaired, singlegrip",
+      "tags": [
+        "autorifle",
+        "repaired",
+        "singlegrip"
+      ],
+      "vertices": 215064,
+      "faces": 71688,
+      "extents": [
+        6.196,
+        23.54602,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735813,
+      "voxel_filled": 1273,
+      "voxel_fill_ratio": 0.038849,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BearKin.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BearKin.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: bearkin",
+      "tags": [
+        "bearkin"
+      ],
+      "vertices": 7322898,
+      "faces": 2440966,
+      "extents": [
+        51.07434,
+        55.04578,
+        32.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.720181,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: boltrifle, repaired",
+      "tags": [
+        "boltrifle",
+        "repaired"
+      ],
+      "vertices": 309582,
+      "faces": 103194,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.730813,
+      "voxel_filled": 1292,
+      "voxel_fill_ratio": 0.039429,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: boltrifle, repaired",
+      "tags": [
+        "boltrifle",
+        "repaired"
+      ],
+      "vertices": 381618,
+      "faces": 127206,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.730813,
+      "voxel_filled": 1336,
+      "voxel_fill_ratio": 0.040771,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: boltrifle, repaired",
+      "tags": [
+        "boltrifle",
+        "repaired"
+      ],
+      "vertices": 329658,
+      "faces": 109886,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.730812,
+      "voxel_filled": 1272,
+      "voxel_fill_ratio": 0.038818,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: boltrifle, repaired",
+      "tags": [
+        "boltrifle",
+        "repaired"
+      ],
+      "vertices": 320214,
+      "faces": 106738,
+      "extents": [
+        4.514,
+        23.386,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.730813,
+      "voxel_filled": 1330,
+      "voxel_fill_ratio": 0.040588,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_05 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_05 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: boltrifle, repaired",
+      "tags": [
+        "boltrifle",
+        "repaired"
+      ],
+      "vertices": 320478,
+      "faces": 106826,
+      "extents": [
+        4.514,
+        23.386,
+        13.52
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.730813,
+      "voxel_filled": 1331,
+      "voxel_fill_ratio": 0.040619,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\crimson leviathan.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\crimson leviathan.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: crimson, leviathan",
+      "tags": [
+        "crimson",
+        "leviathan"
+      ],
+      "vertices": 7359114,
+      "faces": 2453038,
+      "extents": [
+        64.32273,
+        50.37299,
+        60.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 2.010085,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Crimson Maw Juggernaut.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Crimson Maw Juggernaut.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: crimson, juggernaut, maw",
+      "tags": [
+        "crimson",
+        "juggernaut",
+        "maw"
+      ],
+      "vertices": 7304139,
+      "faces": 2434713,
+      "extents": [
+        67.12651,
+        53.14233,
+        64.99999
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 2.097703,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: back, pack",
+      "tags": [
+        "back",
+        "pack"
+      ],
+      "vertices": 1160418,
+      "faces": 386806,
+      "extents": [
+        21.34398,
+        27.79597,
+        11.28479
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.868624,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_2.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_2.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: back, pack",
+      "tags": [
+        "back",
+        "pack"
+      ],
+      "vertices": 927192,
+      "faces": 309064,
+      "extents": [
+        21.34271,
+        29.77386,
+        13.95584
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.930433,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_3.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_3.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: back, pack",
+      "tags": [
+        "back",
+        "pack"
+      ],
+      "vertices": 1050774,
+      "faces": 350258,
+      "extents": [
+        34.24591,
+        23.4565,
+        11.85945
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.070185,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_4.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_4.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: back, pack",
+      "tags": [
+        "back",
+        "pack"
+      ],
+      "vertices": 1058898,
+      "faces": 352966,
+      "extents": [
+        21.34148,
+        22.93514,
+        11.731
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.716723,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_5.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_5.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: back, pack",
+      "tags": [
+        "back",
+        "pack"
+      ],
+      "vertices": 989802,
+      "faces": 329934,
+      "extents": [
+        21.33437,
+        26.93374,
+        11.43506
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.841679,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_cloak_.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_cloak_.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: cloak",
+      "tags": [
+        "cloak"
+      ],
+      "vertices": 2441940,
+      "faces": 813980,
+      "extents": [
+        23.31061,
+        23.1542,
+        10.47141
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.728457,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand",
+      "tags": [
+        "hand"
+      ],
+      "vertices": 1070046,
+      "faces": 356682,
+      "extents": [
+        9.41411,
+        14.92568,
+        8.48693
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.466428,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_2.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_2.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand",
+      "tags": [
+        "hand"
+      ],
+      "vertices": 2189742,
+      "faces": 729914,
+      "extents": [
+        19.70495,
+        12.73118,
+        36.91614
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.153629,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_3.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_3.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand",
+      "tags": [
+        "hand"
+      ],
+      "vertices": 690462,
+      "faces": 230154,
+      "extents": [
+        13.3735,
+        40.54173,
+        18.4516
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.266929,
+      "voxel_filled": 668,
+      "voxel_fill_ratio": 0.020386,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_4.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_4.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand",
+      "tags": [
+        "hand"
+      ],
+      "vertices": 715260,
+      "faces": 238420,
+      "extents": [
+        12.4605,
+        40.54241,
+        20.55653
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.26695,
+      "voxel_filled": 729,
+      "voxel_fill_ratio": 0.022247,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_5.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_5.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand",
+      "tags": [
+        "hand"
+      ],
+      "vertices": 1117500,
+      "faces": 372500,
+      "extents": [
+        12.22451,
+        40.54227,
+        5.85936
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.266946,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_6.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_6.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand",
+      "tags": [
+        "hand"
+      ],
+      "vertices": 1087290,
+      "faces": 362430,
+      "extents": [
+        9.13954,
+        8.35057,
+        16.21938
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.506856,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 512028,
+      "faces": 170676,
+      "extents": [
+        7.03528,
+        8.15685,
+        8.71507
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.272346,
+      "voxel_filled": 4289,
+      "voxel_fill_ratio": 0.13089,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_10.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_10.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 674688,
+      "faces": 224896,
+      "extents": [
+        8.13779,
+        8.93164,
+        8.92378
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.279114,
+      "voxel_filled": 4694,
+      "voxel_fill_ratio": 0.14325,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_2.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_2.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 320298,
+      "faces": 106766,
+      "extents": [
+        7.05389,
+        8.18416,
+        16.58593
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.51831,
+      "voxel_filled": 1966,
+      "voxel_fill_ratio": 0.059998,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_3.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_3.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 663228,
+      "faces": 221076,
+      "extents": [
+        8.14375,
+        8.65156,
+        8.78001
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.274375,
+      "voxel_filled": 4759,
+      "voxel_fill_ratio": 0.145233,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_4.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_4.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 288486,
+      "faces": 96162,
+      "extents": [
+        6.68487,
+        8.11942,
+        14.57915
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.455599,
+      "voxel_filled": 2064,
+      "voxel_fill_ratio": 0.062988,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_5.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_5.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 989844,
+      "faces": 329948,
+      "extents": [
+        8.1332,
+        9.28546,
+        9.19677
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.290171,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_6.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_6.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 878130,
+      "faces": 292710,
+      "extents": [
+        8.1411,
+        8.65165,
+        9.32333
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.291354,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_7.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_7.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 502836,
+      "faces": 167612,
+      "extents": [
+        7.91606,
+        8.24276,
+        8.44154
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.263798,
+      "voxel_filled": 4510,
+      "voxel_fill_ratio": 0.137634,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_8.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_8.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 962622,
+      "faces": 320874,
+      "extents": [
+        7.052,
+        8.454,
+        16.604
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.518875,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_9.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_9.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: helmet",
+      "tags": [
+        "helmet"
+      ],
+      "vertices": 915210,
+      "faces": 305070,
+      "extents": [
+        6.70148,
+        8.00597,
+        16.18313
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.505723,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 1627416,
+      "faces": 542472,
+      "extents": [
+        29.20922,
+        25.31815,
+        16.17007
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.912788,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_2.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_2.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 2437206,
+      "faces": 812402,
+      "extents": [
+        24.84104,
+        24.42453,
+        24.02125
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.776282,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_3.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_3.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 1734972,
+      "faces": 578324,
+      "extents": [
+        31.0,
+        24.066,
+        18.172
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.96875,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_4.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_4.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 1381008,
+      "faces": 460336,
+      "extents": [
+        25.09726,
+        17.83091,
+        26.89295
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.840405,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_5.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_5.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 1811868,
+      "faces": 603956,
+      "extents": [
+        31.00144,
+        23.82375,
+        18.79134
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.968795,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_1_bent_weapon.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_1_bent_weapon.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 1195674,
+      "faces": 398558,
+      "extents": [
+        31.874,
+        14.212,
+        24.72
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.996062,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_2_bent_weapon.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_2_bent_weapon.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 1038522,
+      "faces": 346174,
+      "extents": [
+        31.83972,
+        18.04464,
+        24.8778
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.994991,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_3_bent_weapon.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_3_bent_weapon.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 1043430,
+      "faces": 347810,
+      "extents": [
+        32.12345,
+        17.93946,
+        25.01257
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.003858,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoulder",
+      "tags": [
+        "pad",
+        "shoulder"
+      ],
+      "vertices": 743922,
+      "faces": 247974,
+      "extents": [
+        16.56573,
+        25.40797,
+        18.13826
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.793999,
+      "voxel_filled": 1717,
+      "voxel_fill_ratio": 0.052399,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoulder",
+      "tags": [
+        "pad",
+        "shoulder"
+      ],
+      "vertices": 829302,
+      "faces": 276434,
+      "extents": [
+        19.00316,
+        25.17155,
+        14.32456
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.786611,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.2.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.2.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoulder",
+      "tags": [
+        "pad",
+        "shoulder"
+      ],
+      "vertices": 878076,
+      "faces": 292692,
+      "extents": [
+        19.62336,
+        25.487,
+        13.82707
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.796469,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_3.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_3.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoulder",
+      "tags": [
+        "pad",
+        "shoulder"
+      ],
+      "vertices": 373386,
+      "faces": 124462,
+      "extents": [
+        6.07242,
+        10.12803,
+        10.38431
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.32451,
+      "voxel_filled": 4610,
+      "voxel_fill_ratio": 0.140686,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_4.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_4.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoulder",
+      "tags": [
+        "pad",
+        "shoulder"
+      ],
+      "vertices": 975486,
+      "faces": 325162,
+      "extents": [
+        6.83927,
+        13.27614,
+        11.82109
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.414879,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_5.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_5.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoulder",
+      "tags": [
+        "pad",
+        "shoulder"
+      ],
+      "vertices": 537318,
+      "faces": 179106,
+      "extents": [
+        6.79,
+        13.212,
+        11.124
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.412875,
+      "voxel_filled": 3225,
+      "voxel_fill_ratio": 0.098419,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoylder_pad_6.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoylder_pad_6.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: pad, shoylder",
+      "tags": [
+        "pad",
+        "shoylder"
+      ],
+      "vertices": 317196,
+      "faces": 105732,
+      "extents": [
+        6.78539,
+        12.0233,
+        10.63514
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.375728,
+      "voxel_filled": 3504,
+      "voxel_fill_ratio": 0.106934,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_1.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_1.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: torso",
+      "tags": [
+        "torso"
+      ],
+      "vertices": 1587252,
+      "faces": 529084,
+      "extents": [
+        12.53207,
+        17.89342,
+        15.15987
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.559169,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_2.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_2.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: torso",
+      "tags": [
+        "torso"
+      ],
+      "vertices": 1605612,
+      "faces": 535204,
+      "extents": [
+        12.53202,
+        17.88936,
+        15.16892
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.559043,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_3_with_cloak_.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_3_with_cloak_.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: cloak, torso",
+      "tags": [
+        "cloak",
+        "torso"
+      ],
+      "vertices": 4832346,
+      "faces": 1610782,
+      "extents": [
+        32.0522,
+        36.66851,
+        22.84605
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.145891,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_4.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_4.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: torso",
+      "tags": [
+        "torso"
+      ],
+      "vertices": 1589514,
+      "faces": 529838,
+      "extents": [
+        12.53219,
+        17.86286,
+        15.10996
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.558214,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_5.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_5.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: torso",
+      "tags": [
+        "torso"
+      ],
+      "vertices": 1597374,
+      "faces": 532458,
+      "extents": [
+        12.53216,
+        17.86813,
+        15.10994
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.558379,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\desolation squad_1775889987.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\desolation squad_1775889987.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 1775889987, desolation, squad",
+      "tags": [
+        "1775889987",
+        "desolation",
+        "squad"
+      ],
+      "vertices": 5101896,
+      "faces": 1700632,
+      "extents": [
+        70.04211,
+        75.71873,
+        100.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 3.125,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DoomClaw Mercedes.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DoomClaw Mercedes.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: doomclaw, mercedes",
+      "tags": [
+        "doomclaw",
+        "mercedes"
+      ],
+      "vertices": 12542922,
+      "faces": 4180974,
+      "extents": [
+        139.27383,
+        105.50738,
+        95.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 4.352307,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite assassin lieutenant.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite assassin lieutenant.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: assassin, elite, lieutenant",
+      "tags": [
+        "assassin",
+        "elite",
+        "lieutenant"
+      ],
+      "vertices": 16099554,
+      "faces": 5366518,
+      "extents": [
+        33.59577,
+        49.39622,
+        47.6092
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.543632,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with grenade launcher.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with grenade launcher.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: assassin, elite, grenade, launcher, with",
+      "tags": [
+        "assassin",
+        "elite",
+        "grenade",
+        "launcher",
+        "with"
+      ],
+      "vertices": 6566742,
+      "faces": 2188914,
+      "extents": [
+        36.94774,
+        43.61551,
+        50.08083
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.565026,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with heavy gun.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with heavy gun.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: gun",
+      "tags": [
+        "gun"
+      ],
+      "vertices": 6251430,
+      "faces": 2083810,
+      "extents": [
+        50.04579,
+        54.83561,
+        45.05623
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.713613,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with jump pack.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with jump pack.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: assassin, elite, jump, pack, with",
+      "tags": [
+        "assassin",
+        "elite",
+        "jump",
+        "pack",
+        "with"
+      ],
+      "vertices": 5458638,
+      "faces": 1819546,
+      "extents": [
+        51.59244,
+        33.19273,
+        53.02449
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.657015,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Eradicator.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Eradicator.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: eradicator",
+      "tags": [
+        "eradicator"
+      ],
+      "vertices": 5208408,
+      "faces": 1736136,
+      "extents": [
+        34.60599,
+        37.88988,
+        50.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.5625,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Flammer carl.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Flammer carl.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: carl, flammer",
+      "tags": [
+        "carl",
+        "flammer"
+      ],
+      "vertices": 5460390,
+      "faces": 1820130,
+      "extents": [
+        36.52499,
+        42.60512,
+        32.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.33141,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Gobby Pistoler.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Gobby Pistoler.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: gobby, pistoler",
+      "tags": [
+        "gobby",
+        "pistoler"
+      ],
+      "vertices": 4959714,
+      "faces": 1653238,
+      "extents": [
+        25.45012,
+        29.56458,
+        28.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.923893,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Grak'Guk.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Grak'Guk.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: grak, guk",
+      "tags": [
+        "grak",
+        "guk"
+      ],
+      "vertices": 8760618,
+      "faces": 2920206,
+      "extents": [
+        59.95239,
+        59.19429,
+        60.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.875,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Grab (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Grab (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: grab, hand, repaired",
+      "tags": [
+        "grab",
+        "hand",
+        "repaired"
+      ],
+      "vertices": 32190,
+      "faces": 10730,
+      "extents": [
+        5.47,
+        3.784,
+        3.78
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.170938,
+      "voxel_filled": 3826,
+      "voxel_fill_ratio": 0.11676,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Order (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Order (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand, order, repaired",
+      "tags": [
+        "hand",
+        "order",
+        "repaired"
+      ],
+      "vertices": 33012,
+      "faces": 11004,
+      "extents": [
+        7.024,
+        3.308,
+        4.088
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.2195,
+      "voxel_filled": 2145,
+      "voxel_fill_ratio": 0.06546,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Point (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Point (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand, point, repaired",
+      "tags": [
+        "hand",
+        "point",
+        "repaired"
+      ],
+      "vertices": 32532,
+      "faces": 10844,
+      "extents": [
+        6.894,
+        3.308,
+        4.088
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.215438,
+      "voxel_filled": 2212,
+      "voxel_fill_ratio": 0.067505,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Rest (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Rest (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hand, repaired, rest",
+      "tags": [
+        "hand",
+        "repaired",
+        "rest"
+      ],
+      "vertices": 33132,
+      "faces": 11044,
+      "extents": [
+        6.476,
+        3.788,
+        3.924
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.202375,
+      "voxel_filled": 2765,
+      "voxel_fill_ratio": 0.084381,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hurricane.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hurricane.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: hurricane",
+      "tags": [
+        "hurricane"
+      ],
+      "vertices": 7184244,
+      "faces": 2394748,
+      "extents": [
+        142.0594,
+        83.91936,
+        80.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 4.439356,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\IronBound Wrecker.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\IronBound Wrecker.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: ironbound, wrecker",
+      "tags": [
+        "ironbound",
+        "wrecker"
+      ],
+      "vertices": 4143570,
+      "faces": 1381190,
+      "extents": [
+        51.57008,
+        32.99818,
+        38.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.611565,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\judgment.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\judgment.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: judgment",
+      "tags": [
+        "judgment"
+      ],
+      "vertices": 9430674,
+      "faces": 3143558,
+      "extents": [
+        183.55761,
+        166.67294,
+        94.99999
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 5.736175,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\librarian_0303233309_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\librarian_0303233309_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 0303233309, generate, librarian",
+      "tags": [
+        "0303233309",
+        "generate",
+        "librarian"
+      ],
+      "vertices": 3973215,
+      "faces": 1324405,
+      "extents": [
+        1898.36926,
+        1203.55798,
+        1338.91577
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 59.324039,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_agressor_1774311700_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_agressor_1774311700_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 1774311700, agressor, generate, meshy",
+      "tags": [
+        "1774311700",
+        "agressor",
+        "generate",
+        "meshy"
+      ],
+      "vertices": 7089054,
+      "faces": 2363018,
+      "extents": [
+        70.61123,
+        69.61189,
+        90.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 2.8125,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blade guard vet_1774680902_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blade guard vet_1774680902_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 1774680902, blade, generate, guard, meshy, vet",
+      "tags": [
+        "1774680902",
+        "blade",
+        "generate",
+        "guard",
+        "meshy",
+        "vet"
+      ],
+      "vertices": 7354824,
+      "faces": 2451608,
+      "extents": [
+        131.9504,
+        114.12232,
+        150.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 4.6875,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blood_angel_0305134448_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blood_angel_0305134448_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 0305134448, angel, blood, generate, meshy",
+      "tags": [
+        "0305134448",
+        "angel",
+        "blood",
+        "generate",
+        "meshy"
+      ],
+      "vertices": 2931786,
+      "faces": 977262,
+      "extents": [
+        1381.96765,
+        1381.73279,
+        2000.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 62.5,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_eliminators_1774311880_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_eliminators_1774311880_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 1774311880, eliminators, generate, meshy",
+      "tags": [
+        "1774311880",
+        "eliminators",
+        "generate",
+        "meshy"
+      ],
+      "vertices": 4494276,
+      "faces": 1498092,
+      "extents": [
+        75.90783,
+        107.62167,
+        90.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 3.363177,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_interssesor_0306083406_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_interssesor_0306083406_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 0306083406, generate, interssesor, meshy",
+      "tags": [
+        "0306083406",
+        "generate",
+        "interssesor",
+        "meshy"
+      ],
+      "vertices": 8817795,
+      "faces": 2939265,
+      "extents": [
+        7029.51807,
+        6542.56787,
+        10000.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 312.5,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_power armor_1774311535_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_power armor_1774311535_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armor",
+      "tags": [
+        "armor"
+      ],
+      "vertices": 4796244,
+      "faces": 1598748,
+      "extents": [
+        77.74728,
+        60.35192,
+        90.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 2.8125,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_praetor_0304052441_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_praetor_0304052441_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 0304052441, generate, meshy, praetor",
+      "tags": [
+        "0304052441",
+        "generate",
+        "meshy",
+        "praetor"
+      ],
+      "vertices": 3427998,
+      "faces": 1142666,
+      "extents": [
+        175.80875,
+        190.05604,
+        240.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 7.5,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary priest_1774311478_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary priest_1774311478_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 1774311478, generate, meshy, priest, sanguinary",
+      "tags": [
+        "1774311478",
+        "generate",
+        "meshy",
+        "priest",
+        "sanguinary"
+      ],
+      "vertices": 6620142,
+      "faces": 2206714,
+      "extents": [
+        84.55729,
+        68.8116,
+        90.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 2.8125,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary_guard_0305100033_generate.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary_guard_0305100033_generate.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: 0305100033, generate, guard, meshy, sanguinary",
+      "tags": [
+        "0305100033",
+        "generate",
+        "guard",
+        "meshy",
+        "sanguinary"
+      ],
+      "vertices": 2628963,
+      "faces": 876321,
+      "extents": [
+        1008.93274,
+        980.85373,
+        1800.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 56.25,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Bearmastaaaa.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Bearmastaaaa.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 8401326,
+      "faces": 2800442,
+      "extents": [
+        51.92052,
+        41.04393,
+        50.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.622516,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Behemoth.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Behemoth.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 5770326,
+      "faces": 1923442,
+      "extents": [
+        41.47001,
+        54.95456,
+        42.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.71733,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\orc clappa.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\orc clappa.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 4845600,
+      "faces": 1615200,
+      "extents": [
+        29.39632,
+        23.54831,
+        32.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.0,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Heavy Bolter.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Heavy Bolter.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 6738726,
+      "faces": 2246242,
+      "extents": [
+        31.04291,
+        31.58591,
+        32.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.0,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Nail Gunner.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Nail Gunner.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 5620422,
+      "faces": 1873474,
+      "extents": [
+        29.89636,
+        31.5488,
+        32.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.0,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc War Boss Clobba.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc War Boss Clobba.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 8814162,
+      "faces": 2938054,
+      "extents": [
+        48.27403,
+        40.85746,
+        48.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.508564,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc warlord.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc warlord.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: orc",
+      "tags": [
+        "orc"
+      ],
+      "vertices": 5498862,
+      "faces": 1832954,
+      "extents": [
+        33.6083,
+        32.7344,
+        32.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.05026,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_00 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_00 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 366708,
+      "faces": 122236,
+      "extents": [
+        5.914,
+        23.546,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735813,
+      "voxel_filled": 1413,
+      "voxel_fill_ratio": 0.043121,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 386910,
+      "faces": 128970,
+      "extents": [
+        5.914,
+        23.546,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735812,
+      "voxel_filled": 1439,
+      "voxel_fill_ratio": 0.043915,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 438996,
+      "faces": 146332,
+      "extents": [
+        5.914,
+        23.548,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735875,
+      "voxel_filled": 1406,
+      "voxel_fill_ratio": 0.042908,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 377406,
+      "faces": 125802,
+      "extents": [
+        5.914,
+        23.546,
+        13.522
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735813,
+      "voxel_filled": 1426,
+      "voxel_fill_ratio": 0.043518,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: rifle",
+      "tags": [
+        "rifle"
+      ],
+      "vertices": 377724,
+      "faces": 125908,
+      "extents": [
+        5.914,
+        23.546,
+        13.52
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.735813,
+      "voxel_filled": 1386,
+      "voxel_fill_ratio": 0.042297,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHead (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHead (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primehead, repaired",
+      "tags": [
+        "primehead",
+        "repaired"
+      ],
+      "vertices": 278370,
+      "faces": 92790,
+      "extents": [
+        7.24,
+        7.986,
+        8.41
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.262813,
+      "voxel_filled": 3979,
+      "voxel_fill_ratio": 0.121429,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadSgt (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadSgt (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeheadsgt, repaired",
+      "tags": [
+        "primeheadsgt",
+        "repaired"
+      ],
+      "vertices": 284472,
+      "faces": 94824,
+      "extents": [
+        7.24,
+        7.986,
+        8.41
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.262813,
+      "voxel_filled": 3972,
+      "voxel_fill_ratio": 0.121216,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStudded (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStudded (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeheadstudded, repaired",
+      "tags": [
+        "primeheadstudded",
+        "repaired"
+      ],
+      "vertices": 280392,
+      "faces": 93464,
+      "extents": [
+        7.24,
+        7.986,
+        8.408
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.26275,
+      "voxel_filled": 3972,
+      "voxel_fill_ratio": 0.121216,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStuddedSgt (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStuddedSgt (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeheadstuddedsgt, repaired",
+      "tags": [
+        "primeheadstuddedsgt",
+        "repaired"
+      ],
+      "vertices": 286242,
+      "faces": 95414,
+      "extents": [
+        7.24,
+        7.986,
+        8.408
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.26275,
+      "voxel_filled": 3979,
+      "voxel_fill_ratio": 0.121429,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 292986,
+      "faces": 97662,
+      "extents": [
+        13.05,
+        13.722,
+        11.92
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.428813,
+      "voxel_filled": 5013,
+      "voxel_fill_ratio": 0.152985,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 294444,
+      "faces": 98148,
+      "extents": [
+        12.934,
+        13.598,
+        11.794
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.424938,
+      "voxel_filled": 5028,
+      "voxel_fill_ratio": 0.153442,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 294294,
+      "faces": 98098,
+      "extents": [
+        12.804,
+        13.758,
+        11.578
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.429938,
+      "voxel_filled": 4896,
+      "voxel_fill_ratio": 0.149414,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 292818,
+      "faces": 97606,
+      "extents": [
+        13.082,
+        13.854,
+        12.06
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.432938,
+      "voxel_filled": 4986,
+      "voxel_fill_ratio": 0.152161,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_05 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_05 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 305862,
+      "faces": 101954,
+      "extents": [
+        13.412,
+        13.796,
+        12.092
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.431125,
+      "voxel_filled": 5134,
+      "voxel_fill_ratio": 0.156677,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_06 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_06 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 292212,
+      "faces": 97404,
+      "extents": [
+        13.212,
+        13.704,
+        11.734
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.42825,
+      "voxel_filled": 5003,
+      "voxel_fill_ratio": 0.152679,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_07 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_07 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 291336,
+      "faces": 97112,
+      "extents": [
+        12.826,
+        13.348,
+        11.69
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.417125,
+      "voxel_filled": 5150,
+      "voxel_fill_ratio": 0.157166,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_08 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_08 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 294228,
+      "faces": 98076,
+      "extents": [
+        12.782,
+        13.812,
+        11.768
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.431625,
+      "voxel_filled": 4928,
+      "voxel_fill_ratio": 0.150391,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_09 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_09 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 293454,
+      "faces": 97818,
+      "extents": [
+        12.82,
+        13.838,
+        11.554
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.432438,
+      "voxel_filled": 4931,
+      "voxel_fill_ratio": 0.150482,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_10 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_10 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: body",
+      "tags": [
+        "body"
+      ],
+      "vertices": 295776,
+      "faces": 98592,
+      "extents": [
+        12.994,
+        13.85,
+        11.71
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.432813,
+      "voxel_filled": 4981,
+      "voxel_fill_ratio": 0.152008,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterEmpty (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterEmpty (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: holsterempty, primeinfantry, repaired",
+      "tags": [
+        "holsterempty",
+        "primeinfantry",
+        "repaired"
+      ],
+      "vertices": 36750,
+      "faces": 12250,
+      "extents": [
+        5.13,
+        2.69,
+        9.784
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.30575,
+      "voxel_filled": 1643,
+      "voxel_fill_ratio": 0.05014,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterPistol (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterPistol (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: holsterpistol, primeinfantry, repaired",
+      "tags": [
+        "holsterpistol",
+        "primeinfantry",
+        "repaired"
+      ],
+      "vertices": 55608,
+      "faces": 18536,
+      "extents": [
+        7.03,
+        2.69,
+        10.258
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.320563,
+      "voxel_filled": 1864,
+      "voxel_fill_ratio": 0.056885,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 574692,
+      "faces": 191564,
+      "extents": [
+        24.088,
+        20.298,
+        23.21
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.75275,
+      "voxel_filled": 3892,
+      "voxel_fill_ratio": 0.118774,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 541092,
+      "faces": 180364,
+      "extents": [
+        19.036,
+        23.188,
+        23.574
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.736688,
+      "voxel_filled": 3907,
+      "voxel_fill_ratio": 0.119232,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 546000,
+      "faces": 182000,
+      "extents": [
+        17.728,
+        21.818,
+        24.456
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.76425,
+      "voxel_filled": 3631,
+      "voxel_fill_ratio": 0.110809,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 542826,
+      "faces": 180942,
+      "extents": [
+        18.228,
+        23.556,
+        23.87
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.745938,
+      "voxel_filled": 3808,
+      "voxel_fill_ratio": 0.116211,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_05 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_05 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 570072,
+      "faces": 190024,
+      "extents": [
+        24.158,
+        21.928,
+        22.966
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.754938,
+      "voxel_filled": 3787,
+      "voxel_fill_ratio": 0.11557,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_06 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_06 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 574464,
+      "faces": 191488,
+      "extents": [
+        23.852,
+        19.992,
+        23.758
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.745375,
+      "voxel_filled": 3914,
+      "voxel_fill_ratio": 0.119446,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_07 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_07 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 564432,
+      "faces": 188144,
+      "extents": [
+        24.192,
+        19.948,
+        23.242
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.756,
+      "voxel_filled": 3911,
+      "voxel_fill_ratio": 0.119354,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_08 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_08 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 541806,
+      "faces": 180602,
+      "extents": [
+        25.73,
+        16.608,
+        23.484
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.804063,
+      "voxel_filled": 3258,
+      "voxel_fill_ratio": 0.099426,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_09 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_09 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 544488,
+      "faces": 181496,
+      "extents": [
+        19.324,
+        22.0,
+        24.066
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.752063,
+      "voxel_filled": 3739,
+      "voxel_fill_ratio": 0.114105,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_10 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_10 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: legs",
+      "tags": [
+        "legs"
+      ],
+      "vertices": 511878,
+      "faces": 170626,
+      "extents": [
+        17.472,
+        21.876,
+        23.896
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.74675,
+      "voxel_filled": 3655,
+      "voxel_fill_ratio": 0.111542,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 84990,
+      "faces": 28330,
+      "extents": [
+        1.802,
+        2.21,
+        6.828
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.213375,
+      "voxel_filled": 1071,
+      "voxel_fill_ratio": 0.032684,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 29994,
+      "faces": 9998,
+      "extents": [
+        2.582,
+        2.506,
+        7.052
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.220375,
+      "voxel_filled": 1501,
+      "voxel_fill_ratio": 0.045807,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 50868,
+      "faces": 16956,
+      "extents": [
+        3.11,
+        2.552,
+        6.574
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.205438,
+      "voxel_filled": 1910,
+      "voxel_fill_ratio": 0.058289,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 29400,
+      "faces": 9800,
+      "extents": [
+        3.51,
+        2.344,
+        5.424
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.1695,
+      "voxel_filled": 2364,
+      "voxel_fill_ratio": 0.072144,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_05 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_05 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 87000,
+      "faces": 29000,
+      "extents": [
+        3.632,
+        2.202,
+        5.494
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.171688,
+      "voxel_filled": 2379,
+      "voxel_fill_ratio": 0.072601,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_06 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_06 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 105132,
+      "faces": 35044,
+      "extents": [
+        2.41,
+        2.41,
+        7.25
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.226563,
+      "voxel_filled": 1163,
+      "voxel_fill_ratio": 0.035492,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_07 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_07 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeinfantry, repaired, trinket",
+      "tags": [
+        "primeinfantry",
+        "repaired",
+        "trinket"
+      ],
+      "vertices": 38802,
+      "faces": 12934,
+      "extents": [
+        4.708,
+        5.74,
+        8.386
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.262063,
+      "voxel_filled": 1820,
+      "voxel_fill_ratio": 0.055542,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimePowerPack_repaired.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimePowerPack_repaired.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primepowerpack, repaired",
+      "tags": [
+        "primepowerpack",
+        "repaired"
+      ],
+      "vertices": 272754,
+      "faces": 90918,
+      "extents": [
+        18.644,
+        7.906,
+        15.68
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.582625,
+      "voxel_filled": 2553,
+      "voxel_fill_ratio": 0.077911,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 164814,
+      "faces": 54938,
+      "extents": [
+        5.696,
+        15.78,
+        8.076
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.493125,
+      "voxel_filled": 1598,
+      "voxel_fill_ratio": 0.048767,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 146664,
+      "faces": 48888,
+      "extents": [
+        8.532,
+        13.036,
+        7.046
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.407375,
+      "voxel_filled": 2078,
+      "voxel_fill_ratio": 0.063416,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 136752,
+      "faces": 45584,
+      "extents": [
+        7.302,
+        14.18,
+        10.70601
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.443125,
+      "voxel_filled": 1966,
+      "voxel_fill_ratio": 0.059998,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 117108,
+      "faces": 39036,
+      "extents": [
+        7.442,
+        11.012,
+        9.868
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.344125,
+      "voxel_filled": 2855,
+      "voxel_fill_ratio": 0.087128,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 153978,
+      "faces": 51326,
+      "extents": [
+        7.902,
+        12.104,
+        14.02
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.438125,
+      "voxel_filled": 2112,
+      "voxel_fill_ratio": 0.064453,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 136014,
+      "faces": 45338,
+      "extents": [
+        7.626,
+        9.766,
+        11.152
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.3485,
+      "voxel_filled": 2864,
+      "voxel_fill_ratio": 0.087402,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 207030,
+      "faces": 69010,
+      "extents": [
+        9.47,
+        13.49,
+        11.88
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.421563,
+      "voxel_filled": 2201,
+      "voxel_fill_ratio": 0.067169,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 146820,
+      "faces": 48940,
+      "extents": [
+        7.014,
+        9.092,
+        10.61
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.331563,
+      "voxel_filled": 3034,
+      "voxel_fill_ratio": 0.09259,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 155538,
+      "faces": 51846,
+      "extents": [
+        6.344,
+        13.242,
+        10.058
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.413813,
+      "voxel_filled": 2136,
+      "voxel_fill_ratio": 0.065186,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 176976,
+      "faces": 58992,
+      "extents": [
+        8.634,
+        11.458,
+        11.1
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.358063,
+      "voxel_filled": 2997,
+      "voxel_fill_ratio": 0.091461,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 192036,
+      "faces": 64012,
+      "extents": [
+        6.382,
+        13.162,
+        13.14
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.411313,
+      "voxel_filled": 2386,
+      "voxel_fill_ratio": 0.072815,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 139248,
+      "faces": 46416,
+      "extents": [
+        8.15,
+        11.334,
+        10.242
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.354188,
+      "voxel_filled": 2840,
+      "voxel_fill_ratio": 0.08667,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_L (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_L (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 186624,
+      "faces": 62208,
+      "extents": [
+        7.178,
+        14.856,
+        9.066
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.46425,
+      "voxel_filled": 1767,
+      "voxel_fill_ratio": 0.053925,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_R (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_R (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: armset, primeranged, repaired",
+      "tags": [
+        "armset",
+        "primeranged",
+        "repaired"
+      ],
+      "vertices": 130962,
+      "faces": 43654,
+      "extents": [
+        7.244,
+        10.224,
+        10.608
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.3315,
+      "voxel_filled": 3061,
+      "voxel_fill_ratio": 0.093414,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeShoulder (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeShoulder (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: primeshoulder, repaired",
+      "tags": [
+        "primeshoulder",
+        "repaired"
+      ],
+      "vertices": 179040,
+      "faces": 59680,
+      "extents": [
+        9.756,
+        5.644,
+        8.352
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.304875,
+      "voxel_filled": 3752,
+      "voxel_fill_ratio": 0.114502,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Reaper Gladation.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Reaper Gladation.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: gladation, reaper",
+      "tags": [
+        "gladation",
+        "reaper"
+      ],
+      "vertices": 10706664,
+      "faces": 3568888,
+      "extents": [
+        124.93391,
+        94.99492,
+        90.00001
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 3.904185,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_00 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_00 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: doublegrip, repaired, riflegrenadelauncher",
+      "tags": [
+        "doublegrip",
+        "repaired",
+        "riflegrenadelauncher"
+      ],
+      "vertices": 276198,
+      "faces": 92066,
+      "extents": [
+        7.464,
+        24.444,
+        11.436
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1450,
+      "voxel_fill_ratio": 0.04425,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: doublegrip, repaired, riflegrenadelauncher",
+      "tags": [
+        "doublegrip",
+        "repaired",
+        "riflegrenadelauncher"
+      ],
+      "vertices": 348504,
+      "faces": 116168,
+      "extents": [
+        7.464,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1466,
+      "voxel_fill_ratio": 0.044739,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: doublegrip, repaired, riflegrenadelauncher",
+      "tags": [
+        "doublegrip",
+        "repaired",
+        "riflegrenadelauncher"
+      ],
+      "vertices": 296436,
+      "faces": 98812,
+      "extents": [
+        7.464,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1452,
+      "voxel_fill_ratio": 0.044312,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: doublegrip, repaired, riflegrenadelauncher",
+      "tags": [
+        "doublegrip",
+        "repaired",
+        "riflegrenadelauncher"
+      ],
+      "vertices": 286920,
+      "faces": 95640,
+      "extents": [
+        7.464,
+        24.446,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763937,
+      "voxel_filled": 1486,
+      "voxel_fill_ratio": 0.045349,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: doublegrip, repaired, riflegrenadelauncher",
+      "tags": [
+        "doublegrip",
+        "repaired",
+        "riflegrenadelauncher"
+      ],
+      "vertices": 287394,
+      "faces": 95798,
+      "extents": [
+        7.464,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1469,
+      "voxel_fill_ratio": 0.04483,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_00 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_00 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: repaired, riflegrenadelauncher, singlegrip",
+      "tags": [
+        "repaired",
+        "riflegrenadelauncher",
+        "singlegrip"
+      ],
+      "vertices": 221682,
+      "faces": 73894,
+      "extents": [
+        6.196,
+        24.444,
+        11.436
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1340,
+      "voxel_fill_ratio": 0.040894,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_01 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_01 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: repaired, riflegrenadelauncher, singlegrip",
+      "tags": [
+        "repaired",
+        "riflegrenadelauncher",
+        "singlegrip"
+      ],
+      "vertices": 294000,
+      "faces": 98000,
+      "extents": [
+        6.196,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1362,
+      "voxel_fill_ratio": 0.041565,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_02 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_02 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: repaired, riflegrenadelauncher, singlegrip",
+      "tags": [
+        "repaired",
+        "riflegrenadelauncher",
+        "singlegrip"
+      ],
+      "vertices": 241764,
+      "faces": 80588,
+      "extents": [
+        6.196,
+        24.44403,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763876,
+      "voxel_filled": 1352,
+      "voxel_fill_ratio": 0.04126,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_03 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_03 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: repaired, riflegrenadelauncher, singlegrip",
+      "tags": [
+        "repaired",
+        "riflegrenadelauncher",
+        "singlegrip"
+      ],
+      "vertices": 232434,
+      "faces": 77478,
+      "extents": [
+        6.196,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1399,
+      "voxel_fill_ratio": 0.042694,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_04 (repaired).stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_04 (repaired).stl",
+      "image_path": null,
+      "caption": "tabletop miniature: repaired, riflegrenadelauncher, singlegrip",
+      "tags": [
+        "repaired",
+        "riflegrenadelauncher",
+        "singlegrip"
+      ],
+      "vertices": 232626,
+      "faces": 77542,
+      "extents": [
+        6.196,
+        24.444,
+        11.434
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 0.763875,
+      "voxel_filled": 1361,
+      "voxel_fill_ratio": 0.041534,
+      "quality_warnings": [
+        "not_watertight_training_source"
+      ]
+    },
+    {
+      "mesh_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Warboss with plasmacannon.stl",
+      "source_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Warboss with plasmacannon.stl",
+      "image_path": null,
+      "caption": "tabletop miniature: plasmacannon, warboss, with",
+      "tags": [
+        "plasmacannon",
+        "warboss",
+        "with"
+      ],
+      "vertices": 6743898,
+      "faces": 2247966,
+      "extents": [
+        31.89215,
+        38.01856,
+        38.0
+      ],
+      "watertight": false,
+      "voxel_resolution": 32,
+      "voxel_pitch": 1.18808,
+      "voxel_filled": 0,
+      "voxel_fill_ratio": 0.0,
+      "quality_warnings": [
+        "not_watertight_training_source",
+        "component_check_skipped_large_mesh",
+        "voxel_summary_skipped_large_mesh"
+      ]
+    }
+  ]
+}

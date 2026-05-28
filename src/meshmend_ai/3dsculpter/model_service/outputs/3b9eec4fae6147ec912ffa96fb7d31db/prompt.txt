@@ -1,0 +1,3 @@
+a space marine in power armor and a pulse rifle
+
+Create a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.

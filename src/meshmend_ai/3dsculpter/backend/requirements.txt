@@ -1,0 +1,16 @@
+PyQt6==6.6.1
+PyQt6-sip==13.6.0
+vispy==0.14.1
+numpy==1.24.3
+trimesh==3.23.5
+pillow==10.1.0
+opencv-python==4.8.1.78
+scipy==1.11.4
+scikit-image==0.22.0
+torch==2.1.0
+torchvision==0.16.0
+transformers==4.34.0
+diffusers==0.21.4
+accelerate==0.24.0
+safetensors==0.4.0
+omegaconf==2.3.0

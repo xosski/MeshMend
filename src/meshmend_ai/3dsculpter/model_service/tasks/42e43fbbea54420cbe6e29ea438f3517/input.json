@@ -1,0 +1,13 @@
+{
+  "prompt": "a space marine\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+  "quality": "high",
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 8000000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}
