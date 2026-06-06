@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import queue
+import subprocess
 import sys
 import threading
 import tkinter as tk
@@ -62,6 +63,9 @@ class MeshMendGUI:
         self._result_queue: queue.Queue[tuple[str, object]] = queue.Queue()
         self.sculptor = get_sculptor_foundation()
         self._donation_dialog: tk.Toplevel | None = None
+        self._creation_progress_dialog: tk.Toplevel | None = None
+        self._creation_progress_label: tk.StringVar | None = None
+        self._creation_progress_bar: ttk.Progressbar | None = None
         self._build_ui()
         if os.environ.get("MESHMEND_DONATION_POPUP", "1").strip().lower() not in {"0", "false", "no", "off"}:
             self.root.after(700, self._show_donation_popup)
@@ -123,6 +127,8 @@ class MeshMendGUI:
         sculptor_buttons = ttk.Frame(sculptor)
         sculptor_buttons.pack(fill=tk.X, padx=10, pady=(0, 10))
         ttk.Button(sculptor_buttons, text="Open 3D Sculptor", command=self.open_sculptor).pack(side=tk.LEFT)
+        self.restart_service_button = ttk.Button(sculptor_buttons, text="Restart model service", command=self.restart_model_service)
+        self.restart_service_button.pack(side=tk.LEFT, padx=(8, 0))
         ttk.Button(sculptor_buttons, text="Import latest sculptor model", command=self.import_latest_sculptor_model).pack(
             side=tk.LEFT, padx=(8, 0)
         )
@@ -154,7 +160,7 @@ class MeshMendGUI:
             width=8,
         )
         detail_combo.pack(side=tk.LEFT)
-        ttk.Label(detail_row, text="um  (50=8K draft, 25=max detail)").pack(side=tk.LEFT, padx=(6, 14))
+        ttk.Label(detail_row, text="um  (50=studio, 25=max detail)").pack(side=tk.LEFT, padx=(6, 14))
         ttk.Label(detail_row, text="Triangle cap").pack(side=tk.LEFT)
         ttk.Entry(detail_row, textvariable=self.max_detail_triangles, width=12).pack(side=tk.LEFT, padx=(6, 0))
         image_row = ttk.Frame(creator)
@@ -353,6 +359,44 @@ class MeshMendGUI:
         except Exception as exc:
             messagebox.showerror("3D Sculptor", f"Could not launch 3D Sculptor:\n{exc}")
 
+    def restart_model_service(self) -> None:
+        self.restart_service_button.configure(state=tk.DISABLED)
+        self.create_button.configure(state=tk.DISABLED)
+        self.status.set("Restarting MeshMend model service...")
+        self._set_progress(0, "Stopping model service")
+        self._append_log("Restarting local model service...\n")
+        thread = threading.Thread(target=self._restart_model_service_worker, daemon=True)
+        thread.start()
+        self.root.after(100, self._poll_result)
+
+    def _restart_model_service_worker(self) -> None:
+        try:
+            cli_path = Path(__file__).resolve().parent / "cli.py"
+            if not cli_path.exists():
+                raise RuntimeError(f"Could not find cli.py at {cli_path}")
+            commands = [
+                ([sys.executable, str(cli_path), "--stop-model-service"], 20, "Stopping model service"),
+                ([sys.executable, str(cli_path), "--model-service", "--restart-model-service"], 85, "Starting model service"),
+            ]
+            logs: list[str] = []
+            for command, percent, message in commands:
+                self._post_progress(percent, message)
+                completed = subprocess.run(
+                    command,
+                    cwd=str(cli_path.parent),
+                    text=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    timeout=float(os.environ.get("MESHMEND_GUI_SERVICE_RESTART_TIMEOUT_SECONDS", "180")),
+                )
+                logs.append("> " + " ".join(command) + "\n" + (completed.stdout or "") + (completed.stderr or ""))
+                if completed.returncode != 0:
+                    raise RuntimeError(logs[-1].strip() or f"model service command exited {completed.returncode}")
+            self._post_progress(100, "Model service restarted")
+            self._result_queue.put(("service_restarted", "\n".join(logs)))
+        except Exception as exc:
+            self._result_queue.put(("service_error", exc))
+
     def import_latest_sculptor_model(self) -> None:
         latest = self.sculptor.latest_model()
         if latest is None:
@@ -455,6 +499,7 @@ class MeshMendGUI:
         self.report_text.delete("1.0", tk.END)
         self._set_progress(0, "Starting model creation")
         self.status.set("Creating 3D model...")
+        self._show_creation_progress_dialog("Starting model creation")
 
         thread = threading.Thread(
             target=self._create_model_worker,
@@ -483,7 +528,7 @@ class MeshMendGUI:
             )
             self._result_queue.put(("created", (output_path, scale_mm, print_detail_um)))
         except Exception as exc:
-            self._result_queue.put(("error", exc))
+            self._result_queue.put(("create_error", exc))
 
     def start_training(self) -> None:
         source_dir = Path(self.training_source_dir.get()).expanduser()
@@ -617,11 +662,47 @@ class MeshMendGUI:
             messagebox.showinfo("Neural training complete", payload.message)
             return
 
+        if status == "service_restarted":
+            self.restart_service_button.configure(state=tk.NORMAL)
+            self.create_button.configure(state=tk.NORMAL)
+            self.repair_button.configure(state=tk.NORMAL)
+            self.status.set("Model service restarted.")
+            self._set_progress(100, "Model service restarted")
+            if payload:
+                self._append_log(str(payload).strip() + "\n")
+            messagebox.showinfo("Model service", "MeshMend model service restarted.")
+            return
+
+        if status == "service_error":
+            self.restart_service_button.configure(state=tk.NORMAL)
+            self.create_button.configure(state=tk.NORMAL)
+            self.repair_button.configure(state=tk.NORMAL)
+            self.status.set("Model service restart failed.")
+            self._set_progress(0, "Service restart failed")
+            messagebox.showerror("Model service", str(payload))
+            return
+
         self.repair_button.configure(state=tk.NORMAL)
         self.create_button.configure(state=tk.NORMAL)
+        self.restart_service_button.configure(state=tk.NORMAL)
+        if status == "create_error":
+            message = str(payload)
+            lowered = message.lower()
+            is_concept_failure = "Concept generation" in message or "concept image" in lowered or "text-to-3d stopped before hunyuan" in lowered
+            is_store_quality_unavailable = "Store-quality 8K miniature generation is not configured" in message or "Store/studio-quality 8K miniature generation is not available" in message
+            is_store_quality_gate = "store-quality gate" in lowered or "no_concept_image_received" in lowered or "low_vision_planner_confidence" in lowered or "ai_planner_required" in lowered or "image_to_3d_requires_ai_vision_planner" in lowered or "concept_match" in lowered or "planned_landmarks" in lowered or "multiple_components_" in lowered
+            self.status.set("Concept generation failed." if is_concept_failure else "Store-quality gate failed." if is_store_quality_gate else "Store-quality backend not configured." if is_store_quality_unavailable else "Model creation failed.")
+            self._set_progress(0, "Concept generation failed" if is_concept_failure else "Store-quality gate failed" if is_store_quality_gate else "Store-quality backend not configured" if is_store_quality_unavailable else "Creation failed")
+            self._close_creation_progress_dialog()
+            self._append_log(message.strip() + "\n")
+            title = "Concept generation failed" if is_concept_failure else "Store-quality gate failed" if is_store_quality_gate else "Store-quality backend not configured" if is_store_quality_unavailable else "Create model failed"
+            messagebox.showerror(title, message)
+            return
+
         if status == "error":
             self.status.set("Repair failed.")
             self._set_progress(0, "Failed")
+            self._close_creation_progress_dialog()
             messagebox.showerror("Repair failed", str(payload))
             return
 
@@ -632,6 +713,7 @@ class MeshMendGUI:
             self.output_path.set(str(output_path.with_name(f"{output_path.stem}_meshmend{output_path.suffix}")))
             self.status.set(f"Created model: {output_path.name}")
             self._set_progress(100, "Model creation complete")
+            self._close_creation_progress_dialog()
             detail_summary = self._detail_summary_for_path(output_path, float(print_detail_um))
             self._append_log(
                 f"Created {float(scale_mm):g}mm 3D model from chat/image:\n{output_path}\n\n{detail_summary}\n\nIt is now selected as the input model for AI repair.\n"
@@ -649,8 +731,56 @@ class MeshMendGUI:
         self._result_queue.put(("progress", (percent, message)))
 
     def _set_progress(self, percent: int, message: str) -> None:
-        self.progress.configure(value=max(0, min(100, int(percent))))
-        self.progress_status.set(f"{max(0, min(100, int(percent)))}% - {message}")
+        value = max(0, min(100, int(percent)))
+        self.progress.configure(value=value)
+        self.progress_status.set(f"{value}% - {message}")
+        if self._creation_progress_dialog is not None and self._creation_progress_dialog.winfo_exists():
+            if self._creation_progress_label is not None:
+                self._creation_progress_label.set(f"{value}% - {message}")
+            if self._creation_progress_bar is not None:
+                self._creation_progress_bar.configure(value=value)
+                self._creation_progress_bar.update_idletasks()
+
+    def _show_creation_progress_dialog(self, message: str) -> None:
+        self._close_creation_progress_dialog()
+        dialog = tk.Toplevel(self.root)
+        self._creation_progress_dialog = dialog
+        self._creation_progress_label = tk.StringVar(value=f"0% - {message}")
+        dialog.title("Creating 3D model")
+        dialog.resizable(False, False)
+        dialog.transient(self.root)
+        dialog.protocol("WM_DELETE_WINDOW", lambda: None)
+
+        frame = ttk.Frame(dialog, padding=18)
+        frame.pack(fill=tk.BOTH, expand=True)
+        ttk.Label(frame, text="Model creation in progress", font=("Segoe UI", 12, "bold")).pack(anchor=tk.W)
+        ttk.Label(
+            frame,
+            text="This can take several minutes while MeshMend native geometry, mesh cleanup, solidification, and detail passes run.",
+            wraplength=420,
+            justify=tk.LEFT,
+        ).pack(anchor=tk.W, pady=(8, 10))
+        self._creation_progress_bar = ttk.Progressbar(frame, mode="determinate", maximum=100, length=420)
+        self._creation_progress_bar.pack(fill=tk.X, pady=(0, 8))
+        ttk.Label(frame, textvariable=self._creation_progress_label, wraplength=420).pack(anchor=tk.W)
+
+        self.root.update_idletasks()
+        dialog.update_idletasks()
+        x = self.root.winfo_x() + max((self.root.winfo_width() - dialog.winfo_width()) // 2, 0)
+        y = self.root.winfo_y() + max((self.root.winfo_height() - dialog.winfo_height()) // 3, 0)
+        dialog.geometry(f"+{x}+{y}")
+        dialog.lift(self.root)
+
+    def _close_creation_progress_dialog(self) -> None:
+        if self._creation_progress_dialog is not None:
+            try:
+                if self._creation_progress_dialog.winfo_exists():
+                    self._creation_progress_dialog.destroy()
+            except tk.TclError:
+                pass
+        self._creation_progress_dialog = None
+        self._creation_progress_label = None
+        self._creation_progress_bar = None
 
     def _append_log(self, text: str) -> None:
         self.report_text.insert(tk.END, text)

@@ -1,5 +1,5 @@
 {
-  "trained_at_utc": "2026-05-28T05:05:58.138876+00:00",
+  "trained_at_utc": "2026-06-06T02:14:00.080551+00:00",
   "source_dir": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl",
   "checkpoint_path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\checkpoints\\meshmend_neural_3d_diffusion.pt",
   "config": {
@@ -12,1653 +12,1131 @@
     "diffusion_steps": 24,
     "device": "auto"
   },
-  "mesh_files_found": 166,
-  "examples": 166,
+  "mesh_files_found": 108,
+  "examples": 108,
   "skipped": [],
   "used_meshes": [
     {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmPointing (repaired).stl",
-      "name": "ArmPointing (repaired).stl",
-      "stem": "ArmPointing (repaired)",
-      "size_bytes": 1106784,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 87931,
-      "voxel_fill_ratio": 0.099387
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmRifle (repaired).stl",
-      "name": "ArmRifle (repaired).stl",
-      "stem": "ArmRifle (repaired)",
-      "size_bytes": 3726584,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 56681,
-      "voxel_fill_ratio": 0.064065
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_L (repaired).stl",
-      "name": "ArmSet08_L (repaired).stl",
-      "stem": "ArmSet08_L (repaired)",
-      "size_bytes": 999484,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 95161,
-      "voxel_fill_ratio": 0.107559
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet08_R (repaired).stl",
-      "name": "ArmSet08_R (repaired).stl",
-      "stem": "ArmSet08_R (repaired)",
-      "size_bytes": 1061484,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 82405,
-      "voxel_fill_ratio": 0.093141
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_L (repaired).stl",
-      "name": "ArmSet09_L (repaired).stl",
-      "stem": "ArmSet09_L (repaired)",
-      "size_bytes": 1052884,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 83053,
-      "voxel_fill_ratio": 0.093873
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ArmSet09_R (repaired).stl",
-      "name": "ArmSet09_R (repaired).stl",
-      "stem": "ArmSet09_R (repaired)",
-      "size_bytes": 1176784,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 96673,
-      "voxel_fill_ratio": 0.109268
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_00 (repaired).stl",
-      "name": "AutoRifle_DoubleGrip_00 (repaired).stl",
-      "stem": "AutoRifle_DoubleGrip_00 (repaired)",
-      "size_bytes": 4340584,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29677,
-      "voxel_fill_ratio": 0.033543
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_01 (repaired).stl",
-      "name": "AutoRifle_DoubleGrip_01 (repaired).stl",
-      "stem": "AutoRifle_DoubleGrip_01 (repaired)",
-      "size_bytes": 5545684,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29802,
-      "voxel_fill_ratio": 0.033685
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_02 (repaired).stl",
-      "name": "AutoRifle_DoubleGrip_02 (repaired).stl",
-      "stem": "AutoRifle_DoubleGrip_02 (repaired)",
-      "size_bytes": 4674684,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29807,
-      "voxel_fill_ratio": 0.03369
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_03 (repaired).stl",
-      "name": "AutoRifle_DoubleGrip_03 (repaired).stl",
-      "stem": "AutoRifle_DoubleGrip_03 (repaired)",
-      "size_bytes": 4521484,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29779,
-      "voxel_fill_ratio": 0.033659
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_DoubleGrip_04 (repaired).stl",
-      "name": "AutoRifle_DoubleGrip_04 (repaired).stl",
-      "stem": "AutoRifle_DoubleGrip_04 (repaired)",
-      "size_bytes": 4525884,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29773,
-      "voxel_fill_ratio": 0.033652
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_00 (repaired).stl",
-      "name": "AutoRifle_SingleGrip_00 (repaired).stl",
-      "stem": "AutoRifle_SingleGrip_00 (repaired)",
-      "size_bytes": 3399884,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27334,
-      "voxel_fill_ratio": 0.030895
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_01 (repaired).stl",
-      "name": "AutoRifle_SingleGrip_01 (repaired).stl",
-      "stem": "AutoRifle_SingleGrip_01 (repaired)",
-      "size_bytes": 4608184,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27575,
-      "voxel_fill_ratio": 0.031167
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_02 (repaired).stl",
-      "name": "AutoRifle_SingleGrip_02 (repaired).stl",
-      "stem": "AutoRifle_SingleGrip_02 (repaired)",
-      "size_bytes": 3735384,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27618,
-      "voxel_fill_ratio": 0.031216
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_03 (repaired).stl",
-      "name": "AutoRifle_SingleGrip_03 (repaired).stl",
-      "stem": "AutoRifle_SingleGrip_03 (repaired)",
-      "size_bytes": 3580084,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27609,
-      "voxel_fill_ratio": 0.031206
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\AutoRifle_SingleGrip_04 (repaired).stl",
-      "name": "AutoRifle_SingleGrip_04 (repaired).stl",
-      "stem": "AutoRifle_SingleGrip_04 (repaired)",
-      "size_bytes": 3584484,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27604,
-      "voxel_fill_ratio": 0.0312
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BearKin.stl",
-      "name": "BearKin.stl",
-      "stem": "BearKin",
-      "size_bytes": 122048384,
-      "modified_ns": 1779435502000000000,
-      "voxel_filled": 68742,
-      "voxel_fill_ratio": 0.077698
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_01 (repaired).stl",
-      "name": "BoltRifle_1H_01 (repaired).stl",
-      "stem": "BoltRifle_1H_01 (repaired)",
-      "size_bytes": 5159784,
-      "modified_ns": 1684799366000000000,
-      "voxel_filled": 24987,
-      "voxel_fill_ratio": 0.028242
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_02 (repaired).stl",
-      "name": "BoltRifle_1H_02 (repaired).stl",
-      "stem": "BoltRifle_1H_02 (repaired)",
-      "size_bytes": 6360384,
-      "modified_ns": 1684799366000000000,
-      "voxel_filled": 25267,
-      "voxel_fill_ratio": 0.028559
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_03 (repaired).stl",
-      "name": "BoltRifle_1H_03 (repaired).stl",
-      "stem": "BoltRifle_1H_03 (repaired)",
-      "size_bytes": 5494384,
-      "modified_ns": 1684799366000000000,
-      "voxel_filled": 25273,
-      "voxel_fill_ratio": 0.028566
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_04 (repaired).stl",
-      "name": "BoltRifle_1H_04 (repaired).stl",
-      "stem": "BoltRifle_1H_04 (repaired)",
-      "size_bytes": 5336984,
-      "modified_ns": 1684799366000000000,
-      "voxel_filled": 25277,
-      "voxel_fill_ratio": 0.02857
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\BoltRifle_1H_05 (repaired).stl",
-      "name": "BoltRifle_1H_05 (repaired).stl",
-      "stem": "BoltRifle_1H_05 (repaired)",
-      "size_bytes": 5341384,
-      "modified_ns": 1684799366000000000,
-      "voxel_filled": 25298,
-      "voxel_fill_ratio": 0.028594
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\crimson leviathan.stl",
-      "name": "crimson leviathan.stl",
-      "stem": "crimson leviathan",
-      "size_bytes": 122651984,
-      "modified_ns": 1779216324000000000,
-      "voxel_filled": 79101,
-      "voxel_fill_ratio": 0.089406
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Crimson Maw Juggernaut.stl",
-      "name": "Crimson Maw Juggernaut.stl",
-      "stem": "Crimson Maw Juggernaut",
-      "size_bytes": 121735734,
-      "modified_ns": 1779094280000000000,
-      "voxel_filled": 78502,
-      "voxel_fill_ratio": 0.088729
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_1.stl",
-      "name": "DA_back_pack_1.stl",
-      "stem": "DA_back_pack_1",
-      "size_bytes": 19340384,
-      "modified_ns": 1645468880000000000,
-      "voxel_filled": 30810,
-      "voxel_fill_ratio": 0.034824
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_2.stl",
-      "name": "DA_back_pack_2.stl",
-      "stem": "DA_back_pack_2",
-      "size_bytes": 15453284,
-      "modified_ns": 1645468898000000000,
-      "voxel_filled": 26174,
-      "voxel_fill_ratio": 0.029584
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_3.stl",
-      "name": "DA_back_pack_3.stl",
-      "stem": "DA_back_pack_3",
-      "size_bytes": 17512984,
-      "modified_ns": 1645468890000000000,
-      "voxel_filled": 22982,
-      "voxel_fill_ratio": 0.025976
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_4.stl",
-      "name": "DA_back_pack_4.stl",
-      "stem": "DA_back_pack_4",
-      "size_bytes": 17648384,
-      "modified_ns": 1645468926000000000,
-      "voxel_filled": 41800,
-      "voxel_fill_ratio": 0.047246
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_back_pack_5.stl",
-      "name": "DA_back_pack_5.stl",
-      "stem": "DA_back_pack_5",
-      "size_bytes": 16496784,
-      "modified_ns": 1645468916000000000,
-      "voxel_filled": 34721,
-      "voxel_fill_ratio": 0.039244
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_cloak_.stl",
-      "name": "DA_cloak_.stl",
-      "stem": "DA_cloak_",
-      "size_bytes": 40699084,
-      "modified_ns": 1645181730000000000,
-      "voxel_filled": 37511,
-      "voxel_fill_ratio": 0.042398
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_1.stl",
-      "name": "DA_hand_1.stl",
-      "stem": "DA_hand_1",
-      "size_bytes": 17834184,
-      "modified_ns": 1646045016000000000,
-      "voxel_filled": 33103,
-      "voxel_fill_ratio": 0.037416
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_2.stl",
-      "name": "DA_hand_2.stl",
-      "stem": "DA_hand_2",
-      "size_bytes": 36495784,
-      "modified_ns": 1646045006000000000,
-      "voxel_filled": 9128,
-      "voxel_fill_ratio": 0.010317
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_3.stl",
-      "name": "DA_hand_3.stl",
-      "stem": "DA_hand_3",
-      "size_bytes": 11507784,
-      "modified_ns": 1646045114000000000,
-      "voxel_filled": 9588,
-      "voxel_fill_ratio": 0.010837
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_4.stl",
-      "name": "DA_hand_4.stl",
-      "stem": "DA_hand_4",
-      "size_bytes": 11921084,
-      "modified_ns": 1646045066000000000,
-      "voxel_filled": 10221,
-      "voxel_fill_ratio": 0.011553
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_5.stl",
-      "name": "DA_hand_5.stl",
-      "stem": "DA_hand_5",
-      "size_bytes": 18625084,
-      "modified_ns": 1646045076000000000,
-      "voxel_filled": 7803,
-      "voxel_fill_ratio": 0.00882
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_hand_6.stl",
-      "name": "DA_hand_6.stl",
-      "stem": "DA_hand_6",
-      "size_bytes": 18121584,
-      "modified_ns": 1646045082000000000,
-      "voxel_filled": 29254,
-      "voxel_fill_ratio": 0.033065
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_1.stl",
-      "name": "DA_helmet_1.stl",
-      "stem": "DA_helmet_1",
-      "size_bytes": 8533884,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 225469,
-      "voxel_fill_ratio": 0.254843
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_10.stl",
-      "name": "DA_helmet_10.stl",
-      "stem": "DA_helmet_10",
-      "size_bytes": 11244884,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 273716,
-      "voxel_fill_ratio": 0.309376
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_2.stl",
-      "name": "DA_helmet_2.stl",
-      "stem": "DA_helmet_2",
-      "size_bytes": 5338384,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 47402,
-      "voxel_fill_ratio": 0.053578
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_3.stl",
-      "name": "DA_helmet_3.stl",
-      "stem": "DA_helmet_3",
-      "size_bytes": 11053884,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 283047,
-      "voxel_fill_ratio": 0.319923
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_4.stl",
-      "name": "DA_helmet_4.stl",
-      "stem": "DA_helmet_4",
-      "size_bytes": 4808184,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 58654,
-      "voxel_fill_ratio": 0.066295
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_5.stl",
-      "name": "DA_helmet_5.stl",
-      "stem": "DA_helmet_5",
-      "size_bytes": 16497484,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 74944,
-      "voxel_fill_ratio": 0.084708
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_6.stl",
-      "name": "DA_helmet_6.stl",
-      "stem": "DA_helmet_6",
-      "size_bytes": 14635584,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 70529,
-      "voxel_fill_ratio": 0.079718
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_7.stl",
-      "name": "DA_helmet_7.stl",
-      "stem": "DA_helmet_7",
-      "size_bytes": 8380684,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 258815,
-      "voxel_fill_ratio": 0.292534
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_8.stl",
-      "name": "DA_helmet_8.stl",
-      "stem": "DA_helmet_8",
-      "size_bytes": 16043784,
-      "modified_ns": 1645813836000000000,
-      "voxel_filled": 34018,
-      "voxel_fill_ratio": 0.03845
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_helmet_9.stl",
-      "name": "DA_helmet_9.stl",
-      "stem": "DA_helmet_9",
-      "size_bytes": 15253584,
-      "modified_ns": 1645813732000000000,
-      "voxel_filled": 34155,
-      "voxel_fill_ratio": 0.038605
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_1.stl",
-      "name": "DA_legs_1.stl",
-      "stem": "DA_legs_1",
-      "size_bytes": 27123684,
-      "modified_ns": 1645181554000000000,
-      "voxel_filled": 62802,
-      "voxel_fill_ratio": 0.070984
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_2.stl",
-      "name": "DA_legs_2.stl",
-      "stem": "DA_legs_2",
-      "size_bytes": 40620184,
-      "modified_ns": 1645181538000000000,
-      "voxel_filled": 82495,
-      "voxel_fill_ratio": 0.093243
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_3.stl",
-      "name": "DA_legs_3.stl",
-      "stem": "DA_legs_3",
-      "size_bytes": 28916284,
-      "modified_ns": 1645469100000000000,
-      "voxel_filled": 62743,
-      "voxel_fill_ratio": 0.070917
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_4.stl",
-      "name": "DA_legs_4.stl",
-      "stem": "DA_legs_4",
-      "size_bytes": 23016884,
-      "modified_ns": 1645181598000000000,
-      "voxel_filled": 61065,
-      "voxel_fill_ratio": 0.069021
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_legs_5.stl",
-      "name": "DA_legs_5.stl",
-      "stem": "DA_legs_5",
-      "size_bytes": 30197884,
-      "modified_ns": 1645181620000000000,
-      "voxel_filled": 66513,
-      "voxel_fill_ratio": 0.075178
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_1_bent_weapon.stl",
-      "name": "DA_rifle_1_bent_weapon.stl",
-      "stem": "DA_rifle_1_bent_weapon",
-      "size_bytes": 19927984,
-      "modified_ns": 1646063344000000000,
-      "voxel_filled": 33033,
-      "voxel_fill_ratio": 0.037337
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_2_bent_weapon.stl",
-      "name": "DA_rifle_2_bent_weapon.stl",
-      "stem": "DA_rifle_2_bent_weapon",
-      "size_bytes": 17308784,
-      "modified_ns": 1646063268000000000,
-      "voxel_filled": 33400,
-      "voxel_fill_ratio": 0.037751
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_rifle_3_bent_weapon.stl",
-      "name": "DA_rifle_3_bent_weapon.stl",
-      "stem": "DA_rifle_3_bent_weapon",
-      "size_bytes": 17390584,
-      "modified_ns": 1646063262000000000,
-      "voxel_filled": 33099,
-      "voxel_fill_ratio": 0.037411
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_1.stl",
-      "name": "DA_shoulder_pad_1.stl",
-      "stem": "DA_shoulder_pad_1",
-      "size_bytes": 12398784,
-      "modified_ns": 1645181722000000000,
-      "voxel_filled": 26069,
-      "voxel_fill_ratio": 0.029465
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.1.stl",
-      "name": "DA_shoulder_pad_2.1.stl",
-      "stem": "DA_shoulder_pad_2.1",
-      "size_bytes": 13821784,
-      "modified_ns": 1645257190000000000,
-      "voxel_filled": 28874,
-      "voxel_fill_ratio": 0.032636
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_2.2.stl",
-      "name": "DA_shoulder_pad_2.2.stl",
-      "stem": "DA_shoulder_pad_2.2",
-      "size_bytes": 14634684,
-      "modified_ns": 1645260798000000000,
-      "voxel_filled": 29525,
-      "voxel_fill_ratio": 0.033372
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_3.stl",
-      "name": "DA_shoulder_pad_3.stl",
-      "stem": "DA_shoulder_pad_3",
-      "size_bytes": 6223184,
-      "modified_ns": 1645260792000000000,
-      "voxel_filled": 107520,
-      "voxel_fill_ratio": 0.121528
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_4.stl",
-      "name": "DA_shoulder_pad_4.stl",
-      "stem": "DA_shoulder_pad_4",
-      "size_bytes": 16258184,
-      "modified_ns": 1645260784000000000,
-      "voxel_filled": 53104,
-      "voxel_fill_ratio": 0.060022
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoulder_pad_5.stl",
-      "name": "DA_shoulder_pad_5.stl",
-      "stem": "DA_shoulder_pad_5",
-      "size_bytes": 8955384,
-      "modified_ns": 1645469166000000000,
-      "voxel_filled": 63491,
-      "voxel_fill_ratio": 0.071763
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_shoylder_pad_6.stl",
-      "name": "DA_shoylder_pad_6.stl",
-      "stem": "DA_shoylder_pad_6",
-      "size_bytes": 5286684,
-      "modified_ns": 1645260768000000000,
-      "voxel_filled": 73321,
-      "voxel_fill_ratio": 0.082873
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_1.stl",
-      "name": "DA_torso_1.stl",
-      "stem": "DA_torso_1",
-      "size_bytes": 26454284,
-      "modified_ns": 1645181682000000000,
-      "voxel_filled": 64821,
-      "voxel_fill_ratio": 0.073266
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_2.stl",
-      "name": "DA_torso_2.stl",
-      "stem": "DA_torso_2",
-      "size_bytes": 26760284,
-      "modified_ns": 1645181646000000000,
-      "voxel_filled": 62021,
-      "voxel_fill_ratio": 0.070101
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_3_with_cloak_.stl",
-      "name": "DA_torso_3_with_cloak_.stl",
-      "stem": "DA_torso_3_with_cloak_",
-      "size_bytes": 80539184,
-      "modified_ns": 1645181668000000000,
-      "voxel_filled": 40130,
-      "voxel_fill_ratio": 0.045358
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_4.stl",
-      "name": "DA_torso_4.stl",
-      "stem": "DA_torso_4",
-      "size_bytes": 26491984,
-      "modified_ns": 1645181698000000000,
-      "voxel_filled": 62500,
-      "voxel_fill_ratio": 0.070643
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DA_torso_5.stl",
-      "name": "DA_torso_5.stl",
-      "stem": "DA_torso_5",
-      "size_bytes": 26622984,
-      "modified_ns": 1645181708000000000,
-      "voxel_filled": 61549,
-      "voxel_fill_ratio": 0.069568
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\desolation squad_1775889987.stl",
-      "name": "desolation squad_1775889987.stl",
-      "stem": "desolation squad_1775889987",
-      "size_bytes": 85031684,
-      "modified_ns": 1775890278000000000,
-      "voxel_filled": 58957,
-      "voxel_fill_ratio": 0.066638
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\DoomClaw Mercedes.stl",
-      "name": "DoomClaw Mercedes.stl",
-      "stem": "DoomClaw Mercedes",
-      "size_bytes": 209048784,
-      "modified_ns": 1779334326000000000,
-      "voxel_filled": 93383,
-      "voxel_fill_ratio": 0.105549
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite assassin lieutenant.stl",
-      "name": "Elite assassin lieutenant.stl",
-      "stem": "Elite assassin lieutenant",
-      "size_bytes": 268325984,
-      "modified_ns": 1777872586000000000,
-      "voxel_filled": 60154,
-      "voxel_fill_ratio": 0.067991
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with grenade launcher.stl",
-      "name": "Elite Assassin with grenade launcher.stl",
-      "stem": "Elite Assassin with grenade launcher",
-      "size_bytes": 109445784,
-      "modified_ns": 1777872506000000000,
-      "voxel_filled": 59635,
-      "voxel_fill_ratio": 0.067404
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with heavy gun.stl",
-      "name": "Elite Assassin with heavy gun.stl",
-      "stem": "Elite Assassin with heavy gun",
-      "size_bytes": 104190584,
-      "modified_ns": 1777872532000000000,
-      "voxel_filled": 48924,
-      "voxel_fill_ratio": 0.055298
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Elite Assassin with jump pack.stl",
-      "name": "Elite Assassin with jump pack.stl",
-      "stem": "Elite Assassin with jump pack",
-      "size_bytes": 90977384,
-      "modified_ns": 1777872428000000000,
-      "voxel_filled": 53590,
-      "voxel_fill_ratio": 0.060572
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Eradicator.stl",
-      "name": "Eradicator.stl",
-      "stem": "Eradicator",
-      "size_bytes": 86806884,
-      "modified_ns": 1774857654000000000,
-      "voxel_filled": 59163,
-      "voxel_fill_ratio": 0.066871
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Flammer carl.stl",
-      "name": "Flammer carl.stl",
-      "stem": "Flammer carl",
-      "size_bytes": 91006584,
-      "modified_ns": 1779194254000000000,
-      "voxel_filled": 52427,
-      "voxel_fill_ratio": 0.059257
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Gobby Pistoler.stl",
-      "name": "Gobby Pistoler.stl",
-      "stem": "Gobby Pistoler",
-      "size_bytes": 82661984,
-      "modified_ns": 1779094296000000000,
-      "voxel_filled": 57308,
-      "voxel_fill_ratio": 0.064774
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Grak'Guk.stl",
-      "name": "Grak'Guk.stl",
-      "stem": "Grak'Guk",
-      "size_bytes": 146010384,
-      "modified_ns": 1779331332000000000,
-      "voxel_filled": 96840,
-      "voxel_fill_ratio": 0.109456
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Grab (repaired).stl",
-      "name": "Hand_Grab (repaired).stl",
-      "stem": "Hand_Grab (repaired)",
-      "size_bytes": 536584,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 158778,
-      "voxel_fill_ratio": 0.179464
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Order (repaired).stl",
-      "name": "Hand_Order (repaired).stl",
-      "stem": "Hand_Order (repaired)",
-      "size_bytes": 550284,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 75229,
-      "voxel_fill_ratio": 0.08503
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Point (repaired).stl",
-      "name": "Hand_Point (repaired).stl",
-      "stem": "Hand_Point (repaired)",
-      "size_bytes": 542284,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 78199,
-      "voxel_fill_ratio": 0.088387
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hand_Rest (repaired).stl",
-      "name": "Hand_Rest (repaired).stl",
-      "stem": "Hand_Rest (repaired)",
-      "size_bytes": 552284,
-      "modified_ns": 1684882398000000000,
-      "voxel_filled": 96947,
-      "voxel_fill_ratio": 0.109577
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Hurricane.stl",
-      "name": "Hurricane.stl",
-      "stem": "Hurricane",
-      "size_bytes": 119737484,
-      "modified_ns": 1779636114000000000,
-      "voxel_filled": 62829,
-      "voxel_fill_ratio": 0.071014
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\IronBound Wrecker.stl",
-      "name": "IronBound Wrecker.stl",
-      "stem": "IronBound Wrecker",
-      "size_bytes": 69059584,
-      "modified_ns": 1779094250000000000,
-      "voxel_filled": 48191,
-      "voxel_fill_ratio": 0.054469
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\judgment.stl",
-      "name": "judgment.stl",
-      "stem": "judgment",
-      "size_bytes": 157177984,
-      "modified_ns": 1779636044000000000,
-      "voxel_filled": 82484,
-      "voxel_fill_ratio": 0.09323
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\librarian_0303233309_generate.stl",
-      "name": "librarian_0303233309_generate.stl",
-      "stem": "librarian_0303233309_generate",
-      "size_bytes": 66220334,
-      "modified_ns": 1772580796000000000,
-      "voxel_filled": 43742,
-      "voxel_fill_ratio": 0.049441
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_agressor_1774311700_generate.stl",
-      "name": "Meshy_AI_agressor_1774311700_generate.stl",
-      "stem": "Meshy_AI_agressor_1774311700_generate",
-      "size_bytes": 118150984,
-      "modified_ns": 1774311798000000000,
-      "voxel_filled": 71814,
-      "voxel_fill_ratio": 0.08117
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blade guard vet_1774680902_generate.stl",
-      "name": "Meshy_AI_blade guard vet_1774680902_generate.stl",
-      "stem": "Meshy_AI_blade guard vet_1774680902_generate",
-      "size_bytes": 122580484,
-      "modified_ns": 1774681060000000000,
-      "voxel_filled": 70485,
-      "voxel_fill_ratio": 0.079668
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_blood_angel_0305134448_generate.stl",
-      "name": "Meshy_AI_blood_angel_0305134448_generate.stl",
-      "stem": "Meshy_AI_blood_angel_0305134448_generate",
-      "size_bytes": 48863184,
-      "modified_ns": 1772718302000000000,
-      "voxel_filled": 59981,
-      "voxel_fill_ratio": 0.067795
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_eliminators_1774311880_generate.stl",
-      "name": "Meshy_AI_eliminators_1774311880_generate.stl",
-      "stem": "Meshy_AI_eliminators_1774311880_generate",
-      "size_bytes": 74904684,
-      "modified_ns": 1774312034000000000,
-      "voxel_filled": 67195,
-      "voxel_fill_ratio": 0.075949
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_interssesor_0306083406_generate.stl",
-      "name": "Meshy_AI_interssesor_0306083406_generate.stl",
-      "stem": "Meshy_AI_interssesor_0306083406_generate",
-      "size_bytes": 146963334,
-      "modified_ns": 1772786090000000000,
-      "voxel_filled": 60685,
-      "voxel_fill_ratio": 0.068591
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_power armor_1774311535_generate.stl",
-      "name": "Meshy_AI_power armor_1774311535_generate.stl",
-      "stem": "Meshy_AI_power armor_1774311535_generate",
-      "size_bytes": 79937484,
-      "modified_ns": 1774311626000000000,
-      "voxel_filled": 58923,
-      "voxel_fill_ratio": 0.0666
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_praetor_0304052441_generate.stl",
-      "name": "Meshy_AI_praetor_0304052441_generate.stl",
-      "stem": "Meshy_AI_praetor_0304052441_generate",
-      "size_bytes": 57133384,
-      "modified_ns": 1772601902000000000,
-      "voxel_filled": 69349,
-      "voxel_fill_ratio": 0.078384
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary priest_1774311478_generate.stl",
-      "name": "Meshy_AI_sanguinary priest_1774311478_generate.stl",
-      "stem": "Meshy_AI_sanguinary priest_1774311478_generate",
-      "size_bytes": 110335784,
-      "modified_ns": 1774311580000000000,
-      "voxel_filled": 68829,
-      "voxel_fill_ratio": 0.077796
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Meshy_AI_sanguinary_guard_0305100033_generate.stl",
-      "name": "Meshy_AI_sanguinary_guard_0305100033_generate.stl",
-      "stem": "Meshy_AI_sanguinary_guard_0305100033_generate",
-      "size_bytes": 43816134,
-      "modified_ns": 1772704848000000000,
-      "voxel_filled": 22831,
-      "voxel_fill_ratio": 0.025805
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Bearmastaaaa.stl",
-      "name": "Orc Bearmastaaaa.stl",
-      "stem": "Orc Bearmastaaaa",
-      "size_bytes": 140022184,
-      "modified_ns": 1779435264000000000,
-      "voxel_filled": 72392,
-      "voxel_fill_ratio": 0.081823
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Behemoth.stl",
-      "name": "Orc Behemoth.stl",
-      "stem": "Orc Behemoth",
-      "size_bytes": 96172184,
-      "modified_ns": 1779112516000000000,
-      "voxel_filled": 50317,
-      "voxel_fill_ratio": 0.056872
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\orc clappa.stl",
-      "name": "orc clappa.stl",
-      "stem": "orc clappa",
-      "size_bytes": 80760084,
-      "modified_ns": 1779193460000000000,
-      "voxel_filled": 49787,
-      "voxel_fill_ratio": 0.056273
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Heavy Bolter.stl",
-      "name": "Orc Heavy Bolter.stl",
-      "stem": "Orc Heavy Bolter",
-      "size_bytes": 112312184,
-      "modified_ns": 1779330180000000000,
-      "voxel_filled": 97497,
-      "voxel_fill_ratio": 0.110199
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc Nail Gunner.stl",
-      "name": "Orc Nail Gunner.stl",
-      "stem": "Orc Nail Gunner",
-      "size_bytes": 93673784,
-      "modified_ns": 1779330494000000000,
-      "voxel_filled": 93815,
-      "voxel_fill_ratio": 0.106037
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc War Boss Clobba.stl",
-      "name": "Orc War Boss Clobba.stl",
-      "stem": "Orc War Boss Clobba",
-      "size_bytes": 146902784,
-      "modified_ns": 1779435938000000000,
-      "voxel_filled": 79979,
-      "voxel_fill_ratio": 0.090399
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Orc warlord.stl",
-      "name": "Orc warlord.stl",
-      "stem": "Orc warlord",
-      "size_bytes": 91647784,
-      "modified_ns": 1779111314000000000,
-      "voxel_filled": 77712,
-      "voxel_fill_ratio": 0.087836
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_00 (repaired).stl",
-      "name": "Prime_Rifle_00 (repaired).stl",
-      "stem": "Prime_Rifle_00 (repaired)",
-      "size_bytes": 6111884,
-      "modified_ns": 1687370456000000000,
-      "voxel_filled": 27726,
-      "voxel_fill_ratio": 0.031338
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_01 (repaired).stl",
-      "name": "Prime_Rifle_01 (repaired).stl",
-      "stem": "Prime_Rifle_01 (repaired)",
-      "size_bytes": 6448584,
-      "modified_ns": 1687370456000000000,
-      "voxel_filled": 27868,
-      "voxel_fill_ratio": 0.031499
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_02 (repaired).stl",
-      "name": "Prime_Rifle_02 (repaired).stl",
-      "stem": "Prime_Rifle_02 (repaired)",
-      "size_bytes": 7316684,
-      "modified_ns": 1687370456000000000,
-      "voxel_filled": 27843,
-      "voxel_fill_ratio": 0.03147
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_03 (repaired).stl",
-      "name": "Prime_Rifle_03 (repaired).stl",
-      "stem": "Prime_Rifle_03 (repaired)",
-      "size_bytes": 6290184,
-      "modified_ns": 1687370456000000000,
-      "voxel_filled": 27843,
-      "voxel_fill_ratio": 0.03147
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Prime_Rifle_04 (repaired).stl",
-      "name": "Prime_Rifle_04 (repaired).stl",
-      "stem": "Prime_Rifle_04 (repaired)",
-      "size_bytes": 6295484,
-      "modified_ns": 1687370456000000000,
-      "voxel_filled": 27844,
-      "voxel_fill_ratio": 0.031472
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHead (repaired).stl",
-      "name": "PrimeHead (repaired).stl",
-      "stem": "PrimeHead (repaired)",
-      "size_bytes": 4639584,
-      "modified_ns": 1683567852000000000,
-      "voxel_filled": 235661,
-      "voxel_fill_ratio": 0.266363
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadSgt (repaired).stl",
-      "name": "PrimeHeadSgt (repaired).stl",
-      "stem": "PrimeHeadSgt (repaired)",
-      "size_bytes": 4741284,
-      "modified_ns": 1683567852000000000,
-      "voxel_filled": 236214,
-      "voxel_fill_ratio": 0.266988
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStudded (repaired).stl",
-      "name": "PrimeHeadStudded (repaired).stl",
-      "stem": "PrimeHeadStudded (repaired)",
-      "size_bytes": 4673284,
-      "modified_ns": 1683567852000000000,
-      "voxel_filled": 235910,
-      "voxel_fill_ratio": 0.266645
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeHeadStuddedSgt (repaired).stl",
-      "name": "PrimeHeadStuddedSgt (repaired).stl",
-      "stem": "PrimeHeadStuddedSgt (repaired)",
-      "size_bytes": 4770784,
-      "modified_ns": 1683567852000000000,
-      "voxel_filled": 236462,
-      "voxel_fill_ratio": 0.267268
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_01 (repaired).stl",
-      "name": "PrimeInfantry_Body_01 (repaired).stl",
-      "stem": "PrimeInfantry_Body_01 (repaired)",
-      "size_bytes": 4883184,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 283703,
-      "voxel_fill_ratio": 0.320664
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_02 (repaired).stl",
-      "name": "PrimeInfantry_Body_02 (repaired).stl",
-      "stem": "PrimeInfantry_Body_02 (repaired)",
-      "size_bytes": 4907484,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 290175,
-      "voxel_fill_ratio": 0.327979
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_03 (repaired).stl",
-      "name": "PrimeInfantry_Body_03 (repaired).stl",
-      "stem": "PrimeInfantry_Body_03 (repaired)",
-      "size_bytes": 4904984,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 280040,
-      "voxel_fill_ratio": 0.316524
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_04 (repaired).stl",
-      "name": "PrimeInfantry_Body_04 (repaired).stl",
-      "stem": "PrimeInfantry_Body_04 (repaired)",
-      "size_bytes": 4880384,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 276861,
-      "voxel_fill_ratio": 0.312931
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_05 (repaired).stl",
-      "name": "PrimeInfantry_Body_05 (repaired).stl",
-      "stem": "PrimeInfantry_Body_05 (repaired)",
-      "size_bytes": 5097784,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 281681,
-      "voxel_fill_ratio": 0.318379
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_06 (repaired).stl",
-      "name": "PrimeInfantry_Body_06 (repaired).stl",
-      "stem": "PrimeInfantry_Body_06 (repaired)",
-      "size_bytes": 4870284,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 283555,
-      "voxel_fill_ratio": 0.320497
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_07 (repaired).stl",
-      "name": "PrimeInfantry_Body_07 (repaired).stl",
-      "stem": "PrimeInfantry_Body_07 (repaired)",
-      "size_bytes": 4855684,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 305086,
-      "voxel_fill_ratio": 0.344833
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_08 (repaired).stl",
-      "name": "PrimeInfantry_Body_08 (repaired).stl",
-      "stem": "PrimeInfantry_Body_08 (repaired)",
-      "size_bytes": 4903884,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 278893,
-      "voxel_fill_ratio": 0.315227
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_09 (repaired).stl",
-      "name": "PrimeInfantry_Body_09 (repaired).stl",
-      "stem": "PrimeInfantry_Body_09 (repaired)",
-      "size_bytes": 4890984,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 276026,
-      "voxel_fill_ratio": 0.311987
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Body_10 (repaired).stl",
-      "name": "PrimeInfantry_Body_10 (repaired).stl",
-      "stem": "PrimeInfantry_Body_10 (repaired)",
-      "size_bytes": 4929684,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 276045,
-      "voxel_fill_ratio": 0.312008
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterEmpty (repaired).stl",
-      "name": "PrimeInfantry_HolsterEmpty (repaired).stl",
-      "stem": "PrimeInfantry_HolsterEmpty (repaired)",
-      "size_bytes": 612584,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 63277,
-      "voxel_fill_ratio": 0.071521
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_HolsterPistol (repaired).stl",
-      "name": "PrimeInfantry_HolsterPistol (repaired).stl",
-      "stem": "PrimeInfantry_HolsterPistol (repaired)",
-      "size_bytes": 926884,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 63424,
-      "voxel_fill_ratio": 0.071687
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_01 (repaired).stl",
-      "name": "PrimeInfantry_Legs_01 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_01 (repaired)",
-      "size_bytes": 9578284,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 115909,
-      "voxel_fill_ratio": 0.13101
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_02 (repaired).stl",
-      "name": "PrimeInfantry_Legs_02 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_02 (repaired)",
-      "size_bytes": 9018284,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 118859,
-      "voxel_fill_ratio": 0.134344
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_03 (repaired).stl",
-      "name": "PrimeInfantry_Legs_03 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_03 (repaired)",
-      "size_bytes": 9100084,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 107036,
-      "voxel_fill_ratio": 0.120981
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_04 (repaired).stl",
-      "name": "PrimeInfantry_Legs_04 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_04 (repaired)",
-      "size_bytes": 9047184,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 114371,
-      "voxel_fill_ratio": 0.129271
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_05 (repaired).stl",
-      "name": "PrimeInfantry_Legs_05 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_05 (repaired)",
-      "size_bytes": 9501284,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 113744,
-      "voxel_fill_ratio": 0.128563
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_06 (repaired).stl",
-      "name": "PrimeInfantry_Legs_06 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_06 (repaired)",
-      "size_bytes": 9574484,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 118663,
-      "voxel_fill_ratio": 0.134122
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_07 (repaired).stl",
-      "name": "PrimeInfantry_Legs_07 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_07 (repaired)",
-      "size_bytes": 9407284,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 113903,
-      "voxel_fill_ratio": 0.128742
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_08 (repaired).stl",
-      "name": "PrimeInfantry_Legs_08 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_08 (repaired)",
-      "size_bytes": 9030184,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 93569,
-      "voxel_fill_ratio": 0.105759
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_09 (repaired).stl",
-      "name": "PrimeInfantry_Legs_09 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_09 (repaired)",
-      "size_bytes": 9074884,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 111918,
-      "voxel_fill_ratio": 0.126499
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Legs_10 (repaired).stl",
-      "name": "PrimeInfantry_Legs_10 (repaired).stl",
-      "stem": "PrimeInfantry_Legs_10 (repaired)",
-      "size_bytes": 8531384,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 111407,
-      "voxel_fill_ratio": 0.125921
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_01 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_01 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_01 (repaired)",
-      "size_bytes": 1416584,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 30142,
-      "voxel_fill_ratio": 0.034069
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_02 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_02 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_02 (repaired)",
-      "size_bytes": 499984,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 44318,
-      "voxel_fill_ratio": 0.050092
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_03 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_03 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_03 (repaired)",
-      "size_bytes": 847884,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 70988,
-      "voxel_fill_ratio": 0.080236
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_04 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_04 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_04 (repaired)",
-      "size_bytes": 490084,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 87226,
-      "voxel_fill_ratio": 0.09859
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_05 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_05 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_05 (repaired)",
-      "size_bytes": 1450084,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 84477,
-      "voxel_fill_ratio": 0.095483
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_06 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_06 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_06 (repaired)",
-      "size_bytes": 1752284,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 28229,
-      "voxel_fill_ratio": 0.031907
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeInfantry_Trinket_07 (repaired).stl",
-      "name": "PrimeInfantry_Trinket_07 (repaired).stl",
-      "stem": "PrimeInfantry_Trinket_07 (repaired)",
-      "size_bytes": 646784,
-      "modified_ns": 1687476784000000000,
-      "voxel_filled": 44595,
-      "voxel_fill_ratio": 0.050405
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimePowerPack_repaired.stl",
-      "name": "PrimePowerPack_repaired.stl",
-      "stem": "PrimePowerPack_repaired",
-      "size_bytes": 4545984,
-      "modified_ns": 1685379070000000000,
-      "voxel_filled": 77227,
-      "voxel_fill_ratio": 0.087288
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_01_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_01_L (repaired)",
-      "size_bytes": 2746984,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 51463,
-      "voxel_fill_ratio": 0.058168
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_01_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_01_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_01_R (repaired)",
-      "size_bytes": 2444484,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 76798,
-      "voxel_fill_ratio": 0.086803
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_02_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_02_L (repaired)",
-      "size_bytes": 2279284,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 67729,
-      "voxel_fill_ratio": 0.076553
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_02_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_02_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_02_R (repaired)",
-      "size_bytes": 1951884,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 121909,
-      "voxel_fill_ratio": 0.137791
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_03_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_03_L (repaired)",
-      "size_bytes": 2566384,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 71347,
-      "voxel_fill_ratio": 0.080642
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_03_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_03_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_03_R (repaired)",
-      "size_bytes": 2266984,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 121435,
-      "voxel_fill_ratio": 0.137256
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_04_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_04_L (repaired)",
-      "size_bytes": 3450584,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 73576,
-      "voxel_fill_ratio": 0.083162
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_04_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_04_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_04_R (repaired)",
-      "size_bytes": 2447084,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 131372,
-      "voxel_fill_ratio": 0.148487
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_05_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_05_L (repaired)",
-      "size_bytes": 2592384,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 79371,
-      "voxel_fill_ratio": 0.089712
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_05_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_05_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_05_R (repaired)",
-      "size_bytes": 2949684,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 124329,
-      "voxel_fill_ratio": 0.140527
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_06_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_06_L (repaired)",
-      "size_bytes": 3200684,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 87349,
-      "voxel_fill_ratio": 0.098729
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_06_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_06_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_06_R (repaired)",
-      "size_bytes": 2320884,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 117774,
-      "voxel_fill_ratio": 0.133118
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_L (repaired).stl",
-      "name": "PrimeRanged_ArmSet_07_L (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_07_L (repaired)",
-      "size_bytes": 3110484,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 58284,
-      "voxel_fill_ratio": 0.065877
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeRanged_ArmSet_07_R (repaired).stl",
-      "name": "PrimeRanged_ArmSet_07_R (repaired).stl",
-      "stem": "PrimeRanged_ArmSet_07_R (repaired)",
-      "size_bytes": 2182784,
-      "modified_ns": 1687370056000000000,
-      "voxel_filled": 138176,
-      "voxel_fill_ratio": 0.156178
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\PrimeShoulder (repaired).stl",
-      "name": "PrimeShoulder (repaired).stl",
-      "stem": "PrimeShoulder (repaired)",
-      "size_bytes": 2984084,
-      "modified_ns": 1685380914000000000,
-      "voxel_filled": 107457,
-      "voxel_fill_ratio": 0.121457
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Reaper Gladation.stl",
-      "name": "Reaper Gladation.stl",
-      "stem": "Reaper Gladation",
-      "size_bytes": 178444484,
-      "modified_ns": 1779636188000000000,
-      "voxel_filled": 82281,
-      "voxel_fill_ratio": 0.093001
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_00 (repaired).stl",
-      "name": "RifleGrenadeLauncher_DoubleGrip_00 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_DoubleGrip_00 (repaired)",
-      "size_bytes": 4603384,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29305,
-      "voxel_fill_ratio": 0.033123
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_01 (repaired).stl",
-      "name": "RifleGrenadeLauncher_DoubleGrip_01 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_DoubleGrip_01 (repaired)",
-      "size_bytes": 5808484,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29574,
-      "voxel_fill_ratio": 0.033427
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_02 (repaired).stl",
-      "name": "RifleGrenadeLauncher_DoubleGrip_02 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_DoubleGrip_02 (repaired)",
-      "size_bytes": 4940684,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29404,
-      "voxel_fill_ratio": 0.033235
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_03 (repaired).stl",
-      "name": "RifleGrenadeLauncher_DoubleGrip_03 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_DoubleGrip_03 (repaired)",
-      "size_bytes": 4782084,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29460,
-      "voxel_fill_ratio": 0.033298
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_DoubleGrip_04 (repaired).stl",
-      "name": "RifleGrenadeLauncher_DoubleGrip_04 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_DoubleGrip_04 (repaired)",
-      "size_bytes": 4789984,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 29452,
-      "voxel_fill_ratio": 0.033289
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_00 (repaired).stl",
-      "name": "RifleGrenadeLauncher_SingleGrip_00 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_SingleGrip_00 (repaired)",
-      "size_bytes": 3694784,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27275,
-      "voxel_fill_ratio": 0.030828
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_01 (repaired).stl",
-      "name": "RifleGrenadeLauncher_SingleGrip_01 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_SingleGrip_01 (repaired)",
-      "size_bytes": 4900084,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27508,
-      "voxel_fill_ratio": 0.031092
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_02 (repaired).stl",
-      "name": "RifleGrenadeLauncher_SingleGrip_02 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_SingleGrip_02 (repaired)",
-      "size_bytes": 4029484,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27511,
-      "voxel_fill_ratio": 0.031095
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_03 (repaired).stl",
-      "name": "RifleGrenadeLauncher_SingleGrip_03 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_SingleGrip_03 (repaired)",
-      "size_bytes": 3873984,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27404,
-      "voxel_fill_ratio": 0.030974
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\RifleGrenadeLauncher_SingleGrip_04 (repaired).stl",
-      "name": "RifleGrenadeLauncher_SingleGrip_04 (repaired).stl",
-      "stem": "RifleGrenadeLauncher_SingleGrip_04 (repaired)",
-      "size_bytes": 3877184,
-      "modified_ns": 1687813280000000000,
-      "voxel_filled": 27563,
-      "voxel_fill_ratio": 0.031154
-    },
-    {
-      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Warboss with plasmacannon.stl",
-      "name": "Warboss with plasmacannon.stl",
-      "stem": "Warboss with plasmacannon",
-      "size_bytes": 112398384,
-      "modified_ns": 1779094194000000000,
-      "voxel_filled": 87776,
-      "voxel_fill_ratio": 0.099212
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_jump_1.stl",
+      "name": "Body_jump_1.stl",
+      "stem": "Body_jump_1",
+      "size_bytes": 42858034,
+      "modified_ns": 1635216254000000000,
+      "voxel_filled": 44496,
+      "voxel_fill_ratio": 0.050293
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_jump_no_loin.stl",
+      "name": "Body_jump_no_loin.stl",
+      "stem": "Body_jump_no_loin",
+      "size_bytes": 35382834,
+      "modified_ns": 1635216308000000000,
+      "voxel_filled": 39380,
+      "voxel_fill_ratio": 0.04451
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_runing_1.stl",
+      "name": "Body_runing_1.stl",
+      "stem": "Body_runing_1",
+      "size_bytes": 42858034,
+      "modified_ns": 1635215414000000000,
+      "voxel_filled": 40284,
+      "voxel_fill_ratio": 0.045532
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_runing_no_loincloth.stl",
+      "name": "Body_runing_no_loincloth.stl",
+      "stem": "Body_runing_no_loincloth",
+      "size_bytes": 35382834,
+      "modified_ns": 1635215332000000000,
+      "voxel_filled": 35077,
+      "voxel_fill_ratio": 0.039647
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_sprealegs_1.stl",
+      "name": "Body_sprealegs_1.stl",
+      "stem": "Body_sprealegs_1",
+      "size_bytes": 43193434,
+      "modified_ns": 1635215082000000000,
+      "voxel_filled": 44410,
+      "voxel_fill_ratio": 0.050196
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_sprealegs_2stl.stl",
+      "name": "Body_sprealegs_2stl.stl",
+      "stem": "Body_sprealegs_2stl",
+      "size_bytes": 42858034,
+      "modified_ns": 1635215138000000000,
+      "voxel_filled": 44410,
+      "voxel_fill_ratio": 0.050196
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\Body_sprealegs_no_loincloth.stl",
+      "name": "Body_sprealegs_no_loincloth.stl",
+      "stem": "Body_sprealegs_no_loincloth",
+      "size_bytes": 35382834,
+      "modified_ns": 1635215168000000000,
+      "voxel_filled": 38339,
+      "voxel_fill_ratio": 0.043334
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\boltgun_hands_1.stl",
+      "name": "boltgun_hands_1.stl",
+      "stem": "boltgun_hands_1",
+      "size_bytes": 13600084,
+      "modified_ns": 1635261096000000000,
+      "voxel_filled": 40171,
+      "voxel_fill_ratio": 0.045405
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\boltgun_hands_2.stl",
+      "name": "boltgun_hands_2.stl",
+      "stem": "boltgun_hands_2",
+      "size_bytes": 13744484,
+      "modified_ns": 1635261166000000000,
+      "voxel_filled": 36571,
+      "voxel_fill_ratio": 0.041335
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\boltgun_hands_3.stl",
+      "name": "boltgun_hands_3.stl",
+      "stem": "boltgun_hands_3",
+      "size_bytes": 13668584,
+      "modified_ns": 1635261290000000000,
+      "voxel_filled": 47986,
+      "voxel_fill_ratio": 0.054238
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\boltgun_hands_4.stl",
+      "name": "boltgun_hands_4.stl",
+      "stem": "boltgun_hands_4",
+      "size_bytes": 13570984,
+      "modified_ns": 1635261730000000000,
+      "voxel_filled": 33299,
+      "voxel_fill_ratio": 0.037637
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\castellan_1.obj",
+      "name": "castellan_1.obj",
+      "stem": "castellan_1",
+      "size_bytes": 40748841,
+      "modified_ns": 1701472714000000000,
+      "voxel_filled": 51131,
+      "voxel_fill_ratio": 0.057792
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\castellan_2.obj",
+      "name": "castellan_2.obj",
+      "stem": "castellan_2",
+      "size_bytes": 44061910,
+      "modified_ns": 1701472706000000000,
+      "voxel_filled": 53405,
+      "voxel_fill_ratio": 0.060363
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ChampBackpackFix1.stl",
+      "name": "ChampBackpackFix1.stl",
+      "stem": "ChampBackpackFix1",
+      "size_bytes": 13635984,
+      "modified_ns": 1702930218000000000,
+      "voxel_filled": 37897,
+      "voxel_fill_ratio": 0.042834
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ChampBodyFix1.stl",
+      "name": "ChampBodyFix1.stl",
+      "stem": "ChampBodyFix1",
+      "size_bytes": 58912134,
+      "modified_ns": 1702929994000000000,
+      "voxel_filled": 43181,
+      "voxel_fill_ratio": 0.048807
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ChampSwordFix1.stl",
+      "name": "ChampSwordFix1.stl",
+      "stem": "ChampSwordFix1",
+      "size_bytes": 7248884,
+      "modified_ns": 1702930292000000000,
+      "voxel_filled": 2881,
+      "voxel_fill_ratio": 0.003256
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_boltgun.stl",
+      "name": "hand_boltgun.stl",
+      "stem": "hand_boltgun",
+      "size_bytes": 7330684,
+      "modified_ns": 1635262132000000000,
+      "voxel_filled": 31461,
+      "voxel_fill_ratio": 0.03556
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_boltgun_2.stl",
+      "name": "hand_boltgun_2.stl",
+      "stem": "hand_boltgun_2",
+      "size_bytes": 7326784,
+      "modified_ns": 1635262254000000000,
+      "voxel_filled": 20751,
+      "voxel_fill_ratio": 0.023454
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_boltpistol_1.stl",
+      "name": "hand_boltpistol_1.stl",
+      "stem": "hand_boltpistol_1",
+      "size_bytes": 7227184,
+      "modified_ns": 1635262724000000000,
+      "voxel_filled": 23715,
+      "voxel_fill_ratio": 0.026805
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_boltpistol_2.stl",
+      "name": "hand_boltpistol_2.stl",
+      "stem": "hand_boltpistol_2",
+      "size_bytes": 7185584,
+      "modified_ns": 1635262478000000000,
+      "voxel_filled": 40996,
+      "voxel_fill_ratio": 0.046337
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_boltpistol_3.stl",
+      "name": "hand_boltpistol_3.stl",
+      "stem": "hand_boltpistol_3",
+      "size_bytes": 7176184,
+      "modified_ns": 1635262376000000000,
+      "voxel_filled": 15904,
+      "voxel_fill_ratio": 0.017976
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_boltpistol_4.stl",
+      "name": "hand_boltpistol_4.stl",
+      "stem": "hand_boltpistol_4",
+      "size_bytes": 7161284,
+      "modified_ns": 1635262336000000000,
+      "voxel_filled": 30656,
+      "voxel_fill_ratio": 0.03465
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_chainsword_1.stl",
+      "name": "hand_chainsword_1.stl",
+      "stem": "hand_chainsword_1",
+      "size_bytes": 7716084,
+      "modified_ns": 1635262710000000000,
+      "voxel_filled": 16858,
+      "voxel_fill_ratio": 0.019054
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_chainsword_2.stl",
+      "name": "hand_chainsword_2.stl",
+      "stem": "hand_chainsword_2",
+      "size_bytes": 7718884,
+      "modified_ns": 1635262458000000000,
+      "voxel_filled": 17303,
+      "voxel_fill_ratio": 0.019557
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_chainsword_3.stl",
+      "name": "hand_chainsword_3.stl",
+      "stem": "hand_chainsword_3",
+      "size_bytes": 7730384,
+      "modified_ns": 1635262360000000000,
+      "voxel_filled": 16666,
+      "voxel_fill_ratio": 0.018837
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_chainsword_4.stl",
+      "name": "hand_chainsword_4.stl",
+      "stem": "hand_chainsword_4",
+      "size_bytes": 7745384,
+      "modified_ns": 1635262320000000000,
+      "voxel_filled": 15914,
+      "voxel_fill_ratio": 0.017987
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_chainsword_888.stl",
+      "name": "hand_chainsword_888.stl",
+      "stem": "hand_chainsword_888",
+      "size_bytes": 7716884,
+      "modified_ns": 1635253344000000000,
+      "voxel_filled": 12892,
+      "voxel_fill_ratio": 0.014572
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_middle.stl",
+      "name": "hand_middle.stl",
+      "stem": "hand_middle",
+      "size_bytes": 6537184,
+      "modified_ns": 1635262186000000000,
+      "voxel_filled": 38020,
+      "voxel_fill_ratio": 0.042973
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\hand_point.stl",
+      "name": "hand_point.stl",
+      "stem": "hand_point",
+      "size_bytes": 6529784,
+      "modified_ns": 1635263992000000000,
+      "voxel_filled": 22072,
+      "voxel_fill_ratio": 0.024948
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head1.stl",
+      "name": "head1.stl",
+      "stem": "head1",
+      "size_bytes": 7522484,
+      "modified_ns": 1635076474000000000,
+      "voxel_filled": 148440,
+      "voxel_fill_ratio": 0.167779
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head1_1.stl",
+      "name": "head1_1.stl",
+      "stem": "head1_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635076524000000000,
+      "voxel_filled": 73003,
+      "voxel_fill_ratio": 0.082514
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head1_2.stl",
+      "name": "head1_2.stl",
+      "stem": "head1_2",
+      "size_bytes": 11060484,
+      "modified_ns": 1635076550000000000,
+      "voxel_filled": 149612,
+      "voxel_fill_ratio": 0.169104
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head1_3.stl",
+      "name": "head1_3.stl",
+      "stem": "head1_3",
+      "size_bytes": 8509684,
+      "modified_ns": 1635076580000000000,
+      "voxel_filled": 138444,
+      "voxel_fill_ratio": 0.156481
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head1_4.stl",
+      "name": "head1_4.stl",
+      "stem": "head1_4",
+      "size_bytes": 8060084,
+      "modified_ns": 1635076594000000000,
+      "voxel_filled": 125205,
+      "voxel_fill_ratio": 0.141517
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head2_0.stl",
+      "name": "head2_0.stl",
+      "stem": "head2_0",
+      "size_bytes": 7522484,
+      "modified_ns": 1635076648000000000,
+      "voxel_filled": 148697,
+      "voxel_fill_ratio": 0.168069
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head2_1.stl",
+      "name": "head2_1.stl",
+      "stem": "head2_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635076722000000000,
+      "voxel_filled": 73987,
+      "voxel_fill_ratio": 0.083626
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head2_2stl.stl",
+      "name": "head2_2stl.stl",
+      "stem": "head2_2stl",
+      "size_bytes": 11060484,
+      "modified_ns": 1635076694000000000,
+      "voxel_filled": 149847,
+      "voxel_fill_ratio": 0.169369
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head2_3.stl",
+      "name": "head2_3.stl",
+      "stem": "head2_3",
+      "size_bytes": 8060084,
+      "modified_ns": 1635076748000000000,
+      "voxel_filled": 125361,
+      "voxel_fill_ratio": 0.141693
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head2_4.stl",
+      "name": "head2_4.stl",
+      "stem": "head2_4",
+      "size_bytes": 8509684,
+      "modified_ns": 1635076778000000000,
+      "voxel_filled": 138697,
+      "voxel_fill_ratio": 0.156767
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head3_0.stl",
+      "name": "head3_0.stl",
+      "stem": "head3_0",
+      "size_bytes": 7522484,
+      "modified_ns": 1635077004000000000,
+      "voxel_filled": 148343,
+      "voxel_fill_ratio": 0.167669
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head3_1.stl",
+      "name": "head3_1.stl",
+      "stem": "head3_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635077224000000000,
+      "voxel_filled": 75301,
+      "voxel_fill_ratio": 0.085111
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head3_2.stl",
+      "name": "head3_2.stl",
+      "stem": "head3_2",
+      "size_bytes": 11060484,
+      "modified_ns": 1635077184000000000,
+      "voxel_filled": 153647,
+      "voxel_fill_ratio": 0.173664
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head3_3.stl",
+      "name": "head3_3.stl",
+      "stem": "head3_3",
+      "size_bytes": 8060084,
+      "modified_ns": 1635077262000000000,
+      "voxel_filled": 126969,
+      "voxel_fill_ratio": 0.143511
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head4_0.stl",
+      "name": "head4_0.stl",
+      "stem": "head4_0",
+      "size_bytes": 7522484,
+      "modified_ns": 1635077294000000000,
+      "voxel_filled": 149788,
+      "voxel_fill_ratio": 0.169302
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head4_1.stl",
+      "name": "head4_1.stl",
+      "stem": "head4_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635077334000000000,
+      "voxel_filled": 73961,
+      "voxel_fill_ratio": 0.083597
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head4_2.stl",
+      "name": "head4_2.stl",
+      "stem": "head4_2",
+      "size_bytes": 11060484,
+      "modified_ns": 1635077310000000000,
+      "voxel_filled": 150871,
+      "voxel_fill_ratio": 0.170527
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head4_3.stl",
+      "name": "head4_3.stl",
+      "stem": "head4_3",
+      "size_bytes": 8060084,
+      "modified_ns": 1635077384000000000,
+      "voxel_filled": 126302,
+      "voxel_fill_ratio": 0.142757
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head4_4.stl",
+      "name": "head4_4.stl",
+      "stem": "head4_4",
+      "size_bytes": 8509684,
+      "modified_ns": 1635077400000000000,
+      "voxel_filled": 139859,
+      "voxel_fill_ratio": 0.15808
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head5_0.stl",
+      "name": "head5_0.stl",
+      "stem": "head5_0",
+      "size_bytes": 7522484,
+      "modified_ns": 1635077452000000000,
+      "voxel_filled": 148990,
+      "voxel_fill_ratio": 0.168401
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head5_1.stl",
+      "name": "head5_1.stl",
+      "stem": "head5_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635077504000000000,
+      "voxel_filled": 73442,
+      "voxel_fill_ratio": 0.08301
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head5_2.stl",
+      "name": "head5_2.stl",
+      "stem": "head5_2",
+      "size_bytes": 11060484,
+      "modified_ns": 1635077476000000000,
+      "voxel_filled": 150691,
+      "voxel_fill_ratio": 0.170323
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head5_3.stl",
+      "name": "head5_3.stl",
+      "stem": "head5_3",
+      "size_bytes": 8060084,
+      "modified_ns": 1635077586000000000,
+      "voxel_filled": 125937,
+      "voxel_fill_ratio": 0.142344
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head5_4.stl",
+      "name": "head5_4.stl",
+      "stem": "head5_4",
+      "size_bytes": 8509684,
+      "modified_ns": 1635077606000000000,
+      "voxel_filled": 139460,
+      "voxel_fill_ratio": 0.157629
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head6_0.stl",
+      "name": "head6_0.stl",
+      "stem": "head6_0",
+      "size_bytes": 7522484,
+      "modified_ns": 1635077650000000000,
+      "voxel_filled": 152833,
+      "voxel_fill_ratio": 0.172744
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head6_1.stl",
+      "name": "head6_1.stl",
+      "stem": "head6_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635077764000000000,
+      "voxel_filled": 73692,
+      "voxel_fill_ratio": 0.083293
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head6_2.stl",
+      "name": "head6_2.stl",
+      "stem": "head6_2",
+      "size_bytes": 11060484,
+      "modified_ns": 1635077794000000000,
+      "voxel_filled": 154436,
+      "voxel_fill_ratio": 0.174556
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head6_3.stl",
+      "name": "head6_3.stl",
+      "stem": "head6_3",
+      "size_bytes": 8509684,
+      "modified_ns": 1635077846000000000,
+      "voxel_filled": 143365,
+      "voxel_fill_ratio": 0.162043
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head6_4.stl",
+      "name": "head6_4.stl",
+      "stem": "head6_4",
+      "size_bytes": 8060084,
+      "modified_ns": 1635077884000000000,
+      "voxel_filled": 129348,
+      "voxel_fill_ratio": 0.1462
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head7_0.stl",
+      "name": "head7_0.stl",
+      "stem": "head7_0",
+      "size_bytes": 7522484,
+      "modified_ns": 1635077930000000000,
+      "voxel_filled": 146843,
+      "voxel_fill_ratio": 0.165974
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head7_1.stl",
+      "name": "head7_1.stl",
+      "stem": "head7_1",
+      "size_bytes": 12702884,
+      "modified_ns": 1635077958000000000,
+      "voxel_filled": 73031,
+      "voxel_fill_ratio": 0.082546
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head7_2.stl",
+      "name": "head7_2.stl",
+      "stem": "head7_2",
+      "size_bytes": 11060484,
+      "modified_ns": 1635077980000000000,
+      "voxel_filled": 150906,
+      "voxel_fill_ratio": 0.170566
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\head7_3.stl",
+      "name": "head7_3.stl",
+      "stem": "head7_3",
+      "size_bytes": 8060084,
+      "modified_ns": 1635077992000000000,
+      "voxel_filled": 125124,
+      "voxel_fill_ratio": 0.141425
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\helmet1.stl",
+      "name": "helmet1.stl",
+      "stem": "helmet1",
+      "size_bytes": 1316484,
+      "modified_ns": 1635078064000000000,
+      "voxel_filled": 196005,
+      "voxel_fill_ratio": 0.221541
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\helmet2.stl",
+      "name": "helmet2.stl",
+      "stem": "helmet2",
+      "size_bytes": 1392784,
+      "modified_ns": 1635078078000000000,
+      "voxel_filled": 207323,
+      "voxel_fill_ratio": 0.234333
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model1_B.obj",
+      "name": "model1_B.obj",
+      "stem": "model1_B",
+      "size_bytes": 153330960,
+      "modified_ns": 1701474006000000000,
+      "voxel_filled": 41791,
+      "voxel_fill_ratio": 0.047236
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model1_C.obj",
+      "name": "model1_C.obj",
+      "stem": "model1_C",
+      "size_bytes": 75692339,
+      "modified_ns": 1701474018000000000,
+      "voxel_filled": 57050,
+      "voxel_fill_ratio": 0.064483
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model2_B.obj",
+      "name": "model2_B.obj",
+      "stem": "model2_B",
+      "size_bytes": 23853581,
+      "modified_ns": 1701474024000000000,
+      "voxel_filled": 48750,
+      "voxel_fill_ratio": 0.055101
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model3.obj",
+      "name": "model3.obj",
+      "stem": "model3",
+      "size_bytes": 51248782,
+      "modified_ns": 1701472740000000000,
+      "voxel_filled": 57185,
+      "voxel_fill_ratio": 0.064635
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model3_B.obj",
+      "name": "model3_B.obj",
+      "stem": "model3_B",
+      "size_bytes": 76975866,
+      "modified_ns": 1701474058000000000,
+      "voxel_filled": 59300,
+      "voxel_fill_ratio": 0.067026
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model_1.obj",
+      "name": "model_1.obj",
+      "stem": "model_1",
+      "size_bytes": 28900955,
+      "modified_ns": 1701472720000000000,
+      "voxel_filled": 60908,
+      "voxel_fill_ratio": 0.068843
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model_11.obj",
+      "name": "model_11.obj",
+      "stem": "model_11",
+      "size_bytes": 40930486,
+      "modified_ns": 1701473716000000000,
+      "voxel_filled": 36728,
+      "voxel_fill_ratio": 0.041513
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model_2.obj",
+      "name": "model_2.obj",
+      "stem": "model_2",
+      "size_bytes": 46650677,
+      "modified_ns": 1701472728000000000,
+      "voxel_filled": 32548,
+      "voxel_fill_ratio": 0.036788
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model_4.obj",
+      "name": "model_4.obj",
+      "stem": "model_4",
+      "size_bytes": 29421946,
+      "modified_ns": 1701472744000000000,
+      "voxel_filled": 27838,
+      "voxel_fill_ratio": 0.031465
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\model_6.obj",
+      "name": "model_6.obj",
+      "stem": "model_6",
+      "size_bytes": 72449204,
+      "modified_ns": 1701472736000000000,
+      "voxel_filled": 52614,
+      "voxel_fill_ratio": 0.059469
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shieldA.obj",
+      "name": "shieldA.obj",
+      "stem": "shieldA",
+      "size_bytes": 11718831,
+      "modified_ns": 1701474060000000000,
+      "voxel_filled": 21889,
+      "voxel_fill_ratio": 0.024741
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shieldB_.obj",
+      "name": "shieldB_.obj",
+      "stem": "shieldB_",
+      "size_bytes": 24080377,
+      "modified_ns": 1701474088000000000,
+      "voxel_filled": 27864,
+      "voxel_fill_ratio": 0.031494
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shieldC.obj",
+      "name": "shieldC.obj",
+      "stem": "shieldC",
+      "size_bytes": 16867109,
+      "modified_ns": 1701474090000000000,
+      "voxel_filled": 22430,
+      "voxel_fill_ratio": 0.025352
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1.stl",
+      "name": "shotgun_hands_1.stl",
+      "stem": "shotgun_hands_1",
+      "size_bytes": 14649784,
+      "modified_ns": 1635270000000000000,
+      "voxel_filled": 25362,
+      "voxel_fill_ratio": 0.028666
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_1.stl",
+      "name": "shotgun_hands_1_1.stl",
+      "stem": "shotgun_hands_1_1",
+      "size_bytes": 17964184,
+      "modified_ns": 1635270028000000000,
+      "voxel_filled": 28125,
+      "voxel_fill_ratio": 0.031789
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_2.stl",
+      "name": "shotgun_hands_1_2.stl",
+      "stem": "shotgun_hands_1_2",
+      "size_bytes": 17975584,
+      "modified_ns": 1635270058000000000,
+      "voxel_filled": 28448,
+      "voxel_fill_ratio": 0.032154
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_3.stl",
+      "name": "shotgun_hands_1_3.stl",
+      "stem": "shotgun_hands_1_3",
+      "size_bytes": 18731384,
+      "modified_ns": 1635270072000000000,
+      "voxel_filled": 28499,
+      "voxel_fill_ratio": 0.032212
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_4.stl",
+      "name": "shotgun_hands_1_4.stl",
+      "stem": "shotgun_hands_1_4",
+      "size_bytes": 18742784,
+      "modified_ns": 1635270084000000000,
+      "voxel_filled": 28822,
+      "voxel_fill_ratio": 0.032577
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_5.stl",
+      "name": "shotgun_hands_1_5.stl",
+      "stem": "shotgun_hands_1_5",
+      "size_bytes": 17937684,
+      "modified_ns": 1635270104000000000,
+      "voxel_filled": 28027,
+      "voxel_fill_ratio": 0.031678
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_6.stl",
+      "name": "shotgun_hands_1_6.stl",
+      "stem": "shotgun_hands_1_6",
+      "size_bytes": 17949084,
+      "modified_ns": 1635270146000000000,
+      "voxel_filled": 28350,
+      "voxel_fill_ratio": 0.032043
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_1_7.stl",
+      "name": "shotgun_hands_1_7.stl",
+      "stem": "shotgun_hands_1_7",
+      "size_bytes": 18729334,
+      "modified_ns": 1635270214000000000,
+      "voxel_filled": 28940,
+      "voxel_fill_ratio": 0.03271
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_1.stl",
+      "name": "shotgun_hands_2_1.stl",
+      "stem": "shotgun_hands_2_1",
+      "size_bytes": 18996834,
+      "modified_ns": 1635270262000000000,
+      "voxel_filled": 34691,
+      "voxel_fill_ratio": 0.039211
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_2.stl",
+      "name": "shotgun_hands_2_2.stl",
+      "stem": "shotgun_hands_2_2",
+      "size_bytes": 19015834,
+      "modified_ns": 1635270276000000000,
+      "voxel_filled": 35360,
+      "voxel_fill_ratio": 0.039967
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_3.stl",
+      "name": "shotgun_hands_2_3.stl",
+      "stem": "shotgun_hands_2_3",
+      "size_bytes": 14736084,
+      "modified_ns": 1635270314000000000,
+      "voxel_filled": 32233,
+      "voxel_fill_ratio": 0.036432
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_4.stl",
+      "name": "shotgun_hands_2_4.stl",
+      "stem": "shotgun_hands_2_4",
+      "size_bytes": 19015834,
+      "modified_ns": 1635270392000000000,
+      "voxel_filled": 35360,
+      "voxel_fill_ratio": 0.039967
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_5.stl",
+      "name": "shotgun_hands_2_5.stl",
+      "stem": "shotgun_hands_2_5",
+      "size_bytes": 18050484,
+      "modified_ns": 1635270426000000000,
+      "voxel_filled": 35981,
+      "voxel_fill_ratio": 0.040669
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_6.stl",
+      "name": "shotgun_hands_2_6.stl",
+      "stem": "shotgun_hands_2_6",
+      "size_bytes": 18061884,
+      "modified_ns": 1635270438000000000,
+      "voxel_filled": 36397,
+      "voxel_fill_ratio": 0.041139
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_7.stl",
+      "name": "shotgun_hands_2_7.stl",
+      "stem": "shotgun_hands_2_7",
+      "size_bytes": 18817684,
+      "modified_ns": 1635270460000000000,
+      "voxel_filled": 36404,
+      "voxel_fill_ratio": 0.041147
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_8.stl",
+      "name": "shotgun_hands_2_8.stl",
+      "stem": "shotgun_hands_2_8",
+      "size_bytes": 18829084,
+      "modified_ns": 1635270478000000000,
+      "voxel_filled": 36820,
+      "voxel_fill_ratio": 0.041617
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_2_9.stl",
+      "name": "shotgun_hands_2_9.stl",
+      "stem": "shotgun_hands_2_9",
+      "size_bytes": 18815634,
+      "modified_ns": 1635270514000000000,
+      "voxel_filled": 36918,
+      "voxel_fill_ratio": 0.041728
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_1.stl",
+      "name": "shotgun_hands_3_1.stl",
+      "stem": "shotgun_hands_3_1",
+      "size_bytes": 14843684,
+      "modified_ns": 1635271280000000000,
+      "voxel_filled": 26853,
+      "voxel_fill_ratio": 0.030351
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_2.stl",
+      "name": "shotgun_hands_3_2.stl",
+      "stem": "shotgun_hands_3_2",
+      "size_bytes": 18158084,
+      "modified_ns": 1635271302000000000,
+      "voxel_filled": 29795,
+      "voxel_fill_ratio": 0.033677
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_3.stl",
+      "name": "shotgun_hands_3_3.stl",
+      "stem": "shotgun_hands_3_3",
+      "size_bytes": 18169484,
+      "modified_ns": 1635271320000000000,
+      "voxel_filled": 30145,
+      "voxel_fill_ratio": 0.034072
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_4.stl",
+      "name": "shotgun_hands_3_4.stl",
+      "stem": "shotgun_hands_3_4",
+      "size_bytes": 18925284,
+      "modified_ns": 1635271340000000000,
+      "voxel_filled": 30160,
+      "voxel_fill_ratio": 0.034089
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_5.stl",
+      "name": "shotgun_hands_3_5.stl",
+      "stem": "shotgun_hands_3_5",
+      "size_bytes": 18936684,
+      "modified_ns": 1635271356000000000,
+      "voxel_filled": 30510,
+      "voxel_fill_ratio": 0.034485
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_6.stl",
+      "name": "shotgun_hands_3_6.stl",
+      "stem": "shotgun_hands_3_6",
+      "size_bytes": 18131584,
+      "modified_ns": 1635271372000000000,
+      "voxel_filled": 29691,
+      "voxel_fill_ratio": 0.033559
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_3_7.stl",
+      "name": "shotgun_hands_3_7.stl",
+      "stem": "shotgun_hands_3_7",
+      "size_bytes": 18923234,
+      "modified_ns": 1635271418000000000,
+      "voxel_filled": 30634,
+      "voxel_fill_ratio": 0.034625
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_4_1.stl",
+      "name": "shotgun_hands_4_1.stl",
+      "stem": "shotgun_hands_4_1",
+      "size_bytes": 18931134,
+      "modified_ns": 1635271482000000000,
+      "voxel_filled": 33263,
+      "voxel_fill_ratio": 0.037597
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_4_2.stl",
+      "name": "shotgun_hands_4_2.stl",
+      "stem": "shotgun_hands_4_2",
+      "size_bytes": 18933184,
+      "modified_ns": 1635271504000000000,
+      "voxel_filled": 32761,
+      "voxel_fill_ratio": 0.037029
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_4_3.stl",
+      "name": "shotgun_hands_4_3.stl",
+      "stem": "shotgun_hands_4_3",
+      "size_bytes": 18165984,
+      "modified_ns": 1635271536000000000,
+      "voxel_filled": 32378,
+      "voxel_fill_ratio": 0.036596
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\shotgun_hands_4_4.stl",
+      "name": "shotgun_hands_4_4.stl",
+      "stem": "shotgun_hands_4_4",
+      "size_bytes": 18177384,
+      "modified_ns": 1635271614000000000,
+      "voxel_filled": 32749,
+      "voxel_fill_ratio": 0.037016
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ShoulderPad.stl",
+      "name": "ShoulderPad.stl",
+      "stem": "ShoulderPad",
+      "size_bytes": 1977684,
+      "modified_ns": 1635303012000000000,
+      "voxel_filled": 102280,
+      "voxel_fill_ratio": 0.115605
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ShoulderPad_blank.stl",
+      "name": "ShoulderPad_blank.stl",
+      "stem": "ShoulderPad_blank",
+      "size_bytes": 1984884,
+      "modified_ns": 1635303028000000000,
+      "voxel_filled": 98237,
+      "voxel_fill_ratio": 0.111035
+    },
+    {
+      "path": "D:\\MeshMend\\src\\meshmend_ai\\training_data\\raw_stl\\ShoulderPad_scull.stl",
+      "name": "ShoulderPad_scull.stl",
+      "stem": "ShoulderPad_scull",
+      "size_bytes": 2615284,
+      "modified_ns": 1635303628000000000,
+      "voxel_filled": 104554,
+      "voxel_fill_ratio": 0.118175
     }
   ],
-  "data_signature": "aa55ff90acfbe80aa34a7f43013ac3a8c6512096bf1fc8f0e5fcee4033cafa16",
+  "data_signature": "3857e4f2d0374a209d3df4f1ad47c012c80dac56467072da11b06d15d43fb560",
   "autoencoder_loss_history": [
-    0.25553909298919497,
-    0.08342374009745461,
-    0.06758042070127669,
-    0.057885536835307165,
-    0.05294340090560062,
-    0.04882633916678883,
-    0.044022977706931886,
-    0.039737279438191934,
-    0.0368017751856574,
-    0.03388127957337669,
-    0.030982904247052613,
-    0.029443214226159312,
-    0.028200988990387747,
-    0.027228545109253554,
-    0.025331850141464246,
-    0.024324933665671518,
-    0.023588958218516337,
-    0.022825598982828006,
-    0.02192918005000268,
-    0.021268425708902732,
-    0.020594941762586434,
-    0.020304437371946517,
-    0.019926168201934723,
-    0.01925675001084095,
-    0.01907001351494165,
-    0.018513981031165236,
-    0.018724863073744234,
-    0.018641856210749774,
-    0.01791990245692432,
-    0.017530500977521853,
-    0.01739978768108856,
-    0.017260503544959994,
-    0.016939238390131367,
-    0.018311042527091644,
-    0.016987717399994533,
-    0.016772729843588813,
-    0.01618254231289029,
-    0.016415594023696724,
-    0.016121988739108757,
-    0.015898755873509106,
-    0.015792541871113435,
-    0.01559133123650792,
-    0.015432474181233417,
-    0.01532286375627986,
-    0.015237653871909493,
-    0.015280493634885975,
-    0.0148601284184094,
-    0.014796470003646044,
-    0.014857799912403737,
-    0.016064254999426857
+    0.5099540452162424,
+    0.13891090507860537,
+    0.07345126458892116,
+    0.06133810637725724,
+    0.056221269347049574,
+    0.05070560646277887,
+    0.04669101246529155,
+    0.04372642672172299,
+    0.041174127961750386,
+    0.03845249958060406,
+    0.035605880328350596,
+    0.032803237403708475,
+    0.03041058920185875,
+    0.028835369274020195,
+    0.02735154337629124,
+    0.026002600651096414,
+    0.025127391365391237,
+    0.023841153036940982,
+    0.023030673153698444,
+    0.022258366803052248,
+    0.021545327578981716,
+    0.02101034346829962,
+    0.02028220747080114,
+    0.019901925973870135,
+    0.019352703596706742,
+    0.018762084931411124,
+    0.01844028048907165,
+    0.01812624513964962,
+    0.017737121735182073,
+    0.017396648379939574,
+    0.01714524174867957,
+    0.016945875732711068,
+    0.01666893923862113,
+    0.01689274526304669,
+    0.016558184874830423,
+    0.01615949426950128,
+    0.016036092769354582,
+    0.015802866934488218,
+    0.01569013202700902,
+    0.015721238959856606,
+    0.01543655791492374,
+    0.015516727783337788,
+    0.015154233547272506,
+    0.015053477000307154,
+    0.014793444907775632,
+    0.014674798999395635,
+    0.014603069431527897,
+    0.014538791961967945,
+    0.014405190841191344,
+    0.014294742710060544
   ],
   "diffusion_loss_history": [
-    1.0283880702086858,
-    1.001574470883324,
-    1.00011811653773,
-    1.0002205896945227,
-    0.996776397739138,
-    0.9974668068545205,
-    0.997680446931294,
-    0.9942108080500648,
-    0.9883976834160941,
-    0.9773626412664141,
-    0.9592718765849159,
-    0.9470787247021993,
-    0.9347127193496341,
-    0.9204687802564531,
-    0.8992079368659428,
-    0.8857451138042268,
-    0.8768195069971538,
-    0.8717960246971675,
-    0.8562306350185758,
-    0.8527807763644627,
-    0.832968723206293,
-    0.829716409955706,
-    0.8566243591762724,
-    0.8360926366987682,
-    0.7773994164807456,
-    0.7827544070425487,
-    0.7753918397994268,
-    0.7627361629690442,
-    0.7528098495233626,
-    0.7428289566721235,
-    0.7408476443517775,
-    0.743109004838126,
-    0.7082356597696032,
-    0.6953173081080118,
-    0.7005742802506402,
-    0.7072783339591253,
-    0.702940224182038,
-    0.6772277724175226,
-    0.6754028768766493,
-    0.6803278362467176,
-    0.669145249185108,
-    0.6576522574538276,
-    0.6432684156156722,
-    0.6556423732212612,
-    0.6259567624046689,
-    0.6441724470683506,
-    0.6109181337413334,
-    0.61656192725613,
-    0.5897008734089988,
-    0.6210793086460659,
-    0.6008440674770446,
-    0.5810682078202566,
-    0.5994394620259603,
-    0.5964244192554837,
-    0.5781486410470236,
-    0.596433739577021,
-    0.5824636518955231,
-    0.544832509898004,
-    0.5515828317119962,
-    0.5688941854806173,
-    0.5418381577446347,
-    0.5507396445387885,
-    0.5404875051407587,
-    0.5391764846586046,
-    0.5221373034375054,
-    0.5161083830254418,
-    0.531982843364988,
-    0.5098048008623577,
-    0.5176487579232171,
-    0.49149981637795764,
-    0.4765468544903256,
-    0.49951506015800295,
-    0.4920627098707926,
-    0.5224023369096574,
-    0.5241657538073403,
-    0.49996525545914966,
-    0.4680857594524111,
-    0.5177015669289089,
-    0.47174003294536043,
-    0.4519871650707154,
-    0.49548069494111197,
-    0.4521482601052239,
-    0.4592780052196412,
-    0.4870312785108884,
-    0.4913694979179473,
-    0.47092925012111664,
-    0.4828981466236569,
-    0.45053068016256603,
-    0.45215727317900883,
-    0.45950673804396674
+    1.0221796212372956,
+    1.0006647750183388,
+    0.9990647589718854,
+    0.9994794218628494,
+    1.001087533103095,
+    0.9992149825449343,
+    1.0003430092776264,
+    1.002273678779602,
+    1.0011962078235768,
+    0.9978917925446121,
+    1.000032111450478,
+    0.9997388963346128,
+    0.9995047803278323,
+    1.000038398636712,
+    0.9989758597479926,
+    1.0008628809893574,
+    0.9990303803373266,
+    1.0001646765956171,
+    1.0008793318713154,
+    1.0010203012713679,
+    0.999728282292684,
+    1.0000493945898834,
+    0.997659049652241,
+    1.0004077642052263,
+    0.9983637708204763,
+    0.9995437772185715,
+    1.0008585453033447,
+    1.00021599177961,
+    0.9999256465170119,
+    1.0004259281688266,
+    1.001503962057608,
+    1.0010661593189947,
+    0.9980803706027843,
+    0.9994792342185974,
+    1.0008998822282862,
+    1.00058807487841,
+    0.9996806007844431,
+    0.9979853872899656,
+    0.9933591242189761,
+    0.9897348726237262,
+    0.9825218717257181,
+    0.9739303787549337,
+    0.9712007443110148,
+    0.9590297628332067,
+    0.9429633529097946,
+    0.9214245169251053,
+    0.908057036223235,
+    0.9073450786096079,
+    0.8976980094556455,
+    0.8821787723788509,
+    0.8595826162232293,
+    0.8568811615308126,
+    0.8415484759542677,
+    0.8476809837200023,
+    0.8432627254062228,
+    0.8219578332371182,
+    0.8218630861352991,
+    0.7912850402019642,
+    0.7960134148597717,
+    0.7590209930031387,
+    0.7652032242880927,
+    0.7717168838889511,
+    0.7306850199346189,
+    0.7430470166382966,
+    0.7597924515053078,
+    0.7298874214843467,
+    0.7385532591078017,
+    0.7184111343489753,
+    0.7063220032939205,
+    0.7128144877928274,
+    0.7110291984346178,
+    0.6921744611528184,
+    0.7021290483298125,
+    0.6673445304234823,
+    0.6699861420525445,
+    0.691926881119057,
+    0.6566097957116587,
+    0.666264741509049,
+    0.6693842830481352,
+    0.6776128521672001,
+    0.6544560171939708,
+    0.6666880272052906,
+    0.6522386107179854,
+    0.6196885958865836,
+    0.6167025455722103,
+    0.625227133433024,
+    0.6079365257863645,
+    0.6129564985081002,
+    0.6223802533414629,
+    0.6217049249896297
   ],
-  "autoencoder_initial_loss": 0.25553909298919497,
-  "autoencoder_final_loss": 0.016064254999426857,
-  "diffusion_initial_loss": 1.0283880702086858,
-  "diffusion_final_loss": 0.45950673804396674,
-  "checkpoint_size_bytes": 614906
+  "autoencoder_initial_loss": 0.5099540452162424,
+  "autoencoder_final_loss": 0.014294742710060544,
+  "diffusion_initial_loss": 1.0221796212372956,
+  "diffusion_final_loss": 0.6217049249896297,
+  "checkpoint_size_bytes": 598202
 }

@@ -1,0 +1,18 @@
+{
+  "certified": true,
+  "worker_python": "C:\\Python313\\python.exe",
+  "text_to_3d_command": "python D:\\MeshMend\\src\\meshmend_ai\\external_local_store_quality_generator.py --input {input_json} --prompt {prompt_path} --output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}",
+  "image_to_3d_command": "python D:\\MeshMend\\src\\meshmend_ai\\external_local_store_quality_generator.py --input {input_json} --prompt {prompt_path} --image {image_path} --output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}",
+  "no_api_local_required_env": {
+    "MESHMEND_HUNYUAN3D_PATH": "optional path to local Hunyuan3D-2/2.1 repo if not pip-installed",
+    "MESHMEND_FREE_LOCAL_TEXT_TO_IMAGE_COMMAND": "optional no-API local text-to-image command for text prompts when diffusers is not installed",
+    "MESHMEND_ALLOW_HUNYUAN_STORE_QUALITY": "1",
+    "MESHMEND_LOCAL_QUALITY_REVIEW_COMMAND": "optional no-API local reviewer command that writes store_quality_scores JSON",
+    "MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES": "0"
+  },
+  "validation": {
+    "min_face_ratio": 0.75,
+    "max_components": 3,
+    "min_depth_ratio": 0.18
+  }
+}

@@ -94,6 +94,7 @@ class AIGeneratorWorker(QObject):
     """Worker thread for AI model generation"""
 
     progress = pyqtSignal(int)
+    progress_message = pyqtSignal(int, str)
     finished = pyqtSignal(object)
     error = pyqtSignal(str)
 
@@ -109,12 +110,12 @@ class AIGeneratorWorker(QObject):
     def run(self):
         """Run the generation process."""
         try:
-            self.progress.emit(5)
+            self._emit_progress(5, "Starting generation")
             generation_prompt = self._miniature_generation_prompt()
 
             mesh = self._generate_with_meshmend_sculptor(generation_prompt)
             if mesh is not None:
-                self.progress.emit(100)
+                self._emit_progress(100, "Model generated")
                 self.finished.emit(mesh)
                 return
 
@@ -130,30 +131,30 @@ class AIGeneratorWorker(QObject):
 
             # Prompt-only mode: build primitive 3D scaffold.
             if self.prompt and not self.source_image_path:
-                self.progress.emit(30)
+                self._emit_progress(30, "Building miniature part plan")
 
                 builder = PartMeshBuilder(use_llm_lookup=True)
                 mesh = builder.build_from_plan(plan)
                 mesh = self._apply_meshmend_trained_exemplar_layer(mesh, generation_prompt)
 
-                self.progress.emit(75)
+                self._emit_progress(75, "Validating generated mesh")
 
                 mesh = self._validate_mesh(mesh)
 
                 mesh = self._review_mesh_or_fail(mesh, generation_prompt)
 
-                self.progress.emit(100)
+                self._emit_progress(100, "Model generated")
                 self.finished.emit(mesh)
                 return
 
-            self.progress.emit(10)
+            self._emit_progress(10, "Preparing image/reference")
 
             if self.source_image_path:
                 image = Image.open(self.source_image_path).convert("RGB")
             else:
                 image = self._generate_image()
 
-            self.progress.emit(40)
+            self._emit_progress(40, "Reconstructing mesh from image")
 
             mesh = reconstruct_mesh_from_image(
                 image,
@@ -171,7 +172,7 @@ class AIGeneratorWorker(QObject):
                 )
 
             if self._is_collapsed_mesh(mesh):
-                self.progress.emit(65)
+                self._emit_progress(65, "Running volumetric reconstruction")
                 mesh = reconstruct_mesh_from_image_volumetric(
                     image,
                     vol_size=128,
@@ -202,7 +203,7 @@ class AIGeneratorWorker(QObject):
                 quality=self._quality_from_detail_level(),
             )
 
-            self.progress.emit(85)
+            self._emit_progress(85, "Validating and scaling mesh")
 
             mesh = self._validate_mesh(mesh)
 
@@ -211,7 +212,7 @@ class AIGeneratorWorker(QObject):
 
             mesh = self._review_mesh_or_fail(mesh, generation_prompt)
 
-            self.progress.emit(100)
+            self._emit_progress(100, "Model generated")
             self.finished.emit(mesh)
 
         except Exception as e:
@@ -232,11 +233,11 @@ class AIGeneratorWorker(QObject):
                 sys.path.insert(0, meshmend_src_text)
             from meshmend_ai.sculptor import get_sculptor_foundation
 
-            self.progress.emit(20)
+            self._emit_progress(20, "Using MeshMend production backend")
             output_path = get_sculptor_foundation().create_model(
                 self.prompt.strip() if isinstance(self.prompt, str) and self.prompt.strip() else generation_prompt,
                 image_path=Path(self.source_image_path) if self.source_image_path else None,
-                progress=lambda percent, _message: self.progress.emit(max(20, min(95, int(percent)))),
+                progress=lambda percent, message: self._emit_progress(max(20, min(95, int(percent))), message),
                 scale_mm=self.scale,
             )
             mesh = trimesh.load(output_path, force="mesh")
@@ -245,6 +246,11 @@ class AIGeneratorWorker(QObject):
         except Exception as exc:
             print(f"MeshMend sculptor primary generation unavailable; falling back: {exc}")
         return None
+
+    def _emit_progress(self, percent: int, message: str) -> None:
+        value = max(0, min(100, int(percent)))
+        self.progress.emit(value)
+        self.progress_message.emit(value, str(message))
 
     def _apply_meshmend_trained_exemplar_layer(self, mesh: trimesh.Trimesh, generation_prompt: str) -> trimesh.Trimesh:
         """Use MeshMend's trained local model library for prompt-specific detail.

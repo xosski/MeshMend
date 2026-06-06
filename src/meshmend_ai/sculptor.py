@@ -38,13 +38,101 @@ ALLOW_FULL_TRAINING_EXEMPLAR_OUTPUT = os.environ.get("MESHMEND_ALLOW_FULL_TRAINI
 USE_HOSTED_CREATION_BACKEND = os.environ.get("MESHMEND_USE_HOSTED_3D", "1").strip().lower() in {"1", "true", "yes"}
 ALLOW_LEGACY_CREATION_FALLBACK = os.environ.get("MESHMEND_ALLOW_LEGACY_CREATION_FALLBACK", "0").strip().lower() in {"1", "true", "yes"}
 HOSTED_CREATION_URL = os.environ.get("MESHMEND_MODEL_SERVICE_URL", "http://127.0.0.1:8090").strip().rstrip("/")
-HOSTED_CREATION_TIMEOUT_SECONDS = float(os.environ.get("MESHMEND_HOSTED_TIMEOUT_SECONDS", "1800"))
+HOSTED_CREATION_TIMEOUT_SECONDS = float(os.environ.get("MESHMEND_HOSTED_TIMEOUT_SECONDS", "5400"))
 HOSTED_CREATION_POLL_SECONDS = float(os.environ.get("MESHMEND_HOSTED_POLL_INTERVAL_SECONDS", "5"))
 MODEL_SERVICE_STARTUP_SECONDS = float(os.environ.get("MESHMEND_MODEL_SERVICE_STARTUP_SECONDS", "20"))
 EIGHT_K_DETAIL_TRIANGLE_CAP = int(os.environ.get("MESHMEND_8K_DETAIL_TRIANGLES", "8000000"))
 EIGHT_K_DETAIL_PITCH_UM = float(os.environ.get("MESHMEND_8K_DETAIL_UM", "50"))
 CREATION_GEOMETRY_VERSION = "clean-trained-orc-asset-v33"
 _MODEL_SERVICE_PROCESS: subprocess.Popen | None = None
+
+
+def _friendly_production_backend_error(exc: Exception) -> str:
+    """Avoid labeling expected quality-gate stops as backend crashes."""
+    message = str(exc).strip()
+    lowered = message.lower()
+    concept_gate_terms = (
+        "text-to-3d stopped before hunyuan",
+        "text concept generation could not produce",
+        "prepared hunyuan reference is not a complete",
+        "local concept image was not a complete usable",
+    )
+    if any(term in lowered for term in concept_gate_terms):
+        summary = message.split(" Details:", 1)[0]
+        if "after " in message and " candidate" in message:
+            summary = message.split(". Details:", 1)[0]
+        return (
+            "Concept generation could not produce a clean full-body miniature reference, so MeshMend stopped before 3D generation "
+            "instead of exporting another noisy or partial model. Try a more specific prompt or provide a clean full-body image reference. "
+            f"Details: {summary}"
+        )
+    quality_gate_terms = (
+        "generated stl did not meet store-quality gate",
+        "likely_background_slab_or_card",
+        "mesh_not_solid_watertight",
+        "mesh_nonmanifold_edges",
+        "image_visual_holes_unsealed",
+        "multiple_components_",
+    )
+    if any(term in lowered for term in quality_gate_terms):
+        return (
+            "The generated mesh failed MeshMend's store-quality checks, so it was not exported as a final model. "
+            f"Details: {message}"
+        )
+    native_sculpt_gate_terms = (
+        "native image-conditioned sculpt failed store-quality gates",
+        "no_concept_image_received",
+        "low_vision_planner_confidence",
+        "ai_planner_required_but_not_configured",
+        "ai_planner_required_but_failed",
+        "image_to_3d_requires_ai_vision_planner_for_concept_fidelity",
+        "concept_match_insufficient_local_landmarks",
+        "concept_match_too_few_required_landmarks",
+        "concept_match_insufficient_native_detail_layers",
+        "planned_landmarks_missing",
+    )
+    if any(term in lowered for term in native_sculpt_gate_terms):
+        if "image_to_3d_requires_ai_vision_planner_for_concept_fidelity" in lowered:
+            return (
+                "MeshMend stopped because high-detail image-to-3D needs a real AI/vision sculpt planner to match the concept image. "
+                "The fallback local image heuristic can only read broad silhouette cues, so it would likely export another generic model. "
+                "Configure a vision planner with --sculpt-planner-command and --require-ai-sculpt-planner, or lower quality to standard for an experimental draft. "
+                f"Details: {message}"
+            )
+        if "concept_match_too_few_required_landmarks" in lowered or "concept_match_insufficient_local_landmarks" in lowered:
+            return (
+                "MeshMend could not verify enough subject-defining landmarks from the concept image. "
+                "Add a short prompt naming the required visible features, or configure the AI/vision sculpt planner for image-only store-quality jobs. "
+                f"Details: {message}"
+            )
+        if "planned_landmarks_missing" in lowered:
+            return (
+                "MeshMend stopped because the generated sculpt did not realize all required concept landmarks. "
+                "This prevents exporting another generic/noisy model when the concept asks for specific parts. "
+                f"Details: {message}"
+            )
+        return (
+            "MeshMend stopped before exporting because the native store-quality gate could not verify concept fidelity. "
+            "For store-quality image-to-STL, attach a concept image and configure an AI/vision sculpt planner; otherwise lower quality to standard for an experimental draft. "
+            f"Details: {message}"
+        )
+    store_quality_unavailable_terms = (
+        "store/studio-quality 8k miniature generation is not available",
+        "not certified for store/studio-quality 8k miniature sculpt generation",
+        "not a certified high-detail miniature sculpt generator",
+    )
+    if any(term in lowered for term in store_quality_unavailable_terms):
+        return (
+            "Store-quality 8K miniature generation is not configured. MeshMend's bundled local generators are draft/procedural or experimental, "
+            "so MeshMend stopped instead of exporting another generic/noisy model. Configure a certified production runner, or lower quality to standard/draft. "
+            f"Details: {message}"
+        )
+    return (
+        "MeshMend's production 3D backend is required for studio-quality miniature creation, "
+        "but it did not return a model. Start the model service and configure a real production runner, "
+        "or set MESHMEND_ALLOW_LEGACY_CREATION_FALLBACK=1 to explicitly use the old procedural draft path. "
+        f"Backend error: {message}"
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -155,11 +243,9 @@ class SculptorFoundation:
                 return hosted_output
         except Exception as exc:
             if not ALLOW_LEGACY_CREATION_FALLBACK:
+                backend_message = _friendly_production_backend_error(exc)
                 raise RuntimeError(
-                    "MeshMend's production 3D backend is required for studio-quality miniature creation, "
-                    "but it did not return a model. Start the model service and configure a real production runner, "
-                    "or set MESHMEND_ALLOW_LEGACY_CREATION_FALLBACK=1 to explicitly use the old procedural draft path. "
-                    f"Backend error: {exc}"
+                    backend_message
                 ) from exc
             progress(12, f"Production backend unavailable; explicit legacy fallback enabled: {exc}")
 
@@ -285,7 +371,9 @@ class SculptorFoundation:
             return None
 
         quality = _hosted_quality_for_detail(print_detail_um)
-        target_polycount = max_detail_triangles or (250_000 if quality == "high" else 150_000)
+        requested_polycount = max_detail_triangles or (250_000 if quality == "high" else 150_000)
+        service_cap = int(os.environ.get("MESHMEND_HOSTED_TARGET_POLYCOUNT_CAP", "4000000" if quality == "high" else "750000"))
+        target_polycount = min(int(requested_polycount), service_cap)
         enriched_prompt = (
             f"{prompt}\n\n"
             f"Create a production/studio-quality {scale_mm:g}mm resin-printable tabletop miniature. "
@@ -312,13 +400,16 @@ class SculptorFoundation:
         progress(8, "Checking MeshMend production 3D backend")
         _ensure_model_service_ready(progress)
         health = _model_service_health()
-        if health is not None and not health.get("ready_for_studio_quality", False):
+        if health is not None and not _creation_backend_ready(health):
+            _restart_experimental_sculpt_service(progress)
+            health = _model_service_health()
+        if health is not None and not _creation_backend_ready(health):
             workflow_name = "image" if image_path is not None else "text"
+            reason = str(health.get("store_quality_reason") or "").strip()
             raise RuntimeError(
                 f"The MeshMend model service is running, but no production {workflow_name}-to-3D runner is configured. "
-                "Install/choose a real local generative 3D pipeline and set "
-                "MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND and/or MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND before launching MeshMend. "
-                "The legacy sculptor is intentionally blocked because it produces the blocky outputs you reported."
+                "Start it with --native-sculpt-backend for experimental native sculpt generation, or configure a certified external backend."
+                + (f" Details: {reason}" if reason else "")
             )
 
         progress(10, "Submitting to MeshMend production 3D backend")
@@ -345,7 +436,8 @@ class SculptorFoundation:
             last_task = task
             status = str(task.get("status", "")).upper()
             task_progress = int(task.get("progress") or 0)
-            progress(max(12, min(86, task_progress)), f"Production backend: {status or 'RUNNING'}")
+            stage_message = str(task.get("message") or task.get("stage") or status or "RUNNING")
+            progress(max(12, min(86, task_progress)), f"Production backend: {stage_message}")
             if _task_has_model(task):
                 return task
             if status in {"FAILED", "ERROR", "CANCELED", "CANCELLED"}:
@@ -2278,6 +2370,15 @@ def _model_service_health() -> dict | None:
         return None
 
 
+def _creation_backend_ready(health: dict | None) -> bool:
+    if health is None:
+        return False
+    return bool(
+        health.get("ready_for_studio_quality", False)
+        or health.get("ready_for_experimental_high_detail", False)
+    )
+
+
 def _ensure_model_service_ready(progress: ProgressCallback) -> None:
     if _model_service_health() is not None:
         return
@@ -2306,6 +2407,86 @@ def _ensure_model_service_ready(progress: ProgressCallback) -> None:
         if _model_service_health() is not None:
             return
         time.sleep(0.5)
+
+
+def _restart_experimental_sculpt_service(progress: ProgressCallback) -> None:
+    if os.environ.get("MESHMEND_AUTO_START_MODEL_SERVICE", "1").strip().lower() not in {"1", "true", "yes"}:
+        return
+    external_store_quality = _external_store_quality_backend_configured() or _configure_bundled_no_api_external_backend()
+    progress(8, "Restarting MeshMend model service with external store-quality backend" if external_store_quality else "Restarting MeshMend model service with native sculpt backend")
+    global _MODEL_SERVICE_PROCESS
+    cli_script = Path(__file__).resolve().parent / "cli.py"
+    if cli_script.exists():
+        try:
+            subprocess.run(
+                [sys.executable, str(cli_script), "--stop-model-service"],
+                cwd=str(cli_script.parent),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=20,
+            )
+        except Exception:
+            pass
+    if _MODEL_SERVICE_PROCESS is not None and _MODEL_SERVICE_PROCESS.poll() is None:
+        try:
+            _MODEL_SERVICE_PROCESS.terminate()
+        except Exception:
+            pass
+    _MODEL_SERVICE_PROCESS = None
+    if external_store_quality:
+        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
+        os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1"
+    else:
+        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "meshmend_sculpt"
+        os.environ["MESHMEND_ALLOW_EXPERIMENTAL_SCULPT_HIGH_DETAIL"] = "1"
+        os.environ["MESHMEND_ALLOW_UNCERTIFIED_STORE_QUALITY_OUTPUT"] = "1"
+    os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = sys.executable
+    os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
+    _ensure_model_service_ready(progress)
+
+
+def _external_store_quality_backend_configured() -> bool:
+    engine = os.environ.get("MESHMEND_PRODUCTION_ENGINE", "").strip().lower()
+    certified = os.environ.get("MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED", "0").strip().lower() in {"1", "true", "yes", "on"}
+    has_command = bool(
+        os.environ.get("MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND", "").strip()
+        or os.environ.get("MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND", "").strip()
+    )
+    if engine in {"external", "command"} and certified and has_command:
+        return True
+    # The new HTTP adapter is configured by provider env vars plus the production
+    # command. Do not let the GUI overwrite that with the experimental native
+    # backend, because that path is intentionally blocked for store-quality jobs.
+    return certified and has_command and bool(os.environ.get("MESHMEND_HTTP_GENERATOR_SUBMIT_URL", "").strip())
+
+
+def _configure_bundled_no_api_external_backend() -> bool:
+    """Prefer the bundled no-API external runner for store-quality jobs.
+
+    The previous GUI path kept restarting the service as `meshmend_sculpt`, which
+    is intentionally rejected for store-quality requests. Use the local external
+    Hunyuan-backed adapter by default so /health reports `external` and the
+    actual worker can surface install/model-quality failures instead of a 503
+    config rejection. Users can still force native sculpt for debugging.
+    """
+    if os.environ.get("MESHMEND_FORCE_NATIVE_SCULPT_BACKEND", "0").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    runner = Path(__file__).resolve().parent / "external_local_store_quality_generator.py"
+    if not runner.exists():
+        return False
+    os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
+    os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1"
+    os.environ.setdefault("MESHMEND_ALLOW_HUNYUAN_STORE_QUALITY", "1")
+    os.environ.setdefault("MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES", "1")
+    os.environ["MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND"] = (
+        f'"{sys.executable}" "{runner}" --input {{input_json}} --prompt {{prompt_path}} '
+        "--output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}"
+    )
+    os.environ["MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND"] = (
+        f'"{sys.executable}" "{runner}" --input {{input_json}} --prompt {{prompt_path}} --image {{image_path}} '
+        "--output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}"
+    )
+    return True
 
 
 def _model_service_request_json(method: str, path: str, payload: dict | None = None) -> dict:

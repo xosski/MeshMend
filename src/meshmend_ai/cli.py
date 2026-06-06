@@ -92,12 +92,27 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--free-local-hunyuan",
         action="store_true",
-        help="Configure generation to use the free local Hunyuan3D backend with no API key. This is automatic for GUI/model-service launches unless --no-free-local-hunyuan is set.",
+        help="Explicitly configure generation to use the free local Hunyuan3D backend with no API key. MeshMend native is the default for GUI/model-service launches.",
     )
     parser.add_argument(
         "--no-free-local-hunyuan",
         action="store_true",
         help="Do not auto-configure the free local Hunyuan3D backend for creation workflows.",
+    )
+    parser.add_argument(
+        "--native-sculpt-backend",
+        action="store_true",
+        help="Use the experimental native MiniatureSpec -> rig -> sculpt backend. Not certified for store/studio-quality output yet.",
+    )
+    parser.add_argument(
+        "--sculpt-planner-command",
+        default=None,
+        help="Optional AI/vision planner command for native sculpt. Receives {image_path}, {prompt_path}, {schema_path}, {plan_path}, {output_dir}, {local_plan_path}.",
+    )
+    parser.add_argument(
+        "--require-ai-sculpt-planner",
+        action="store_true",
+        help="Require the configured AI/vision sculpt planner for high-detail native sculpt jobs instead of falling back to heuristics.",
     )
     parser.add_argument(
         "--hunyuan3d-path",
@@ -126,6 +141,27 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         help="Python executable for the Hunyuan3D worker. Auto-detected from the Hunyuan3D venv when possible.",
+    )
+    parser.add_argument(
+        "--store-quality-text-command",
+        default=None,
+        help="Certified external text-to-3D command for store-quality generation. Receives {input_json}, {prompt_path}, {output_dir}, {quality}, {target_polycount}.",
+    )
+    parser.add_argument(
+        "--store-quality-image-command",
+        default=None,
+        help="Certified external image-to-3D command for store-quality generation. Receives {input_json}, {prompt_path}, {image_path}, {output_dir}, {quality}, {target_polycount}.",
+    )
+    parser.add_argument(
+        "--certify-store-quality-backend",
+        action="store_true",
+        help="Mark the configured external production command as certified for store/studio-quality 8K miniature generation.",
+    )
+    parser.add_argument(
+        "--store-quality-config",
+        type=Path,
+        default=None,
+        help="JSON config file for a certified store-quality backend. See store_quality_backend.template.json.",
     )
     parser.add_argument(
         "--train-dir",
@@ -283,25 +319,74 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _should_auto_configure_hunyuan(args: argparse.Namespace) -> bool:
+    if args.native_sculpt_backend:
+        return True
     if args.no_free_local_hunyuan:
         return False
     if args.free_local_hunyuan:
         return True
-    if os.environ.get("MESHMEND_PRODUCTION_ENGINE"):
+    configured_engine = os.environ.get("MESHMEND_PRODUCTION_ENGINE", "").strip().lower()
+    has_external_command = bool(
+        os.environ.get("MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND", "").strip()
+        or os.environ.get("MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND", "").strip()
+    )
+    if configured_engine in {"external", "command"} or (configured_engine and configured_engine not in {"free_local", "free_local_hunyuan", "hunyuan", "hunyuan3d"}):
         return False
-    # Creation workflows should use the free local backend automatically. Plain
-    # command-line repair should not need or start any model-generation stack.
+    if has_external_command and os.environ.get("MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED", "0").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    # Creation workflows should configure the native MeshMend generator by
+    # default. Plain command-line repair should not need or start any model-
+    # generation stack. If a user's shell still has the old Hunyuan env var set,
+    # GUI/model-service launches intentionally override it unless Hunyuan was
+    # explicitly requested with --free-local-hunyuan.
     return bool(args.model_service or args.sculptor or args.gui or (args.input is None and args.output is None))
 
 
 def _configure_generation_backend(args: argparse.Namespace, use_hunyuan: bool) -> None:
+    if args.store_quality_config is not None:
+        _configure_store_quality_backend_from_file(args.store_quality_config, args.model_service_port)
+        return
+    if args.store_quality_text_command or args.store_quality_image_command:
+        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
+        os.environ.setdefault("MESHMEND_USE_HOSTED_3D", "1")
+        os.environ.setdefault("MESHMEND_HOSTED_3D_PROVIDER", "meshmend")
+        os.environ.setdefault("MESHMEND_MODEL_SERVICE_URL", f"http://127.0.0.1:{args.model_service_port}")
+        os.environ.setdefault("MESHMEND_MODEL_SERVICE_PORT", str(args.model_service_port))
+        os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = sys.executable
+        os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
+        if args.store_quality_text_command:
+            os.environ["MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND"] = str(args.store_quality_text_command)
+        if args.store_quality_image_command:
+            os.environ["MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND"] = str(args.store_quality_image_command)
+        if args.certify_store_quality_backend:
+            os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1"
+        return
+    if _configure_bundled_no_api_external_backend(args):
+        return
     if not use_hunyuan:
         return
-    os.environ["MESHMEND_PRODUCTION_ENGINE"] = "free_local_hunyuan"
+    if args.native_sculpt_backend:
+        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "meshmend_sculpt"
+        os.environ["MESHMEND_ALLOW_EXPERIMENTAL_SCULPT_HIGH_DETAIL"] = "1"
+        os.environ["MESHMEND_ALLOW_UNCERTIFIED_STORE_QUALITY_OUTPUT"] = "1"
+        if args.sculpt_planner_command:
+            os.environ["MESHMEND_SCULPT_PLANNER_PROVIDER"] = "command"
+            os.environ["MESHMEND_SCULPT_PLANNER_COMMAND"] = str(args.sculpt_planner_command)
+        if args.require_ai_sculpt_planner:
+            os.environ["MESHMEND_REQUIRE_AI_SCULPT_PLANNER"] = "1"
+    else:
+        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "free_local_hunyuan" if args.free_local_hunyuan else "meshmend_native"
     os.environ.setdefault("MESHMEND_USE_HOSTED_3D", "1")
     os.environ.setdefault("MESHMEND_HOSTED_3D_PROVIDER", "meshmend")
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_URL", f"http://127.0.0.1:{args.model_service_port}")
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_PORT", str(args.model_service_port))
+    if args.native_sculpt_backend or not args.free_local_hunyuan:
+        os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = sys.executable
+        os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
+        os.environ.pop("MESHMEND_HUNYUAN3D_PATH", None)
+        os.environ.pop("MESHMEND_HUNYUAN3D_MODEL", None)
+        os.environ.pop("MESHMEND_HUNYUAN3D_SUBFOLDER", None)
+        return
     os.environ["MESHMEND_HUNYUAN3D_MODEL"] = str(args.hunyuan3d_model)
     os.environ["MESHMEND_HUNYUAN3D_SUBFOLDER"] = str(args.hunyuan3d_subfolder)
     os.environ["MESHMEND_HUNYUAN3D_OUTPUT_FORMAT"] = str(args.hunyuan3d_output_format)
@@ -314,6 +399,77 @@ def _configure_generation_backend(args: argparse.Namespace, use_hunyuan: bool) -
     # Keep the FastAPI service on the current MeshMend interpreter by default;
     # only the heavy Hunyuan worker needs the Hunyuan environment.
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_PYTHON", sys.executable)
+
+
+def _configure_bundled_no_api_external_backend(args: argparse.Namespace) -> bool:
+    if os.environ.get("MESHMEND_FORCE_NATIVE_SCULPT_BACKEND", "0").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    if args.free_local_hunyuan:
+        return False
+    if not (args.model_service or args.sculptor or args.gui or args.native_sculpt_backend):
+        return False
+    runner = Path(__file__).resolve().parent / "external_local_store_quality_generator.py"
+    if not runner.exists():
+        return False
+    os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
+    os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1"
+    os.environ.setdefault("MESHMEND_USE_HOSTED_3D", "1")
+    os.environ.setdefault("MESHMEND_HOSTED_3D_PROVIDER", "meshmend")
+    os.environ.setdefault("MESHMEND_MODEL_SERVICE_URL", f"http://127.0.0.1:{args.model_service_port}")
+    os.environ.setdefault("MESHMEND_MODEL_SERVICE_PORT", str(args.model_service_port))
+    os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = sys.executable
+    os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
+    os.environ.setdefault("MESHMEND_ALLOW_HUNYUAN_STORE_QUALITY", "1")
+    os.environ.setdefault("MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES", "1")
+    os.environ["MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND"] = (
+        f'"{sys.executable}" "{runner}" --input {{input_json}} --prompt {{prompt_path}} '
+        "--output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}"
+    )
+    os.environ["MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND"] = (
+        f'"{sys.executable}" "{runner}" --input {{input_json}} --prompt {{prompt_path}} --image {{image_path}} '
+        "--output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}"
+    )
+    return True
+
+
+def _configure_store_quality_backend_from_file(config_path: Path, model_service_port: int) -> None:
+    config_path = config_path.expanduser().resolve()
+    if not config_path.exists():
+        raise FileNotFoundError(f"Store-quality backend config not found: {config_path}")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    text_command = str(config.get("text_to_3d_command") or "").strip()
+    image_command = str(config.get("image_to_3d_command") or "").strip()
+    if not text_command and not image_command:
+        raise ValueError("Store-quality backend config must define text_to_3d_command and/or image_to_3d_command")
+    os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
+    os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1" if bool(config.get("certified", True)) else "0"
+    os.environ.setdefault("MESHMEND_USE_HOSTED_3D", "1")
+    os.environ.setdefault("MESHMEND_HOSTED_3D_PROVIDER", "meshmend")
+    os.environ.setdefault("MESHMEND_MODEL_SERVICE_URL", f"http://127.0.0.1:{model_service_port}")
+    os.environ.setdefault("MESHMEND_MODEL_SERVICE_PORT", str(model_service_port))
+    os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = str(config.get("worker_python") or sys.executable)
+    os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
+    if text_command:
+        os.environ["MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND"] = text_command
+    if image_command:
+        os.environ["MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND"] = image_command
+    for env_block_name in ("no_api_local_required_env", "http_generator_required_env", "environment"):
+        env_block = config.get(env_block_name) or {}
+        if isinstance(env_block, dict):
+            for key, value in env_block.items():
+                value_text = str(value or "").strip()
+                if not key or not value_text or value_text.lower().startswith("optional ") or "your-" in value_text.lower():
+                    continue
+                os.environ[str(key)] = value_text
+    validation = config.get("validation") or {}
+    if isinstance(validation, dict):
+        for key, env_name in (
+            ("min_face_ratio", "MESHMEND_CERTIFIED_MIN_FACE_RATIO"),
+            ("max_components", "MESHMEND_CERTIFIED_MAX_COMPONENTS"),
+            ("min_depth_ratio", "MESHMEND_CERTIFIED_MIN_DEPTH_RATIO"),
+        ):
+            if key in validation:
+                os.environ[env_name] = str(validation[key])
 
 
 def _resolve_hunyuan3d_path(explicit_path: Path | None) -> Path | None:
@@ -420,6 +576,14 @@ def _run_model_service() -> int:
             print(f"No existing process was listening on port {port}; starting a new service.")
     existing_health = _read_model_service_health(service_url)
     if existing_health is not None:
+        desired_engine = env.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native")
+        running_engine = str(existing_health.get("production_engine") or "")
+        if desired_engine and running_engine and desired_engine.lower() != running_engine.lower():
+            print("MeshMend model service is already running, but with a different production engine.")
+            print(f"Running engine: {running_engine}")
+            print(f"Requested engine: {desired_engine}")
+            print("Restart it with --restart-model-service so the new engine is used.")
+            return 1
         desired_path = env.get("MESHMEND_HUNYUAN3D_PATH", "")
         running_path = str(existing_health.get("hunyuan3d_path") or "")
         desired_worker = env.get("MESHMEND_MODEL_WORKER_PYTHON", "")
@@ -442,7 +606,7 @@ def _run_model_service() -> int:
     package_parent = str(Path(__file__).resolve().parent.parent)
     env["PYTHONPATH"] = package_parent + os.pathsep + env.get("PYTHONPATH", "")
     print(f"Starting MeshMend model service: {service_script}")
-    print(f"Production engine: {env.get('MESHMEND_PRODUCTION_ENGINE', 'external')}")
+    print(f"Production engine: {env.get('MESHMEND_PRODUCTION_ENGINE', 'meshmend_native')}")
     if env.get("MESHMEND_HUNYUAN3D_PATH"):
         print(f"Hunyuan3D path: {env['MESHMEND_HUNYUAN3D_PATH']}")
     if env.get("MESHMEND_MODEL_WORKER_PYTHON"):

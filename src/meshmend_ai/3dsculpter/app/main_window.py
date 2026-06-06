@@ -246,6 +246,7 @@ class MainWindow(QMainWindow):
         
         # Connect signals
         self.ai_worker.progress.connect(self.update_progress)
+        self.ai_worker.progress_message.connect(self.update_progress_message)
         self.ai_worker.finished.connect(self.on_generation_complete)
         self.ai_worker.error.connect(self.on_generation_error)
         self.worker_thread.started.connect(self.ai_worker.run)
@@ -255,6 +256,11 @@ class MainWindow(QMainWindow):
     def update_progress(self, value):
         """Update progress bar"""
         self.progress_bar.setValue(value)
+
+    def update_progress_message(self, value, message):
+        """Update progress bar and status text."""
+        self.progress_bar.setValue(value)
+        self.status_label.setText(f"{value}% - {message}")
     
     def on_generation_complete(self, mesh_data):
         """Handle completed generation"""
