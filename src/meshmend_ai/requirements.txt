@@ -1,0 +1,14 @@
+numpy>=1.26
+scipy>=1.11
+trimesh>=4.4
+networkx>=3.2
+pillow>=10.0
+PySide6>=6.6
+pyqtgraph>=0.13
+pytest>=8.0
+
+# Optional local-only repair/model acceleration. Install when available for your Python version.
+# open3d
+# pymeshlab
+# manifold3d
+# torch

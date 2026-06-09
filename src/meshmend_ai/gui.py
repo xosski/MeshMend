@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 import queue
@@ -26,11 +27,20 @@ else:
     from .neural_diffusion import Neural3DDiffusionModel, NeuralTrainingConfig
     from .sculptor import get_sculptor_foundation
 
+_PACKAGE_DIR = Path(__file__).resolve().parent
+if str(_PACKAGE_DIR) not in sys.path:
+    sys.path.insert(0, str(_PACKAGE_DIR))
+from meshmend.ai import GenerationRequest, get_adapter
+from meshmend.core import add_circular_base, auto_scale_to_height, build_printability_report, decimate_mesh, load_mesh, remesh_subdivide
+from meshmend.export import export_slicer_ready
+from meshmend.repair import repair_mesh
+
 
 MESH_FILE_TYPES = (
-    ("3D mesh files", "*.stl *.obj *.ply"),
+    ("3D mesh files", "*.stl *.obj *.glb *.ply"),
     ("STL files", "*.stl"),
     ("OBJ files", "*.obj"),
+    ("GLB files", "*.glb"),
     ("PLY files", "*.ply"),
     ("All files", "*.*"),
 )
@@ -56,6 +66,10 @@ class MeshMendGUI:
         self.neural_diffusion_epochs = tk.StringVar(value="90")
         self.connector_radius = tk.StringVar(value="auto")
         self.max_bridge_distance = tk.StringVar(value="")
+        self.local_adapter = tk.StringVar(value="existing")
+        self.local_target_faces = tk.StringVar(value="180000")
+        self.local_add_base = tk.BooleanVar(value=True)
+        self.local_repair = tk.BooleanVar(value=True)
         self.use_perseus = tk.BooleanVar(value=False)
         self.status = tk.StringVar(value="Choose a 3D model to repair.")
         self.progress_status = tk.StringVar(value="Idle")
@@ -170,8 +184,44 @@ class MeshMendGUI:
         ttk.Button(image_row, text="Browse", command=self.choose_creation_image).pack(side=tk.LEFT)
         creator_buttons = ttk.Frame(creator)
         creator_buttons.pack(fill=tk.X, padx=10, pady=(0, 10))
-        self.create_button = ttk.Button(creator_buttons, text="Create 3D model from chat/image", command=self.start_create_model)
+        self.create_button = ttk.Button(creator_buttons, text="Create local studio model", command=self.start_create_model)
         self.create_button.pack(side=tk.LEFT)
+
+        local_mvp = ttk.LabelFrame(workflow_tab, text="Local MVP workbench — no paid API required")
+        local_mvp.pack(fill=tk.X, pady=(0, 12))
+        ttk.Label(
+            local_mvp,
+            text="Run the new fully-local MeshMend MVP tools from this GUI: adapter generation, repair, scale/base, export, and printability report.",
+            wraplength=700,
+        ).pack(anchor=tk.W, padx=10, pady=(10, 6))
+        local_row = ttk.Frame(local_mvp)
+        local_row.pack(fill=tk.X, padx=10, pady=(0, 8))
+        ttk.Label(local_row, text="Adapter", width=10).pack(side=tk.LEFT)
+        ttk.Combobox(
+            local_row,
+            textvariable=self.local_adapter,
+            values=("existing", "placeholder"),
+            width=14,
+            state="readonly",
+        ).pack(side=tk.LEFT, padx=(0, 14))
+        ttk.Label(local_row, text="Scale", width=6).pack(side=tk.LEFT)
+        ttk.Combobox(
+            local_row,
+            textvariable=self.creation_scale_mm,
+            values=("28", "32", "75"),
+            width=8,
+        ).pack(side=tk.LEFT)
+        ttk.Label(local_row, text="mm").pack(side=tk.LEFT, padx=(4, 14))
+        ttk.Label(local_row, text="Target faces").pack(side=tk.LEFT)
+        ttk.Entry(local_row, textvariable=self.local_target_faces, width=12).pack(side=tk.LEFT, padx=(6, 14))
+        ttk.Checkbutton(local_row, text="Repair", variable=self.local_repair).pack(side=tk.LEFT)
+        ttk.Checkbutton(local_row, text="Base", variable=self.local_add_base).pack(side=tk.LEFT, padx=(8, 0))
+        local_buttons = ttk.Frame(local_mvp)
+        local_buttons.pack(fill=tk.X, padx=10, pady=(0, 10))
+        ttk.Button(local_buttons, text="Open 3D MVP Workbench", command=self.open_local_mvp_workbench).pack(side=tk.LEFT)
+        ttk.Button(local_buttons, text="Printability Report", command=self.start_local_printability_report).pack(side=tk.LEFT, padx=(8, 0))
+        ttk.Button(local_buttons, text="Local Repair/Scale/Base/Export", command=self.start_local_mvp_export).pack(side=tk.LEFT, padx=(8, 0))
+        ttk.Button(local_buttons, text="Generate Local MVP Miniature", command=self.start_local_mvp_generate).pack(side=tk.LEFT, padx=(8, 0))
 
         action_frame = ttk.Frame(workflow_tab)
         action_frame.pack(fill=tk.X, pady=(0, 10))
@@ -416,6 +466,165 @@ class MeshMendGUI:
         for name, value in learning.items():
             self._append_log(f"- {name}: {value}\n")
 
+    def open_local_mvp_workbench(self) -> None:
+        try:
+            subprocess.Popen([sys.executable, "-m", "meshmend"], cwd=str(Path(__file__).resolve().parent))
+            self.status.set("Opened local MVP workbench.")
+        except Exception as exc:
+            messagebox.showerror("Local MVP workbench", str(exc))
+
+    def start_local_printability_report(self) -> None:
+        try:
+            input_path = Path(self.input_path.get()).expanduser()
+            if not input_path.exists():
+                raise ValueError("Choose an existing input model first.")
+        except Exception as exc:
+            messagebox.showerror("Printability report", str(exc))
+            return
+        self._set_progress(0, "Running local printability report")
+        self.status.set("Inspecting printability...")
+        thread = threading.Thread(target=self._local_printability_worker, args=(input_path,), daemon=True)
+        thread.start()
+        self.root.after(100, self._poll_result)
+
+    def _local_printability_worker(self, input_path: Path) -> None:
+        try:
+            mesh = load_mesh(input_path)
+            report = build_printability_report(mesh)
+            self._result_queue.put(("mvp_report", {"input": str(input_path), "printability": report.to_dict()}))
+        except Exception as exc:
+            self._result_queue.put(("mvp_error", exc))
+
+    def start_local_mvp_export(self) -> None:
+        try:
+            input_path = Path(self.input_path.get()).expanduser()
+            output_path = Path(self.output_path.get()).expanduser()
+            if not input_path.exists():
+                raise ValueError("Choose an existing input model first.")
+            if not output_path.name:
+                raise ValueError("Choose where to save the exported model.")
+            scale_mm = self._creation_scale_mm()
+            target_faces = self._positive_int(self.local_target_faces.get(), "Target faces")
+        except Exception as exc:
+            messagebox.showerror("Local MVP export", str(exc))
+            return
+        self.repair_button.configure(state=tk.DISABLED)
+        self.create_button.configure(state=tk.DISABLED)
+        self.report_text.delete("1.0", tk.END)
+        self._set_progress(0, "Starting local MVP export")
+        self.status.set("Running local MVP mesh pipeline...")
+        thread = threading.Thread(
+            target=self._local_mvp_export_worker,
+            args=(input_path, output_path, scale_mm, target_faces, self.local_repair.get(), self.local_add_base.get()),
+            daemon=True,
+        )
+        thread.start()
+        self.root.after(100, self._poll_result)
+
+    def _local_mvp_export_worker(
+        self,
+        input_path: Path,
+        output_path: Path,
+        scale_mm: float,
+        target_faces: int,
+        run_repair: bool,
+        add_base: bool,
+    ) -> None:
+        try:
+            self._post_progress(10, "Loading mesh")
+            mesh = load_mesh(input_path)
+            repair_actions: list[str] = []
+            if run_repair:
+                self._post_progress(30, "Repairing with existing MeshMend repair engine")
+                repaired = repair_mesh(mesh)
+                mesh = repaired.mesh
+                repair_actions = repaired.actions
+            self._post_progress(50, f"Scaling to {scale_mm:g}mm")
+            mesh = auto_scale_to_height(mesh, scale_mm)
+            if add_base:
+                self._post_progress(62, "Adding circular base")
+                mesh = add_circular_base(mesh)
+            if target_faces > 0:
+                if len(mesh.faces) > target_faces:
+                    self._post_progress(74, f"Decimating toward {target_faces:,} faces")
+                    mesh = decimate_mesh(mesh, target_faces)
+                elif len(mesh.faces) < target_faces:
+                    self._post_progress(74, f"Remeshing toward {target_faces:,} faces")
+                    mesh = remesh_subdivide(mesh, target_faces)
+            self._post_progress(88, "Exporting slicer-ready mesh")
+            export_slicer_ready(mesh, output_path)
+            report = build_printability_report(mesh).to_dict()
+            self._post_progress(100, "Local MVP export complete")
+            self._result_queue.put(("mvp_exported", {"output": str(output_path), "actions": repair_actions, "printability": report}))
+        except Exception as exc:
+            self._result_queue.put(("mvp_error", exc))
+
+    def start_local_mvp_generate(self) -> None:
+        prompt = self.chat_prompt.get("1.0", tk.END).strip()
+        try:
+            if not prompt:
+                raise ValueError("Enter a structured prompt first.")
+            output_text = self.output_path.get().strip()
+            if output_text:
+                output_path = Path(output_text).expanduser()
+            else:
+                selected = filedialog.asksaveasfilename(
+                    title="Save generated local MVP model as",
+                    defaultextension=".stl",
+                    filetypes=MESH_FILE_TYPES,
+                )
+                if not selected:
+                    return
+                output_path = Path(selected).expanduser()
+                self.output_path.set(str(output_path))
+            scale_mm = self._creation_scale_mm()
+            target_faces = self._positive_int(self.local_target_faces.get(), "Target faces")
+            adapter_name = self.local_adapter.get().strip() or "existing"
+        except Exception as exc:
+            messagebox.showerror("Local MVP generation", str(exc))
+            return
+        self.repair_button.configure(state=tk.DISABLED)
+        self.create_button.configure(state=tk.DISABLED)
+        self.report_text.delete("1.0", tk.END)
+        self._set_progress(0, "Starting local MVP generation")
+        self.status.set("Generating local MVP miniature...")
+        thread = threading.Thread(
+            target=self._local_mvp_generate_worker,
+            args=(prompt, output_path, adapter_name, scale_mm, target_faces, self.local_repair.get(), self.local_add_base.get()),
+            daemon=True,
+        )
+        thread.start()
+        self.root.after(100, self._poll_result)
+
+    def _local_mvp_generate_worker(
+        self,
+        prompt: str,
+        output_path: Path,
+        adapter_name: str,
+        scale_mm: float,
+        target_faces: int,
+        run_repair: bool,
+        add_base: bool,
+    ) -> None:
+        try:
+            self._post_progress(15, f"Generating with local adapter: {adapter_name}")
+            mesh = get_adapter(adapter_name).generate(
+                GenerationRequest(prompt=prompt, height_mm=scale_mm, target_faces=target_faces, add_base=add_base)
+            )
+            repair_actions: list[str] = []
+            if run_repair:
+                self._post_progress(70, "Repairing generated mesh")
+                repaired = repair_mesh(mesh)
+                mesh = repaired.mesh
+                repair_actions = repaired.actions
+            self._post_progress(88, "Exporting generated mesh")
+            export_slicer_ready(mesh, output_path)
+            report = build_printability_report(mesh).to_dict()
+            self._post_progress(100, "Local MVP generation complete")
+            self._result_queue.put(("mvp_generated", {"output": str(output_path), "adapter": adapter_name, "actions": repair_actions, "printability": report}))
+        except Exception as exc:
+            self._result_queue.put(("mvp_error", exc))
+
     def start_repair(self) -> None:
         try:
             input_path = Path(self.input_path.get()).expanduser()
@@ -478,9 +687,47 @@ class MeshMendGUI:
         except Exception as exc:
             self._result_queue.put(("error", exc))
 
+    def _creation_requests_store_quality(self, prompt: str, image_text: str) -> bool:
+        lowered = prompt.lower()
+        if image_text.strip():
+            return True
+        try:
+            if self._print_detail_um() <= 50:
+                return True
+        except Exception:
+            pass
+        return any(
+            term in lowered
+            for term in (
+                "8k",
+                "8 k",
+                "studio",
+                "studio quality",
+                "store quality",
+                "store-quality",
+                "store level",
+                "store-level",
+                "production quality",
+                "display quality",
+                "maximum detail",
+                "max detail",
+                "high detail",
+                "intricate",
+                "marketplace",
+            )
+        )
+
     def start_create_model(self) -> None:
         prompt = self.chat_prompt.get("1.0", tk.END).strip()
         image_text = self.creation_image_path.get().strip()
+        use_legacy_service = os.environ.get("MESHMEND_GUI_USE_LEGACY_MODEL_SERVICE_CREATE", "0").strip().lower() in {"1", "true", "yes", "on"}
+        if not use_legacy_service and not self._creation_requests_store_quality(prompt, image_text):
+            self.start_local_mvp_generate()
+            return
+        self._append_log(
+            "Routing create request through MeshMend production/store-quality local backend. "
+            "Use 'Generate Local MVP Miniature' for procedural draft output.\n"
+        )
         image_path = Path(image_text).expanduser() if image_text else None
         try:
             if image_path is not None and not image_path.exists():
@@ -680,6 +927,42 @@ class MeshMendGUI:
             self.status.set("Model service restart failed.")
             self._set_progress(0, "Service restart failed")
             messagebox.showerror("Model service", str(payload))
+            return
+
+        if status == "mvp_error":
+            self.repair_button.configure(state=tk.NORMAL)
+            self.create_button.configure(state=tk.NORMAL)
+            self.restart_service_button.configure(state=tk.NORMAL)
+            self.status.set("Local MVP operation failed.")
+            self._set_progress(0, "Local MVP failed")
+            self._append_log(str(payload).strip() + "\n")
+            messagebox.showerror("Local MVP", str(payload))
+            return
+
+        if status == "mvp_report":
+            self.repair_button.configure(state=tk.NORMAL)
+            self.create_button.configure(state=tk.NORMAL)
+            self.restart_service_button.configure(state=tk.NORMAL)
+            self.status.set("Printability report complete.")
+            self._set_progress(100, "Printability report complete")
+            self.report_text.delete("1.0", tk.END)
+            self._append_log(json.dumps(payload, indent=2) + "\n")
+            return
+
+        if status in {"mvp_exported", "mvp_generated"}:
+            self.repair_button.configure(state=tk.NORMAL)
+            self.create_button.configure(state=tk.NORMAL)
+            self.restart_service_button.configure(state=tk.NORMAL)
+            data = payload if isinstance(payload, dict) else {}
+            output = Path(str(data.get("output") or ""))
+            if output.name:
+                self.input_path.set(str(output))
+                self.output_path.set(str(output.with_name(f"{output.stem}_meshmend{output.suffix}")))
+            self.status.set("Local MVP generation complete." if status == "mvp_generated" else "Local MVP export complete.")
+            self._set_progress(100, "Local MVP complete")
+            self.report_text.delete("1.0", tk.END)
+            self._append_log(json.dumps(data, indent=2) + "\n")
+            messagebox.showinfo("Local MVP", f"Saved model:\n{output}" if output.name else "Local MVP operation complete.")
             return
 
         self.repair_button.configure(state=tk.NORMAL)

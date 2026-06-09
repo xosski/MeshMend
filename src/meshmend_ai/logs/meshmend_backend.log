@@ -1,0 +1,105 @@
+2026-06-07 21:06:57,428 INFO meshmend_backend {"event": "diagnostics_requested", "status": "ok"}
+2026-06-07 21:06:57,586 INFO meshmend_backend {"event": "test_mesh_generated", "task_id": "testmesh_6ad2f716b06c", "mesh": {"faces": 1856, "vertices": 934, "watertight": true, "components": 3, "extents_mm": [16.0, 16.0, 12.450000000000001], "units": "mm"}}
+2026-06-07 21:06:58,017 INFO meshmend_backend {"event": "generate_part", "category": "head_helmet", "count": 1}
+2026-06-07 21:07:04,369 INFO meshmend_backend {"event": "assemble_miniature", "result": {"faces": 52510, "vertices": 26241, "watertight": true, "components": 2, "extents_mm": [32.00000000000001, 32.00000000000001, 32.00000000000001], "units": "mm"}}
+2026-06-07 21:09:07,684 INFO meshmend_backend {"event": "task_started", "task_id": "5d76a8b4d0d7468d822fd0222b414c78", "workflow": "text_to_3d", "prompt_preview": "store quality sci-fi heavy infantry"}
+2026-06-07 21:09:18,010 INFO meshmend_backend {"event": "task_forced_fallback_succeeded", "task_id": "5d76a8b4d0d7468d822fd0222b414c78", "reason": "No production text-to-3D runner is configured", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/5d76a8b4d0d7468d822fd0222b414c78_modular_fallback_miniature.stl"}}
+2026-06-07 21:50:56,140 INFO meshmend_backend {"event": "task_started", "task_id": "6492f7b257aa47918a7e716d657c2d18", "workflow": "image_to_3d", "prompt_preview": "Create a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features,"}
+2026-06-07 21:57:13,611 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: No-API local external generator failed: Raw AI mesh has 963642 faces, above memory-safe postprocess limit 900000. Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation.
+2026-06-07 21:57:24,859 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "6492f7b257aa47918a7e716d657c2d18", "reason": "No-API local external generator failed: Raw AI mesh has 963642 faces, above memory-safe postprocess limit 900000. Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation.", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/6492f7b257aa47918a7e716d657c2d18_modular_fallback_miniature.stl"}}
+2026-06-07 22:24:34,758 INFO meshmend_backend {"event": "task_started", "task_id": "3d026b3c95e3481c8c9d25ac9ef9e951", "workflow": "text_to_3d", "prompt_preview": "a elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp f"}
+2026-06-07 22:40:20,755 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: No-API local external generator failed: Raw AI mesh has 1040348 faces, above memory-safe postprocess limit 900000. Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation.
+2026-06-07 22:40:30,731 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "3d026b3c95e3481c8c9d25ac9ef9e951", "reason": "No-API local external generator failed: Raw AI mesh has 1040348 faces, above memory-safe postprocess limit 900000. Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation.", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/3d026b3c95e3481c8c9d25ac9ef9e951_modular_fallback_miniature.stl"}}
+2026-06-07 22:50:51,832 INFO meshmend_backend {"event": "task_started", "task_id": "7c4c47d5f4e74e7783d286e5bbecb93a", "workflow": "text_to_3d", "prompt_preview": "a high elf paladin\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-07 23:51:12,391 INFO meshmend_backend {"event": "task_started", "task_id": "c6bba38cf7f04774bdbe3dd64355feff", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 00:07:49,354 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: No-API local external generator failed: Raw AI mesh has 1239216 faces, above memory-safe postprocess limit 900000. Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation.
+2026-06-08 00:08:14,095 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "c6bba38cf7f04774bdbe3dd64355feff", "reason": "No-API local external generator failed: Raw AI mesh has 1239216 faces, above memory-safe postprocess limit 900000. Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation.", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/c6bba38cf7f04774bdbe3dd64355feff_modular_fallback_miniature.stl"}}
+2026-06-08 10:57:46,718 INFO meshmend_backend {"event": "task_started", "task_id": "e4537a8839f84238815ca8071c92c7fa", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 11:00:25,973 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: certified mesh has too many components: 168 > 3
+2026-06-08 11:00:49,554 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "e4537a8839f84238815ca8071c92c7fa", "reason": "certified mesh has too many components: 168 > 3", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/e4537a8839f84238815ca8071c92c7fa_modular_fallback_miniature.stl"}}
+2026-06-08 11:53:07,624 INFO meshmend_backend {"event": "task_started", "task_id": "c016106d6bb749e58ae4213ee665e38c", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 11:55:40,937 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: certified mesh has too many components: 168 > 3
+2026-06-08 11:56:05,321 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "c016106d6bb749e58ae4213ee665e38c", "reason": "certified mesh has too many components: 168 > 3", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/c016106d6bb749e58ae4213ee665e38c_modular_fallback_miniature.stl"}}
+2026-06-08 14:30:28,327 INFO meshmend_backend {"event": "task_started", "task_id": "92af18ca34e64dc2ab6ccd5da3921b34", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 14:32:55,175 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: certified mesh has too many components: 168 > 3
+2026-06-08 14:33:16,705 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "92af18ca34e64dc2ab6ccd5da3921b34", "reason": "certified mesh has too many components: 168 > 3", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/92af18ca34e64dc2ab6ccd5da3921b34_modular_fallback_miniature.stl"}}
+2026-06-08 14:43:50,256 INFO meshmend_backend {"event": "task_started", "task_id": "cb800f8973124e838acc6dd08af98b98", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 14:45:01,366 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 14:45:23,187 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "cb800f8973124e838acc6dd08af98b98", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/cb800f8973124e838acc6dd08af98b98_modular_fallback_miniature.stl"}}
+2026-06-08 15:11:58,105 INFO meshmend_backend {"event": "task_started", "task_id": "12609565135b44648d40247bed458a6a", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 15:13:18,215 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 15:13:40,428 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "12609565135b44648d40247bed458a6a", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/12609565135b44648d40247bed458a6a_modular_fallback_miniature.stl"}}
+2026-06-08 15:14:51,388 INFO meshmend_backend {"event": "task_started", "task_id": "88d5b6dd64ea42c5bfce5a49eea48eae", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 15:16:10,473 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 15:16:31,667 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "88d5b6dd64ea42c5bfce5a49eea48eae", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/88d5b6dd64ea42c5bfce5a49eea48eae_modular_fallback_miniature.stl"}}
+2026-06-08 18:07:39,509 INFO meshmend_backend {"event": "task_started", "task_id": "8cf35b5641a643f097ce60c1428921e3", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 18:08:58,605 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: disconnected_shells:133; outlier_shells:3; thin_sheet_shells_detected:1; outlier_shells:3>0; missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 18:09:20,922 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "8cf35b5641a643f097ce60c1428921e3", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: disconnected_shells:133; outlier_shells:3; thin_sheet_shells_detected:1; outlier_shells:3>0; missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/8cf35b5641a643f097ce60c1428921e3_modular_fallback_miniature.stl"}}
+2026-06-08 18:45:56,490 INFO meshmend_backend {"event": "task_started", "task_id": "969ff9fda52f4e79b876d71d0611e31d", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 18:47:15,585 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: thin_sheet_shells_detected:1; missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 18:47:40,412 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "969ff9fda52f4e79b876d71d0611e31d", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: thin_sheet_shells_detected:1; missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/969ff9fda52f4e79b876d71d0611e31d_modular_fallback_miniature.stl"}}
+2026-06-08 19:01:50,028 INFO meshmend_backend {"event": "task_started", "task_id": "f9130ed86d2f484da8615e994aaed37f", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 19:03:09,142 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: thin_sheet_shells_detected:1; missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 19:03:33,275 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "f9130ed86d2f484da8615e994aaed37f", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: thin_sheet_shells_detected:1; missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/f9130ed86d2f484da8615e994aaed37f_modular_fallback_miniature.stl"}}
+2026-06-08 20:17:02,422 INFO meshmend_backend {"event": "task_started", "task_id": "34b65f0672584ad1856d068f93cc20d6", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 20:17:58,504 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack
+2026-06-08 20:18:20,903 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "34b65f0672584ad1856d068f93cc20d6", "reason": "MeshMend local sculpt generator failed: MiniatureSculptQualityGate failed: missing_required_components:backpack; missing_recognizable_equipment:backpack", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/34b65f0672584ad1856d068f93cc20d6_modular_fallback_miniature.stl"}}
+2026-06-08 21:56:55,310 INFO meshmend_backend {"event": "task_started", "task_id": "501edb3e74fb4d43aaad1b44e424fde1", "workflow": "text_to_3d", "prompt_preview": "a high elf warrior\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: cr"}
+2026-06-08 21:57:35,602 ERROR meshmend_backend task_failed_before_optional_fallback
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 563, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: certified mesh has too many components: 249 > 3
+2026-06-08 21:57:59,277 INFO meshmend_backend {"event": "task_fallback_succeeded", "task_id": "501edb3e74fb4d43aaad1b44e424fde1", "reason": "certified mesh has too many components: 249 > 3", "model_urls": {"stl": "http://127.0.0.1:8090/v1/files/501edb3e74fb4d43aaad1b44e424fde1_modular_fallback_miniature.stl"}}

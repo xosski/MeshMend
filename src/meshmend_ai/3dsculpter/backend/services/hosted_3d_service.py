@@ -242,10 +242,10 @@ class SelfHostedProvider:
             return int(override)
         q = (quality or "standard").lower()
         if q == "high":
-            return 1200000
+            return 180000
         if q == "low":
             return 50000
-        return 450000
+        return 100000
 
     @staticmethod
     def _scale_mm_from_prompt(prompt: str) -> float:

@@ -32,6 +32,72 @@ If `/health` reports `ready_for_studio_quality: false`, the service is running
 but the real production runner is still missing. In that state MeshMend will
 refuse to create another blocky draft and will ask for these runner commands.
 
+## Backend diagnostics and fallback endpoints
+
+Backend stability is intentionally separate from model quality. A running
+backend does not mean the local AI model can produce a store-quality miniature.
+
+Logs are written to:
+
+```powershell
+.\logs\meshmend_backend.log
+```
+
+Use these endpoints while debugging:
+
+```powershell
+# Process is alive, plus a short dependency summary. This does not certify output quality.
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/health).Content
+
+# Full dependency/path/GPU/import/permission/port/recent-failure diagnostics.
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/diagnostics).Content
+
+# Generate a known simple watertight mesh to prove backend export plumbing works.
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/test-mesh).Content
+
+# Generate modular fallback part candidates.
+Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/generate-part `
+  -Method POST `
+  -ContentType 'application/json' `
+  -Body '{"category":"head_helmet","prompt":"sci-fi heavy infantry helmet","count":3}'
+
+# Assemble a valid procedural placeholder miniature from modular parts.
+Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/assemble-miniature `
+  -Method POST `
+  -ContentType 'application/json' `
+  -Body '{"prompt":"sci-fi heavy infantry with rifle and backpack","scale_mm":32,"output_format":"stl"}'
+```
+
+When local AI output fails a hard quality gate, MeshMend can fall back to the
+procedural modular pipeline instead of returning a malformed STL. The fallback is
+labelled `studio_quality_certified: false`; it is valid geometry for debugging
+and iteration, not a claim of premium visual sculpt quality. Disable this with:
+
+```powershell
+$env:MESHMEND_ENABLE_MODULAR_FALLBACK = '0'
+```
+
+## Memory safety
+
+Local Hunyuan/Trimesh repair can expand meshes in 4x subdivision jumps. A
+1.2M-face target can become a 3M+ face mesh during cleanup and may consume tens
+of GB of RAM. MeshMend now keeps local/offline processing memory-safe by default:
+
+```powershell
+$env:MESHMEND_MAX_POSTPROCESS_FACES = '350000'       # default local repair/detail cap
+$env:MESHMEND_MAX_EXPORT_FACES = '600000'           # default subdivision overshoot cap
+$env:MESHMEND_MAX_RAW_POSTPROCESS_FACES = '900000'  # refuse huge raw AI meshes before repair
+$env:MESHMEND_MEMORY_SAFE_SOLIDIFY_VOXEL_PITCH_MM = '0.28'
+```
+
+If the AI returns a huge mesh, MeshMend skips expensive repair and falls back to
+the modular procedural miniature instead of freezing the PC. Only disable this on
+a workstation with enough RAM:
+
+```powershell
+$env:MESHMEND_DISABLE_MEMORY_SAFETY = '1'
+```
+
 ## Free local/no-API Hunyuan3D mode
 
 For a free local backend with no API key or cloud signup, install Hunyuan3D-2 or

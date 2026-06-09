@@ -1,0 +1,24 @@
+{
+  "prompt": "original sci-fi heavy infantry miniature with helmet lenses, rifle, backpack vents, layered armor plates, panel lines, rivets, tactical pouches, and textured round base",
+  "scale_mm": 32.0,
+  "archetype": "heavy_infantry",
+  "style": "sci_fi",
+  "pose": "heroic_standing",
+  "weapon": "rifle",
+  "helmet": true,
+  "backpack": true,
+  "cape": false,
+  "robe": false,
+  "claws": false,
+  "base": "round_textured",
+  "target_faces": 90000,
+  "details": [
+    "panel_lines",
+    "armor_seams",
+    "rivets",
+    "helmet_lenses",
+    "weapon_barrel",
+    "backpack_vents",
+    "base_texture"
+  ]
+}

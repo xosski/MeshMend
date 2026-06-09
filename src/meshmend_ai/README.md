@@ -2,6 +2,66 @@
 
 MeshMend is a local-first 3D miniature creation and STL repair toolkit. It can repair existing meshes, launch a desktop creation/repair GUI, and use a local no-API 3D generation backend to create printable tabletop miniatures from text or image prompts.
 
+## Local MVP: no paid API required
+
+This repository now includes a first-cut local desktop MVP under `meshmend/`. It does **not** call OpenAI, Meshy, Tripo, or any paid generation API. The default generation adapter reuses MeshMend's existing local `3dsculpter/model_service/native_generation.py` miniature generator. A clearly labeled procedural placeholder adapter remains available for adapter tests and offline fallback.
+
+Windows quick start:
+
+```powershell
+cd D:\MeshMend\src\meshmend_ai
+py -3.11 -m venv .venv
+.\.venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# Desktop app
+python -m meshmend
+
+# Existing MeshMend GUI with the Local MVP workbench wired in
+python .\cli.py --gui
+
+# CLI example: generate through the existing local MeshMend native generator and export STL + report
+python -m meshmend --cli --generate "original armored star knight with rifle" --scale 32mm --output .\local_mini.stl
+
+# CLI example: generate through the gated offline studio miniature pipeline
+python -m meshmend --cli --studio-config .\examples\studio_sci_fi_heavy_infantry.json --output .\studio_heavy_infantry.stl
+
+# Optional: force the procedural placeholder adapter for quick smoke tests
+python -m meshmend --cli --generate "original armored star knight with rifle" --adapter placeholder --scale 32mm --output .\placeholder_mini.stl
+
+# CLI example: repair an imported mesh
+python -m meshmend --cli --input .\broken.obj --repair --scale 32mm --add-base --output .\repaired.stl
+```
+
+MVP features currently implemented:
+
+- Open/import STL, OBJ, GLB, and PLY.
+- PySide6 desktop shell with optional OpenGL viewport via `pyqtgraph.opengl`.
+- Existing `meshmend --gui` / `cli.py --gui` Tkinter GUI now includes a “Local MVP workbench” section for local generation, printability reports, repair/scale/base/export, and launching the PySide 3D viewport workbench.
+- Basic mesh repair using the existing `repair.py` engine: duplicate/degenerate cleanup, boundary-loop capping, normals fix, topology validation, optional component bridging.
+- Auto-scale to 28mm, 32mm, or 75mm miniature height.
+- Add circular miniature base.
+- Decimate/remesh controls.
+- Export STL/OBJ/GLB/PLY with printability report sidecar.
+- Local generation adapter interface. Default adapter wraps the existing local `native_generation.py` code; placeholder adapter is available for tests/fallback.
+- Gated offline studio miniature pipeline under `meshmend.studio` for deterministic anatomy/armor/equipment/detail generation with artifact rejection before export.
+- Printability report: manifold/watertight status, holes, non-manifold edges, thin-part heuristic, floating shells, dimensions, polygon count.
+- Originality/compliance mode that sanitizes protected direct-copy terms and forbidden symbols before generation.
+
+Docs:
+
+- `docs/ARCHITECTURE.md`
+- `docs/MVP_IMPLEMENTATION_PLAN.md`
+- `docs/ROADMAP_V1.md`
+- `docs/STUDIO_MINIATURE_PIPELINE.md`
+
+Run tests:
+
+```powershell
+pytest tests
+```
+
 The current creation pipeline is designed for home/local use:
 
 ```text
@@ -143,14 +203,29 @@ Health check:
 
 ```powershell
 (Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/health).Content
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/diagnostics).Content
+(Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/test-mesh).Content
 ```
 
-The health response should show:
+The health response separates backend stability from visual/model quality:
 
 - `production_engine: free_local_hunyuan`
-- `ready_for_studio_quality: true`
+- `backend_running: true`
+- `model_quality_acceptable: false` unless a certified external production runner is configured
 - a valid `model_worker_python`
 - `hunyuan_import.ok: true`
+- `log_file: ...\logs\meshmend_backend.log`
+
+If local AI fails a hard quality gate, MeshMend falls back to the modular
+procedural generator and labels the result `studio_quality_certified: false`.
+Use this endpoint to prove valid fallback geometry independently of AI quality:
+
+```powershell
+Invoke-WebRequest -UseBasicParsing http://127.0.0.1:8090/assemble-miniature `
+  -Method POST `
+  -ContentType 'application/json' `
+  -Body '{"prompt":"sci-fi heavy infantry with rifle and backpack","scale_mm":32,"output_format":"stl"}'
+```
 
 ## Miniature detail and scale controls
 

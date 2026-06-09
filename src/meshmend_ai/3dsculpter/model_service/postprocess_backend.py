@@ -54,6 +54,14 @@ class PostprocessReport:
 def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.Trimesh, PostprocessReport]:
     """Turn raw Hunyuan output into one printable, scaled, detailed STL mesh."""
     mesh = coerce_to_trimesh(mesh)
+    request = clamp_request_for_memory_safety(dict(request))
+    if memory_safety_enabled():
+        max_raw_faces = int(os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES", "900000"))
+        if len(mesh.faces) > max_raw_faces:
+            raise RuntimeError(
+                f"Raw AI mesh has {len(mesh.faces)} faces, above memory-safe postprocess limit {max_raw_faces}. "
+                "Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation."
+            )
     before_faces = len(mesh.faces)
     mesh = remove_background_slabs(mesh, request)
     mesh = remove_connected_sheet_surfaces(mesh, request)
@@ -64,11 +72,11 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     mesh = normalize_to_scale(mesh, requested_scale_mm(request), request)
     detail_target = detail_face_target(request)
     mesh = remove_connected_sheet_surfaces(mesh, dict(request, _meshmend_aggressive_slab_removal=True))
-    pre_detail_default = "700000" if strict_quality_requested(request) else "450000"
-    pre_detail_target = min(detail_target, int(os.environ.get("MESHMEND_PRE_INTRICATE_DETAIL_FACES", pre_detail_default)))
+    pre_detail_default = "180000" if strict_quality_requested(request) else "90000"
+    pre_detail_target = memory_safe_face_target(min(detail_target, int(os.environ.get("MESHMEND_PRE_INTRICATE_DETAIL_FACES", pre_detail_default))))
     mesh = subdivide_to_faces(mesh, pre_detail_target)
     mesh = denoise_surface_bumps(mesh, request)
-    if synthetic_detail_enabled("MESHMEND_ENABLE_SCULPT_RELIEF_DETAIL", default="0"):
+    if synthetic_detail_enabled("MESHMEND_ENABLE_SCULPT_RELIEF_DETAIL", default="1" if strict_quality_requested(request) else "0"):
         mesh = apply_miniature_sculpt_detail(mesh, request)
     mesh = apply_image_guided_surface_detail(mesh, request)
     mesh = add_high_resolution_geometry(mesh, request)
@@ -114,11 +122,36 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
 def synthetic_detail_enabled(env_name: str, *, default: str = "0") -> bool:
     """Return whether procedural surface detail should be added.
 
-    Default to concept fidelity. Hunyuan already uses the concept/reference image;
-    adding prompt-derived sine-pattern grooves can read as STL noise and make the
-    result drift away from the concept. Users can still opt in with env flags.
+    Store/studio mode is geometry-first: detail passes are enabled by default so
+    outputs cannot silently remain smooth Hunyuan blobs. Draft mode keeps the old
+    conservative default unless the caller opts in with env flags.
     """
     return os.environ.get(env_name, default).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def memory_safety_enabled() -> bool:
+    return os.environ.get("MESHMEND_DISABLE_MEMORY_SAFETY", "0").strip().lower() not in {"1", "true", "yes", "on"}
+
+
+def memory_safe_face_target(target_faces: int) -> int:
+    target_faces = max(1_000, int(target_faces))
+    if not memory_safety_enabled():
+        return target_faces
+    cap = int(os.environ.get("MESHMEND_MAX_POSTPROCESS_FACES", "350000"))
+    return min(target_faces, max(50_000, cap))
+
+
+def clamp_request_for_memory_safety(request: dict[str, Any]) -> dict[str, Any]:
+    if not memory_safety_enabled():
+        return request
+    try:
+        requested = int(float(request.get("target_polycount") or 0) or 0)
+    except (TypeError, ValueError):
+        requested = 0
+    safe_target = memory_safe_face_target(requested or (180_000 if strict_quality_requested(request) else 90_000))
+    request["target_polycount"] = safe_target
+    request["_meshmend_memory_safety_face_cap"] = int(os.environ.get("MESHMEND_MAX_POSTPROCESS_FACES", "350000"))
+    return request
 
 
 def mesh_quality_diagnostics(mesh: trimesh.Trimesh, request: dict[str, Any], detail_faces_target: int, issues: list[str]) -> dict[str, Any]:
@@ -159,8 +192,8 @@ def restore_image_store_density(mesh: trimesh.Trimesh, request: dict[str, Any], 
     if source_workflow not in {"image_to_3d", "text_to_3d"} or not strict_quality_requested(request):
         return mesh
     try:
-        min_ratio = float(os.environ.get("MESHMEND_IMAGE_FINAL_DETAIL_TARGET_RATIO", "1.05"))
-        min_faces = max(len(mesh.faces), int(detail_faces_target * min_ratio))
+        min_ratio = float(os.environ.get("MESHMEND_IMAGE_FINAL_DETAIL_TARGET_RATIO", "1.0"))
+        min_faces = memory_safe_face_target(max(len(mesh.faces), int(detail_faces_target * min_ratio)))
         mesh = subdivide_to_faces(mesh, min_faces)
         mesh = apply_image_guided_surface_detail(mesh, request)
         mesh = cleanup(mesh)
@@ -273,9 +306,9 @@ def final_image_surface_polish(mesh: trimesh.Trimesh, request: dict[str, Any]) -
 
         filter_taubin(
             polished,
-            lamb=float(os.environ.get("MESHMEND_FINAL_POLISH_LAMBDA", "0.22")),
-            nu=float(os.environ.get("MESHMEND_FINAL_POLISH_NU", "0.34")),
-            iterations=int(os.environ.get("MESHMEND_FINAL_POLISH_ITERATIONS", "3")),
+            lamb=float(os.environ.get("MESHMEND_FINAL_POLISH_LAMBDA", "0.08")),
+            nu=float(os.environ.get("MESHMEND_FINAL_POLISH_NU", "-0.085")),
+            iterations=int(os.environ.get("MESHMEND_FINAL_POLISH_ITERATIONS", "1")),
         )
         polished.metadata.update(metadata)
         polished.metadata["meshmend_final_surface_polished"] = True
@@ -756,14 +789,17 @@ def thicken_if_sheet(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
 
 
 def subdivide_to_faces(mesh: trimesh.Trimesh, target_faces: int) -> trimesh.Trimesh:
-    target_faces = max(target_faces, len(mesh.faces))
-    # Trimesh subdivision grows faces in 4x jumps. Store-quality meshes commonly
-    # sit around 700k faces after repair; reaching a 2M target requires accepting
-    # the next 2.8-3.6M step instead of exporting below target. Keep a hard-ish
-    # cap for memory, but make the default high enough for a single 4x jump from
-    # repaired 700-900k meshes to pass the 2M store-quality gate.
-    max_faces = max(target_faces, int(os.environ.get("MESHMEND_MAX_EXPORT_FACES", "4200000")))
-    overshoot_limit = max(max_faces, int(target_faces * 2.05))
+    target_faces = memory_safe_face_target(max(target_faces, len(mesh.faces)))
+    # Trimesh subdivision grows faces in 4x jumps. The old default accepted a
+    # jump to 3-4M faces to satisfy a 1-2M target, which can freeze machines with
+    # consumer RAM during repair/export. Keep the overshoot bounded unless the
+    # user explicitly disables memory safety.
+    max_faces = int(os.environ.get("MESHMEND_MAX_EXPORT_FACES", "600000"))
+    if memory_safety_enabled():
+        max_faces = min(max_faces, int(os.environ.get("MESHMEND_MAX_POSTPROCESS_FACES", "350000")) * 2)
+    else:
+        max_faces = max(target_faces, max_faces)
+    overshoot_limit = max(target_faces, int(min(max_faces, target_faces * 1.35)))
     while len(mesh.faces) < target_faces:
         next_faces = len(mesh.faces) * 4
         if next_faces > overshoot_limit:
@@ -831,11 +867,11 @@ def apply_image_guided_surface_detail(mesh: trimesh.Trimesh, request: dict[str, 
     quality = str(request.get("quality") or "standard").lower()
     prompt = str(request.get("prompt") or "").lower()
     source_workflow = str(request.get("_meshmend_source_workflow") or "").lower()
-    # Text concepts from SD often contain painted/weathering pixels and AI edge
-    # artifacts. Projecting those 2D edges as relief makes the STL noisy and
-    # less like a clean miniature sculpt. Keep image-guided relief automatic for
-    # user-provided image references, and make text-to-3D opt-in only.
-    default_enabled = "auto" if source_workflow == "image_to_3d" else "0"
+    # Project reference/concept contrast into shallow printable relief. This is
+    # automatic in studio mode so detail has a real geometry path instead of
+    # relying on prompt wording alone; negative prompts and concept gates reduce
+    # painted/noisy inputs before this pass runs.
+    default_enabled = "auto" if source_workflow in {"image_to_3d", "text_to_3d"} else "0"
     enabled = os.environ.get("MESHMEND_ENABLE_IMAGE_GUIDED_DETAIL", default_enabled).strip().lower()
     wants_8k = any(
         term in prompt
@@ -910,7 +946,7 @@ def add_high_resolution_geometry(mesh: trimesh.Trimesh, request: dict[str, Any])
     It cannot invent a perfect sculpt from a bad concept, but it prevents high
     resolution exports from remaining visually smooth/480p.
     """
-    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_GEOMETRY_UPSCALE", default="0")
+    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_GEOMETRY_UPSCALE", default="1" if strict_quality_requested(request) else "0")
     if not enabled:
         return mesh
     quality = str(request.get("quality") or "standard").lower()
@@ -991,7 +1027,7 @@ def apply_custom_miniature_detail_pipeline(mesh: trimesh.Trimesh, request: dict[
     vents, rivets, cloth seams, creature scales) at several spatial frequencies.
     It runs after sheet removal so it does not add detail to an image card.
     """
-    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_CUSTOM_MINIATURE_DETAIL_PIPELINE", default="0")
+    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_CUSTOM_MINIATURE_DETAIL_PIPELINE", default="1" if strict_quality_requested(request) else "0")
     if not enabled or not strict_quality_requested(request):
         return mesh
     try:
@@ -1097,7 +1133,7 @@ def _cloth_miniature_relief(x: np.ndarray, y: np.ndarray, z: np.ndarray, seed: i
 
 def apply_intricate_detail_pipeline(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
     """Separate multi-pass intricate detailing for high-quality miniature exports."""
-    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_INTRICATE_DETAIL_PIPELINE", default="0")
+    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_INTRICATE_DETAIL_PIPELINE", default="1" if strict_quality_requested(request) else "0")
     if not enabled:
         return mesh
     quality = str(request.get("quality") or "standard").lower()
@@ -1112,7 +1148,7 @@ def apply_intricate_detail_pipeline(mesh: trimesh.Trimesh, request: dict[str, An
     if not wants_detail:
         return mesh
     try:
-        target_faces = int(os.environ.get("MESHMEND_INTRICATE_DETAIL_FACES", "900000"))
+        target_faces = memory_safe_face_target(int(os.environ.get("MESHMEND_INTRICATE_DETAIL_FACES", "220000")))
         mesh = subdivide_to_faces(mesh, max(len(mesh.faces), target_faces))
         vertices = np.asarray(mesh.vertices, dtype=float)
         if len(vertices) < 1000:
@@ -1585,13 +1621,12 @@ def detail_face_target(request: dict[str, Any]) -> int:
     )
     requested_polycount = int(request.get("target_polycount") or 0)
     if quality == "high" or wants_8k:
-        # Studio/8K miniature exports need real surface density for sculpted
-        # relief, not just a 2-4M subdivided smooth shell. Keep this overridable
-        # for slower machines, but default high-quality jobs into a denser pass.
-        default = str(max(1_200_000, min(requested_polycount or 1_500_000, 2_000_000)))
+        # Local high-quality mode must stay memory-safe. Million-face requests
+        # become 3-5M faces after 4x subdivision jumps and can freeze PCs.
+        default = str(max(180_000, min(requested_polycount or 180_000, 300_000)))
     else:
-        default = str(max(450_000, min(requested_polycount, 1_200_000)))
-    return int(os.environ.get("MESHMEND_MIN_EXPORT_FACES", default))
+        default = str(max(90_000, min(requested_polycount or 90_000, 180_000)))
+    return memory_safe_face_target(int(os.environ.get("MESHMEND_MIN_EXPORT_FACES", default)))
 
 
 def repair_structural_quality_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_faces_target: int) -> tuple[trimesh.Trimesh, bool]:
@@ -1652,6 +1687,8 @@ def ensure_printable_solid_mesh(mesh: trimesh.Trimesh, request: dict[str, Any]) 
             return mesh
         default_pitch = "0.16" if source_workflow == "image_to_3d" else "0.24"
         pitch = float(os.environ.get("MESHMEND_SOLIDIFY_VOXEL_PITCH_MM", default_pitch))
+        if memory_safety_enabled():
+            pitch = max(pitch, float(os.environ.get("MESHMEND_MEMORY_SAFE_SOLIDIFY_VOXEL_PITCH_MM", "0.28")))
         pitch = max(0.06, min(pitch, max_extent / 48.0))
         voxels = repaired.voxelized(pitch).fill()
         solid = voxels.marching_cubes
@@ -1854,16 +1891,19 @@ def denoise_surface_bumps(mesh: trimesh.Trimesh, request: dict[str, Any]) -> tri
         if len(mesh.vertices) < 1000 or len(mesh.faces) < 1000:
             return mesh
         source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
+        strict_quality = strict_quality_requested(request)
         smoothed = mesh.copy()
         metadata = dict(mesh.metadata)
         try:
             from trimesh.smoothing import filter_laplacian, filter_taubin
 
-            default_iterations = "4" if source_workflow in {"image_to_3d", "text_to_3d"} else "4"
+            default_iterations = "1" if strict_quality else ("2" if source_workflow in {"image_to_3d", "text_to_3d"} else "3")
             iterations = int(os.environ.get("MESHMEND_DENOISE_ITERATIONS", default_iterations))
-            lamb = float(os.environ.get("MESHMEND_DENOISE_LAMBDA", "0.28"))
+            default_lamb = "0.06" if strict_quality else "0.18"
+            lamb = float(os.environ.get("MESHMEND_DENOISE_LAMBDA", default_lamb))
             if source_workflow in {"image_to_3d", "text_to_3d"} and os.environ.get("MESHMEND_DENOISE_FILTER", "taubin").strip().lower() == "taubin":
-                nu = float(os.environ.get("MESHMEND_DENOISE_NU", "0.33"))
+                default_nu = "-0.065" if strict_quality else "-0.19"
+                nu = float(os.environ.get("MESHMEND_DENOISE_NU", default_nu))
                 filter_taubin(smoothed, lamb=lamb, nu=nu, iterations=iterations)
             else:
                 filter_laplacian(smoothed, lamb=lamb, iterations=iterations)
@@ -2020,8 +2060,10 @@ def fatal_quality_gate_issues(issues: list[str]) -> list[str]:
         "image_reference_under_defined",
         "image_visual_holes_unsealed",
         "image_low_relief_sheet",
-        "likely_blocky_low_definition",
+        "large_smooth_primitive_surfaces_dominate",
         "likely_background_slab_or_card",
+        "likely_horizontal_square_sheet_or_card",
+        "likely_blocky_low_definition",
     )
     return [issue for issue in issues if issue.startswith(fatal_prefixes)]
 
@@ -2054,8 +2096,14 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
         issues.append("image_low_relief_sheet_or_connected_card")
     if likely_background_slab(mesh, request):
         issues.append("likely_background_slab_or_card")
+    if likely_horizontal_sheet_card(mesh):
+        issues.append("likely_horizontal_square_sheet_or_card")
     if likely_blocky_low_definition(mesh):
         issues.append("likely_blocky_low_definition")
+    smooth_ratio = smooth_surface_area_ratio(mesh)
+    smooth_limit = float(os.environ.get("MESHMEND_MAX_SMOOTH_PRIMITIVE_SURFACE_RATIO", "0.68"))
+    if smooth_ratio > smooth_limit and not has_miniature_detail_metadata(mesh):
+        issues.append(f"large_smooth_primitive_surfaces_dominate_{smooth_ratio:.2f}_max_{smooth_limit:.2f}")
     if not bool(mesh.is_watertight):
         issues.append("mesh_not_solid_watertight")
     boundary_edges = _boundary_edge_count(mesh)
@@ -2074,15 +2122,41 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
     if component_count > max_components:
         issues.append(f"too_many_disconnected_components_{component_count}_max_{max_components}")
     issues.extend(artifact_salvage_quality_issues(mesh, source_workflow))
-    if synthetic_detail_enabled("MESHMEND_ENABLE_CUSTOM_MINIATURE_DETAIL_PIPELINE", default="0") and not bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline")):
+    if synthetic_detail_enabled("MESHMEND_ENABLE_CUSTOM_MINIATURE_DETAIL_PIPELINE", default="1") and not bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline")):
         issues.append("custom_miniature_detail_pipeline_not_applied")
-    if synthetic_detail_enabled("MESHMEND_ENABLE_INTRICATE_DETAIL_PIPELINE", default="0") and not bool(mesh.metadata.get("meshmend_intricate_detail_pipeline")):
+    if synthetic_detail_enabled("MESHMEND_ENABLE_INTRICATE_DETAIL_PIPELINE", default="1") and not bool(mesh.metadata.get("meshmend_intricate_detail_pipeline")):
         issues.append("intricate_detail_pipeline_not_applied")
-    if synthetic_detail_enabled("MESHMEND_ENABLE_GEOMETRY_UPSCALE", default="0") and not bool(mesh.metadata.get("meshmend_geometry_upscale")):
+    if synthetic_detail_enabled("MESHMEND_ENABLE_GEOMETRY_UPSCALE", default="1") and not bool(mesh.metadata.get("meshmend_geometry_upscale")):
         issues.append("geometry_upscale_not_applied")
     if os.environ.get("MESHMEND_REQUIRE_AI_DEFINITION_LAYER", "0").strip().lower() in {"1", "true", "yes"} and not bool(mesh.metadata.get("meshmend_ai_definition_layer")):
         issues.append("ai_training_definition_layer_not_applied")
     return issues
+
+
+def smooth_surface_area_ratio(mesh: trimesh.Trimesh) -> float:
+    if len(mesh.faces) == 0 or len(mesh.face_adjacency) == 0:
+        return 1.0
+    areas = np.asarray(mesh.area_faces, dtype=float)
+    total_area = max(float(areas.sum()), 1e-8)
+    adjacency = np.asarray(mesh.face_adjacency, dtype=np.int64)
+    angles = np.asarray(mesh.face_adjacency_angles, dtype=float)
+    smooth_faces = np.zeros(len(mesh.faces), dtype=bool)
+    smooth_pairs = adjacency[angles < np.radians(7.5)]
+    if len(smooth_pairs):
+        smooth_faces[np.unique(smooth_pairs)] = True
+    return float(areas[smooth_faces].sum() / total_area)
+
+
+def has_miniature_detail_metadata(mesh: trimesh.Trimesh) -> bool:
+    metadata = getattr(mesh, "metadata", {}) or {}
+    return all(
+        bool(metadata.get(key))
+        for key in (
+            "meshmend_custom_miniature_detail_pipeline",
+            "meshmend_intricate_detail_pipeline",
+            "meshmend_geometry_upscale",
+        )
+    )
 
 
 def artifact_salvage_quality_issues(mesh: trimesh.Trimesh, source_workflow: str) -> list[str]:
@@ -2145,6 +2219,23 @@ def likely_blocky_low_definition(mesh: trimesh.Trimesh) -> bool:
             return True
         ext = np.maximum(np.asarray(mesh.extents, dtype=float), 1e-6)
         depth_ratio = float(ext.min() / max(ext.max(), 1e-6))
+        metadata = getattr(mesh, "metadata", {}) or {}
+        has_detail_pipeline = any(
+            bool(metadata.get(key))
+            for key in (
+                "meshmend_image_guided_detail",
+                "meshmend_custom_miniature_detail_pipeline",
+                "meshmend_intricate_detail_pipeline",
+                "meshmend_image_store_density_restored",
+            )
+        )
+        if (
+            has_detail_pipeline
+            and bool(mesh.is_watertight)
+            and len(mesh.faces) >= int(os.environ.get("MESHMEND_BLOCKY_EXEMPT_MIN_FACES", "1000000"))
+            and depth_ratio >= float(os.environ.get("MESHMEND_BLOCKY_EXEMPT_MIN_DEPTH_RATIO", "0.45"))
+        ):
+            return False
         normals = np.asarray(mesh.face_normals, dtype=float)
         areas = np.asarray(mesh.area_faces, dtype=float)
         if normals.shape[0] != areas.shape[0] or float(areas.sum()) <= 1e-8:
@@ -2225,6 +2316,50 @@ def likely_background_slab(mesh: trimesh.Trimesh, request: dict[str, Any] | None
                 if coverage >= min_coverage:
                     return True
         return False
+    except Exception:
+        return False
+
+
+def likely_horizontal_sheet_card(mesh: trimesh.Trimesh) -> bool:
+    """Detect square floor/cards that survive as a connected bottom sheet.
+
+    A legitimate round miniature base can have a flat bottom, but it occupies a
+    circular footprint. Hunyuan/card artifacts usually form a nearly rectangular
+    plane covering almost the entire XY bounding box. Use occupancy, not just
+    area, so a round base is not mistaken for a sheet.
+    """
+    try:
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        faces = np.asarray(mesh.faces)
+        if len(vertices) < 1000 or len(faces) < 1000:
+            return False
+        mins = vertices.min(axis=0)
+        maxs = vertices.max(axis=0)
+        ext = np.maximum(maxs - mins, 1e-6)
+        centers = vertices[faces].mean(axis=1)
+        normals = np.asarray(mesh.face_normals, dtype=float)
+        areas = np.asarray(mesh.area_faces, dtype=float)
+        total_area = float(areas.sum())
+        if total_area <= 1e-8:
+            return False
+        near_bottom = np.abs(centers[:, 2] - mins[2]) < ext[2] * float(os.environ.get("MESHMEND_HORIZONTAL_CARD_Z_TOLERANCE", "0.06"))
+        flat_bottom = np.abs(normals[:, 2]) > float(os.environ.get("MESHMEND_HORIZONTAL_CARD_NORMAL_DOT", "0.70"))
+        candidate = near_bottom & flat_bottom
+        if int(candidate.sum()) < max(500, int(len(faces) * 0.01)):
+            return False
+        area_ratio = float(areas[candidate].sum() / total_area)
+        if area_ratio < float(os.environ.get("MESHMEND_HORIZONTAL_CARD_MIN_AREA_RATIO", "0.16")):
+            return False
+        cand_centers = centers[candidate]
+        footprint = np.maximum(cand_centers[:, :2].max(axis=0) - cand_centers[:, :2].min(axis=0), 1e-6)
+        coverage = float(np.prod(footprint) / max(np.prod(ext[:2]), 1e-6))
+        if coverage < float(os.environ.get("MESHMEND_HORIZONTAL_CARD_MIN_COVERAGE", "0.86")):
+            return False
+        bins = int(os.environ.get("MESHMEND_HORIZONTAL_CARD_OCCUPANCY_BINS", "40"))
+        normalized = (cand_centers[:, :2] - mins[:2]) / ext[:2]
+        hist, _, _ = np.histogram2d(normalized[:, 0], normalized[:, 1], bins=bins, range=[[0.0, 1.0], [0.0, 1.0]])
+        occupancy = float((hist > 0).mean())
+        return occupancy >= float(os.environ.get("MESHMEND_HORIZONTAL_CARD_MIN_OCCUPANCY", "0.82"))
     except Exception:
         return False
 

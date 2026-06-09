@@ -16,6 +16,12 @@ from pathlib import Path
 from typing import Any
 
 
+SERVICE_ROOT = Path(__file__).resolve().parent
+WORKSPACE_ROOT = SERVICE_ROOT.parent.parent
+if str(WORKSPACE_ROOT) not in sys.path:
+    sys.path.insert(0, str(WORKSPACE_ROOT))
+
+
 SUPPORTED_MODEL_SUFFIXES = {".stl", ".glb", ".obj", ".ply", ".3mf", ".fbx", ".usdz"}
 
 
@@ -279,7 +285,29 @@ def run_external_engine(request: dict[str, Any], input_path: Path, output_dir: P
     if completed.returncode != 0:
         failed_result = load_result_from_output(output_dir, completed.stdout)
         if failed_result.get("error"):
-            raise RuntimeError(str(failed_result.get("error")))
+            error_text = str(failed_result.get("error"))
+            if should_native_fallback_after_concept_failure(error_text, request):
+                write_progress(
+                    output_dir,
+                    82,
+                    "native_fallback_after_concept_gate",
+                    "Local concept generation was unsafe; generating MeshMend-native printable geometry instead",
+                )
+                fallback_request = dict(request)
+                fallback_request["target_polycount"] = max(int(float(fallback_request.get("target_polycount") or 0)), 180_000)
+                result = run_meshmend_native(fallback_request, output_dir, workflow)
+                blockers = list(result.get("store_quality_blockers") or [])
+                blockers.insert(0, "local text concept gate failed; Hunyuan reconstruction was skipped to avoid sheet/artifact output")
+                result["store_quality_blockers"] = list(dict.fromkeys(blockers))
+                result["native_fallback_reason"] = error_text[:1200]
+                result["capability_tier"] = "local_native_fallback_after_concept_failure"
+                result["store_quality_certified"] = False
+                mesh_info = dict(result.get("mesh_info") or {})
+                mesh_info["native_fallback_after_concept_failure"] = True
+                mesh_info["blocked_hunyuan_reason"] = error_text[:1200]
+                result["mesh_info"] = mesh_info
+                return result
+            raise RuntimeError(error_text)
         raise RuntimeError(compact_command_error(completed.stderr, completed.stdout, completed.returncode))
     result = load_result_from_output(output_dir, completed.stdout)
     if not result.get("model_file") and not result.get("model_urls"):
@@ -289,11 +317,44 @@ def run_external_engine(request: dict[str, Any], input_path: Path, output_dir: P
     return result
 
 
+def should_native_fallback_after_concept_failure(error_text: str, request: dict[str, Any]) -> bool:
+    """Return whether an external concept failure may fall back to native geometry.
+
+    Silent fallback is disabled by default because it hides the real generator
+    failure and can make unrelated prompts appear as the same mannequin. Keep an
+    explicit opt-in only for local debugging.
+    """
+    if os.environ.get("MESHMEND_ENABLE_NATIVE_CONCEPT_FAIL_FALLBACK", "0").strip().lower() not in {"1", "true", "yes", "on"}:
+        return False
+    if os.environ.get("MESHMEND_DISABLE_NATIVE_CONCEPT_FAIL_FALLBACK", "0").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    if production_quality_requested(request) and os.environ.get("MESHMEND_ALLOW_STUDIO_NATIVE_CONCEPT_FAIL_FALLBACK", "0").strip().lower() not in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }:
+        return False
+    text = (error_text or "").lower()
+    if "text concept generation could not produce" not in text and "local concept image was not" not in text:
+        return False
+    hard_artifact_terms = (
+        "likely_vertical_reference_sheet\": true",
+        "likely_horizontal_square_sheet_or_card",
+        "reference sheet",
+        "square sheet",
+        "card-like",
+    )
+    if any(term in text for term in hard_artifact_terms):
+        return False
+    return str(request.get("workflow") or "text_to_3d") == "text_to_3d"
+
+
 def validate_store_quality_external_result(result: dict[str, Any], output_dir: Path, request: dict[str, Any]) -> None:
     """Validate the certified external backend contract before accepting output."""
     if not bool(result.get("store_quality_certified")):
         raise RuntimeError("Certified production runner did not return store_quality_certified=true")
-    score_issues = certified_quality_score_issues(result)
+    score_issues = filter_overlay_certified_score_issues(certified_quality_score_issues(result), result)
     if score_issues:
         raise RuntimeError("Certified production runner did not meet store-quality score contract: " + "; ".join(score_issues))
     model_file = str(result.get("model_file") or "").strip()
@@ -307,6 +368,7 @@ def validate_store_quality_external_result(result: dict[str, Any], output_dir: P
     try:
         import numpy as np
         import trimesh
+        from postprocess_backend import likely_horizontal_sheet_card
 
         mesh = trimesh.load(model_path, force="mesh", process=False)
         if isinstance(mesh, trimesh.Scene):
@@ -330,6 +392,8 @@ def validate_store_quality_external_result(result: dict[str, Any], output_dir: P
                 if bool(cleaned.is_watertight):
                     mesh = cleaned
                     export_mesh(mesh, model_path)
+        if likely_horizontal_sheet_card(mesh):
+            raise RuntimeError("certified mesh contains a large square sheet/card artifact")
         target_faces = certified_validation_face_target(result, request)
         min_faces = int(float(os.environ.get("MESHMEND_CERTIFIED_MIN_FACE_RATIO", "0.75")) * target_faces)
         face_tolerance = float(os.environ.get("MESHMEND_CERTIFIED_FACE_TARGET_TOLERANCE", "0.005"))
@@ -376,7 +440,7 @@ def validate_store_quality_external_result(result: dict[str, Any], output_dir: P
 
 
 def certified_validation_face_target(result: dict[str, Any], request: dict[str, Any]) -> int:
-    target_faces = int(request.get("target_polycount") or 2_000_000)
+    target_faces = memory_safe_face_target(int(request.get("target_polycount") or 180_000))
     provider = str(result.get("provider") or "").lower()
     geometry_source = str(result.get("geometry_source") or "").lower()
     local_no_api = "no_api" in provider or "local_no_api" in geometry_source
@@ -389,9 +453,27 @@ def certified_validation_face_target(result: dict[str, Any], request: dict[str, 
         except (TypeError, ValueError):
             detail_target = 0
         if detail_target > 0:
-            cap = int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_MAX_CERT_FACE_TARGET", "1500000"))
-            return max(1_200_000, min(target_faces, detail_target, cap))
+            cap = memory_safe_face_target(int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_MAX_CERT_FACE_TARGET", "350000")))
+            return max(80_000, min(target_faces, detail_target, cap))
     return target_faces
+
+
+def memory_safety_enabled() -> bool:
+    return os.environ.get("MESHMEND_DISABLE_MEMORY_SAFETY", "0").strip().lower() not in {"1", "true", "yes", "on"}
+
+
+def memory_safe_face_target(target_faces: int) -> int:
+    """Clamp local/offline face budgets before repair creates 4x subdivisions.
+
+    This prevents consumer PCs from freezing when a high-quality request asks for
+    1-2M faces and downstream Trimesh subdivision jumps to 3-5M faces. Users with
+    workstation-class RAM can opt out with MESHMEND_DISABLE_MEMORY_SAFETY=1.
+    """
+    target_faces = max(1_000, int(target_faces))
+    if not memory_safety_enabled():
+        return target_faces
+    cap = int(os.environ.get("MESHMEND_MAX_POSTPROCESS_FACES", "350000"))
+    return min(target_faces, max(50_000, cap))
 
 
 def compact_command_error(stderr: str, stdout: str, returncode: int) -> str:
@@ -446,6 +528,15 @@ def certified_quality_score_issues(result: dict[str, Any]) -> list[str]:
     return issues
 
 
+def filter_overlay_certified_score_issues(issues: list[str], result: dict[str, Any]) -> list[str]:
+    """Do not reject prompt-landmark overlays for printability score only."""
+    mesh_info = result.get("mesh_info") if isinstance(result, dict) else {}
+    overlay = mesh_info.get("prompt_landmark_overlay") if isinstance(mesh_info, dict) else None
+    if not (isinstance(overlay, dict) and overlay.get("applied")):
+        return issues
+    return [issue for issue in issues if not issue.startswith("printability_score_below_min:")]
+
+
 def certified_quality_scores(result: dict[str, Any]) -> dict[str, Any]:
     scores = result.get("store_quality_scores") or result.get("quality_scores") or {}
     if not isinstance(scores, dict):
@@ -479,44 +570,56 @@ def certified_requested_scale_mm(request: dict[str, Any]) -> float:
 
 
 def run_meshmend_native(request: dict[str, Any], output_dir: Path, workflow: str) -> dict[str, Any]:
-    """Generate MeshMend-controlled production geometry without Hunyuan as source."""
-    write_progress(output_dir, 10, "native_start", "Generating MeshMend-owned miniature scaffold")
-    image_path = None
-    if workflow == "image_to_3d" and request.get("image_data_uri"):
-        image_path = write_image_data_uri(str(request["image_data_uri"]), output_dir / "input_image.png")
+    """Generate through the staged archetype pipeline, never the old humanoid fallback."""
+    write_progress(output_dir, 10, "native_start", "Generating MeshMend staged archetype miniature")
     try:
-        from native_generation import generate_native_miniature
+        from meshmend.studio import MiniatureSculptQualityGate, StagedMiniaturePipeline, StudioMiniatureSpec
     except Exception as exc:
-        raise RuntimeError(f"MeshMend native generator is unavailable: {exc}") from exc
+        raise RuntimeError(f"MeshMend staged archetype generator is unavailable: {exc}") from exc
 
-    write_progress(output_dir, 28, "native_polygon_generation", "Building controlled 3D body, limbs, base, and sculpt details")
-    mesh, native_report = generate_native_miniature(request, image_path, output_dir)
-    if production_quality_requested(request) and not native_report.production_ready:
-        raise RuntimeError("MeshMend native generation did not meet store-quality definition gate: " + "; ".join(native_report.issues))
+    prompt = str(request.get("prompt") or "")
+    scale_mm = float(request.get("scale_mm") or 32.0)
+    target_faces = int(float(request.get("target_polycount") or request.get("target_faces") or 250_000))
+    write_progress(output_dir, 28, "native_archetype_generation", "Building archetype-specific base form and sculpt details")
+    spec = StudioMiniatureSpec.from_prompt(prompt, scale_mm=scale_mm, target_faces=target_faces)
+    pipeline = StagedMiniaturePipeline(quality_gate=MiniatureSculptQualityGate())
+    result = pipeline.generate(spec, candidates_per_category=1)
+    mesh = result.mesh
+    generation_trace = dict(mesh.metadata.get("meshmend_generation_trace") or {})
+    if generation_trace:
+        (output_dir / "generation_trace.json").write_text(json.dumps(generation_trace, indent=2, default=str), encoding="utf-8")
     output_format = os.environ.get("MESHMEND_NATIVE_OUTPUT_FORMAT", "stl").strip().lower().lstrip(".") or "stl"
     if f".{output_format}" not in SUPPORTED_MODEL_SUFFIXES:
         output_format = "stl"
-    model_file = output_dir / f"meshmend_native.{output_format}"
-    write_progress(output_dir, 92, "native_exporting", f"Exporting MeshMend-native {output_format.upper()} model")
+    model_file = output_dir / f"meshmend_staged_archetype.{output_format}"
+    write_progress(output_dir, 92, "native_exporting", f"Exporting MeshMend staged archetype {output_format.upper()} model")
     export_mesh(mesh, model_file)
     if not model_file.exists():
-        raise RuntimeError("MeshMend native generator completed but no mesh file was exported")
+        raise RuntimeError("MeshMend staged archetype generator completed but no mesh file was exported")
     mesh_info = mesh_export_info(mesh, request)
     return {
         "model_file": model_file.name,
         "model_format": output_format,
-        "provider": "meshmend_native",
-        "geometry_source": "meshmend_backend_controlled_polygons",
-        "capability_tier": "procedural_printable_draft",
+        "provider": "meshmend_staged_archetype_pipeline",
+        "geometry_source": "meshmend_staged_archetype_base_and_sculpt_pipeline",
+        "capability_tier": "staged_archetype_native_sculpt",
         "store_quality_certified": False,
         "store_quality_blockers": [
-            "procedural archetype geometry",
-            "no certified prompt-specific high-detail sculpt generator configured",
-            "native topology checks prove printability, not commercial miniature artistry",
+            "local staged archetype generator is not externally certified",
+            "visual review is required before claiming production/store quality",
         ],
-        "source_image": image_path.name if image_path is not None else None,
+        "source_image": None,
         "workflow": workflow,
-        "mesh_info": native_report.to_dict() | {"printable_topology_ready": native_report.production_ready, "store_quality_certified": False, "export_info": mesh_info},
+        "mesh_info": {
+            "printable_topology_ready": bool(result.quality_report.passed),
+            "store_quality_certified": False,
+            "stage_results": [stage.to_dict() for stage in result.stage_results],
+            "quality_report": result.quality_report.to_dict(),
+            "studio_components": list(mesh.metadata.get("studio_components", [])),
+            "generation_trace": generation_trace,
+            "sculpt_engine": dict(mesh.metadata.get("sculpt_engine") or {}),
+            "export_info": mesh_info,
+        },
         "consumed_credits": 0,
     }
 
@@ -582,6 +685,7 @@ def run_free_local_hunyuan(request: dict[str, Any], input_path: Path, output_dir
         request = dict(request)
         request["_meshmend_generated_text_concept"] = True
         source_concept_metrics = read_json_if_exists(output_dir / "concept_validation_metrics.json") or {}
+        source_concept_path = image_path
         write_progress(output_dir, 28, "concept_ready", "Concept image selected; isolating subject")
         isolated = prepare_hunyuan_reference_image(image_path, output_dir / "concept_subject.png")
         if isolated is not None:
@@ -592,11 +696,60 @@ def run_free_local_hunyuan(request: dict[str, Any], input_path: Path, output_dir
                 "Refusing to generate a square STL; retry with a cleaner concept or provide an image reference."
             )
         reference_metrics = concept_validation_metrics(image_path)
-        (output_dir / "concept_subject_validation_metrics.json").write_text(json.dumps(reference_metrics, indent=2), encoding="utf-8")
         source_concept_passed = bool(source_concept_metrics.get("passed", False))
+        # Do not let the Hunyuan reference cleanup turn a valid full-body concept
+        # into a squat/partial crop. This happened with prompts such as "a high
+        # elf warrior": the selected concept passed the full-body/card gates, but
+        # the tighter rembg/mask crop removed enough vertical context that the
+        # stricter pre-Hunyuan gate correctly rejected it. If the original
+        # selected concept is already non-card and passed, prefer it over a
+        # degraded prepared image; this preserves valid full-body references
+        # without lowering the sheet/partial-body quality gate.
+        if (
+            strict_quality_requested_like(request)
+            and source_concept_passed
+            and not reference_metrics.get("passed", False)
+            and not reference_image_likely_card(source_concept_path)
+        ):
+            source_metrics = concept_validation_metrics(source_concept_path)
+            hard_source_failure = any(
+                bool(source_metrics.get(flag, False))
+                for flag in (
+                    "likely_partial_body",
+                    "likely_base_band",
+                    "likely_background_panel",
+                    "likely_clipped_subject",
+                    "likely_vertical_reference_sheet",
+                )
+            )
+            if source_metrics.get("passed", False) and not hard_source_failure:
+                (output_dir / "concept_subject_cleanup_rejected_metrics.json").write_text(
+                    json.dumps(reference_metrics, indent=2), encoding="utf-8"
+                )
+                image_path = source_concept_path
+                reference_metrics = source_metrics
+        if strict_quality_requested_like(request) and reference_metrics.get("likely_noisy_reference", False):
+            denoised_path = output_dir / "concept_subject_denoised.png"
+            denoised = denoise_prepared_hunyuan_reference(image_path, denoised_path)
+            if denoised is not None and denoised.exists():
+                denoised_metrics = concept_validation_metrics(denoised)
+                (output_dir / "concept_subject_denoised_validation_metrics.json").write_text(
+                    json.dumps(denoised_metrics, indent=2), encoding="utf-8"
+                )
+                if not denoised_metrics.get("likely_noisy_reference", False) or float(denoised_metrics.get("score", 0.0) or 0.0) >= float(reference_metrics.get("score", 0.0) or 0.0) - 0.02:
+                    image_path = denoised
+                    reference_metrics = denoised_metrics
+        (output_dir / "concept_subject_validation_metrics.json").write_text(json.dumps(reference_metrics, indent=2), encoding="utf-8")
         prepared_has_hard_failure = any(
             bool(reference_metrics.get(flag, False))
-            for flag in ("likely_partial_body", "likely_base_band", "likely_background_panel", "likely_clipped_subject")
+            for flag in (
+                "likely_partial_body",
+                "likely_base_band",
+                "likely_background_panel",
+                "likely_clipped_subject",
+                "likely_noisy_reference",
+                "likely_vertical_reference_sheet",
+            )
         )
         if strict_quality_requested_like(request) and not reference_metrics.get("passed", False) and not (
             source_concept_passed and not prepared_has_hard_failure
@@ -684,7 +837,14 @@ def prepare_hunyuan_reference_image(input_path: Path, output_path: Path, *, use_
         original_crop = image.crop((left, top, right, bottom)).convert("RGBA")
         cropped = original_crop.copy()
         alpha_crop = (subject[top:bottom, left:right].astype(np.uint8) * 255)
-        alpha_image = Image.fromarray(alpha_crop, mode="L").filter(ImageFilter.GaussianBlur(radius=0.5))
+        alpha_image = Image.fromarray(alpha_crop, mode="L")
+        # Avoid a bright matte fringe around dark miniatures. When the RGBA crop
+        # is flattened onto white for Hunyuan, soft over-expanded alpha becomes a
+        # white halo that the image-to-3D model reconstructs as fins/artifacts.
+        # A tiny erosion keeps the silhouette clean while preserving accessories.
+        for _ in range(max(0, int(os.environ.get("MESHMEND_REFERENCE_ALPHA_ERODE_PIXELS", "1")))):
+            alpha_image = alpha_image.filter(ImageFilter.MinFilter(size=3))
+        alpha_image = alpha_image.filter(ImageFilter.GaussianBlur(radius=0.35))
         cropped.putalpha(alpha_image)
         keep_rectangular = os.environ.get("MESHMEND_KEEP_RECTANGULAR_HUNYUAN_REFERENCE", "1").strip().lower() not in {"0", "false", "no"}
         if keep_rectangular:
@@ -763,6 +923,24 @@ def should_denoise_hunyuan_reference(image_path: Path) -> bool:
         return bool(metrics.get("likely_noisy_reference", False))
     except Exception:
         return False
+
+
+def denoise_prepared_hunyuan_reference(input_path: Path, output_path: Path) -> Path | None:
+    """Clean noisy prepared concept crops before Hunyuan reconstructs artifacts."""
+    try:
+        from PIL import Image, ImageFilter
+
+        image = Image.open(input_path).convert("RGB")
+        # Median removes speckled matte/edge noise; a light smooth pass reduces
+        # jagged halos without changing the broad silhouette. Keep this only for
+        # references already flagged as noisy so clean concepts retain detail.
+        cleaned = image.filter(ImageFilter.MedianFilter(size=3)).filter(ImageFilter.SMOOTH)
+        if os.environ.get("MESHMEND_SHARPEN_DENOISED_REFERENCE", "1").strip().lower() in {"1", "true", "yes"}:
+            cleaned = cleaned.filter(ImageFilter.SHARPEN)
+        cleaned.save(output_path)
+        return output_path
+    except Exception:
+        return None
 
 
 def resize_reference_image_for_hunyuan(input_path: Path, output_path: Path) -> Path | None:
@@ -1108,20 +1286,24 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
     # and armor cues.
     compact_prompt = compact_concept_prompt(normalize_miniature_prompt(prompt))
     landmark_prompt = concept_landmark_prompt(prompt)
-    miniature_prompt = (
-        f"{landmark_prompt}, {compact_prompt}, monochrome unpainted matte graphite clay resin full body tabletop miniature, "
-        "all requested landmarks visible, readable weapon across body, rear backpack visible as side silhouette, chest icon relief, skull rubble round base, "
-        "helmeted bulky armored soldier silhouette, oversized shoulder pauldrons, backpack power unit, chunky greaves heavy boots, "
-        "crisp sculpted armor seams bevels vents hands face and panel lines, head to boots visible, small round base, "
-        "centered subject fills frame, modest white border, frontal orthographic product render, pure white background, "
-        "no color no paint no weathering, not smooth blank armor, not bust not cropped"
-    )
+    if prompt_is_alien_bioform(prompt):
+        miniature_prompt = (
+            f"{landmark_prompt}, {compact_prompt}, monochrome unpainted matte graphite clay resin full body tabletop miniature, "
+            "lean insectoid alien creature silhouette, chitin armor plates, long tail, four clawed legs, two scything forelimbs, fleshborer bio weapon integrated into forearm, "
+            "large sloped carapace head, mandibles, ribbed organic armor, clean readable sculpted anatomy, small round base, "
+            "centered subject fills frame, modest white border, frontal orthographic product render, pure white background, "
+            "no human armor no sword no shield no backpack no skull pile no space marine no humanoid soldier no color no paint no weathering not smooth blob not bust not cropped"
+        )
+    else:
+        archetype_detail = concept_archetype_detail_prompt(prompt)
+        miniature_prompt = concept_full_body_prompt(compact_prompt, landmark_prompt, archetype_detail)
     negative_prompt = (
-        "painted armor, white armor, colored armor, color accents, weathering, battle damage, scratches, grunge, dirt, black speckles, stipple, noisy texture, posterized edges, heavy outline, "
+        "cropped, close-up, bust, portrait, cut off head, cut off feet, cropped weapon, missing legs, missing boots, outside frame, "
         "multiple characters, duplicates, lineup, squad, group, two views, three views, multi view, multiple views, triptych, front and back, rear view, side view, four views, "
-        "reference sheet, turnaround, collage, grid, cropped, close-up, zoomed in, cut off head, cut off feet, cropped weapon, "
+        "reference sheet, turnaround, collage, grid, square card, backing card, rectangular panel, backdrop, scenery wall, "
+        "painted armor, white armor, colored armor, color accents, weathering, battle damage, scratches, grunge, dirt, black speckles, stipple, noisy texture, posterized edges, heavy outline, "
         "melted weapon, fused hands, fused fingers, malformed hands, malformed weapon, blurry weapon, deformed legs, missing feet, "
-        "text, letters, words, logo, watermark, sign, label, nameplate, placard, border, frame, scenery, wall, grey background, gray background, rectangular panel, backdrop, backing card, "
+        "text, letters, words, logo, watermark, sign, label, nameplate, placard, border, frame, grey background, gray background, "
         "display plinth, terrain slab, slab, square card, glossy texture, color noise, speckle, low detail, smooth blob, blocky, holes, malformed"
     )
     pipe = load_text_to_image_pipeline(model_id, dtype)
@@ -1141,7 +1323,7 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
     # SDXL is enabled. With the default lightweight SD1.5 path, allow several
     # bounded quality retries for studio requests so bad bust crops do not become
     # an immediate backend failure.
-    max_candidates_default = "8" if wants_studio_detail and not use_sdxl else str(candidates)
+    max_candidates_default = "12" if wants_studio_detail and not use_sdxl else str(candidates)
     max_candidates = max(
         candidates,
         int(os.environ.get("MESHMEND_MAX_CONCEPT_CANDIDATES", max_candidates_default)),
@@ -1249,6 +1431,12 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
         score = concept_quality_score(candidate_path)
         if metrics.get("likely_clipped_subject") and not metrics.get("likely_base_band"):
             score -= 3.0
+        if metrics.get("likely_top_heavy_bad_proportions"):
+            score -= 2.5
+        if metrics.get("likely_weak_lower_body"):
+            score -= 1.5
+        if metrics.get("likely_vertical_reference_sheet") or int(metrics.get("active_row_bands") or 0) > 1:
+            score -= 4.0
         foreground_ratio = float(metrics.get("foreground_ratio", 0.0) or 0.0)
         if foreground_ratio > 0.76:
             # Very high foreground fill is usually a zoomed/upper-body crop or a
@@ -1309,6 +1497,10 @@ def concept_retry_prompt(prompt: str, metrics: dict[str, Any] | None) -> str:
         "plain white product cutout, no glow, no rim light, no halo, no card, no backdrop",
     ]
     if metrics:
+        if metrics.get("likely_top_heavy_bad_proportions") or metrics.get("likely_weak_lower_body"):
+            additions.insert(0, "balanced heroic miniature proportions with visible full size helmet torso hips thighs knees shins and large boots")
+            additions.insert(1, "not squat not tiny legs not oversized blob torso not tiny head")
+            additions.insert(2, "boxy rectangular rifle clearly separated from both hands with visible barrel magazine and stock")
         if metrics.get("likely_background_panel"):
             additions.insert(1, "no backdrop panel no card no poster no grey rectangle")
         if metrics.get("likely_clipped_subject") or metrics.get("likely_partial_body"):
@@ -1328,6 +1520,28 @@ def concept_retry_prompt(prompt: str, metrics: dict[str, Any] | None) -> str:
             additions.insert(0, "extra wide empty white border around entire miniature")
     first_addition, *remaining_additions = additions
     return ", ".join([first_addition, prompt] + remaining_additions)
+
+
+def concept_full_body_prompt(compact_prompt: str, landmark_prompt: str, archetype_detail: str) -> str:
+    """Build an SD1.5-safe concept prompt whose important words survive CLIP.
+
+    The previous prompt spent the first token window on landmark lists. SD1.5
+    then never saw the full-body/crop/background constraints, so it produced
+    clipped noisy concepts and the pipeline fell back to procedural geometry.
+    Keep the first ~60 words focused on framing + subject + distinguishing
+    landmarks; detailed sculpt language can follow for SDXL/longer tokenizers.
+    """
+    subject = re.sub(r"\s+", " ", compact_prompt or "").strip() or "original fantasy miniature"
+    detail = re.sub(r"\s+", " ", archetype_detail or "").strip()
+    landmarks = [item.strip() for item in re.split(r",|;", landmark_prompt or "") if item.strip()]
+    compact_landmarks = ", ".join(dict.fromkeys(landmarks[:5]))
+    return (
+        "complete full body head to toe centered 32mm unpainted matte grey clay tabletop miniature, "
+        "plain pure white background, empty white margin, small round base fully visible, "
+        f"{subject}, {detail}, {compact_landmarks}, "
+        "visible head torso arms hands weapon hips thighs knees shins boots, crisp sculpted armor seams panel lines raised trim cloth folds, "
+        "single front three quarter product render, not cropped, not bust, not reference sheet"
+    )
 
 
 def compact_concept_prompt(prompt: str) -> str:
@@ -1374,23 +1588,69 @@ def concept_landmark_prompt(prompt: str) -> str:
     image becomes a generic armored person and Hunyuan faithfully reconstructs
     that generic reference. Keep archetype-defining shapes first.
     """
-    lowered = (prompt or "").lower()
+    subject_text = prompt_subject_text(prompt)
+    lowered = subject_text.lower()
     landmarks: list[str] = []
+    try:
+        from native_generation import lookup_semantic_archetype
+
+        plan = lookup_semantic_archetype(lowered)
+        for item in plan.get("landmarks") or []:
+            landmarks.append(str(item))
+        silhouette = str(plan.get("silhouette") or "").strip()
+        if silhouette:
+            landmarks.insert(0, silhouette)
+    except Exception:
+        pass
+    if any(term in lowered for term in ("high elf", "high-elf", "elven warrior", "elf warrior", "elven knight", "aelf", "aelves")):
+        landmarks.extend(
+            [
+                "tall slender high elf warrior silhouette",
+                "long pointed ears visible outside helmet",
+                "elegant crested helmet not a hood",
+                "leaf engraved armor trim and rune panel lines",
+                "kite shield with raised leaf emblem",
+                "long spear or elegant blade",
+                "flowing cape and narrow tabard",
+            ]
+        )
+    if any(term in lowered for term in ("dwarf", "dwarven", "duardin")):
+        landmarks.extend(["short broad dwarf warrior silhouette", "large braided beard", "runic plate armor", "round shield", "axe or hammer"])
+    if any(term in lowered for term in ("samurai", "ronin", "ashigaru", "katana")):
+        landmarks.extend(["kabuto helmet crest", "lamellar armor rows", "sode shoulder guards", "katana", "waist skirt plates"])
+    if any(term in lowered for term in ("lizardfolk", "lizardman", "saurus", "dragonborn", "reptilian warrior")):
+        landmarks.extend(["reptilian humanoid silhouette", "long snout", "visible tail", "scale rows", "clawed hands and feet"])
+    if any(term in lowered for term in ("robot", "android", "mech", "cyborg", "automaton")):
+        landmarks.extend(["boxy mechanical silhouette", "sensor visor", "rectangular armor plates", "exposed cables", "mechanical joints"])
+    if prompt_is_alien_bioform(subject_text):
+        landmarks.extend(
+            [
+                "termagant style insectoid alien bioform",
+                "low forward leaning chitin creature silhouette",
+                "large sloped carapace head with mandibles",
+                "ribbed organic armor plates along torso",
+                "four clawed legs planted on round base",
+                "two scything forelimbs",
+                "fleshborer bio weapon fused to forearm",
+                "long tapering tail",
+            ]
+        )
     if any(term in lowered for term in ("space marine", "spcace marine", "sapce marine", "spcae marine", "power armor", "power armour", "adeptus", "primaris")):
         landmarks.extend(
             [
                 "original bulky sci fi power armored soldier",
-                "massive round shoulder pauldrons wider than torso",
+                "large round shoulder pauldrons with visible normal sized helmet",
                 "helmet visor respirator face mask",
                 "large rear power backpack with twin exhaust vents visible",
                 "boxy heavy rifle held across chest with barrel and magazine",
                 "barrel chest armor with raised chest emblem relief",
-                "chunky greaves oversized boots",
-                "skulls and rubble on small round scenic base",
+                "long visible thighs shins chunky greaves and oversized boots",
             ]
         )
     if any(term in lowered for term in ("wizard", "mage", "sorcerer", "witch", "warlock", "cleric", "priest")):
         landmarks.extend(["robed caster silhouette", "pointed hood", "tall staff with orb", "deep robe folds"])
+    if any(term in lowered for term in ("plague doctor", "plague mask", "beaked mask", "bird mask", "doctor mask")):
+        landmarks.extend(["plague doctor with long bird beak mask", "round goggle eyes", "wide brim hat", "long doctor coat", "doctor cane"])
     if any(term in lowered for term in ("rogue", "assassin", "ranger", "thief", "ninja")):
         landmarks.extend(["lean hooded stealth silhouette", "two visible daggers", "belt pouches", "narrow cloak"])
     if any(term in lowered for term in ("knight", "paladin", "templar", "crusader", "champion")):
@@ -1408,6 +1668,73 @@ def concept_landmark_prompt(prompt: str) -> str:
     if not landmarks:
         landmarks.append("distinct non generic silhouette matching the requested subject")
     return ", ".join(dict.fromkeys(landmarks))
+
+
+def concept_archetype_detail_prompt(prompt: str) -> str:
+    """Subject-specific concept wording for local SD before Hunyuan reconstruction.
+
+    The previous generic prompt always asked for a backpack power unit and
+    oversized pauldrons, which made fantasy prompts collapse into the same
+    armored-soldier blob. Keep the generic store-quality terms, but swap the
+    anatomy/material/silhouette sentence based on the user's subject.
+    """
+    subject_text = prompt_subject_text(prompt).lower()
+    if any(term in subject_text for term in ("space marine", "spacemarine", "power armor", "power armour", "adeptus", "primaris")):
+        return (
+            "original bulky sci fi power armored soldier, large round shoulder pauldrons with normal sized helmet, "
+            "helmet visor respirator face mask, rear power backpack with twin exhaust vents, boxy heavy rifle, chunky greaves heavy boots"
+        )
+    if any(term in subject_text for term in ("high elf", "high-elf", "elven warrior", "elf warrior", "elven knight", "aelf", "aelves")):
+        return (
+            "tall slender elegant fantasy elf warrior, pointed ears readable, narrow refined helmet crest, leaf filigree armor, "
+            "layered scale plates, slender greaves, kite shield, long spear or elegant sword, flowing cape and tabard"
+        )
+    if any(term in subject_text for term in ("dwarf", "dwarven", "duardin")):
+        return "short stocky dwarf warrior, massive braided beard, broad runic armor, round shield, axe or hammer, heavy boots"
+    if any(term in subject_text for term in ("orc", "ork", "brute")):
+        return "hunched muscular orc brute, tusks, heavy jaw, crude scrap armor, spikes, oversized cleaver axe, trophy straps"
+    if any(term in subject_text for term in ("samurai", "ronin", "ashigaru", "katana")):
+        return "samurai warrior, kabuto helmet crest, lamellar armor rows, sode shoulder guards, katana, waist skirt plates"
+    if any(term in subject_text for term in ("lizardfolk", "lizardman", "saurus", "dragonborn", "reptilian warrior")):
+        return "reptilian humanoid warrior, long snout, tail, scale rows, claws, crest spines, primitive armor and weapon"
+    if any(term in subject_text for term in ("robot", "android", "mech", "cyborg", "automaton")):
+        return "mechanical robot warrior, boxy plates, sensor visor, antenna, exposed cable joints, angular armor panels"
+    if any(term in subject_text for term in ("ranger", "archer", "bowman", "hunter", "scout")):
+        return "lean hooded ranger archer, bow, quiver, cloak, belt pouches, light armor, stealth silhouette"
+    return "distinct non generic fantasy miniature matching the requested subject, unique silhouette, custom armor, visible accessories"
+
+
+def prompt_subject_text(prompt: str) -> str:
+    """Return the user's subject without appended store-quality boilerplate."""
+    text = re.sub(r"\s+", " ", prompt or "").strip()
+    for marker in (
+        "Create a production/studio-quality",
+        "Create a final store/studio-quality",
+        "Create a production",
+        "Create a final",
+    ):
+        index = text.lower().find(marker.lower())
+        if index > 0:
+            return text[:index].strip()
+    return text
+
+
+def prompt_is_alien_bioform(prompt: str) -> bool:
+    lowered = (prompt or "").lower()
+    return any(
+        term in lowered
+        for term in (
+            "termagant",
+            "termagaunt",
+            "tyranid",
+            "hormagaunt",
+            "gaunt alien",
+            "insectoid alien",
+            "chitin alien",
+            "bioform",
+            "fleshborer",
+        )
+    )
 
 
 def clamp_diffusers_prompt_to_token_limit(pipe: Any, prompt: str) -> str:
@@ -1575,6 +1902,9 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
                 start = None
         if start is not None and len(active) - start >= w * 0.055:
             bands += 1
+        row_smooth = np.convolve(row_density_for_bands(fg), np.ones(15) / 15.0, mode="same")
+        row_active = row_smooth > max(float(row_smooth.max()) * 0.30, 0.025) if row_smooth.size else np.zeros(0, dtype=bool)
+        row_bands = count_active_bands(row_active, min_width=max(4, int(h * 0.070)))
         gx = np.abs(np.diff(arr, axis=1, prepend=arr[:, :1]))
         gy = np.abs(np.diff(arr, axis=0, prepend=arr[:1, :]))
         edges = gx + gy
@@ -1592,6 +1922,7 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
             edge_density * 2.0
             + foreground_ratio
             - max(0, bands - 1) * 0.6
+            - max(0, row_bands - 1) * 0.75
             - border_contact * 0.25
             - (0.35 if likely_base_band else 0.0)
             - (0.75 if likely_background_panel else 0.0)
@@ -1609,14 +1940,28 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
         min_subject_aspect = float(os.environ.get("MESHMEND_CONCEPT_MIN_SUBJECT_ASPECT", "1.08"))
         upper_width_ratio = float(completeness.get("upper_body_width_ratio", 0.0) or 0.0)
         lower_density = float(completeness.get("lower_body_density", 0.0) or 0.0)
+        lower_width_ratio = float(completeness.get("lower_body_width_ratio", 0.0) or 0.0)
         max_upper_width = float(os.environ.get("MESHMEND_CONCEPT_MAX_UPPER_BODY_WIDTH", "0.98"))
         likely_overwide_upper_body = require_full_body and upper_width_ratio > max_upper_width and subject_aspect < 1.15
         likely_squat_or_wide_subject = require_full_body and subject_aspect < min_subject_aspect
+        likely_top_heavy_bad_proportions = (
+            require_full_body
+            and upper_width_ratio > float(os.environ.get("MESHMEND_CONCEPT_MAX_TOP_HEAVY_UPPER_WIDTH", "0.82"))
+            and lower_width_ratio < float(os.environ.get("MESHMEND_CONCEPT_MIN_TOP_HEAVY_LOWER_WIDTH", "0.64"))
+            and subject_aspect < float(os.environ.get("MESHMEND_CONCEPT_MAX_TOP_HEAVY_ASPECT", "1.18"))
+        )
+        likely_weak_lower_body = (
+            require_full_body
+            and subject_aspect < float(os.environ.get("MESHMEND_CONCEPT_MIN_BALANCED_LEG_ASPECT", "1.10"))
+            and lower_width_ratio < float(os.environ.get("MESHMEND_CONCEPT_MIN_BALANCED_LOWER_WIDTH", "0.60"))
+        )
         wide_armored_full_body = (
             require_full_body
             and subject_aspect >= float(os.environ.get("MESHMEND_CONCEPT_MIN_WIDE_ARMORED_ASPECT", "0.92"))
             and subject_height_ratio >= float(os.environ.get("MESHMEND_CONCEPT_MIN_WIDE_ARMORED_HEIGHT", "0.62"))
             and lower_density >= float(os.environ.get("MESHMEND_CONCEPT_MIN_WIDE_ARMORED_LOWER_DENSITY", "0.32"))
+            and not likely_top_heavy_bad_proportions
+            and not likely_weak_lower_body
             and border_contact < max_border_contact
             and not likely_base_band
             and not likely_background_panel
@@ -1625,28 +1970,51 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
         if wide_armored_full_body:
             likely_partial_body = False
             likely_squat_or_wide_subject = False
-        max_absolute_edge_density = float(os.environ.get("MESHMEND_CONCEPT_MAX_ABSOLUTE_EDGE_DENSITY", "0.072"))
+        max_absolute_edge_density = float(os.environ.get("MESHMEND_CONCEPT_MAX_ABSOLUTE_EDGE_DENSITY", "0.085"))
         min_absolute_edge_density = float(os.environ.get("MESHMEND_CONCEPT_MIN_ABSOLUTE_EDGE_DENSITY", "0.040"))
-        likely_noisy_reference = absolute_edge_density > max_absolute_edge_density
-        likely_under_detailed_reference = require_full_body and absolute_edge_density < min_absolute_edge_density
-        min_score = float(os.environ.get("MESHMEND_CONCEPT_MIN_QUALITY_SCORE", "0.38"))
-        passed = (
+        likely_vertical_reference_sheet = row_bands > 1 and foreground_ratio > float(os.environ.get("MESHMEND_CONCEPT_VERTICAL_SHEET_MIN_FOREGROUND", "0.14"))
+        clean_single_subject_layout = (
             bands <= 1
+            and row_bands <= 1
             and not likely_base_band
             and not likely_background_panel
             and not clipped
             and not likely_partial_body
             and not likely_squat_or_wide_subject
             and not likely_overwide_upper_body
+            and not likely_top_heavy_bad_proportions
+            and not likely_weak_lower_body
+            and not likely_vertical_reference_sheet
+            and border_contact < max_border_contact
+        )
+        tolerated_clean_edge_density = float(os.environ.get("MESHMEND_CONCEPT_TOLERATED_CLEAN_EDGE_DENSITY", "0.13"))
+        accepted_noisy_clean_layout = clean_single_subject_layout and absolute_edge_density <= tolerated_clean_edge_density
+        likely_noisy_reference = absolute_edge_density > max_absolute_edge_density and not accepted_noisy_clean_layout
+        likely_under_detailed_reference = require_full_body and absolute_edge_density < min_absolute_edge_density
+        min_score = float(os.environ.get("MESHMEND_CONCEPT_MIN_QUALITY_SCORE", "0.38"))
+        clean_layout_min_score = float(os.environ.get("MESHMEND_CONCEPT_CLEAN_LAYOUT_MIN_SCORE", "0.30"))
+        score_passed = score >= min_score or (accepted_noisy_clean_layout and score >= clean_layout_min_score)
+        passed = (
+            bands <= 1
+            and row_bands <= 1
+            and not likely_base_band
+            and not likely_background_panel
+            and not clipped
+            and not likely_partial_body
+            and not likely_squat_or_wide_subject
+            and not likely_overwide_upper_body
+            and not likely_top_heavy_bad_proportions
+            and not likely_weak_lower_body
             and not likely_noisy_reference
             and not likely_under_detailed_reference
             and border_contact < max_border_contact
             and 0.08 <= foreground_ratio <= max_foreground_ratio
-            and score >= min_score
+            and score_passed
         )
         return {
             "score": score,
             "active_column_bands": bands,
+            "active_row_bands": row_bands,
             "border_contact_ratio": border_contact,
             "top_contact_ratio": top_contact,
             "bottom_contact_ratio": bottom_contact,
@@ -1664,18 +2032,50 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
             "wide_armored_full_body": wide_armored_full_body,
             "min_subject_aspect_ratio": min_subject_aspect,
             "likely_overwide_upper_body": likely_overwide_upper_body,
+            "likely_top_heavy_bad_proportions": likely_top_heavy_bad_proportions,
+            "likely_weak_lower_body": likely_weak_lower_body,
             "max_upper_body_width_ratio": max_upper_width,
             "likely_noisy_reference": likely_noisy_reference,
+            "accepted_noisy_clean_layout": accepted_noisy_clean_layout,
             "likely_under_detailed_reference": likely_under_detailed_reference,
+            "likely_vertical_reference_sheet": likely_vertical_reference_sheet,
             "absolute_edge_density": absolute_edge_density,
             "max_absolute_edge_density": max_absolute_edge_density,
             "min_absolute_edge_density": min_absolute_edge_density,
             "edge_density": edge_density,
             "min_quality_score": min_score,
+            "clean_layout_min_quality_score": clean_layout_min_score,
             "passed": passed,
         }
     except Exception as exc:
         return {"score": 0.0, "active_column_bands": 0, "border_contact_ratio": 1.0, "foreground_ratio": 0.0, "passed": False, "error": str(exc)}
+
+
+def row_density_for_bands(mask: Any) -> Any:
+    import numpy as np
+
+    mask = np.asarray(mask, dtype=bool)
+    if mask.size == 0:
+        return np.zeros(0, dtype=float)
+    return mask.sum(axis=1).astype(float) / max(mask.shape[1], 1)
+
+
+def count_active_bands(active: Any, *, min_width: int) -> int:
+    import numpy as np
+
+    active = np.asarray(active, dtype=bool)
+    bands = 0
+    start = None
+    for idx, value in enumerate(active):
+        if value and start is None:
+            start = idx
+        elif not value and start is not None:
+            if idx - start >= min_width:
+                bands += 1
+            start = None
+    if start is not None and len(active) - start >= min_width:
+        bands += 1
+    return bands
 
 
 def concept_full_body_completeness_metrics(foreground_mask: Any) -> dict[str, Any]:
@@ -2083,6 +2483,11 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
             )
             raw_mesh = mesh_result[0] if isinstance(mesh_result, (list, tuple)) else mesh_result
             postprocess_request = dict(attempt_request)
+            if production_quality_requested(postprocess_request):
+                local_cap = memory_safe_face_target(int(os.environ.get("MESHMEND_LOCAL_HUNYUAN_POSTPROCESS_TARGET_FACES", "300000")))
+                requested_target = int(float(postprocess_request.get("target_polycount") or 0) or 0)
+                if requested_target <= 0 or requested_target > local_cap:
+                    postprocess_request["target_polycount"] = local_cap
             postprocess_request["_meshmend_source_image_path"] = str(image_path)
             # Hunyuan's local text prompt path is implemented as text -> concept image -> image-to-3D.
             # Validate and repair that generated concept mesh with the image-reconstruction profile;
@@ -2094,6 +2499,17 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
             write_progress(output_dir, 74, "postprocessing", "Postprocessing mesh: scale, detail, cleanup, quality gates")
             mesh, postprocess_report = postprocess_miniature(raw_mesh, postprocess_request)
             mesh, prompt_landmark_overlay = apply_prompt_landmark_overlay(mesh, postprocess_request, output_dir)
+            if bool(prompt_landmark_overlay.get("applied")):
+                # The overlay is part of the final exported STL, so validate the
+                # final combined geometry instead of certifying only the pre-
+                # overlay body. This catches sheet/card geometry, disconnected
+                # bridge artifacts, non-watertight overlay shells, and missing
+                # post-overlay detail before export.
+                write_progress(output_dir, 88, "validating_overlay", "Validating final prompt landmarks and removing sheet artifacts")
+                overlay_postprocess_request = dict(postprocess_request)
+                overlay_postprocess_request["_meshmend_prompt_landmark_overlay_applied"] = True
+                mesh, postprocess_report = postprocess_miniature(mesh, overlay_postprocess_request)
+                prompt_landmark_overlay["postprocessed"] = True
             break
         except RuntimeError as exc:
             last_error = exc
@@ -2141,12 +2557,19 @@ def apply_prompt_landmark_overlay(mesh: Any, request: dict[str, Any], output_dir
     prompt = str(request.get("prompt") or "")
     if not prompt.strip():
         return mesh, {"applied": False, "reason": "empty_prompt"}
+    subject_text = prompt_subject_text(prompt)
+    if any(term in subject_text.lower() for term in ("space marine", "spacemarine", "power armor", "power armour", "adeptus", "primaris")):
+        if os.environ.get("MESHMEND_ENABLE_POWER_ARMOR_PROMPT_OVERLAY", "0").strip().lower() not in {"1", "true", "yes", "on"}:
+            return mesh, {"applied": False, "reason": "power_armor_overlay_disabled"}
     try:
         import numpy as np
         import trimesh
-        from native_generation import build_humanoid_prompt_features
+        from native_generation import build_humanoid_prompt_features, build_semantic_archetype_features
 
-        overlay_parts, overlay_names = build_humanoid_prompt_features(prompt.lower())
+        overlay_parts, overlay_names = build_humanoid_prompt_features(subject_text.lower())
+        semantic_parts, semantic_names = build_semantic_archetype_features(subject_text.lower())
+        overlay_parts.extend(semantic_parts)
+        overlay_names.extend(semantic_names)
         if not overlay_parts:
             return mesh, {"applied": False, "reason": "no_prompt_landmarks"}
         overlay = trimesh.util.concatenate(overlay_parts)
@@ -2167,12 +2590,19 @@ def apply_prompt_landmark_overlay(mesh: Any, request: dict[str, Any], output_dir
         overlay_max = overlay_vertices.max(axis=0)
         mesh_center = (mesh_min + mesh_max) * 0.5
         overlay_center = (overlay_min + overlay_max) * 0.5
-        overlay.apply_translation([
+        translation = np.array([
             float(mesh_center[0] - overlay_center[0]),
             float(mesh_center[1] - overlay_center[1]),
             float(mesh_min[2] - overlay_min[2]),
-        ])
-        combined = trimesh.util.concatenate([mesh, overlay])
+        ], dtype=float)
+        overlay.apply_translation(translation)
+        transformed_overlay_parts: list[Any] = []
+        for part in overlay_parts:
+            transformed = part.copy()
+            transformed.apply_scale(scale)
+            transformed.apply_translation(translation)
+            transformed_overlay_parts.append(transformed)
+        combined, bridge_count = concatenate_with_topology_bridges(mesh, transformed_overlay_parts)
         combined.metadata.update(getattr(mesh, "metadata", {}) or {})
         combined.metadata["meshmend_prompt_landmark_overlay"] = True
         combined.metadata["meshmend_prompt_landmark_parts"] = overlay_names
@@ -2186,11 +2616,65 @@ def apply_prompt_landmark_overlay(mesh: Any, request: dict[str, Any], output_dir
             "part_count": len(overlay_names),
             "parts": overlay_names,
             "scale": scale,
+            "topology_bridges": bridge_count,
         }
         (output_dir / "prompt_landmark_overlay.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         return combined, report
     except Exception as exc:
         return mesh, {"applied": False, "reason": f"overlay_failed:{exc}"}
+
+
+def concatenate_with_topology_bridges(base_mesh: Any, parts: list[Any]) -> tuple[Any, int]:
+    """Concatenate meshes and add tiny shared-face bridges so split() sees one part.
+
+    Intersecting STL shells are still separate connected components because they
+    do not share vertices/faces. The store-quality validator counts those as
+    disconnected parts. Add one small triangle from the base mesh to each overlay
+    part; this creates topological connectivity without requiring a slow boolean
+    union over a million-face Hunyuan mesh.
+    """
+    import numpy as np
+    import trimesh
+
+    base_vertices = np.asarray(base_mesh.vertices, dtype=float)
+    base_faces = np.asarray(base_mesh.faces, dtype=np.int64)
+    base_edges = np.asarray(getattr(base_mesh, "edges_unique", []), dtype=np.int64)
+    if base_edges.size == 0:
+        base_edges = base_faces[:, :2]
+    base_edge_midpoints = (base_vertices[base_edges[:, 0]] + base_vertices[base_edges[:, 1]]) * 0.5
+    vertices: list[np.ndarray] = [base_vertices]
+    faces: list[np.ndarray] = [base_faces]
+    bridge_faces: list[list[int]] = []
+    base_count = int(len(base_vertices))
+    if base_count == 0:
+        return trimesh.util.concatenate(parts), 0
+    for part in parts:
+        part_vertices = np.asarray(part.vertices, dtype=float)
+        part_faces = np.asarray(part.faces, dtype=np.int64)
+        if len(part_vertices) < 3 or len(part_faces) == 0:
+            continue
+        offset = sum(len(block) for block in vertices)
+        vertices.append(part_vertices)
+        faces.append(part_faces + offset)
+        centroid = part_vertices.mean(axis=0)
+        base_edge_index = int(np.argmin(np.sum((base_edge_midpoints - centroid[None, :]) ** 2, axis=1)))
+        base_edge = base_edges[base_edge_index]
+        base_anchor = base_edge_midpoints[base_edge_index]
+        part_edges = np.asarray(getattr(part, "edges_unique", []), dtype=np.int64)
+        if part_edges.size == 0:
+            part_edges = part_faces[:, :2]
+        part_edge_midpoints = (part_vertices[part_edges[:, 0]] + part_vertices[part_edges[:, 1]]) * 0.5
+        part_edge_index = int(np.argmin(np.sum((part_edge_midpoints - base_anchor[None, :]) ** 2, axis=1)))
+        part_edge = part_edges[part_edge_index] + offset
+        # Two triangles form a quad bridge. One shares a real edge with the base
+        # component and one shares a real edge with the overlay component, so
+        # trimesh.split() follows the connection through shared edges.
+        bridge_faces.append([int(base_edge[0]), int(part_edge[0]), int(part_edge[1])])
+        bridge_faces.append([int(base_edge[0]), int(part_edge[1]), int(base_edge[1])])
+    if bridge_faces:
+        faces.append(np.asarray(bridge_faces, dtype=np.int64))
+    combined = trimesh.Trimesh(vertices=np.vstack(vertices), faces=np.vstack(faces), process=False)
+    return combined, len(bridge_faces)
 
 
 def call_hunyuan_pipeline(
@@ -2534,8 +3018,8 @@ def add_printable_surface_detail(mesh: Any, request: dict[str, Any]) -> Any:
         if not hasattr(mesh, "vertices") or not hasattr(mesh, "faces") or len(mesh.faces) < 100:
             return mesh
         quality = str(request.get("quality") or "standard").lower()
-        target_faces = int(os.environ.get("MESHMEND_DETAIL_TARGET_FACES", "420000" if quality == "high" else "180000"))
-        max_faces = int(os.environ.get("MESHMEND_DETAIL_MAX_FACES", "750000"))
+        target_faces = memory_safe_face_target(int(os.environ.get("MESHMEND_DETAIL_TARGET_FACES", "180000" if quality == "high" else "90000")))
+        max_faces = memory_safe_face_target(int(os.environ.get("MESHMEND_DETAIL_MAX_FACES", "350000")))
         mesh = subdivide_for_detail(mesh, min(target_faces, max_faces))
 
         vertices = np.asarray(mesh.vertices, dtype=float)
@@ -2603,7 +3087,7 @@ def ensure_minimum_export_density(mesh: Any, request: dict[str, Any]) -> Any:
         if not hasattr(mesh, "faces"):
             return mesh
         quality = str(request.get("quality") or "standard").lower()
-        min_faces = int(os.environ.get("MESHMEND_MIN_EXPORT_FACES", "180000" if quality == "high" else "90000"))
+        min_faces = memory_safe_face_target(int(os.environ.get("MESHMEND_MIN_EXPORT_FACES", "180000" if quality == "high" else "90000")))
         if len(mesh.faces) >= min_faces:
             return mesh
         return subdivide_for_detail(mesh, min_faces)

@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
+import platform
 import shutil
 import shlex
+import socket
 import subprocess
 import sys
 import threading
@@ -20,9 +23,14 @@ from pydantic import BaseModel
 
 
 SERVICE_ROOT = Path(__file__).resolve().parent
+WORKSPACE_ROOT = SERVICE_ROOT.parent.parent
+if str(WORKSPACE_ROOT) not in sys.path:
+    sys.path.insert(0, str(WORKSPACE_ROOT))
 SERVICE_BUILD_ID = "meshmend-model-service-progress-v3"
 TASKS_DIR = Path(os.environ.get("MESHMEND_MODEL_SERVICE_TASKS_DIR", SERVICE_ROOT / "tasks"))
 OUTPUTS_DIR = Path(os.environ.get("MESHMEND_MODEL_SERVICE_OUTPUTS_DIR", SERVICE_ROOT / "outputs"))
+LOGS_DIR = Path(os.environ.get("MESHMEND_BACKEND_LOG_DIR", WORKSPACE_ROOT / "logs"))
+BACKEND_LOG_FILE = LOGS_DIR / "meshmend_backend.log"
 SERVICE_PORT = os.environ.get("MESHMEND_MODEL_SERVICE_PORT", "8090").strip() or "8090"
 PUBLIC_BASE_URL = os.environ.get("MESHMEND_MODEL_SERVICE_PUBLIC_URL", f"http://127.0.0.1:{SERVICE_PORT}").rstrip("/")
 MODEL_WORKER_PYTHON = os.environ.get("MESHMEND_MODEL_WORKER_PYTHON", sys.executable).strip() or sys.executable
@@ -32,6 +40,20 @@ IMAGE_TO_3D_COMMAND = os.environ.get("MESHMEND_IMAGE_TO_3D_COMMAND", DEFAULT_WOR
 
 TASKS_DIR.mkdir(parents=True, exist_ok=True)
 OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def _configure_logging() -> logging.Logger:
+    logger = logging.getLogger("meshmend_backend")
+    logger.setLevel(logging.INFO)
+    if not any(isinstance(handler, logging.FileHandler) and getattr(handler, "baseFilename", "") == str(BACKEND_LOG_FILE) for handler in logger.handlers):
+        handler = logging.FileHandler(BACKEND_LOG_FILE, encoding="utf-8")
+        handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(name)s %(message)s'))
+        logger.addHandler(handler)
+    return logger
+
+
+LOGGER = _configure_logging()
 
 app = FastAPI(title="MeshMend Independent 3D Model Service", version="0.1.0")
 
@@ -40,7 +62,11 @@ class TextTo3DRequest(BaseModel):
     prompt: str
     quality: str = "high"
     target_formats: list[str] = ["stl", "glb", "obj"]
-    target_polycount: int = 2_000_000
+    # Keep the service default memory-safe. Local repair/detail passes can grow
+    # faces in 4x jumps, so million-face requests can become 3-5M face meshes and
+    # freeze consumer PCs. Certified external render farms can still request more
+    # via MESHMEND_HOSTED_TARGET_POLYCOUNT or direct payload overrides.
+    target_polycount: int = 180_000
     scale_mm: float | None = None
     workflow: str = "text_to_3d"
     product: str = "meshmend"
@@ -49,6 +75,22 @@ class TextTo3DRequest(BaseModel):
 class ImageTo3DRequest(TextTo3DRequest):
     image_data_uri: str
     workflow: str = "image_to_3d"
+
+
+class GeneratePartRequest(BaseModel):
+    category: str
+    prompt: str = "sci-fi heavy infantry"
+    count: int = 3
+    scale_mm: float = 32.0
+    target_faces: int = 40_000
+
+
+class AssembleMiniatureRequest(BaseModel):
+    prompt: str = "sci-fi heavy infantry with rifle and backpack"
+    scale_mm: float = 32.0
+    target_faces: int = 90_000
+    output_format: str = "stl"
+    candidates_per_category: int = 3
 
 
 @dataclass
@@ -87,11 +129,18 @@ async def health():
     runner_ready = _production_runner_ready("text_to_3d") or _production_runner_ready("image_to_3d")
     studio_ready = _studio_quality_runner_ready("text_to_3d") or _studio_quality_runner_ready("image_to_3d")
     experimental_high_detail_ready = _experimental_high_detail_runner_ready("text_to_3d") or _experimental_high_detail_runner_ready("image_to_3d")
+    dependency_summary = _dependency_health_summary()
     return {
         "status": "healthy",
+        "backend_running": True,
+        "model_quality_acceptable": bool(studio_ready),
+        "model_quality_note": "backend health is separate from miniature quality; only certified external runners may report model_quality_acceptable=true",
+        "memory_safety": _memory_safety_status(),
         "service_build_id": SERVICE_BUILD_ID,
         "service_root": str(SERVICE_ROOT),
+        "workspace_root": str(WORKSPACE_ROOT),
         "service_python": sys.executable,
+        "log_file": str(BACKEND_LOG_FILE),
         "text_to_3d_configured": bool(TEXT_TO_3D_COMMAND),
         "image_to_3d_configured": bool(IMAGE_TO_3D_COMMAND),
         "production_text_to_3d_configured": bool(production_text_command),
@@ -108,41 +157,154 @@ async def health():
         "hunyuan3d_model": os.environ.get("MESHMEND_HUNYUAN3D_MODEL", ""),
         "hunyuan3d_subfolder": os.environ.get("MESHMEND_HUNYUAN3D_SUBFOLDER", ""),
         "hunyuan_import": hunyuan_import,
+        "dependency_summary": dependency_summary,
     }
+
+
+@app.get("/diagnostics")
+async def diagnostics():
+    """Deep backend diagnostics: dependencies, paths, ports, permissions, and recent failures."""
+    report = _build_backend_diagnostics()
+    LOGGER.info(json.dumps({"event": "diagnostics_requested", "status": report.get("status")}, default=str))
+    return report
+
+
+@app.get("/test-mesh")
+async def test_mesh(format: str = "stl"):
+    """Generate a known simple watertight mesh to prove backend/export plumbing works."""
+    fmt = _safe_export_format(format)
+    task_id = "testmesh_" + uuid.uuid4().hex[:12]
+    output_dir = OUTPUTS_DIR / task_id
+    output_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        mesh = _create_known_test_mesh()
+        output_path = output_dir / f"known_simple_mesh.{fmt}"
+        _export_mesh(mesh, output_path)
+        info = _mesh_summary(mesh)
+        LOGGER.info(json.dumps({"event": "test_mesh_generated", "task_id": task_id, "mesh": info}, default=str))
+        return {
+            "status": "ok",
+            "purpose": "backend/export smoke test only; not a miniature quality test",
+            "model_urls": {fmt: f"{PUBLIC_BASE_URL}/v1/files/{task_file_name(output_path)}"},
+            "mesh_info": info,
+        }
+    except Exception as exc:
+        LOGGER.exception("test_mesh_failed")
+        raise HTTPException(status_code=500, detail={"error": str(exc), "traceback": traceback.format_exc()})
+
+
+@app.post("/generate-part")
+async def generate_part(request: GeneratePartRequest):
+    """Generate validated modular candidates for one part category using the fallback provider."""
+    try:
+        from meshmend.studio.assets import PartCategory
+        from meshmend.studio.pipeline import StudioMiniatureSpec
+        from meshmend.studio.staged_pipeline import ProceduralMiniaturePartProvider
+
+        category = PartCategory(str(request.category))
+        spec = StudioMiniatureSpec.from_prompt(request.prompt, scale_mm=request.scale_mm, target_faces=request.target_faces)
+        output_dir = OUTPUTS_DIR / ("part_" + uuid.uuid4().hex[:12])
+        output_dir.mkdir(parents=True, exist_ok=True)
+        provider = ProceduralMiniaturePartProvider()
+        concept = {"prompt": spec.prompt, "scale_mm": spec.scale_mm, "style": spec.style, "weapon": spec.weapon}
+        parts = provider.generate_candidates(category, concept, max(1, min(int(request.count), 6)), spec.scale_mm)
+        response_parts = []
+        for part in parts:
+            bundle = part.export_bundle(output_dir)
+            mesh_path = Path(bundle["mesh_file"])
+            response_parts.append(
+                {
+                    "part_id": part.part_id,
+                    "category": category.value,
+                    "mesh_url": f"{PUBLIC_BASE_URL}/v1/files/{task_file_name(mesh_path)}" if mesh_path.exists() else None,
+                    "bundle_dir": str(bundle),
+                    "anchors": [anchor.to_dict() for anchor in part.anchors],
+                    "sockets": [socket_.to_dict() for socket_ in part.sockets],
+                    "scale_mm": part.scale_mm,
+                    "symmetry": part.symmetry,
+                    "cleanup_report": part.cleanup_report.to_dict() if part.cleanup_report else None,
+                }
+            )
+        LOGGER.info(json.dumps({"event": "generate_part", "category": category.value, "count": len(response_parts)}, default=str))
+        return {"status": "ok", "quality_tier": "procedural_modular_part", "studio_quality_certified": False, "parts": response_parts}
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except Exception as exc:
+        LOGGER.exception("generate_part_failed")
+        raise HTTPException(status_code=500, detail={"error": str(exc), "traceback": traceback.format_exc()})
+
+
+@app.post("/assemble-miniature")
+async def assemble_miniature(request: AssembleMiniatureRequest):
+    """Assemble a valid fallback miniature from procedural kitbash modules."""
+    try:
+        result = _generate_modular_fallback(
+            prompt=request.prompt,
+            scale_mm=request.scale_mm,
+            target_faces=request.target_faces,
+            output_format=request.output_format,
+            candidates_per_category=request.candidates_per_category,
+            reason="explicit_assemble_miniature_endpoint",
+        )
+        LOGGER.info(json.dumps({"event": "assemble_miniature", "result": result.get("mesh_info")}, default=str))
+        return result
+    except Exception as exc:
+        LOGGER.exception("assemble_miniature_failed")
+        raise HTTPException(status_code=500, detail={"error": str(exc), "traceback": traceback.format_exc()})
 
 
 @app.post("/v1/text-to-3d")
 async def text_to_3d(request: TextTo3DRequest):
+    payload = _request_dict(request)
     if not TEXT_TO_3D_COMMAND:
+        if _modular_fallback_enabled():
+            payload["_meshmend_force_modular_fallback_reason"] = "MESHMEND_TEXT_TO_3D_COMMAND is not configured"
+            return _enqueue("text_to_3d", payload)
         raise HTTPException(
             status_code=503,
             detail="MESHMEND_TEXT_TO_3D_COMMAND is not configured on the independent model service.",
         )
     if not _production_runner_ready("text_to_3d"):
+        if _modular_fallback_enabled():
+            payload["_meshmend_force_modular_fallback_reason"] = "No production text-to-3D runner is configured"
+            return _enqueue("text_to_3d", payload)
         raise HTTPException(
             status_code=503,
             detail="No production text-to-3D runner is configured. Set MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND, or explicitly set MESHMEND_PRODUCTION_ENGINE=legacy_sculptor for draft-only fallback.",
         )
-    if _store_quality_requested(_request_dict(request)) and not _can_accept_high_detail_request("text_to_3d"):
+    if _store_quality_requested(payload) and not _can_accept_high_detail_request("text_to_3d"):
+        if _modular_fallback_enabled():
+            payload["_meshmend_force_modular_fallback_reason"] = _store_quality_reason(os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native"))
+            return _enqueue("text_to_3d", payload)
         raise HTTPException(status_code=503, detail=_store_quality_reason(os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native")))
-    return _enqueue("text_to_3d", _request_dict(request))
+    return _enqueue("text_to_3d", payload)
 
 
 @app.post("/v1/image-to-3d")
 async def image_to_3d(request: ImageTo3DRequest):
+    payload = _request_dict(request)
     if not IMAGE_TO_3D_COMMAND:
+        if _modular_fallback_enabled():
+            payload["_meshmend_force_modular_fallback_reason"] = "MESHMEND_IMAGE_TO_3D_COMMAND is not configured"
+            return _enqueue("image_to_3d", payload)
         raise HTTPException(
             status_code=503,
             detail="MESHMEND_IMAGE_TO_3D_COMMAND is not configured on the independent model service.",
         )
     if not _production_runner_ready("image_to_3d"):
+        if _modular_fallback_enabled():
+            payload["_meshmend_force_modular_fallback_reason"] = "No production image-to-3D runner is configured"
+            return _enqueue("image_to_3d", payload)
         raise HTTPException(
             status_code=503,
             detail="No production image-to-3D runner is configured. Set MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND, or explicitly set MESHMEND_PRODUCTION_ENGINE=legacy_sculptor for draft-only fallback.",
         )
-    if _store_quality_requested(_request_dict(request)) and not _can_accept_high_detail_request("image_to_3d"):
+    if _store_quality_requested(payload) and not _can_accept_high_detail_request("image_to_3d"):
+        if _modular_fallback_enabled():
+            payload["_meshmend_force_modular_fallback_reason"] = _store_quality_reason(os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native"))
+            return _enqueue("image_to_3d", payload)
         raise HTTPException(status_code=503, detail=_store_quality_reason(os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native")))
-    return _enqueue("image_to_3d", _request_dict(request))
+    return _enqueue("image_to_3d", payload)
 
 
 @app.get("/v1/tasks/{task_id}")
@@ -177,7 +339,7 @@ def _production_runner_ready(workflow: str) -> bool:
     engine = os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native").strip().lower()
     if engine in {"meshmend_native", "native", "embedded_native"}:
         try:
-            import native_generation  # noqa: F401
+            from meshmend.studio import StagedMiniaturePipeline, StudioMiniatureSpec  # noqa: F401
 
             return True
         except Exception:
@@ -246,6 +408,10 @@ def _store_quality_requested(payload: dict[str, Any]) -> bool:
             "store-level", "intricate",
         )
     )
+
+
+def _modular_fallback_enabled() -> bool:
+    return os.environ.get("MESHMEND_ENABLE_MODULAR_FALLBACK", "0").strip().lower() in {"1", "true", "yes", "on"}
 
 
 def _capability_tier(engine: str) -> str:
@@ -339,7 +505,40 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
     result_json = output_dir / "result.json"
     input_json.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
+    LOGGER.info(json.dumps({"event": "task_started", "task_id": task_id, "workflow": workflow, "prompt_preview": str(payload.get("prompt") or "")[:160]}, default=str))
     _update(task_id, status="IN_PROGRESS", progress=5, stage="starting", message="Starting production worker", started_at=time.time())
+    forced_fallback_reason = str(payload.get("_meshmend_force_modular_fallback_reason") or "").strip()
+    if forced_fallback_reason:
+        try:
+            _update(task_id, status="IN_PROGRESS", progress=40, stage="modular_fallback", message="Using validated procedural fallback because local AI is not certified/available")
+            fallback_result = _generate_modular_fallback(
+                prompt=str(payload.get("prompt") or "fallback miniature"),
+                scale_mm=float(payload.get("scale_mm") or 32.0),
+                target_faces=int(payload.get("target_polycount") or payload.get("target_faces") or 90_000),
+                output_format="stl",
+                candidates_per_category=3,
+                output_dir=output_dir,
+                reason=forced_fallback_reason,
+            )
+            result_json.write_text(json.dumps(fallback_result, indent=2, default=str), encoding="utf-8")
+            model_urls = {str(k): str(v) for k, v in fallback_result.get("model_urls", {}).items()}
+            _update(
+                task_id,
+                status="SUCCEEDED",
+                progress=100,
+                stage="fallback_complete",
+                message="Valid procedural fallback miniature ready; not studio-quality certified",
+                finished_at=time.time(),
+                model_urls=model_urls,
+                thumbnail_url=None,
+                consumed_credits=0,
+            )
+            LOGGER.info(json.dumps({"event": "task_forced_fallback_succeeded", "task_id": task_id, "reason": forced_fallback_reason, "model_urls": model_urls}, default=str))
+            return
+        except Exception as exc:
+            LOGGER.exception("task_forced_modular_fallback_failed")
+            _update(task_id, status="FAILED", progress=100, stage="failed", message="Forced fallback failed", finished_at=time.time(), error=str(exc))
+            return
     try:
         command = command_template.format(input_json=str(input_json), output_dir=str(output_dir), task_id=task_id)
         command_args = _worker_command_args(command, input_json=input_json, output_dir=output_dir)
@@ -382,7 +581,39 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
             thumbnail_url=result.get("thumbnail_url"),
             consumed_credits=int(result.get("consumed_credits") or (30 if workflow == "image_to_3d" else 20)),
         )
+        LOGGER.info(json.dumps({"event": "task_succeeded", "task_id": task_id, "model_urls": model_urls}, default=str))
     except Exception as exc:
+        LOGGER.exception("task_failed_before_optional_fallback")
+        if _modular_fallback_enabled():
+            try:
+                _update(task_id, status="IN_PROGRESS", progress=85, stage="modular_fallback", message="AI/backend generation failed; assembling validated procedural fallback")
+                fallback_result = _generate_modular_fallback(
+                    prompt=str(payload.get("prompt") or "fallback miniature"),
+                    scale_mm=float(payload.get("scale_mm") or 32.0),
+                    target_faces=int(payload.get("target_polycount") or payload.get("target_faces") or 90_000),
+                    output_format="stl",
+                    candidates_per_category=3,
+                    output_dir=output_dir,
+                    reason=str(exc),
+                )
+                result_json.write_text(json.dumps(fallback_result, indent=2, default=str), encoding="utf-8")
+                model_urls = {str(k): str(v) for k, v in fallback_result.get("model_urls", {}).items()}
+                if model_urls:
+                    _update(
+                        task_id,
+                        status="SUCCEEDED",
+                        progress=100,
+                        stage="fallback_complete",
+                        message="Valid procedural fallback miniature ready; not studio-quality certified",
+                        finished_at=time.time(),
+                        model_urls=model_urls,
+                        thumbnail_url=None,
+                        consumed_credits=0,
+                    )
+                    LOGGER.info(json.dumps({"event": "task_fallback_succeeded", "task_id": task_id, "reason": str(exc), "model_urls": model_urls}, default=str))
+                    return
+            except Exception:
+                LOGGER.exception("task_modular_fallback_failed")
         try:
             (output_dir / "worker_error.txt").write_text(str(exc), encoding="utf-8")
             (output_dir / "service_diagnostics.json").write_text(
@@ -393,6 +624,7 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
         except Exception:
             pass
         _update(task_id, status="FAILED", progress=100, stage="failed", message="Generation failed", finished_at=time.time(), error=str(exc))
+        LOGGER.error(json.dumps({"event": "task_failed", "task_id": task_id, "error": str(exc), "traceback": traceback.format_exc()}, default=str))
 
 
 def build_service_diagnostics(exc: Exception, output_dir: Path, result_json: Path) -> dict[str, Any]:
@@ -414,6 +646,268 @@ def build_service_diagnostics(exc: Exception, output_dir: Path, result_json: Pat
         "model_worker_python": MODEL_WORKER_PYTHON,
         "hunyuan3d_path": os.environ.get("MESHMEND_HUNYUAN3D_PATH", ""),
         "production_engine": os.environ.get("MESHMEND_PRODUCTION_ENGINE", ""),
+        "backend_diagnostics": _build_backend_diagnostics(include_recent_failures=False),
+    }
+
+
+def _build_backend_diagnostics(*, include_recent_failures: bool = True) -> dict[str, Any]:
+    imports = {name: _check_import(name) for name in ("fastapi", "pydantic", "numpy", "trimesh", "scipy", "PIL", "torch", "diffusers", "open3d", "hy3dgen")}
+    permissions = {name: _permission_check(path) for name, path in {"tasks_dir": TASKS_DIR, "outputs_dir": OUTPUTS_DIR, "logs_dir": LOGS_DIR, "service_root": SERVICE_ROOT}.items()}
+    worker_python = _python_status(MODEL_WORKER_PYTHON)
+    gpu = _gpu_status()
+    port = _port_status("127.0.0.1", int(SERVICE_PORT))
+    configured_paths = {
+        "service_root": _path_status(SERVICE_ROOT),
+        "workspace_root": _path_status(WORKSPACE_ROOT),
+        "model_worker_python": _path_status(Path(MODEL_WORKER_PYTHON)),
+        "hunyuan3d_path": _path_status(Path(os.environ.get("MESHMEND_HUNYUAN3D_PATH", ""))) if os.environ.get("MESHMEND_HUNYUAN3D_PATH", "").strip() else {"configured": False},
+        "external_generator_command": {"configured": bool(os.environ.get("MESHMEND_EXTERNAL_GENERATOR_COMMAND", "").strip())},
+    }
+    failed_checks = []
+    failed_checks.extend(f"import:{name}" for name, result in imports.items() if not result.get("ok") and name in {"fastapi", "pydantic", "numpy", "trimesh"})
+    failed_checks.extend(f"permission:{name}" for name, result in permissions.items() if not result.get("writable"))
+    if not worker_python.get("ok"):
+        failed_checks.append("worker_python")
+    recent = _recent_failure_reports() if include_recent_failures else []
+    return {
+        "status": "ok" if not failed_checks else "degraded",
+        "backend_running": True,
+        "model_quality_acceptable": bool(_studio_quality_runner_ready("text_to_3d") or _studio_quality_runner_ready("image_to_3d")),
+        "model_quality_note": "This diagnostic checks backend stability, not visual miniature quality.",
+        "failed_checks": failed_checks,
+        "service": {
+            "build_id": SERVICE_BUILD_ID,
+            "python": sys.executable,
+            "platform": platform.platform(),
+            "cwd": os.getcwd(),
+            "pid": os.getpid(),
+            "port": SERVICE_PORT,
+            "public_base_url": PUBLIC_BASE_URL,
+            "log_file": str(BACKEND_LOG_FILE),
+        },
+        "commands": {
+            "text_to_3d_command": TEXT_TO_3D_COMMAND,
+            "image_to_3d_command": IMAGE_TO_3D_COMMAND,
+            "model_worker_python": MODEL_WORKER_PYTHON,
+            "production_engine": os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native"),
+        },
+        "imports": imports,
+        "gpu": gpu,
+        "memory": _memory_safety_status(),
+        "paths": configured_paths,
+        "permissions": permissions,
+        "port": port,
+        "worker_python": worker_python,
+        "hunyuan_import": _hunyuan_import_status() if os.environ.get("MESHMEND_PRODUCTION_ENGINE", "").strip().lower() in {"free_local", "free_local_hunyuan", "hunyuan", "hunyuan3d"} else None,
+        "recent_failures": recent,
+        "active_tasks": {task_id: asdict(task) for task_id, task in list(_tasks.items())[-20:]},
+    }
+
+
+def _dependency_health_summary() -> dict[str, Any]:
+    required = {name: _check_import(name) for name in ("fastapi", "pydantic", "numpy", "trimesh")}
+    optional = {name: _check_import(name) for name in ("torch", "diffusers", "open3d", "hy3dgen")}
+    return {
+        "required_ok": all(result.get("ok") for result in required.values()),
+        "required": required,
+        "optional": optional,
+    }
+
+
+def _check_import(module_name: str) -> dict[str, Any]:
+    try:
+        import importlib
+
+        module = importlib.import_module(module_name)
+        return {"ok": True, "version": str(getattr(module, "__version__", "")), "file": str(getattr(module, "__file__", ""))}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc), "traceback": traceback.format_exc()}
+
+
+def _gpu_status() -> dict[str, Any]:
+    try:
+        import torch
+
+        cuda_available = bool(torch.cuda.is_available())
+        return {
+            "torch_import_ok": True,
+            "cuda_available": cuda_available,
+            "cuda_device_count": int(torch.cuda.device_count()) if cuda_available else 0,
+            "cuda_devices": [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())] if cuda_available else [],
+        }
+    except Exception as exc:
+        return {"torch_import_ok": False, "cuda_available": False, "error": str(exc)}
+
+
+def _memory_safety_status() -> dict[str, Any]:
+    try:
+        import psutil
+
+        vm = psutil.virtual_memory()
+        return {
+            "enabled": _memory_safety_enabled(),
+            "max_postprocess_faces": int(os.environ.get("MESHMEND_MAX_POSTPROCESS_FACES", "350000")),
+            "max_export_faces": int(os.environ.get("MESHMEND_MAX_EXPORT_FACES", "600000")),
+            "available_gb": round(float(vm.available) / (1024**3), 2),
+            "total_gb": round(float(vm.total) / (1024**3), 2),
+            "percent_used": float(vm.percent),
+        }
+    except Exception as exc:
+        return {
+            "enabled": _memory_safety_enabled(),
+            "max_postprocess_faces": int(os.environ.get("MESHMEND_MAX_POSTPROCESS_FACES", "350000")),
+            "max_export_faces": int(os.environ.get("MESHMEND_MAX_EXPORT_FACES", "600000")),
+            "psutil_error": str(exc),
+        }
+
+
+def _memory_safety_enabled() -> bool:
+    return os.environ.get("MESHMEND_DISABLE_MEMORY_SAFETY", "0").strip().lower() not in {"1", "true", "yes", "on"}
+
+
+def _path_status(path: Path) -> dict[str, Any]:
+    try:
+        return {"path": str(path), "exists": path.exists(), "is_file": path.is_file(), "is_dir": path.is_dir()}
+    except Exception as exc:
+        return {"path": str(path), "error": str(exc)}
+
+
+def _permission_check(path: Path) -> dict[str, Any]:
+    try:
+        path.mkdir(parents=True, exist_ok=True) if path.suffix == "" else path.parent.mkdir(parents=True, exist_ok=True)
+        probe_dir = path if path.is_dir() or path.suffix == "" else path.parent
+        probe = probe_dir / f".meshmend_write_probe_{uuid.uuid4().hex}"
+        probe.write_text("ok", encoding="utf-8")
+        probe.unlink(missing_ok=True)
+        return {"path": str(path), "writable": True}
+    except Exception as exc:
+        return {"path": str(path), "writable": False, "error": str(exc)}
+
+
+def _python_status(python_path: str) -> dict[str, Any]:
+    try:
+        completed = subprocess.run([python_path, "-c", "import sys,platform; print(sys.executable); print(platform.platform())"], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=15)
+        return {"ok": completed.returncode == 0, "stdout": completed.stdout.strip(), "stderr": completed.stderr.strip(), "returncode": completed.returncode}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)}
+
+
+def _port_status(host: str, port: int) -> dict[str, Any]:
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(0.5)
+            connected = sock.connect_ex((host, port)) == 0
+        return {"host": host, "port": port, "accepting_connections": connected}
+    except Exception as exc:
+        return {"host": host, "port": port, "error": str(exc)}
+
+
+def _recent_failure_reports(limit: int = 8) -> list[dict[str, Any]]:
+    reports: list[dict[str, Any]] = []
+    try:
+        task_dirs = [path for path in OUTPUTS_DIR.iterdir() if path.is_dir()]
+        for output_dir in sorted(task_dirs, key=lambda item: item.stat().st_mtime, reverse=True):
+            error_path = output_dir / "worker_error.txt"
+            traceback_path = output_dir / "service_traceback.txt"
+            if not error_path.exists() and not traceback_path.exists():
+                continue
+            reports.append(
+                {
+                    "task_id": output_dir.name,
+                    "modified": output_dir.stat().st_mtime,
+                    "error": error_path.read_text(encoding="utf-8", errors="replace")[-4000:] if error_path.exists() else "",
+                    "traceback": traceback_path.read_text(encoding="utf-8", errors="replace")[-8000:] if traceback_path.exists() else "",
+                }
+            )
+            if len(reports) >= limit:
+                break
+    except Exception as exc:
+        reports.append({"error": str(exc)})
+    return reports
+
+
+def _create_known_test_mesh() -> Any:
+    import trimesh
+
+    base = trimesh.creation.cylinder(radius=8.0, height=2.0, sections=64)
+    body = trimesh.creation.icosphere(subdivisions=3, radius=3.0)
+    body.apply_scale([0.75, 0.65, 1.45])
+    body.apply_translation([0, 0, 6.0])
+    head = trimesh.creation.icosphere(subdivisions=2, radius=1.15)
+    head.apply_translation([0, 0, 10.3])
+    mesh = trimesh.util.concatenate([base, body, head])
+    mesh.metadata["units"] = "mm"
+    mesh.metadata["purpose"] = "backend_test_mesh"
+    return mesh
+
+
+def _generate_modular_fallback(
+    *,
+    prompt: str,
+    scale_mm: float,
+    target_faces: int,
+    output_format: str,
+    candidates_per_category: int,
+    reason: str,
+    output_dir: Path | None = None,
+) -> dict[str, Any]:
+    from meshmend.studio.pipeline import StudioMiniatureSpec
+    from meshmend.studio.staged_pipeline import StagedMiniaturePipeline
+
+    fmt = _safe_export_format(output_format)
+    output_dir = output_dir or (OUTPUTS_DIR / ("fallback_" + uuid.uuid4().hex[:12]))
+    output_dir.mkdir(parents=True, exist_ok=True)
+    spec = StudioMiniatureSpec.from_prompt(prompt, scale_mm=scale_mm, target_faces=max(24_000, min(int(target_faces), 150_000)))
+    pipeline = StagedMiniaturePipeline()
+    result = pipeline.generate(spec, candidates_per_category=max(1, min(int(candidates_per_category), 6)), candidate_output_dir=output_dir / "candidates")
+    mesh = result.mesh
+    output_path = output_dir / f"modular_fallback_miniature.{fmt}"
+    _export_mesh(mesh, output_path)
+    quality_report = result.quality_report.to_dict()
+    payload = {
+        "status": "ok",
+        "source": "procedural_modular_fallback",
+        "quality_tier": "valid_procedural_placeholder_miniature",
+        "studio_quality_certified": False,
+        "studio_quality_note": "Fallback guarantees valid modular geometry; it is not claimed as store/studio-quality visual sculpt output.",
+        "fallback_reason": reason,
+        "model_file": output_path.name,
+        "model_format": fmt,
+        "model_urls": {fmt: f"{PUBLIC_BASE_URL}/v1/files/{task_file_name(output_path)}"},
+        "mesh_info": _mesh_summary(mesh),
+        "quality_report": quality_report,
+        "stage_results": [stage.to_dict() for stage in result.stage_results],
+        "selected_parts": {category.value: part.part_id for category, part in result.selected_parts.items()},
+        "consumed_credits": 0,
+    }
+    (output_dir / "fallback_report.json").write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    return payload
+
+
+def _safe_export_format(format_name: str) -> str:
+    fmt = str(format_name or "stl").lower().lstrip(".")
+    if fmt not in {"stl", "obj", "glb", "ply"}:
+        raise HTTPException(status_code=400, detail="format must be one of: stl, obj, glb, ply")
+    return fmt
+
+
+def _export_mesh(mesh: Any, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    mesh.export(str(output_path))
+
+
+def _mesh_summary(mesh: Any) -> dict[str, Any]:
+    try:
+        components = [part for part in mesh.split(only_watertight=False) if len(part.faces) > 20]
+    except Exception:
+        components = []
+    return {
+        "faces": int(len(mesh.faces)),
+        "vertices": int(len(mesh.vertices)),
+        "watertight": bool(getattr(mesh, "is_watertight", False)),
+        "components": len(components),
+        "extents_mm": [float(value) for value in getattr(mesh, "extents", [])],
+        "units": str(getattr(mesh, "metadata", {}).get("units", "mm")),
     }
 
 
@@ -436,12 +930,12 @@ def _run_worker_with_progress(task_id: str, command_args: list[str], output_dir:
     )
     stdout_parts: list[str] = []
     stderr_parts: list[str] = []
-    deadline = time.time() + float(os.environ.get("MESHMEND_MODEL_COMMAND_TIMEOUT_SECONDS", "3600"))
+    deadline = time.time() + float(os.environ.get("MESHMEND_MODEL_COMMAND_TIMEOUT_SECONDS", "10800"))
     last_progress_mtime = 0.0
     last_heartbeat = 0.0
     last_progress_seen_at = time.time()
     last_output_count = 0
-    stalled_timeout = float(os.environ.get("MESHMEND_MODEL_STALLED_TIMEOUT_SECONDS", "900"))
+    stalled_timeout = float(os.environ.get("MESHMEND_MODEL_STALLED_TIMEOUT_SECONDS", "3600"))
     stderr_thread = threading.Thread(target=_collect_pipe, args=(process.stderr, stderr_parts), daemon=True)
     stdout_thread = threading.Thread(target=_collect_pipe, args=(process.stdout, stdout_parts), daemon=True)
     stderr_thread.start()
@@ -449,10 +943,10 @@ def _run_worker_with_progress(task_id: str, command_args: list[str], output_dir:
     while process.poll() is None:
         if time.time() > deadline:
             process.kill()
-            raise RuntimeError(f"model command timed out after {os.environ.get('MESHMEND_MODEL_COMMAND_TIMEOUT_SECONDS', '3600')}s")
+            raise RuntimeError(f"model command timed out after {os.environ.get('MESHMEND_MODEL_COMMAND_TIMEOUT_SECONDS', '10800')}s")
         progress_path = output_dir / "progress.json"
-        if progress_path.exists():
-            try:
+        try:
+            if progress_path.exists():
                 mtime = progress_path.stat().st_mtime
                 if mtime > last_progress_mtime:
                     last_progress_mtime = mtime
@@ -460,8 +954,8 @@ def _run_worker_with_progress(task_id: str, command_args: list[str], output_dir:
                     if progress:
                         _apply_worker_progress(task_id, progress)
                         last_progress_seen_at = time.time()
-            except Exception:
-                pass
+        except Exception:
+            pass
         output_count = len(stdout_parts) + len(stderr_parts)
         if output_count > last_output_count:
             last_output_count = output_count

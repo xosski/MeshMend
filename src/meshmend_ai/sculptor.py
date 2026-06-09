@@ -372,7 +372,7 @@ class SculptorFoundation:
 
         quality = _hosted_quality_for_detail(print_detail_um)
         requested_polycount = max_detail_triangles or (250_000 if quality == "high" else 150_000)
-        service_cap = int(os.environ.get("MESHMEND_HOSTED_TARGET_POLYCOUNT_CAP", "4000000" if quality == "high" else "750000"))
+        service_cap = int(os.environ.get("MESHMEND_HOSTED_TARGET_POLYCOUNT_CAP", "1200000" if quality == "high" else "500000"))
         target_polycount = min(int(requested_polycount), service_cap)
         enriched_prompt = (
             f"{prompt}\n\n"
@@ -2465,9 +2465,8 @@ def _configure_bundled_no_api_external_backend() -> bool:
 
     The previous GUI path kept restarting the service as `meshmend_sculpt`, which
     is intentionally rejected for store-quality requests. Use the local external
-    Hunyuan-backed adapter by default so /health reports `external` and the
-    actual worker can surface install/model-quality failures instead of a 503
-    config rejection. Users can still force native sculpt for debugging.
+    MeshMend-owned sculpt adapter by default so /health reports `external` and the
+    actual worker uses the dedicated sculpt engine instead of Hunyuan.
     """
     if os.environ.get("MESHMEND_FORCE_NATIVE_SCULPT_BACKEND", "0").strip().lower() in {"1", "true", "yes", "on"}:
         return False
@@ -2476,8 +2475,7 @@ def _configure_bundled_no_api_external_backend() -> bool:
         return False
     os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
     os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1"
-    os.environ.setdefault("MESHMEND_ALLOW_HUNYUAN_STORE_QUALITY", "1")
-    os.environ.setdefault("MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES", "1")
+    os.environ.setdefault("MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES", "0")
     os.environ["MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND"] = (
         f'"{sys.executable}" "{runner}" --input {{input_json}} --prompt {{prompt_path}} '
         "--output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}"

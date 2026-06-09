@@ -20,10 +20,10 @@ class MeshSimplifier:
 
         q = (quality or "standard").lower().strip()
         if q == "high":
-            taubin_iter = 1
-            lambda_v = 0.08
-            nu_v = -0.09
-            min_component_faces = 200
+            taubin_iter = 0
+            lambda_v = 0.0
+            nu_v = 0.0
+            min_component_faces = 80
         elif q == "low":
             taubin_iter = 2
             lambda_v = 0.20
@@ -63,11 +63,12 @@ class MeshSimplifier:
         except Exception:
             pass
 
-        try:
-            import trimesh
-            trimesh.smoothing.filter_taubin(polished, lamb=lambda_v, nu=nu_v, iterations=taubin_iter)
-        except Exception:
-            pass
+        if taubin_iter > 0:
+            try:
+                import trimesh
+                trimesh.smoothing.filter_taubin(polished, lamb=lambda_v, nu=nu_v, iterations=taubin_iter)
+            except Exception:
+                pass
 
         try:
             polished.remove_unreferenced_vertices()

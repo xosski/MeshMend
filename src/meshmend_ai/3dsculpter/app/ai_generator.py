@@ -362,13 +362,13 @@ class AIGeneratorWorker(QObject):
     def _num_points_for_detail(self) -> int:
         """Map UI detail level to reconstruction point budget."""
         mapping = {
-            1: 14000,
-            2: 22000,
-            3: 32000,
-            4: 44000,
-            5: 64000,
+            1: 18000,
+            2: 30000,
+            3: 52000,
+            4: 84000,
+            5: 128000,
         }
-        return mapping.get(int(self.detail_level), 32000)
+        return mapping.get(int(self.detail_level), 52000)
 
     def _quality_from_detail_level(self) -> str:
         level = int(self.detail_level)
@@ -766,15 +766,17 @@ class AIGeneratorWorker(QObject):
                 mesh.remove_duplicate_faces()
             
             # Keep enough geometry for miniature details; only decimate truly noisy outputs.
-            target_faces = {1: 8000, 2: 14000, 3: 24000, 4: 42000, 5: 70000}.get(int(self.detail_level), 24000)
+            target_faces = {1: 16000, 2: 32000, 3: 80000, 4: 160000, 5: 320000}.get(int(self.detail_level), 80000)
             if len(mesh.faces) > target_faces and hasattr(mesh, "simplify_quadratic_decimation"):
                 try:
                     mesh = mesh.simplify_quadratic_decimation(target_faces)
                 except Exception:
                     pass
 
-            # Very light smoothing only after simplification.
-            smooth_iters = 0 if self.detail_level <= 2 else 1
+            # Avoid smoothing high-detail output: it removes the raised/recessed
+            # miniature features users are asking for. Low-detail drafts still
+            # get one cleanup pass to reduce reconstruction speckle.
+            smooth_iters = 1 if self.detail_level <= 2 else 0
             if smooth_iters > 0:
                 mesh = self._smooth_mesh(mesh, iterations=smooth_iters)
 

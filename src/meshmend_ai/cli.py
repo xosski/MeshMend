@@ -419,8 +419,9 @@ def _configure_bundled_no_api_external_backend(args: argparse.Namespace) -> bool
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_PORT", str(args.model_service_port))
     os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = sys.executable
     os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
-    os.environ.setdefault("MESHMEND_ALLOW_HUNYUAN_STORE_QUALITY", "1")
-    os.environ.setdefault("MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES", "1")
+    os.environ.setdefault("MESHMEND_MODEL_COMMAND_TIMEOUT_SECONDS", "10800")
+    os.environ.setdefault("MESHMEND_MODEL_STALLED_TIMEOUT_SECONDS", "3600")
+    os.environ.setdefault("MESHMEND_ALLOW_LOCAL_QUALITY_SCORE_ESTIMATES", "0")
     os.environ["MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND"] = (
         f'"{sys.executable}" "{runner}" --input {{input_json}} --prompt {{prompt_path}} '
         "--output-dir {output_dir} --quality {quality} --target-polycount {target_polycount}"

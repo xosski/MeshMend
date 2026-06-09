@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
         self.detail_spin = QSpinBox()
         self.detail_spin.setMinimum(1)
         self.detail_spin.setMaximum(5)
-        self.detail_spin.setValue(4)
+        self.detail_spin.setValue(5)
         layout.addWidget(self.detail_spin)
         
         # Scale

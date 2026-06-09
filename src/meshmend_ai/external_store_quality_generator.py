@@ -139,30 +139,68 @@ def main() -> int:
 
 def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path | None, target_polycount: int) -> dict[str, Any]:
     text = prompt.lower()
+    subject_text = prompt_subject_text(prompt).lower()
     scale_mm = float(request.get("scale_mm") or 32.0)
     image_cues = reference_image_subject_cues(image_path) if image_path is not None else {}
+    semantic_plan = local_semantic_plan(subject_text)
+    semantic_archetype = str(semantic_plan.get("archetype") or "generic_humanoid")
+    is_alien_bioform = any(
+        term in subject_text
+        for term in (
+            "termagant",
+            "termagaunt",
+            "tyranid",
+            "hormagaunt",
+            "gaunt alien",
+            "insectoid alien",
+            "chitin alien",
+            "bioform",
+            "fleshborer",
+        )
+    )
     prompt_has_subject = any(
-        term in text
+        term in subject_text
         for term in (
             "space marine", "spacemarine", "adeptus", "primaris", "mounted", "rider", "dragon", "beast",
             "cavalry", "wizard", "mage", "sorcerer", "witch", "warlock", "cleric", "priest", "rogue",
             "assassin", "ranger", "knight", "paladin", "orc", "ork", "brute", "creature", "monster",
+            "termagant", "termagaunt", "tyranid", "hormagaunt", "insectoid alien", "bioform",
+            "high elf", "high-elf", "elf warrior", "elven warrior", "dwarf", "dwarven", "samurai",
+            "ronin", "viking", "pirate", "robot", "android", "mech", "lizardfolk", "dragonborn",
         )
     )
-    is_space_marine = any(term in text for term in ("space marine", "spacemarine", "adeptus", "primaris", "power armored marine", "power armoured marine"))
+    is_space_marine = any(term in subject_text for term in ("space marine", "spacemarine", "adeptus", "primaris", "power armored marine", "power armoured marine"))
     archetype = (
-        "power_armored_space_marine" if is_space_marine
-        else "mounted_beast" if any(term in text for term in ("mounted", "rider", "dragon", "beast", "cavalry"))
-        else "robed_caster" if any(term in text for term in ("wizard", "mage", "sorcerer", "witch", "warlock", "cleric", "priest", "robe", "robed"))
-        else "stealth_rogue" if any(term in text for term in ("rogue", "assassin", "ranger", "thief", "ninja", "dagger"))
-        else "heroic_knight" if any(term in text for term in ("knight", "paladin", "templar", "crusader", "champion"))
-        else "orc_warrior" if any(term in text for term in ("orc", "ork", "brute"))
+        "alien_chitin_bioform" if is_alien_bioform
+        else "power_armored_space_marine" if is_space_marine
+        else semantic_archetype if semantic_archetype != "generic_humanoid"
+        else "mounted_beast" if any(term in subject_text for term in ("mounted", "rider", "dragon", "beast", "cavalry"))
+        else "robed_caster" if any(term in subject_text for term in ("wizard", "mage", "sorcerer", "witch", "warlock", "cleric", "priest", "robe", "robed"))
+        else "stealth_rogue" if any(term in subject_text for term in ("rogue", "assassin", "ranger", "thief", "ninja", "dagger"))
+        else "heroic_knight" if any(term in subject_text for term in ("knight", "paladin", "templar", "crusader", "champion"))
+        else "orc_warrior" if any(term in subject_text for term in ("orc", "ork", "brute"))
         else "mounted_beast" if image_cues.get("wide_reference") and not prompt_has_subject
         else "image_reference_subject" if image_path is not None and not prompt_has_subject
         else "armored_humanoid"
     )
-    weapon = "rifle" if is_space_marine or any(term in text for term in ("rifle", "gun", "bolter", "blaster")) else "axe" if "axe" in text else "staff" if any(term in text for term in ("staff", "spear", "lance")) else "visible_reference_weapon" if image_path is not None and not prompt_has_subject else "sword"
-    landmarks = ["readable_face_or_helmet", "hands_and_fingers", "weapon_bevels", "armor_trim", "deep_panel_lines", "scenic_base"]
+    weapon = "fleshborer_bioweapon" if is_alien_bioform else "rifle" if is_space_marine or any(term in subject_text for term in ("rifle", "gun", "bolter", "blaster")) else "axe" if "axe" in subject_text else "staff" if any(term in subject_text for term in ("staff", "spear", "lance")) else "visible_reference_weapon" if image_path is not None and not prompt_has_subject else "sword"
+    if is_alien_bioform:
+        landmarks = [
+            "sloped_chitin_head_with_mandibles",
+            "ribbed_organic_carapace",
+            "four_clawed_legs",
+            "two_scything_forelimbs",
+            "fleshborer_bioweapon",
+            "long_tapering_tail",
+            "small_scenic_base",
+            "do_not_substitute_generic_humanoid",
+        ]
+    else:
+        landmarks = ["readable_face_or_helmet", "hands_and_fingers", "weapon_bevels", "armor_trim", "deep_panel_lines", "scenic_base"]
+    for landmark in semantic_plan.get("landmarks") or []:
+        value = str(landmark).replace(" ", "_")
+        if value not in landmarks:
+            landmarks.append(value)
     if is_space_marine:
         landmarks += [
             "power_armored_barrel_torso",
@@ -181,6 +219,16 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
         landmarks += ["heroic_plate_armor", "large_shield_or_banner", "crested_helmet"]
     if archetype == "orc_warrior":
         landmarks += ["brute_proportions", "tusks", "heavy_weapon", "trophy_straps"]
+    if archetype == "high_elf_warrior":
+        landmarks += ["tall_slender_proportions", "pointed_ears", "crested_helmet", "leaf_rune_trim", "kite_shield", "cape_or_tabard"]
+    if archetype == "dwarf_warrior":
+        landmarks += ["short_stocky_proportions", "braided_beard", "runic_armor", "round_shield", "axe_or_hammer"]
+    if archetype == "samurai_warrior":
+        landmarks += ["kabuto_helmet", "lamellar_plate_rows", "sode_shoulders", "katana", "skirt_plates"]
+    if archetype == "robot_mech":
+        landmarks += ["boxy_panels", "sensor_visor", "cables", "mechanical_joints"]
+    if archetype == "lizardfolk_warrior":
+        landmarks += ["long_snout", "visible_tail", "scale_rows", "claws", "crest_spines"]
     if archetype == "mounted_beast" and image_path is not None and not prompt_has_subject:
         landmarks += [
             "preserve_uploaded_reference_silhouette",
@@ -211,6 +259,10 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
         ("horn", "horns_or_spikes"),
         ("spike", "horns_or_spikes"),
     ):
+        if term not in subject_text:
+            continue
+        if is_alien_bioform and landmark in {"cloth_folds", "shield", "banner", "skulls_and_rubble"}:
+            continue
         if term in text and landmark not in landmarks:
             landmarks.append(landmark)
     landmarks = list(dict.fromkeys(landmarks))
@@ -220,6 +272,18 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
         "archetype": archetype,
         "weapon": weapon,
         "quality_bar": "commercial tabletop miniature STL, 360-degree sculpt, resin-printable, not a blockout",
+        "generation_pipeline": {
+            "concept_generation_separate_from_mesh_generation": True,
+            "modular_parts": ["head", "torso", "legs", "left_arm", "right_arm", "weapons", "accessories"],
+            "assembly_before_sculpting": True,
+            "sculpt_passes": [
+                "primary_large_forms",
+                "secondary_armor_details_trims_vents_pouches",
+                "tertiary_micro_detail_engravings_insignia_texture",
+            ],
+            "artifact_rejection": ["planes", "sheets", "floating_geometry", "disconnected_shells", "non_manifold_topology", "open_surfaces"],
+            "quality_critic_minimum_score": 85,
+        },
         "input_image": image_path.name if image_path else None,
         "required_landmarks": landmarks,
         "printability": {
@@ -229,6 +293,34 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
             "preferred_scale_mm": scale_mm,
         },
     }
+
+
+def prompt_subject_text(prompt: str) -> str:
+    text = " ".join((prompt or "").split())
+    for marker in (
+        "Create a production/studio-quality",
+        "Create a final store/studio-quality",
+        "Create a production",
+        "Create a final",
+    ):
+        index = text.lower().find(marker.lower())
+        if index > 0:
+            return text[:index].strip()
+    return text
+
+
+def local_semantic_plan(subject_text: str) -> dict[str, Any]:
+    """Return bundled offline archetype cues used to avoid generic outputs."""
+    try:
+        service_dir = Path(__file__).resolve().parent / "3dsculpter" / "model_service"
+        if str(service_dir) not in sys.path:
+            sys.path.insert(0, str(service_dir))
+        from native_generation import lookup_semantic_archetype
+
+        plan = lookup_semantic_archetype(subject_text)
+        return dict(plan) if isinstance(plan, dict) else {}
+    except Exception:
+        return {"archetype": "generic_humanoid", "landmarks": []}
 
 
 def reference_image_subject_cues(image_path: Path | None) -> dict[str, Any]:
@@ -262,9 +354,12 @@ def build_enhanced_prompt(prompt: str, spec: dict[str, Any]) -> str:
         f"Scale: {spec['scale_mm']}mm. Archetype: {spec['archetype']}. Weapon: {spec['weapon']}. "
         f"Required visible landmarks: {landmarks}. "
         f"{reference_sentence}"
+        "Pipeline requirement: first create a complete concept/specification, then generate separate modular meshes for head, torso, legs, left arm, right arm, weapons, and accessories; assemble these modules into a complete miniature before sculpting. "
+        "Run a primary sculpt pass for large anatomical and silhouette forms, a secondary sculpt pass for armor details/trims/vents/pouches, and a tertiary sculpt pass for micro-detail, engravings, insignia, and surface texture. "
         "Use clean 360-degree sculpt anatomy, readable face/helmet, hands/fingers or claws, bevelled weapons, layered armor/cloth/leather/metal details, "
         "deep recesses and raised trim that survive miniature painting, a fused scenic base, watertight topology, and commercial STL-ready geometry. "
-        "Avoid smooth blobs, flat bas-relief, card-like depth, generic rocks, unconnected floating parts, and low-poly decimated surfaces."
+        "Avoid and reject smooth blobs, flat bas-relief, planes, sheets, card-like depth, generic rocks, floating geometry, disconnected shells, non-manifold topology, open surfaces, and low-poly decimated surfaces. "
+        "The final Miniature Quality Critic score must be at least 85/100 for silhouette quality, anatomical quality, armor design quality, detail density, printability, and professional resin miniature similarity."
     )
 
 
@@ -305,14 +400,38 @@ def inspect_mesh(model_path: Path) -> dict[str, Any]:
     if not isinstance(mesh, trimesh.Trimesh) or len(mesh.faces) == 0:
         raise RuntimeError("model is empty or not a Trimesh")
     components = len([part for part in mesh.split(only_watertight=False) if len(part.faces) > 20])
+    edge_counts = np.bincount(mesh.edges_unique_inverse) if len(mesh.faces) else np.array([], dtype=int)
+    boundary_edges = int((edge_counts == 1).sum()) if len(edge_counts) else 0
+    non_manifold_edges = int((edge_counts > 2).sum()) if len(edge_counts) else 0
     extents = np.maximum(np.asarray(mesh.extents, dtype=float), 1e-6)
+    smooth_surface_area_ratio = mesh_smooth_surface_area_ratio(mesh)
+    sheet_card_artifact = False
+    background_slab_artifact = False
+    low_relief_sheet = False
+    try:
+        service_dir = Path(__file__).resolve().parent / "3dsculpter" / "model_service"
+        if str(service_dir) not in sys.path:
+            sys.path.insert(0, str(service_dir))
+        from postprocess_backend import likely_background_slab, likely_horizontal_sheet_card, likely_image_low_relief_sheet
+
+        sheet_card_artifact = bool(likely_horizontal_sheet_card(mesh))
+        background_slab_artifact = bool(likely_background_slab(mesh, {"workflow": "image_to_3d"}))
+        low_relief_sheet = bool(likely_image_low_relief_sheet(mesh))
+    except Exception:
+        pass
     return {
         "faces": int(len(mesh.faces)),
         "vertices": int(len(mesh.vertices)),
         "watertight": bool(mesh.is_watertight),
         "components": int(components),
+        "boundary_edges": boundary_edges,
+        "non_manifold_edges": non_manifold_edges,
         "extents_mm": [float(value) for value in extents],
         "depth_ratio": float(extents.min() / extents.max()),
+        "sheet_card_artifact": sheet_card_artifact,
+        "background_slab_artifact": background_slab_artifact,
+        "low_relief_sheet": low_relief_sheet,
+        "smooth_surface_area_ratio": smooth_surface_area_ratio,
         "validated_by_external_scaffold": True,
     }
 
@@ -325,13 +444,43 @@ def quality_issues(mesh_info: dict[str, Any], min_faces: int) -> list[str]:
         issues.append(f"faces_below_target:{mesh_info.get('faces')}<{effective_min_faces}")
     if not bool(mesh_info.get("watertight")):
         issues.append("mesh_not_watertight")
+    if int(mesh_info.get("boundary_edges") or 0) > 0:
+        issues.append(f"open_surfaces:{mesh_info.get('boundary_edges')}")
+    if int(mesh_info.get("non_manifold_edges") or 0) > 0:
+        issues.append(f"non_manifold_topology:{mesh_info.get('non_manifold_edges')}")
     max_components = env_int("MESHMEND_CERTIFIED_MAX_COMPONENTS", "3", fallback_name="MESHMEND_EXTERNAL_MAX_COMPONENTS")
     if int(mesh_info.get("components") or 0) > max_components:
         issues.append(f"too_many_components:{mesh_info.get('components')}>{max_components}")
     min_depth_ratio = env_float("MESHMEND_CERTIFIED_MIN_DEPTH_RATIO", "0.18", fallback_name="MESHMEND_EXTERNAL_MIN_DEPTH_RATIO")
     if float(mesh_info.get("depth_ratio") or 0.0) < min_depth_ratio:
         issues.append(f"too_flat:{mesh_info.get('depth_ratio')}<{min_depth_ratio}")
+    if bool(mesh_info.get("sheet_card_artifact")):
+        issues.append("sheet_card_artifact")
+    if bool(mesh_info.get("background_slab_artifact")):
+        issues.append("background_slab_artifact")
+    if bool(mesh_info.get("low_relief_sheet")):
+        issues.append("low_relief_sheet")
+    smooth_limit = env_float("MESHMEND_CERTIFIED_MAX_SMOOTH_SURFACE_AREA_RATIO", "0.68")
+    smooth_ratio = float(mesh_info.get("smooth_surface_area_ratio") or 0.0)
+    if smooth_ratio > smooth_limit:
+        issues.append(f"large_smooth_primitive_surfaces_dominate:{smooth_ratio:.2f}>{smooth_limit:.2f}")
     return issues
+
+
+def mesh_smooth_surface_area_ratio(mesh: Any) -> float:
+    import numpy as np
+
+    if len(mesh.faces) == 0 or len(mesh.face_adjacency) == 0:
+        return 1.0
+    areas = np.asarray(mesh.area_faces, dtype=float)
+    total_area = max(float(areas.sum()), 1e-8)
+    adjacency = np.asarray(mesh.face_adjacency, dtype=np.int64)
+    angles = np.asarray(mesh.face_adjacency_angles, dtype=float)
+    smooth_faces = np.zeros(len(mesh.faces), dtype=bool)
+    smooth_pairs = adjacency[angles < np.radians(7.5)]
+    if len(smooth_pairs):
+        smooth_faces[np.unique(smooth_pairs)] = True
+    return float(areas[smooth_faces].sum() / total_area)
 
 
 def required_quality_score_issues(result: dict[str, Any]) -> list[str]:
@@ -339,13 +488,14 @@ def required_quality_score_issues(result: dict[str, Any]) -> list[str]:
         return []
     scores = store_quality_scores(result)
     required = (
-        "semantic_fidelity_score",
-        "anatomy_score",
+        "silhouette_quality",
+        "anatomical_quality",
+        "armor_design_quality",
         "detail_density_score",
-        "surface_finish_score",
         "printability_score",
+        "professional_resin_similarity",
     )
-    min_score = env_float("MESHMEND_CERTIFIED_MIN_QUALITY_SCORE", "0.80")
+    min_score = env_float("MESHMEND_CERTIFIED_MIN_QUALITY_SCORE", "85")
     issues: list[str] = []
     for key in required:
         if key not in scores:
@@ -356,8 +506,18 @@ def required_quality_score_issues(result: dict[str, Any]) -> list[str]:
         except (TypeError, ValueError):
             issues.append(f"invalid_{key}:{scores[key]!r}")
             continue
-        if value < min_score:
-            issues.append(f"{key}_below_min:{value:.2f}<{min_score:.2f}")
+        normalized = value * 100.0 if value <= 1.0 and min_score > 1.0 else value
+        if normalized < min_score:
+            issues.append(f"{key}_below_min:{normalized:.2f}<{min_score:.2f}")
+    overall = scores.get("overall") or scores.get("critic_score")
+    if overall is not None:
+        try:
+            overall_value = float(overall)
+            overall_normalized = overall_value * 100.0 if overall_value <= 1.0 and min_score > 1.0 else overall_value
+            if overall_normalized < min_score:
+                issues.append(f"critic_overall_below_min:{overall_normalized:.2f}<{min_score:.2f}")
+        except (TypeError, ValueError):
+            issues.append(f"invalid_critic_overall:{overall!r}")
     certifier = str(scores.get("certifier") or result.get("certifier") or "").strip()
     if not certifier:
         issues.append("missing_certifier")
@@ -373,13 +533,31 @@ def store_quality_scores(result: dict[str, Any]) -> dict[str, Any]:
         for key in (
             "semantic_fidelity_score",
             "anatomy_score",
+            "silhouette_quality",
+            "anatomical_quality",
+            "armor_design_quality",
             "detail_density_score",
             "surface_finish_score",
             "printability_score",
+            "professional_resin_similarity",
+            "overall",
+            "critic_score",
             "certifier",
         ):
             if key not in scores and key in mesh_info:
                 scores[key] = mesh_info[key]
+    if "anatomical_quality" not in scores and "anatomy_score" in scores:
+        scores["anatomical_quality"] = scores["anatomy_score"]
+    if "detail_density_score" not in scores and "detail_density" in scores:
+        scores["detail_density_score"] = scores["detail_density"]
+    if "printability_score" not in scores and "printability" in scores:
+        scores["printability_score"] = scores["printability"]
+    if "silhouette_quality" not in scores and "semantic_fidelity_score" in scores:
+        scores["silhouette_quality"] = scores["semantic_fidelity_score"]
+    if "armor_design_quality" not in scores and "surface_finish_score" in scores:
+        scores["armor_design_quality"] = scores["surface_finish_score"]
+    if "professional_resin_similarity" not in scores and "surface_finish_score" in scores:
+        scores["professional_resin_similarity"] = scores["surface_finish_score"]
     return dict(scores)
 
 

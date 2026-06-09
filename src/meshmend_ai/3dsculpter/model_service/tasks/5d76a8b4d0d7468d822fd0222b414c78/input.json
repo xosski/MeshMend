@@ -1,0 +1,14 @@
+{
+  "prompt": "store quality sci-fi heavy infantry",
+  "quality": "high",
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 50000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend",
+  "_meshmend_force_modular_fallback_reason": "No production text-to-3D runner is configured"
+}
