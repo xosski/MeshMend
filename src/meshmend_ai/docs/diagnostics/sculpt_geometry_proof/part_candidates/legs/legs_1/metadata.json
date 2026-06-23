@@ -1,0 +1,87 @@
+{
+  "part_id": "legs_1",
+  "category": "legs",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "procedural_modular_provider",
+  "detail_tags": [
+    "legs",
+    "left_leg",
+    "right_leg",
+    "greaves",
+    "knee_pads",
+    "boot_trim",
+    "greave_trim"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.0,
+        -0.12931297507461031,
+        6.45
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.0,
+        -0.12931297507461031,
+        1.65
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.0,
+        -0.12931297507461031,
+        11.25
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.0,
+        -0.12931297507461031,
+        6.45
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 2728,
+    "vertices": 1380,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 6,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.22787948007940986,
+    "detail_density": 0.7737790611783355,
+    "issues": [],
+    "passed": true
+  }
+}

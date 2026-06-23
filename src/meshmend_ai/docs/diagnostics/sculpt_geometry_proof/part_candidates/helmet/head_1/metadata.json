@@ -1,0 +1,87 @@
+{
+  "part_id": "head_1",
+  "category": "head",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "procedural_modular_provider",
+  "detail_tags": [
+    "head",
+    "helmet",
+    "helmet_lenses",
+    "helmet_mouth_grille",
+    "helmet_trim"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.0,
+        -0.1399999999999999,
+        23.1
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.0,
+        -0.1399999999999999,
+        21.200000000000003
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.0,
+        -0.1399999999999999,
+        25.0
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.0,
+        -0.1399999999999999,
+        23.1
+      ],
+      "radius_mm": 0.34559999999999996,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 368,
+    "vertices": 194,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 1,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.6633191164704968,
+    "detail_density": 0.5311150718104591,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "helmet",
+  "canonical_category": "head"
+}

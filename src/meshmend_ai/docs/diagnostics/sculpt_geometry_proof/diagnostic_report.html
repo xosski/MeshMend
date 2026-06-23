@@ -1,0 +1,50 @@
+<!doctype html><meta charset='utf-8'><title>MeshMend Sculpt Geometry Proof</title><style>body{font-family:Arial,sans-serif;margin:24px}table{border-collapse:collapse}td,th{border:1px solid #bbb;padding:8px;vertical-align:top}pre{margin:0}</style><h1>MeshMend Sculpt Geometry Proof</h1><p><b>Prompt:</b> original sci-fi heavy infantry veteran with rifle, helmet lenses, armor trim, vents, rivets, panel lines, cloth tabard, pouches, chains, skull trophy, insignia, surface wear</p><p><b>Evidence rule:</b> DetailCritic scores are not used as evidence. This report shows stage renders, exported meshes, and geometry counts. Previous visual QA found generic/blockout appearance; this revision uses larger readable sculpt forms.</p><table><tr><th>Stage</th><th>Faces</th><th>Vertices</th><th>Objects</th><th>BBox mm</th><th>Detected detail geometry counts</th></tr><tr><td>01_base_mesh</td><td>10,464</td><td>5,400</td><td>40</td><td>[26.0, 26.0, 26.0]</td><td><pre>{
+  "armor_trims": 0,
+  "panel_lines": 0,
+  "rivets": 0,
+  "cloth_folds": 0,
+  "pouches": 0,
+  "insignia": 0,
+  "weapon_details": 0
+}</pre></td></tr><tr><td>02_post_assembly</td><td>22,104</td><td>11,274</td><td>67</td><td>[26.0, 26.0, 26.0]</td><td><pre>{
+  "armor_trims": 0,
+  "panel_lines": 0,
+  "rivets": 0,
+  "cloth_folds": 0,
+  "pouches": 0,
+  "insignia": 0,
+  "weapon_details": 0
+}</pre></td></tr><tr><td>03_primary_sculpt</td><td>354,328</td><td>177,394</td><td>113</td><td>[26.0, 26.0, 26.0]</td><td><pre>{
+  "armor_trims": 0,
+  "panel_lines": 0,
+  "rivets": 0,
+  "cloth_folds": 0,
+  "pouches": 0,
+  "insignia": 0,
+  "weapon_details": 0
+}</pre></td></tr><tr><td>04_secondary_detail</td><td>360,952</td><td>180,870</td><td>163</td><td>[26.0, 26.0, 26.0]</td><td><pre>{
+  "armor_trims": 14,
+  "panel_lines": 14,
+  "rivets": 14,
+  "cloth_folds": 0,
+  "pouches": 4,
+  "insignia": 0,
+  "weapon_details": 0
+}</pre></td></tr><tr><td>05_final_sculpt</td><td>5,780,788</td><td>2,891,150</td><td>251</td><td>[26.1703, 26.143, 26.1835]</td><td><pre>{
+  "armor_trims": 52,
+  "panel_lines": 26,
+  "rivets": 40,
+  "cloth_folds": 9,
+  "pouches": 8,
+  "insignia": 3,
+  "weapon_details": 17
+}</pre></td></tr></table><h2>Stage renders</h2><h2>01_base_mesh</h2><img src='01_base_mesh.png' style='max-width:900px;border:1px solid #aaa'><h2>02_post_assembly</h2><img src='02_post_assembly.png' style='max-width:900px;border:1px solid #aaa'><h2>03_primary_sculpt</h2><img src='03_primary_sculpt.png' style='max-width:900px;border:1px solid #aaa'><h2>04_secondary_detail</h2><img src='04_secondary_detail.png' style='max-width:900px;border:1px solid #aaa'><h2>05_final_sculpt</h2><img src='05_final_sculpt.png' style='max-width:900px;border:1px solid #aaa'><h2>Side-by-side comparison</h2><p>Professional reference is unavailable locally and is not fabricated.</p><img src='side_by_side_meshmend_vs_professional_reference.png' style='max-width:1500px;border:1px solid #aaa'><h2>Export survival</h2><pre>{
+  "exported_file": "05_final_sculpt.stl",
+  "reloaded_face_count": 5780788,
+  "reloaded_vertex_count": 17342364,
+  "reloaded_bounding_box_dimensions_mm": [
+    26.1703,
+    26.143,
+    26.1835
+  ]
+}</pre>

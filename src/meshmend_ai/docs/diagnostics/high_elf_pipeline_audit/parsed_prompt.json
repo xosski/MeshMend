@@ -1,0 +1,243 @@
+{
+  "prompt": "High Elf Warrior with glaive, layered fantasy armor, cape, heroic posture, ornate helm, narrow waist, long limbs",
+  "race": "high_elf",
+  "class": "warrior",
+  "role": "high_elf_warrior",
+  "equipment": [
+    "pointed_ears_or_elf_helm",
+    "glaive",
+    "cape_or_tabard",
+    "leaf_plate_edges"
+  ],
+  "pose": "heroic_posture",
+  "armor": "layered_fantasy_armor",
+  "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+  "style": "fantasy",
+  "ai_shape_plan": {
+    "source": "local_semantic_ai_shape_planner",
+    "confidence": 0.82,
+    "archetype": "high_elf_warrior",
+    "subject": "high_elf_warrior",
+    "scale_mm": 32.0,
+    "part_directives": {
+      "head": {
+        "scale": [
+          0.92,
+          0.96,
+          1.08
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "slender elven helm and ears"
+      },
+      "torso": {
+        "scale": [
+          0.88,
+          0.96,
+          1.06
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "narrow waist and tall chest"
+      },
+      "legs": {
+        "scale": [
+          0.88,
+          0.95,
+          1.12
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "elongated graceful legs"
+      },
+      "left_arm": {
+        "scale": [
+          0.88,
+          0.95,
+          1.08
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "long slender arms"
+      },
+      "right_arm": {
+        "scale": [
+          0.88,
+          0.95,
+          1.08
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "long slender arms"
+      },
+      "weapons": {
+        "scale": [
+          1.06,
+          1.06,
+          1.08
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "long readable spear/glaive with printable thickness"
+      },
+      "accessories": {
+        "scale": [
+          0.9,
+          0.92,
+          1.08
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "flowing cape/tabard silhouette"
+      },
+      "base": {
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "intent": "base"
+      }
+    },
+    "required_silhouette_features": [
+      "high_elf_warrior_shape",
+      "elongated_limbs",
+      "narrow_waist",
+      "heroic_posture",
+      "pointed_ears_or_elf_helm",
+      "layered_fantasy_armor",
+      "sword_spear_or_glaive",
+      "cape_or_tabard"
+    ],
+    "planner_parts": [
+      {
+        "name": "torso",
+        "kind": "body",
+        "shape": "barrel chest",
+        "size": "large",
+        "position": [
+          0,
+          0,
+          13
+        ],
+        "scale": [
+          4.5,
+          3.0,
+          6.5
+        ],
+        "detail_tags": []
+      },
+      {
+        "name": "head",
+        "kind": "body",
+        "shape": "snarling head",
+        "size": "medium",
+        "position": [
+          0,
+          0,
+          19
+        ],
+        "scale": [
+          2.5,
+          2.0,
+          2.8
+        ],
+        "detail_tags": []
+      },
+      {
+        "name": "left_leg",
+        "kind": "limb",
+        "shape": "bent armored leg",
+        "size": "large",
+        "position": [
+          -1.8,
+          0,
+          7
+        ],
+        "scale": [
+          1.6,
+          1.4,
+          6
+        ],
+        "detail_tags": []
+      },
+      {
+        "name": "right_leg",
+        "kind": "limb",
+        "shape": "braced armored leg",
+        "size": "large",
+        "position": [
+          1.8,
+          0,
+          7
+        ],
+        "scale": [
+          1.6,
+          1.4,
+          6
+        ],
+        "detail_tags": []
+      },
+      {
+        "name": "left_arm",
+        "kind": "limb",
+        "shape": "muscular weapon arm",
+        "size": "large",
+        "position": [
+          -4.2,
+          0,
+          14
+        ],
+        "scale": [
+          1.4,
+          1.2,
+          6
+        ],
+        "detail_tags": []
+      },
+      {
+        "name": "right_arm",
+        "kind": "limb",
+        "shape": "muscular weapon arm",
+        "size": "large",
+        "position": [
+          4.2,
+          0,
+          14
+        ],
+        "scale": [
+          1.4,
+          1.2,
+          6
+        ],
+        "detail_tags": []
+      }
+    ]
+  }
+}

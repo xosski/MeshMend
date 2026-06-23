@@ -1,0 +1,13 @@
+{
+  "faces": 300,
+  "vertices": 178,
+  "watertight": true,
+  "boundary_edges": 0,
+  "non_manifold_edges": 0,
+  "components": 3,
+  "sheet_artifacts": 0,
+  "primitive_score": 1.0,
+  "detail_density": 0.3873267055575142,
+  "issues": [],
+  "passed": true
+}

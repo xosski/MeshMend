@@ -1,0 +1,1029 @@
+<!doctype html><meta charset="utf-8"><title>High Elf Pipeline Audit</title>
+<style>body{font-family:Arial;margin:24px}img{border:1px solid #ddd;max-width:45%;margin:6px}pre{background:#f5f5f5;padding:12px;overflow:auto}</style>
+<h1>High Elf Pipeline Audit</h1>
+<h2>base_body.png</h2><img src="base_body.png">
+<h2>silhouette_front.png</h2><img src="silhouette_front.png">
+<h2>silhouette_side.png</h2><img src="silhouette_side.png">
+<h2>silhouette_rear.png</h2><img src="silhouette_rear.png">
+<h2>silhouette_45.png</h2><img src="silhouette_45.png">
+<h2>assembled_model.png</h2><img src="assembled_model.png">
+<h2>sculpted_model.png</h2><img src="sculpted_model.png">
+<h2>final_model.png</h2><img src="final_model.png">
+<h2>archetype_silhouette_comparison.png</h2><img src="archetype_silhouette_comparison.png">
+<h2>Trace</h2><pre>{
+  &quot;prompt&quot;: &quot;High Elf Warrior with glaive, layered fantasy armor, cape, heroic posture, ornate helm, narrow waist, long limbs&quot;,
+  &quot;stages&quot;: [
+    {
+      &quot;name&quot;: &quot;concept_profile&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;concept&quot;: {
+          &quot;prompt&quot;: &quot;High Elf Warrior with glaive, layered fantasy armor, cape, heroic posture, ornate helm, narrow waist, long limbs&quot;,
+          &quot;scale_mm&quot;: 32.0,
+          &quot;style&quot;: &quot;fantasy&quot;,
+          &quot;archetype&quot;: &quot;heavy_infantry&quot;,
+          &quot;pose&quot;: &quot;heroic_standing&quot;,
+          &quot;weapon&quot;: &quot;rifle&quot;,
+          &quot;design&quot;: {
+            &quot;faction&quot;: &quot;high_elf_host&quot;,
+            &quot;role&quot;: &quot;high_elf_warrior&quot;,
+            &quot;armor_class&quot;: &quot;layered_fantasy_armor&quot;,
+            &quot;equipment&quot;: [
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;glaive&quot;,
+              &quot;cape_or_tabard&quot;,
+              &quot;leaf_plate_edges&quot;
+            ],
+            &quot;pose&quot;: &quot;heroic_posture&quot;,
+            &quot;silhouette&quot;: &quot;tall_slender_elven_warrior_with_cape_and_pole_weapon&quot;,
+            &quot;head_type&quot;: &quot;elf_helm&quot;,
+            &quot;armor_type&quot;: &quot;layered_fantasy_armor&quot;,
+            &quot;backpack_type&quot;: &quot;cape_or_tabard&quot;,
+            &quot;weapon_type&quot;: &quot;glaive&quot;,
+            &quot;pose_type&quot;: &quot;heroic_posture&quot;,
+            &quot;faction_style&quot;: &quot;high_elf_host&quot;
+          },
+          &quot;head_type&quot;: &quot;elf_helm&quot;,
+          &quot;armor_type&quot;: &quot;layered_fantasy_armor&quot;,
+          &quot;backpack_type&quot;: &quot;cape_or_tabard&quot;,
+          &quot;weapon_type&quot;: &quot;glaive&quot;,
+          &quot;pose_type&quot;: &quot;heroic_posture&quot;,
+          &quot;faction_style&quot;: &quot;high_elf_host&quot;,
+          &quot;director_brief&quot;: {
+            &quot;selected&quot;: {
+              &quot;heads&quot;: {
+                &quot;kind&quot;: &quot;head&quot;,
+                &quot;name&quot;: &quot;elf_helm&quot;,
+                &quot;tags&quot;: [
+                  &quot;head&quot;,
+                  &quot;elf_helm&quot;,
+                  &quot;faction_head_identity&quot;
+                ],
+                &quot;silhouette_weight&quot;: 0.9
+              },
+              &quot;bodies&quot;: {
+                &quot;kind&quot;: &quot;body&quot;,
+                &quot;name&quot;: &quot;layered_fantasy_armor&quot;,
+                &quot;tags&quot;: [
+                  &quot;body&quot;,
+                  &quot;torso&quot;,
+                  &quot;layered_fantasy_armor&quot;,
+                  &quot;wide_shoulders&quot;
+                ],
+                &quot;silhouette_weight&quot;: 0.92
+              },
+              &quot;weapons&quot;: {
+                &quot;kind&quot;: &quot;weapon&quot;,
+                &quot;name&quot;: &quot;glaive&quot;,
+                &quot;tags&quot;: [
+                  &quot;weapon&quot;,
+                  &quot;weapon_barrel&quot;,
+                  &quot;glaive&quot;
+                ],
+                &quot;silhouette_weight&quot;: 0.9
+              },
+              &quot;equipment&quot;: {
+                &quot;kind&quot;: &quot;equipment&quot;,
+                &quot;name&quot;: &quot;pointed_ears_or_elf_helm&quot;,
+                &quot;tags&quot;: [
+                  &quot;accessory&quot;,
+                  &quot;pointed_ears_or_elf_helm&quot;
+                ],
+                &quot;silhouette_weight&quot;: 0.75
+              },
+              &quot;poses&quot;: {
+                &quot;kind&quot;: &quot;pose&quot;,
+                &quot;name&quot;: &quot;heroic_posture&quot;,
+                &quot;tags&quot;: [
+                  &quot;pose&quot;,
+                  &quot;heroic_posture&quot;
+                ],
+                &quot;silhouette_weight&quot;: 0.88
+              },
+              &quot;factions&quot;: {
+                &quot;kind&quot;: &quot;faction&quot;,
+                &quot;name&quot;: &quot;high_elf_host&quot;,
+                &quot;tags&quot;: [
+                  &quot;faction&quot;,
+                  &quot;high_elf_host&quot;
+                ],
+                &quot;silhouette_weight&quot;: 0.95
+              }
+            },
+            &quot;silhouette_tags&quot;: [
+              &quot;accessory&quot;,
+              &quot;body&quot;,
+              &quot;elf_helm&quot;,
+              &quot;faction&quot;,
+              &quot;faction_head_identity&quot;,
+              &quot;glaive&quot;,
+              &quot;head&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;high_elf_host&quot;,
+              &quot;layered_fantasy_armor&quot;,
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;pose&quot;,
+              &quot;torso&quot;,
+              &quot;weapon&quot;,
+              &quot;weapon_barrel&quot;,
+              &quot;wide_shoulders&quot;
+            ],
+            &quot;candidate_counts&quot;: {
+              &quot;heads&quot;: 5,
+              &quot;bodies&quot;: 5,
+              &quot;weapons&quot;: 5,
+              &quot;equipment&quot;: 9,
+              &quot;poses&quot;: 5,
+              &quot;factions&quot;: 5
+            }
+          },
+          &quot;shape_language&quot;: {
+            &quot;archetype&quot;: &quot;high_elf_warrior&quot;,
+            &quot;silhouette&quot;: &quot;tall_slender_elven_warrior_with_cape_and_pole_weapon&quot;,
+            &quot;anatomy&quot;: [
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;long_neck&quot;
+            ],
+            &quot;armor&quot;: [
+              &quot;layered_fantasy_armor&quot;,
+              &quot;crested_elf_helm&quot;,
+              &quot;slender_pauldrons&quot;,
+              &quot;leaf_plate_edges&quot;
+            ],
+            &quot;equipment&quot;: [
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ],
+            &quot;pose&quot;: [
+              &quot;upright_heroic_stance&quot;,
+              &quot;weapon_forward_readable&quot;
+            ],
+            &quot;required_silhouette_tags&quot;: [
+              &quot;high_elf_warrior_shape&quot;,
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;layered_fantasy_armor&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ]
+          },
+          &quot;ai_shape_plan&quot;: {
+            &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+            &quot;confidence&quot;: 0.82,
+            &quot;archetype&quot;: &quot;high_elf_warrior&quot;,
+            &quot;subject&quot;: &quot;high_elf_warrior&quot;,
+            &quot;scale_mm&quot;: 32.0,
+            &quot;part_directives&quot;: {
+              &quot;head&quot;: {
+                &quot;scale&quot;: [
+                  0.92,
+                  0.96,
+                  1.08
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;slender elven helm and ears&quot;
+              },
+              &quot;torso&quot;: {
+                &quot;scale&quot;: [
+                  0.88,
+                  0.96,
+                  1.06
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;narrow waist and tall chest&quot;
+              },
+              &quot;legs&quot;: {
+                &quot;scale&quot;: [
+                  0.88,
+                  0.95,
+                  1.12
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;elongated graceful legs&quot;
+              },
+              &quot;left_arm&quot;: {
+                &quot;scale&quot;: [
+                  0.88,
+                  0.95,
+                  1.08
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;long slender arms&quot;
+              },
+              &quot;right_arm&quot;: {
+                &quot;scale&quot;: [
+                  0.88,
+                  0.95,
+                  1.08
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;long slender arms&quot;
+              },
+              &quot;weapons&quot;: {
+                &quot;scale&quot;: [
+                  1.06,
+                  1.06,
+                  1.08
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;long readable spear/glaive with printable thickness&quot;
+              },
+              &quot;accessories&quot;: {
+                &quot;scale&quot;: [
+                  0.9,
+                  0.92,
+                  1.08
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;flowing cape/tabard silhouette&quot;
+              },
+              &quot;base&quot;: {
+                &quot;scale&quot;: [
+                  1.0,
+                  1.0,
+                  1.0
+                ],
+                &quot;offset&quot;: [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                &quot;intent&quot;: &quot;base&quot;
+              }
+            },
+            &quot;required_silhouette_features&quot;: [
+              &quot;high_elf_warrior_shape&quot;,
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;layered_fantasy_armor&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ],
+            &quot;planner_parts&quot;: [
+              {
+                &quot;name&quot;: &quot;torso&quot;,
+                &quot;kind&quot;: &quot;body&quot;,
+                &quot;shape&quot;: &quot;barrel chest&quot;,
+                &quot;size&quot;: &quot;large&quot;,
+                &quot;position&quot;: [
+                  0,
+                  0,
+                  13
+                ],
+                &quot;scale&quot;: [
+                  4.5,
+                  3.0,
+                  6.5
+                ],
+                &quot;detail_tags&quot;: []
+              },
+              {
+                &quot;name&quot;: &quot;head&quot;,
+                &quot;kind&quot;: &quot;body&quot;,
+                &quot;shape&quot;: &quot;snarling head&quot;,
+                &quot;size&quot;: &quot;medium&quot;,
+                &quot;position&quot;: [
+                  0,
+                  0,
+                  19
+                ],
+                &quot;scale&quot;: [
+                  2.5,
+                  2.0,
+                  2.8
+                ],
+                &quot;detail_tags&quot;: []
+              },
+              {
+                &quot;name&quot;: &quot;left_leg&quot;,
+                &quot;kind&quot;: &quot;limb&quot;,
+                &quot;shape&quot;: &quot;bent armored leg&quot;,
+                &quot;size&quot;: &quot;large&quot;,
+                &quot;position&quot;: [
+                  -1.8,
+                  0,
+                  7
+                ],
+                &quot;scale&quot;: [
+                  1.6,
+                  1.4,
+                  6
+                ],
+                &quot;detail_tags&quot;: []
+              },
+              {
+                &quot;name&quot;: &quot;right_leg&quot;,
+                &quot;kind&quot;: &quot;limb&quot;,
+                &quot;shape&quot;: &quot;braced armored leg&quot;,
+                &quot;size&quot;: &quot;large&quot;,
+                &quot;position&quot;: [
+                  1.8,
+                  0,
+                  7
+                ],
+                &quot;scale&quot;: [
+                  1.6,
+                  1.4,
+                  6
+                ],
+                &quot;detail_tags&quot;: []
+              },
+              {
+                &quot;name&quot;: &quot;left_arm&quot;,
+                &quot;kind&quot;: &quot;limb&quot;,
+                &quot;shape&quot;: &quot;muscular weapon arm&quot;,
+                &quot;size&quot;: &quot;large&quot;,
+                &quot;position&quot;: [
+                  -4.2,
+                  0,
+                  14
+                ],
+                &quot;scale&quot;: [
+                  1.4,
+                  1.2,
+                  6
+                ],
+                &quot;detail_tags&quot;: []
+              },
+              {
+                &quot;name&quot;: &quot;right_arm&quot;,
+                &quot;kind&quot;: &quot;limb&quot;,
+                &quot;shape&quot;: &quot;muscular weapon arm&quot;,
+                &quot;size&quot;: &quot;large&quot;,
+                &quot;position&quot;: [
+                  4.2,
+                  0,
+                  14
+                ],
+                &quot;scale&quot;: [
+                  1.4,
+                  1.2,
+                  6
+                ],
+                &quot;detail_tags&quot;: []
+              }
+            ]
+          },
+          &quot;required_categories&quot;: [
+            &quot;head&quot;,
+            &quot;torso&quot;,
+            &quot;legs&quot;,
+            &quot;left_arm&quot;,
+            &quot;right_arm&quot;,
+            &quot;weapons&quot;,
+            &quot;accessories&quot;,
+            &quot;base&quot;
+          ],
+          &quot;quality_target&quot;: &quot;premium_resin_tabletop_miniature&quot;
+        }
+      }
+    },
+    {
+      &quot;name&quot;: &quot;head&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;head_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;torso&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;torso_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;legs&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;legs_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;left_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;left_arm_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;right_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;right_arm_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;weapons&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;weapons_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;accessories&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;accessories_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;base&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;candidate_ids&quot;: [
+          &quot;base_1&quot;
+        ]
+      }
+    },
+    {
+      &quot;name&quot;: &quot;part_selection&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;head&quot;: &quot;head_1&quot;,
+        &quot;torso&quot;: &quot;torso_1&quot;,
+        &quot;legs&quot;: &quot;legs_1&quot;,
+        &quot;left_arm&quot;: &quot;left_arm_1&quot;,
+        &quot;right_arm&quot;: &quot;right_arm_1&quot;,
+        &quot;weapons&quot;: &quot;weapons_1&quot;,
+        &quot;accessories&quot;: &quot;accessories_1&quot;,
+        &quot;base&quot;: &quot;base_1&quot;
+      }
+    },
+    {
+      &quot;name&quot;: &quot;final_assembly&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;parts&quot;: {
+          &quot;head&quot;: &quot;head_1&quot;,
+          &quot;torso&quot;: &quot;torso_1&quot;,
+          &quot;legs&quot;: &quot;legs_1&quot;,
+          &quot;left_arm&quot;: &quot;left_arm_1&quot;,
+          &quot;right_arm&quot;: &quot;right_arm_1&quot;,
+          &quot;weapons&quot;: &quot;weapons_1&quot;,
+          &quot;accessories&quot;: &quot;accessories_1&quot;,
+          &quot;base&quot;: &quot;base_1&quot;
+        },
+        &quot;socket_connectors&quot;: 9
+      }
+    },
+    {
+      &quot;name&quot;: &quot;pre_sculpt_silhouette_and_part_recognizability_gate&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;artifacts&quot;: {
+        &quot;recognizability_gate&quot;: {
+          &quot;part_checks&quot;: {
+            &quot;head_recognizable&quot;: true,
+            &quot;torso_recognizable&quot;: true,
+            &quot;arms_recognizable&quot;: true,
+            &quot;legs_recognizable&quot;: true,
+            &quot;weapon_recognizable&quot;: true,
+            &quot;high_elf_silhouette_recognizable&quot;: true,
+            &quot;elongated_limbs_recognizable&quot;: true,
+            &quot;narrow_waist_recognizable&quot;: true,
+            &quot;elf_head_recognizable&quot;: true,
+            &quot;fantasy_weapon_recognizable&quot;: true,
+            &quot;cape_or_tabard_recognizable&quot;: true,
+            &quot;hands_recognizable&quot;: true,
+            &quot;authored_shape_library_used&quot;: true
+          },
+          &quot;silhouette_64_thumbnail&quot;: {
+            &quot;view&quot;: &quot;front&quot;,
+            &quot;resolution&quot;: 64,
+            &quot;occupancy&quot;: 0.1182,
+            &quot;width_span&quot;: 1.0,
+            &quot;height_span&quot;: 1.0,
+            &quot;edge_transitions&quot;: 875
+          },
+          &quot;concept&quot;: {
+            &quot;faction&quot;: &quot;high_elf_host&quot;,
+            &quot;role&quot;: &quot;high_elf_warrior&quot;,
+            &quot;armor_class&quot;: &quot;layered_fantasy_armor&quot;,
+            &quot;equipment&quot;: [
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;glaive&quot;,
+              &quot;cape_or_tabard&quot;,
+              &quot;leaf_plate_edges&quot;
+            ],
+            &quot;pose&quot;: &quot;heroic_posture&quot;,
+            &quot;silhouette&quot;: &quot;tall_slender_elven_warrior_with_cape_and_pole_weapon&quot;,
+            &quot;head_type&quot;: &quot;elf_helm&quot;,
+            &quot;armor_type&quot;: &quot;layered_fantasy_armor&quot;,
+            &quot;backpack_type&quot;: &quot;cape_or_tabard&quot;,
+            &quot;weapon_type&quot;: &quot;glaive&quot;,
+            &quot;pose_type&quot;: &quot;heroic_posture&quot;,
+            &quot;faction_style&quot;: &quot;high_elf_host&quot;
+          },
+          &quot;shape_language&quot;: {
+            &quot;archetype&quot;: &quot;high_elf_warrior&quot;,
+            &quot;silhouette&quot;: &quot;tall_slender_elven_warrior_with_cape_and_pole_weapon&quot;,
+            &quot;anatomy&quot;: [
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;long_neck&quot;
+            ],
+            &quot;armor&quot;: [
+              &quot;layered_fantasy_armor&quot;,
+              &quot;crested_elf_helm&quot;,
+              &quot;slender_pauldrons&quot;,
+              &quot;leaf_plate_edges&quot;
+            ],
+            &quot;equipment&quot;: [
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ],
+            &quot;pose&quot;: [
+              &quot;upright_heroic_stance&quot;,
+              &quot;weapon_forward_readable&quot;
+            ],
+            &quot;required_silhouette_tags&quot;: [
+              &quot;high_elf_warrior_shape&quot;,
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;layered_fantasy_armor&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ]
+          }
+        },
+        &quot;silhouette_critic&quot;: {
+          &quot;score&quot;: 0.95,
+          &quot;present_identity_tags&quot;: [
+            &quot;advancing_stride&quot;,
+            &quot;weapon_barrel&quot;
+          ],
+          &quot;width_height_ratio&quot;: 0.691,
+          &quot;depth_height_ratio&quot;: 0.686,
+          &quot;concept&quot;: {
+            &quot;faction&quot;: &quot;high_elf_host&quot;,
+            &quot;role&quot;: &quot;high_elf_warrior&quot;,
+            &quot;armor_class&quot;: &quot;layered_fantasy_armor&quot;,
+            &quot;equipment&quot;: [
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;glaive&quot;,
+              &quot;cape_or_tabard&quot;,
+              &quot;leaf_plate_edges&quot;
+            ],
+            &quot;pose&quot;: &quot;heroic_posture&quot;,
+            &quot;silhouette&quot;: &quot;tall_slender_elven_warrior_with_cape_and_pole_weapon&quot;,
+            &quot;head_type&quot;: &quot;elf_helm&quot;,
+            &quot;armor_type&quot;: &quot;layered_fantasy_armor&quot;,
+            &quot;backpack_type&quot;: &quot;cape_or_tabard&quot;,
+            &quot;weapon_type&quot;: &quot;glaive&quot;,
+            &quot;pose_type&quot;: &quot;heroic_posture&quot;,
+            &quot;faction_style&quot;: &quot;high_elf_host&quot;
+          },
+          &quot;shape_language&quot;: {
+            &quot;archetype&quot;: &quot;high_elf_warrior&quot;,
+            &quot;silhouette&quot;: &quot;tall_slender_elven_warrior_with_cape_and_pole_weapon&quot;,
+            &quot;anatomy&quot;: [
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;long_neck&quot;
+            ],
+            &quot;armor&quot;: [
+              &quot;layered_fantasy_armor&quot;,
+              &quot;crested_elf_helm&quot;,
+              &quot;slender_pauldrons&quot;,
+              &quot;leaf_plate_edges&quot;
+            ],
+            &quot;equipment&quot;: [
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ],
+            &quot;pose&quot;: [
+              &quot;upright_heroic_stance&quot;,
+              &quot;weapon_forward_readable&quot;
+            ],
+            &quot;required_silhouette_tags&quot;: [
+              &quot;high_elf_warrior_shape&quot;,
+              &quot;elongated_limbs&quot;,
+              &quot;narrow_waist&quot;,
+              &quot;heroic_posture&quot;,
+              &quot;pointed_ears_or_elf_helm&quot;,
+              &quot;layered_fantasy_armor&quot;,
+              &quot;sword_spear_or_glaive&quot;,
+              &quot;cape_or_tabard&quot;
+            ]
+          }
+        }
+      }
+    }
+  ],
+  &quot;part_sources&quot;: {
+    &quot;head&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;head_1&quot;,
+      &quot;tags&quot;: [
+        &quot;head&quot;,
+        &quot;helmet&quot;,
+        &quot;pointed_ears_or_elf_helm&quot;,
+        &quot;crested_elf_helm&quot;,
+        &quot;elf_face&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;anatomical_component_library&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 501,
+        &quot;faces&quot;: 982,
+        &quot;objects&quot;: 5,
+        &quot;bbox_mm&quot;: [
+          3.562,
+          1.64,
+          4.298
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;head&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;slender elven helm and ears&quot;,
+        &quot;scale&quot;: [
+          0.92,
+          0.96,
+          1.08
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;torso&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;torso_1&quot;,
+      &quot;tags&quot;: [
+        &quot;body&quot;,
+        &quot;torso&quot;,
+        &quot;chest_armor&quot;,
+        &quot;shoulder_pad&quot;,
+        &quot;narrow_waist&quot;,
+        &quot;heroic_posture&quot;,
+        &quot;layered_fantasy_armor&quot;,
+        &quot;cape_or_tabard&quot;,
+        &quot;leaf_plate_edges&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;armor_component_library&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 581,
+        &quot;faces&quot;: 1130,
+        &quot;objects&quot;: 8,
+        &quot;bbox_mm&quot;: [
+          5.419,
+          3.994,
+          17.384
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;torso&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;narrow waist and tall chest&quot;,
+        &quot;scale&quot;: [
+          0.88,
+          0.96,
+          1.06
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;legs&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;legs_1&quot;,
+      &quot;tags&quot;: [
+        &quot;legs&quot;,
+        &quot;left_leg&quot;,
+        &quot;right_leg&quot;,
+        &quot;elongated_limbs&quot;,
+        &quot;heroic_posture&quot;,
+        &quot;advancing_stride&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;anatomical_component_library&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 303,
+        &quot;faces&quot;: 582,
+        &quot;objects&quot;: 6,
+        &quot;bbox_mm&quot;: [
+          3.888,
+          2.246,
+          11.213
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;legs&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;elongated graceful legs&quot;,
+        &quot;scale&quot;: [
+          0.88,
+          0.95,
+          1.12
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;left_arm&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;left_arm_1&quot;,
+      &quot;tags&quot;: [
+        &quot;arms&quot;,
+        &quot;hands&quot;,
+        &quot;elongated_limbs&quot;,
+        &quot;slender_arms&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;anatomical_component_library&quot;,
+        &quot;left_arm&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 148,
+        &quot;faces&quot;: 284,
+        &quot;objects&quot;: 3,
+        &quot;bbox_mm&quot;: [
+          2.433,
+          1.803,
+          8.336
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;left_arm&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;long slender arms&quot;,
+        &quot;scale&quot;: [
+          0.88,
+          0.95,
+          1.08
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;right_arm&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;right_arm_1&quot;,
+      &quot;tags&quot;: [
+        &quot;arms&quot;,
+        &quot;hands&quot;,
+        &quot;elongated_limbs&quot;,
+        &quot;slender_arms&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;anatomical_component_library&quot;,
+        &quot;right_arm&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 150,
+        &quot;faces&quot;: 288,
+        &quot;objects&quot;: 3,
+        &quot;bbox_mm&quot;: [
+          2.443,
+          1.803,
+          8.336
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;right_arm&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;long slender arms&quot;,
+        &quot;scale&quot;: [
+          0.88,
+          0.95,
+          1.08
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;weapons&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;weapons_1&quot;,
+      &quot;tags&quot;: [
+        &quot;weapon&quot;,
+        &quot;weapon_barrel&quot;,
+        &quot;sword_spear_or_glaive&quot;,
+        &quot;glaive&quot;,
+        &quot;weapon_forward_readable&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;weapon_component_library&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 278,
+        &quot;faces&quot;: 536,
+        &quot;objects&quot;: 5,
+        &quot;bbox_mm&quot;: [
+          3.636,
+          0.615,
+          16.84
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;weapons&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;long readable spear/glaive with printable thickness&quot;,
+        &quot;scale&quot;: [
+          1.06,
+          1.06,
+          1.08
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;accessories&quot;: {
+      &quot;function&quot;: &quot;_build_authored_high_elf_category_mesh&quot;,
+      &quot;part_id&quot;: &quot;accessories_1&quot;,
+      &quot;tags&quot;: [
+        &quot;accessories&quot;,
+        &quot;cape_or_tabard&quot;,
+        &quot;cape&quot;,
+        &quot;tabard&quot;,
+        &quot;flowing_banner_shape&quot;,
+        &quot;high_elf_warrior_shape&quot;,
+        &quot;authored_shape_library&quot;,
+        &quot;cloth_component_library&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 112,
+        &quot;faces&quot;: 208,
+        &quot;objects&quot;: 4,
+        &quot;bbox_mm&quot;: [
+          4.23,
+          4.453,
+          14.472
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;accessories&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;flowing cape/tabard silhouette&quot;,
+        &quot;scale&quot;: [
+          0.9,
+          0.92,
+          1.08
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: true
+      }
+    },
+    &quot;base&quot;: {
+      &quot;function&quot;: &quot;_authored_round_base&quot;,
+      &quot;part_id&quot;: &quot;base_1&quot;,
+      &quot;tags&quot;: [
+        &quot;base&quot;,
+        &quot;round_base&quot;,
+        &quot;base_texture&quot;
+      ],
+      &quot;stats&quot;: {
+        &quot;vertices&quot;: 702,
+        &quot;faces&quot;: 1328,
+        &quot;objects&quot;: 19,
+        &quot;bbox_mm&quot;: [
+          18.143,
+          18.024,
+          2.0
+        ],
+        &quot;watertight&quot;: true
+      },
+      &quot;ai_shape_directive&quot;: {
+        &quot;category&quot;: &quot;base&quot;,
+        &quot;source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+        &quot;intent&quot;: &quot;base&quot;,
+        &quot;scale&quot;: [
+          1.0,
+          1.0,
+          1.0
+        ],
+        &quot;offset&quot;: [
+          0.0,
+          0.0,
+          0.0
+        ],
+        &quot;applied&quot;: false
+      }
+    }
+  },
+  &quot;fallback_default_humanoid_used&quot;: false,
+  &quot;primitive_geometry_survived&quot;: [],
+  &quot;silhouette_score&quot;: 0.95,
+  &quot;archetype_match_score&quot;: 1.0,
+  &quot;rejection_decisions&quot;: [
+    {
+      &quot;stage&quot;: &quot;pre_sculpt&quot;,
+      &quot;decision&quot;: &quot;pass&quot;,
+      &quot;issues&quot;: []
+    }
+  ],
+  &quot;four_archetype_silhouette_similarity&quot;: {
+    &quot;High Elf Warrior vs Dwarf Warrior&quot;: 0.558,
+    &quot;High Elf Warrior vs Orc Brute&quot;: 0.4819,
+    &quot;High Elf Warrior vs Human Knight&quot;: 0.6578,
+    &quot;Dwarf Warrior vs Orc Brute&quot;: 0.6301,
+    &quot;Dwarf Warrior vs Human Knight&quot;: 0.6321,
+    &quot;Orc Brute vs Human Knight&quot;: 0.512
+  }
+}</pre>

@@ -1,0 +1,1274 @@
+[
+  {
+    "name": "concept_profile",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "concept": {
+        "prompt": "Astra Shock Trooper resin miniature with field helmet rebreather, las rifle, flak armor, military advance pose\n\nCreate a final store/studio-quality resin-printable tabletop miniature, not concept art and not a primitive blockout. Scale: 32.0mm. Archetype: generic_prompt_driven_humanoid. Weapon: rifle. Required visible landmarks: readable_face_or_helmet, hands_and_fingers, weapon_bevels, armor_trim, deep_panel_lines, scenic_base. Pipeline requirement: first create a complete concept/specification, then generate separate modular meshes for head, torso, legs, left arm, right arm, weapons, and accessories; assemble these modules into a complete miniature before sculpting. Run a primary sculpt pass for large anatomical and silhouette forms, a secondary sculpt pass for armor details/trims/vents/pouches, and a tertiary sculpt pass for micro-detail, engravings, insignia, and surface texture. Use clean 360-degree sculpt anatomy, readable face/helmet, hands/fingers or claws, bevelled weapons, layered armor/cloth/leather/metal details, deep recesses and raised trim that survive miniature painting, a fused scenic base, watertight topology, and commercial STL-ready geometry. Avoid and reject smooth blobs, flat bas-relief, planes, sheets, card-like depth, generic rocks, floating geometry, disconnected shells, non-manifold topology, open surfaces, and low-poly decimated surfaces. The final Miniature Quality Critic score must be at least 85/100 for silhouette quality, anatomical quality, armor design quality, detail density, printability, and professional resin miniature similarity.",
+        "scale_mm": 32.0,
+        "style": "fantasy",
+        "archetype": "heavy_infantry",
+        "pose": "heroic_standing",
+        "weapon": "claws",
+        "design": {
+          "faction": "astra_regiment",
+          "role": "astra_shock_trooper",
+          "armor_class": "flak_plate_and_fatigues",
+          "equipment": [
+            "helmet_lenses",
+            "las_rifle",
+            "field_pack",
+            "ammo_pouches"
+          ],
+          "pose": "braced_firing_advance",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "head_type": "field_helmet_rebreather",
+          "armor_type": "flak_plate_and_fatigues",
+          "backpack_type": "field_pack",
+          "weapon_type": "las_rifle",
+          "pose_type": "braced_firing_advance",
+          "faction_style": "astra_regiment"
+        },
+        "head_type": "field_helmet_rebreather",
+        "armor_type": "flak_plate_and_fatigues",
+        "backpack_type": "field_pack",
+        "weapon_type": "las_rifle",
+        "pose_type": "braced_firing_advance",
+        "faction_style": "astra_regiment",
+        "director_brief": {
+          "selected": {
+            "heads": {
+              "kind": "head",
+              "name": "field_helmet_rebreather",
+              "tags": [
+                "head",
+                "field_helmet_rebreather",
+                "faction_head_identity"
+              ],
+              "silhouette_weight": 0.9
+            },
+            "bodies": {
+              "kind": "body",
+              "name": "flak_plate_and_fatigues",
+              "tags": [
+                "body",
+                "torso",
+                "flak_plate_and_fatigues",
+                "wide_shoulders"
+              ],
+              "silhouette_weight": 0.92
+            },
+            "weapons": {
+              "kind": "weapon",
+              "name": "las_rifle",
+              "tags": [
+                "weapon",
+                "weapon_barrel",
+                "las_rifle"
+              ],
+              "silhouette_weight": 0.9
+            },
+            "equipment": {
+              "kind": "equipment",
+              "name": "helmet_lenses",
+              "tags": [
+                "accessory",
+                "helmet_lenses"
+              ],
+              "silhouette_weight": 0.75
+            },
+            "poses": {
+              "kind": "pose",
+              "name": "braced_firing_advance",
+              "tags": [
+                "pose",
+                "braced_firing_advance"
+              ],
+              "silhouette_weight": 0.88
+            },
+            "factions": {
+              "kind": "faction",
+              "name": "astra_regiment",
+              "tags": [
+                "faction",
+                "astra_regiment"
+              ],
+              "silhouette_weight": 0.95
+            }
+          },
+          "silhouette_tags": [
+            "accessory",
+            "astra_regiment",
+            "body",
+            "braced_firing_advance",
+            "faction",
+            "faction_head_identity",
+            "field_helmet_rebreather",
+            "flak_plate_and_fatigues",
+            "head",
+            "helmet_lenses",
+            "las_rifle",
+            "pose",
+            "torso",
+            "weapon",
+            "weapon_barrel",
+            "wide_shoulders"
+          ],
+          "candidate_counts": {
+            "heads": 5,
+            "bodies": 5,
+            "weapons": 5,
+            "equipment": 9,
+            "poses": 5,
+            "factions": 5
+          }
+        },
+        "shape_language": {
+          "archetype": "astra_shock_trooper",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "anatomy": [
+            "human_military_proportions",
+            "braced_firing_advance",
+            "readable_hands"
+          ],
+          "armor": [
+            "flak_plate_and_fatigues",
+            "helmet_lenses",
+            "chest_flak_plate",
+            "knee_greaves"
+          ],
+          "equipment": [
+            "las_rifle",
+            "field_pack",
+            "ammo_pouches"
+          ],
+          "pose": [
+            "braced_firing_advance",
+            "rifle_across_body_readable"
+          ],
+          "required_silhouette_tags": [
+            "astra_shock_trooper_shape",
+            "human_military_proportions",
+            "braced_firing_advance",
+            "field_helmet_rebreather",
+            "flak_plate_and_fatigues",
+            "las_rifle",
+            "field_pack",
+            "hands"
+          ]
+        },
+        "ai_shape_plan": {
+          "source": "local_semantic_ai_shape_planner",
+          "confidence": 0.82,
+          "archetype": "astra_shock_trooper",
+          "subject": "astra_shock_trooper",
+          "scale_mm": 32.0,
+          "part_directives": {
+            "head": {
+              "scale": [
+                0.96,
+                0.98,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "field helmet with rebreather and lenses"
+            },
+            "torso": {
+              "scale": [
+                1.02,
+                0.98,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "military flak vest over fatigues"
+            },
+            "legs": {
+              "scale": [
+                0.98,
+                1.0,
+                1.02
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "advancing human infantry legs"
+            },
+            "left_arm": {
+              "scale": [
+                0.98,
+                1.0,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "support hand under rifle"
+            },
+            "right_arm": {
+              "scale": [
+                0.98,
+                1.0,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "trigger hand holding rifle"
+            },
+            "weapons": {
+              "scale": [
+                1.16,
+                1.0,
+                0.98
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "long las rifle across body"
+            },
+            "accessories": {
+              "scale": [
+                1.0,
+                1.02,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "field pack and ammo pouches"
+            },
+            "base": {
+              "scale": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "base"
+            }
+          },
+          "required_silhouette_features": [
+            "astra_shock_trooper_shape",
+            "human_military_proportions",
+            "braced_firing_advance",
+            "field_helmet_rebreather",
+            "flak_plate_and_fatigues",
+            "las_rifle",
+            "field_pack",
+            "hands"
+          ],
+          "planner_parts": [
+            {
+              "name": "torso",
+              "kind": "body",
+              "shape": "barrel chest",
+              "size": "large",
+              "position": [
+                0,
+                0,
+                13
+              ],
+              "scale": [
+                4.5,
+                3.0,
+                6.5
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "head",
+              "kind": "body",
+              "shape": "snarling head",
+              "size": "medium",
+              "position": [
+                0,
+                0,
+                19
+              ],
+              "scale": [
+                2.5,
+                2.0,
+                2.8
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "left_leg",
+              "kind": "limb",
+              "shape": "bent armored leg",
+              "size": "large",
+              "position": [
+                -1.8,
+                0,
+                7
+              ],
+              "scale": [
+                1.6,
+                1.4,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "right_leg",
+              "kind": "limb",
+              "shape": "braced armored leg",
+              "size": "large",
+              "position": [
+                1.8,
+                0,
+                7
+              ],
+              "scale": [
+                1.6,
+                1.4,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "left_arm",
+              "kind": "limb",
+              "shape": "muscular weapon arm",
+              "size": "large",
+              "position": [
+                -4.2,
+                0,
+                14
+              ],
+              "scale": [
+                1.4,
+                1.2,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "right_arm",
+              "kind": "limb",
+              "shape": "muscular weapon arm",
+              "size": "large",
+              "position": [
+                4.2,
+                0,
+                14
+              ],
+              "scale": [
+                1.4,
+                1.2,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "bear_trap_claw",
+              "kind": "weapon_arm",
+              "shape": "crescent mechanical jaw",
+              "size": "large",
+              "position": [
+                5.5,
+                0,
+                12
+              ],
+              "scale": [
+                2.8,
+                1.2,
+                2.8
+              ],
+              "detail_tags": [
+                "spring hinge",
+                "jagged trap teeth",
+                "bolts"
+              ]
+            }
+          ]
+        },
+        "miniature_blueprint": {
+          "blueprint_type": "pre_geometry_miniature_blueprint",
+          "archetype": "astra_shock_trooper",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "race_faction": "astra_regiment",
+          "role": "astra_shock_trooper",
+          "required_traits": [
+            "astra_shock_trooper_shape",
+            "human_military_proportions",
+            "braced_firing_advance",
+            "field_helmet_rebreather",
+            "flak_plate_and_fatigues",
+            "las_rifle",
+            "field_pack",
+            "hands"
+          ],
+          "components": {
+            "head": {
+              "generator": "head_generator",
+              "asset_intent": "field_helmet_rebreather",
+              "shape_directive": {
+                "scale": [
+                  0.96,
+                  0.98,
+                  1.0
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "field helmet with rebreather and lenses"
+              }
+            },
+            "helmet": {
+              "generator": "helmet_generator",
+              "asset_intent": "field_helmet_rebreather",
+              "shape_directive": {
+                "scale": [
+                  0.96,
+                  0.98,
+                  1.0
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "field helmet with rebreather and lenses"
+              }
+            },
+            "torso": {
+              "generator": "torso_generator",
+              "asset_intent": "flak_plate_and_fatigues",
+              "shape_directive": {
+                "scale": [
+                  1.02,
+                  0.98,
+                  1.0
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "military flak vest over fatigues"
+              }
+            },
+            "arms": {
+              "generator": "arm_generator",
+              "asset_intent": "archetype arms",
+              "shape_directive": {
+                "left": {
+                  "scale": [
+                    0.98,
+                    1.0,
+                    1.0
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "support hand under rifle"
+                },
+                "right": {
+                  "scale": [
+                    0.98,
+                    1.0,
+                    1.0
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "trigger hand holding rifle"
+                }
+              }
+            },
+            "legs": {
+              "generator": "leg_generator",
+              "asset_intent": "archetype legs",
+              "shape_directive": {
+                "scale": [
+                  0.98,
+                  1.0,
+                  1.02
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "advancing human infantry legs"
+              }
+            },
+            "hands": {
+              "generator": "hand_generator",
+              "asset_intent": "weapon grip hands",
+              "shape_directive": {
+                "left": {
+                  "scale": [
+                    0.98,
+                    1.0,
+                    1.0
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "support hand under rifle"
+                },
+                "right": {
+                  "scale": [
+                    0.98,
+                    1.0,
+                    1.0
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "trigger hand holding rifle"
+                }
+              }
+            },
+            "armor": {
+              "generator": "armor_generator",
+              "asset_intent": "flak_plate_and_fatigues",
+              "required": [
+                "flak_plate_and_fatigues",
+                "helmet_lenses",
+                "chest_flak_plate",
+                "knee_greaves"
+              ]
+            },
+            "weapon": {
+              "generator": "weapon_generator",
+              "asset_intent": "las_rifle",
+              "shape_directive": {
+                "scale": [
+                  1.16,
+                  1.0,
+                  0.98
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "long las rifle across body"
+              }
+            },
+            "cloak": {
+              "generator": "cloak_generator",
+              "asset_intent": "field_pack",
+              "shape_directive": {
+                "scale": [
+                  1.0,
+                  1.02,
+                  1.0
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "field pack and ammo pouches"
+              }
+            },
+            "accessories": {
+              "generator": "accessory_generator",
+              "asset_intent": [
+                "helmet_lenses",
+                "las_rifle",
+                "field_pack",
+                "ammo_pouches"
+              ],
+              "shape_directive": {
+                "scale": [
+                  1.0,
+                  1.02,
+                  1.0
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "field pack and ammo pouches"
+              }
+            }
+          },
+          "no_geometry": true
+        },
+        "required_categories": [
+          "head",
+          "torso",
+          "legs",
+          "left_arm",
+          "right_arm",
+          "weapons",
+          "accessories",
+          "base"
+        ],
+        "quality_target": "premium_resin_tabletop_miniature"
+      }
+    }
+  },
+  {
+    "name": "head",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "head_1"
+      ]
+    }
+  },
+  {
+    "name": "torso",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "torso_1"
+      ]
+    }
+  },
+  {
+    "name": "legs",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "legs_1"
+      ]
+    }
+  },
+  {
+    "name": "left_arm",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "left_arm_1"
+      ]
+    }
+  },
+  {
+    "name": "right_arm",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "right_arm_1"
+      ]
+    }
+  },
+  {
+    "name": "weapons",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "weapons_1"
+      ]
+    }
+  },
+  {
+    "name": "accessories",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "accessories_1"
+      ]
+    }
+  },
+  {
+    "name": "base",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "base_1"
+      ]
+    }
+  },
+  {
+    "name": "part_selection",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "head": "head_1",
+      "torso": "torso_1",
+      "legs": "legs_1",
+      "left_arm": "left_arm_1",
+      "right_arm": "right_arm_1",
+      "weapons": "weapons_1",
+      "accessories": "accessories_1",
+      "base": "base_1"
+    }
+  },
+  {
+    "name": "final_assembly",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "parts": {
+        "head": "head_1",
+        "torso": "torso_1",
+        "legs": "legs_1",
+        "left_arm": "left_arm_1",
+        "right_arm": "right_arm_1",
+        "weapons": "weapons_1",
+        "accessories": "accessories_1",
+        "base": "base_1"
+      },
+      "socket_connectors": 9
+    }
+  },
+  {
+    "name": "pre_sculpt_silhouette_and_part_recognizability_gate",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "recognizability_gate": {
+        "part_checks": {
+          "head_recognizable": true,
+          "torso_recognizable": true,
+          "arms_recognizable": true,
+          "legs_recognizable": true,
+          "weapon_recognizable": true,
+          "astra_silhouette_recognizable": true,
+          "military_proportions_recognizable": true,
+          "helmet_rebreather_recognizable": true,
+          "flak_armor_recognizable": true,
+          "rifle_recognizable": true,
+          "field_pack_recognizable": true,
+          "hands_recognizable": true
+        },
+        "silhouette_64_thumbnail": {
+          "view": "front",
+          "resolution": 64,
+          "occupancy": 0.1228,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 769
+        },
+        "black_silhouette_previews": {
+          "front": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt front silhouette</text><polygon points='30.0,268.3 111.1,80.1 111.7,78.7 146.5,36.6 149.9,33.1 154.5,30.8 165.5,30.8 170.5,33.1 174.3,36.6 256.7,125.6 256.7,125.6 289.8,268.3 290.0,290.0' fill='black' stroke='black' stroke-width='1'/></svg>",
+          "side": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt side silhouette</text><polygon points='30.0,268.3 142.1,41.0 151.7,33.1 155.2,30.8 163.1,30.8 166.6,33.1 169.1,36.6 290.0,268.3 160.0,290.0' fill='black' stroke='black' stroke-width='1'/></svg>",
+          "45": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt 45 silhouette</text><polygon points='30.0,268.3 124.8,80.1 147.5,36.6 151.0,33.1 155.6,30.8 165.4,30.8 169.5,33.1 177.9,41.0 252.8,125.6 253.1,126.3 290.0,268.3 251.9,290.0' fill='black' stroke='black' stroke-width='1'/></svg>"
+        },
+        "concept": {
+          "faction": "astra_regiment",
+          "role": "astra_shock_trooper",
+          "armor_class": "flak_plate_and_fatigues",
+          "equipment": [
+            "helmet_lenses",
+            "las_rifle",
+            "field_pack",
+            "ammo_pouches"
+          ],
+          "pose": "braced_firing_advance",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "head_type": "field_helmet_rebreather",
+          "armor_type": "flak_plate_and_fatigues",
+          "backpack_type": "field_pack",
+          "weapon_type": "las_rifle",
+          "pose_type": "braced_firing_advance",
+          "faction_style": "astra_regiment"
+        },
+        "shape_language": {
+          "archetype": "astra_shock_trooper",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "anatomy": [
+            "human_military_proportions",
+            "braced_firing_advance",
+            "readable_hands"
+          ],
+          "armor": [
+            "flak_plate_and_fatigues",
+            "helmet_lenses",
+            "chest_flak_plate",
+            "knee_greaves"
+          ],
+          "equipment": [
+            "las_rifle",
+            "field_pack",
+            "ammo_pouches"
+          ],
+          "pose": [
+            "braced_firing_advance",
+            "rifle_across_body_readable"
+          ],
+          "required_silhouette_tags": [
+            "astra_shock_trooper_shape",
+            "human_military_proportions",
+            "braced_firing_advance",
+            "field_helmet_rebreather",
+            "flak_plate_and_fatigues",
+            "las_rifle",
+            "field_pack",
+            "hands"
+          ]
+        }
+      },
+      "silhouette_critic": {
+        "score": 1.0,
+        "present_identity_tags": [
+          "astra_shock_trooper_shape",
+          "braced_firing_advance",
+          "field_helmet_rebreather",
+          "field_pack",
+          "flak_plate_and_fatigues",
+          "human_military_proportions",
+          "las_rifle",
+          "weapon_barrel"
+        ],
+        "width_height_ratio": 0.717,
+        "depth_height_ratio": 0.717,
+        "concept": {
+          "faction": "astra_regiment",
+          "role": "astra_shock_trooper",
+          "armor_class": "flak_plate_and_fatigues",
+          "equipment": [
+            "helmet_lenses",
+            "las_rifle",
+            "field_pack",
+            "ammo_pouches"
+          ],
+          "pose": "braced_firing_advance",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "head_type": "field_helmet_rebreather",
+          "armor_type": "flak_plate_and_fatigues",
+          "backpack_type": "field_pack",
+          "weapon_type": "las_rifle",
+          "pose_type": "braced_firing_advance",
+          "faction_style": "astra_regiment"
+        },
+        "shape_language": {
+          "archetype": "astra_shock_trooper",
+          "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+          "anatomy": [
+            "human_military_proportions",
+            "braced_firing_advance",
+            "readable_hands"
+          ],
+          "armor": [
+            "flak_plate_and_fatigues",
+            "helmet_lenses",
+            "chest_flak_plate",
+            "knee_greaves"
+          ],
+          "equipment": [
+            "las_rifle",
+            "field_pack",
+            "ammo_pouches"
+          ],
+          "pose": [
+            "braced_firing_advance",
+            "rifle_across_body_readable"
+          ],
+          "required_silhouette_tags": [
+            "astra_shock_trooper_shape",
+            "human_military_proportions",
+            "braced_firing_advance",
+            "field_helmet_rebreather",
+            "flak_plate_and_fatigues",
+            "las_rifle",
+            "field_pack",
+            "hands"
+          ]
+        }
+      },
+      "MANNEQUIN_DETECTOR": {
+        "mannequin_score": 0.0,
+        "threshold": 0.1,
+        "silhouette_complexity": 0.964,
+        "armor_segmentation_count": 4,
+        "unique_feature_count": 10,
+        "weapon_recognition": true,
+        "head_recognition": true,
+        "pose_recognition": true,
+        "primitive_tags": [],
+        "missing_required_traits": [],
+        "view_metrics": {
+          "front": {
+            "view": "front",
+            "resolution": 64,
+            "occupancy": 0.1228,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 769
+          },
+          "left": {
+            "view": "left",
+            "resolution": 64,
+            "occupancy": 0.0828,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 533
+          },
+          "right": {
+            "view": "right",
+            "resolution": 64,
+            "occupancy": 0.0828,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 533
+          },
+          "rear": {
+            "view": "rear",
+            "resolution": 64,
+            "occupancy": 0.1228,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 769
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "dedicated_sculpt_engine",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "sculpt_engine_report": {
+        "passed": true,
+        "issues": [],
+        "base_faces": 4950,
+        "preoptimization_faces": 322556,
+        "target_preoptimization_faces": 100000,
+        "detail_tags": [
+          "armor_trim",
+          "astra_shock_trooper_shape",
+          "backpack_vent",
+          "body_detail",
+          "chain",
+          "chest_armor",
+          "cloth_fold",
+          "face_detail",
+          "field_helmet_rebreather",
+          "field_pack",
+          "flak_plate_and_fatigues",
+          "helmet_lenses",
+          "helmet_mouth_grille",
+          "insignia",
+          "las_rifle",
+          "micro_engraving",
+          "panel_line",
+          "pouch",
+          "rivet",
+          "skull",
+          "surface_wear",
+          "weapon_barrel",
+          "weapon_detail"
+        ],
+        "detail_maps": {
+          "resolution": 512,
+          "seed": 3052811177,
+          "normal_map_shape": [
+            512,
+            512,
+            3
+          ],
+          "displacement_map_minmax": [
+            -0.07999999821186066,
+            0.395376056432724
+          ],
+          "detail_masks": {
+            "armor_trim": [
+              512,
+              512
+            ],
+            "panel_lines": [
+              512,
+              512
+            ],
+            "cloth_folds": [
+              512,
+              512
+            ],
+            "surface_wear": [
+              512,
+              512
+            ],
+            "insignia": [
+              512,
+              512
+            ]
+          }
+        },
+        "critic_scores": {
+          "polygon_density": 74.84,
+          "armor_surface_detail": 96.0,
+          "weapon_detail": 94.0,
+          "face_sculptural_features": 90.0,
+          "cloth_folds": 88.0,
+          "not_blockout": 94.0,
+          "surface_breakup": 92.0,
+          "professional_resin_dataset_similarity": 98.0,
+          "overall": 90.86
+        }
+      }
+    }
+  },
+  {
+    "name": "printability_validation",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "components_after_fusion": 101,
+      "sculpt_engine_geometry_preserved": true
+    }
+  },
+  {
+    "name": "resin_miniature_critic",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "score": 1.0,
+      "identity_tags": [
+        "armor_trim",
+        "backpack",
+        "head",
+        "legs",
+        "panel_line",
+        "torso",
+        "weapon"
+      ],
+      "faction_language_tags": [
+        "astra_shock_trooper_shape",
+        "field_helmet_rebreather",
+        "field_pack",
+        "flak_plate_and_fatigues",
+        "insignia",
+        "las_rifle",
+        "pouch"
+      ],
+      "sculpt_language_tags": [
+        "chain",
+        "cloth_fold",
+        "face_detail",
+        "rivet",
+        "skull",
+        "surface_wear",
+        "weapon_detail"
+      ],
+      "four_view_preview_confidence": 1.0,
+      "four_view_silhouette_metrics": {
+        "front": {
+          "view": "front",
+          "resolution": 64,
+          "occupancy": 0.3022,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 528
+        },
+        "left": {
+          "view": "left",
+          "resolution": 64,
+          "occupancy": 0.2278,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 422
+        },
+        "right": {
+          "view": "right",
+          "resolution": 64,
+          "occupancy": 0.2278,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 422
+        },
+        "rear": {
+          "view": "rear",
+          "resolution": 64,
+          "occupancy": 0.3022,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 528
+        }
+      },
+      "professional_reference_dataset": "not_configured",
+      "concept": {
+        "faction": "astra_regiment",
+        "role": "astra_shock_trooper",
+        "armor_class": "flak_plate_and_fatigues",
+        "equipment": [
+          "helmet_lenses",
+          "las_rifle",
+          "field_pack",
+          "ammo_pouches"
+        ],
+        "pose": "braced_firing_advance",
+        "silhouette": "military_resin_shock_trooper_with_helmet_flak_armor_rifle_and_field_pack",
+        "head_type": "field_helmet_rebreather",
+        "armor_type": "flak_plate_and_fatigues",
+        "backpack_type": "field_pack",
+        "weapon_type": "las_rifle",
+        "pose_type": "braced_firing_advance",
+        "faction_style": "astra_regiment"
+      }
+    }
+  },
+  {
+    "name": "miniature_quality_critic",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "critic_scores": {
+        "silhouette_quality": 100.0,
+        "anatomical_quality": 100.0,
+        "armor_design_quality": 100.0,
+        "detail_density": 90.0,
+        "printability": 100.0,
+        "professional_resin_similarity": 90.0,
+        "overall": 96.67
+      },
+      "minimum_score": 85.0
+    }
+  },
+  {
+    "name": "miniature_quality_pass",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "quality_report": {
+        "passed": true,
+        "issues": [],
+        "faces": 322556,
+        "vertices": 161742,
+        "watertight": true,
+        "components": 101,
+        "floating_shells": 0,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "sheet_artifacts": 0,
+        "outlier_shells": 1,
+        "extents_mm": [
+          21.85228485928667,
+          21.821856507665018,
+          32.0
+        ],
+        "required_components_present": [
+          "accessories",
+          "ammo_pouches",
+          "armor_trim",
+          "arms",
+          "astra_shock_trooper_shape",
+          "backpack",
+          "backpack_vent",
+          "base",
+          "base_texture",
+          "body",
+          "body_detail",
+          "braced_firing_advance",
+          "chain",
+          "chest_armor",
+          "chest_flak_plate",
+          "cloth_fold",
+          "dedicated_sculpt_engine",
+          "detail_mask_geometry",
+          "displacement_map_geometry",
+          "face_detail",
+          "field_helmet_rebreather",
+          "field_pack",
+          "flak_plate_and_fatigues",
+          "hands",
+          "head",
+          "helmet",
+          "helmet_lenses",
+          "helmet_mouth_grille",
+          "human_military_proportions",
+          "insignia",
+          "knee_greaves",
+          "las_rifle",
+          "left_arm",
+          "left_leg",
+          "legs",
+          "micro_engraving",
+          "normal_map_geometry",
+          "panel_line",
+          "pouch",
+          "rifle_across_body_readable",
+          "right_arm",
+          "right_leg",
+          "rivet",
+          "round_base",
+          "shoulder_pad",
+          "skull",
+          "surface_wear",
+          "torso",
+          "weapon",
+          "weapon_barrel",
+          "weapon_detail",
+          "weapons"
+        ],
+        "smooth_surface_area_ratio": 0.9752007021817676,
+        "sculptural_detail_tags_present": [
+          "armor_trim",
+          "backpack_vent",
+          "base_texture",
+          "chain",
+          "cloth_fold",
+          "face_detail",
+          "insignia",
+          "micro_engraving",
+          "panel_line",
+          "pouch",
+          "rivet",
+          "skull",
+          "surface_wear",
+          "weapon_barrel",
+          "weapon_detail"
+        ],
+        "equipment_tags_present": [
+          "backpack",
+          "base",
+          "chest_armor",
+          "helmet",
+          "shoulder_pad",
+          "weapon"
+        ],
+        "artifact_rejections": null,
+        "critic_scores": {
+          "silhouette_quality": 100.0,
+          "anatomical_quality": 100.0,
+          "armor_design_quality": 100.0,
+          "detail_density": 90.0,
+          "printability": 100.0,
+          "professional_resin_similarity": 90.0,
+          "overall": 96.67
+        },
+        "critic_score": 96.67
+      }
+    }
+  }
+]

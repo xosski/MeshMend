@@ -1,0 +1,87 @@
+{
+  "part_id": "left_arm_1",
+  "category": "left_arm",
+  "scale_mm": 32.0,
+  "symmetry": "none",
+  "source": "procedural_modular_provider",
+  "detail_tags": [
+    "arms",
+    "gauntlets",
+    "finger_detail",
+    "armor_trim",
+    "left_arm"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        -3.9000000000000004,
+        -0.7250000000000001,
+        14.822500000000002
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        -3.9000000000000004,
+        -0.7250000000000001,
+        10.725
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        -3.9000000000000004,
+        -0.7250000000000001,
+        18.92
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        -3.9000000000000004,
+        -0.7250000000000001,
+        14.822500000000002
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 1388,
+    "vertices": 706,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 3,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.21491893101562262,
+    "detail_density": 0.7639702825100015,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "arms",
+  "canonical_category": "left_arm"
+}

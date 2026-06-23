@@ -1,0 +1,4644 @@
+{
+  "title": "MeshMend Archetype Root-Cause Debug Report",
+  "scope": "Pre-sculpt silhouette and body-origin diagnostic. Sculpt/detail passes intentionally not run.",
+  "sources": {
+    "production_store_quality_path": "external_local_store_quality_generator.py:115-149 uses StagedMiniaturePipeline.export; provider reports meshmend_no_api_native_sculpt_engine.",
+    "body_generator_source": "meshmend/studio/staged_pipeline.py:400-432 ProceduralMiniaturePartProvider.generate_candidates calls _build_category_mesh for every modular category.",
+    "generic_body_source": "meshmend/studio/staged_pipeline.py:742-890 _build_category_mesh builds heads/torsos/arms/legs/weapons/accessories from ellipsoid/box/capsule/cylinder primitives.",
+    "high_elf_body_source": "meshmend/studio/staged_pipeline.py:903-1023 _build_high_elf_category_mesh is a High Elf branch, but it still constructs anatomy/armor/glaive/cape from ellipsoid/cone/tapered_limb primitives, not authored sculpt assets.",
+    "archetype_source": "meshmend/studio/staged_pipeline.py:110-186 CharacterArchetypeGenerator only has a dedicated High Elf branch; Dwarf/Orc/Human Knight fall back to generic faction/role rules.",
+    "shape_language_source": "meshmend/studio/staged_pipeline.py:219-266 ShapeLanguageEngine only has a dedicated High Elf profile; other archetypes use generic required tags.",
+    "armor_weapon_pose_source": "Armor/weapons/pose are generated procedurally in _build_category_mesh/_build_high_elf_category_mesh; pose is mostly fixed part coordinates plus metadata tags, not an authored pose asset.",
+    "silhouette_source": "SilhouetteCritic/PreSculptRecognizabilityGate use metadata tags, bbox ratios, and projected thumbnail metrics; they are not a vision model and do not ask a human-recognizability question.",
+    "legacy_native_path": "3dsculpter/model_service/native_generation.py and native_sculpt_backend.py also contain primitive ellipsoid/box/capsule-based humanoid builders; non-High-Elf prompts often fall back to armored_humanoid."
+  },
+  "archetypes": {
+    "High Elf Warrior": {
+      "prompt": "High Elf Warrior with glaive, layered fantasy armor, cape, heroic posture",
+      "spec": {
+        "prompt": "High Elf Warrior with glaive, layered fantasy armor, cape, heroic posture",
+        "scale_mm": 32.0,
+        "archetype": "heavy_infantry",
+        "style": "fantasy",
+        "pose": "heroic_standing",
+        "weapon": "rifle",
+        "helmet": true,
+        "backpack": false,
+        "cape": true,
+        "robe": false,
+        "claws": false,
+        "base": "round_textured",
+        "target_faces": 250000,
+        "details": [
+          "panel_lines",
+          "rivets",
+          "armor_seams",
+          "base_texture",
+          "cloth_folds",
+          "trim",
+          "scrolls"
+        ]
+      },
+      "design": {
+        "faction": "high_elf_host",
+        "role": "high_elf_warrior",
+        "armor_class": "layered_fantasy_armor",
+        "equipment": [
+          "pointed_ears_or_elf_helm",
+          "glaive",
+          "cape_or_tabard",
+          "leaf_plate_edges"
+        ],
+        "pose": "heroic_posture",
+        "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+        "head_type": "elf_helm",
+        "armor_type": "layered_fantasy_armor",
+        "backpack_type": "cape_or_tabard",
+        "weapon_type": "glaive",
+        "pose_type": "heroic_posture",
+        "faction_style": "high_elf_host"
+      },
+      "shape_language": {
+        "archetype": "high_elf_warrior",
+        "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+        "anatomy": [
+          "elongated_limbs",
+          "narrow_waist",
+          "heroic_posture",
+          "long_neck"
+        ],
+        "armor": [
+          "layered_fantasy_armor",
+          "crested_elf_helm",
+          "slender_pauldrons",
+          "leaf_plate_edges"
+        ],
+        "equipment": [
+          "pointed_ears_or_elf_helm",
+          "sword_spear_or_glaive",
+          "cape_or_tabard"
+        ],
+        "pose": [
+          "upright_heroic_stance",
+          "weapon_forward_readable"
+        ],
+        "required_silhouette_tags": [
+          "high_elf_warrior_shape",
+          "elongated_limbs",
+          "narrow_waist",
+          "heroic_posture",
+          "pointed_ears_or_elf_helm",
+          "layered_fantasy_armor",
+          "sword_spear_or_glaive",
+          "cape_or_tabard"
+        ]
+      },
+      "selected_parts": {
+        "head": {
+          "part_id": "head_1",
+          "category": "head",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "head",
+            "helmet",
+            "pointed_ears_or_elf_helm",
+            "crested_elf_helm",
+            "elf_face",
+            "high_elf_warrior_shape",
+            "anatomical_component_library"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                -0.11500000000000005,
+                23.799999999999997
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                -0.11500000000000005,
+                21.8
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                -0.11500000000000005,
+                25.799999999999997
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                -0.11500000000000005,
+                23.799999999999997
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1752,
+            "vertices": 886,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 5,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.15401682218109358,
+            "detail_density": 1.0,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "torso": {
+          "part_id": "torso_1",
+          "category": "torso",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "body",
+            "torso",
+            "chest_armor",
+            "shoulder_pad",
+            "narrow_waist",
+            "heroic_posture",
+            "layered_fantasy_armor",
+            "cape_or_tabard",
+            "leaf_plate_edges",
+            "high_elf_warrior_shape",
+            "armor_component_library"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.1100000000000001,
+                14.6
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.1100000000000001,
+                6.999999999999999
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.1100000000000001,
+                22.2
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.1100000000000001,
+                14.6
+              ],
+              "radius_mm": 0.46319999999999995,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "head",
+              "kind": "neck",
+              "position": [
+                0.0,
+                0.1100000000000001,
+                22.2
+              ],
+              "radius_mm": 0.46319999999999995,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "left_arm",
+              "kind": "shoulder",
+              "position": [
+                -3.2,
+                0.1100000000000001,
+                14.6
+              ],
+              "radius_mm": 0.46319999999999995,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_arm",
+              "kind": "shoulder",
+              "position": [
+                3.2,
+                0.1100000000000001,
+                14.6
+              ],
+              "radius_mm": 0.46319999999999995,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 3520,
+            "vertices": 1776,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 8,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.36830565541130256,
+            "detail_density": 0.6082075392044106,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "legs": {
+          "part_id": "legs_1",
+          "category": "legs",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "legs",
+            "left_leg",
+            "right_leg",
+            "elongated_limbs",
+            "heroic_posture",
+            "advancing_stride",
+            "high_elf_warrior_shape",
+            "anatomical_component_library"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -0.08500000000000019,
+                -0.5580279216613573,
+                6.002365144502335
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -0.08500000000000019,
+                -0.5580279216613573,
+                0.8300000000000001
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -0.08500000000000019,
+                -0.5580279216613573,
+                11.17473028900467
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -0.08500000000000019,
+                -0.5580279216613573,
+                6.002365144502335
+              ],
+              "radius_mm": 0.30527329880127424,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2272,
+            "vertices": 1148,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 6,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.1811131122470398,
+            "detail_density": 0.7058558597196962,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "left_arm": {
+          "part_id": "left_arm_1",
+          "category": "left_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "elongated_limbs",
+            "slender_arms",
+            "high_elf_warrior_shape",
+            "anatomical_component_library",
+            "left_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -3.4012240348596445,
+                -0.7800577889190154,
+                15.072372965394283
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -3.4012240348596445,
+                -0.7800577889190154,
+                11.13
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -3.4012240348596445,
+                -0.7800577889190154,
+                19.014745930788568
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -3.4012240348596445,
+                -0.7800577889190154,
+                15.072372965394283
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1136,
+            "vertices": 574,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.06436513352522119,
+            "detail_density": 0.7055843617985578,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "right_arm": {
+          "part_id": "right_arm_1",
+          "category": "right_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "elongated_limbs",
+            "slender_arms",
+            "high_elf_warrior_shape",
+            "anatomical_component_library",
+            "right_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.4012240348596445,
+                -0.7800577889190154,
+                15.072372965394283
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.4012240348596445,
+                -0.7800577889190154,
+                11.13
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.4012240348596445,
+                -0.7800577889190154,
+                19.014745930788568
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.4012240348596445,
+                -0.7800577889190154,
+                15.072372965394283
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1136,
+            "vertices": 574,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.06436513352522119,
+            "detail_density": 0.7055843617985578,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "weapons": {
+          "part_id": "weapons_1",
+          "category": "weapons",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "weapon",
+            "weapon_barrel",
+            "sword_spear_or_glaive",
+            "glaive",
+            "weapon_forward_readable",
+            "high_elf_warrior_shape",
+            "weapon_component_library"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                5.079608314665625,
+                -2.18,
+                16.32785188453233
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                5.079608314665625,
+                -2.18,
+                7.905703769064656
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                5.079608314665625,
+                -2.18,
+                24.750000000000004
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                5.079608314665625,
+                -2.18,
+                16.32785188453233
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_hand_grip",
+              "kind": "hand",
+              "position": [
+                2.0,
+                -2.0,
+                14.0
+              ],
+              "radius_mm": 0.35,
+              "direction": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 968,
+            "vertices": 492,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 4,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.03992121085493602,
+            "detail_density": 0.49210145122513244,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "accessories": {
+          "part_id": "accessories_1",
+          "category": "accessories",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "accessories",
+            "cape_or_tabard",
+            "cape",
+            "tabard",
+            "flowing_banner_shape",
+            "high_elf_warrior_shape",
+            "cloth_component_library"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.20999999999999996,
+                13.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.20999999999999996,
+                6.2
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.20999999999999996,
+                19.8
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.20999999999999996,
+                13.0
+              ],
+              "radius_mm": 0.5352,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 800,
+            "vertices": 408,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 4,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.6434501321611703,
+            "detail_density": 0.42235289627369826,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "base": {
+          "part_id": "base_1",
+          "category": "base",
+          "scale_mm": 32.0,
+          "symmetry": "radial",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "base",
+            "round_base",
+            "base_texture"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                0.10000000000000009
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                1.2000000000000002
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                0.10000000000000009
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "feet",
+              "kind": "base",
+              "position": [
+                0,
+                0,
+                1.0
+              ],
+              "radius_mm": 1.2,
+              "direction": [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1952,
+            "vertices": 1014,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 19,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.5989524020880818,
+            "detail_density": 0.5715383341159701,
+            "issues": [],
+            "passed": true
+          }
+        }
+      },
+      "assembly_stats": {
+        "vertices": 12746,
+        "faces": 25176,
+        "objects": 79,
+        "bbox_mm": [
+          23.6,
+          23.6,
+          26.8
+        ],
+        "watertight": true
+      },
+      "silhouette_gate": {
+        "name": "pre_sculpt_silhouette_and_part_recognizability_gate",
+        "passed": true,
+        "issues": [],
+        "artifacts": {
+          "recognizability_gate": {
+            "part_checks": {
+              "head_recognizable": true,
+              "torso_recognizable": true,
+              "arms_recognizable": true,
+              "legs_recognizable": true,
+              "weapon_recognizable": true,
+              "high_elf_silhouette_recognizable": true,
+              "elongated_limbs_recognizable": true,
+              "narrow_waist_recognizable": true,
+              "elf_head_recognizable": true,
+              "fantasy_weapon_recognizable": true,
+              "cape_or_tabard_recognizable": true
+            },
+            "silhouette_64_thumbnail": {
+              "view": "front",
+              "resolution": 64,
+              "occupancy": 0.186,
+              "width_span": 1.0,
+              "height_span": 1.0,
+              "edge_transitions": 595
+            },
+            "concept": {
+              "faction": "high_elf_host",
+              "role": "high_elf_warrior",
+              "armor_class": "layered_fantasy_armor",
+              "equipment": [
+                "pointed_ears_or_elf_helm",
+                "glaive",
+                "cape_or_tabard",
+                "leaf_plate_edges"
+              ],
+              "pose": "heroic_posture",
+              "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+              "head_type": "elf_helm",
+              "armor_type": "layered_fantasy_armor",
+              "backpack_type": "cape_or_tabard",
+              "weapon_type": "glaive",
+              "pose_type": "heroic_posture",
+              "faction_style": "high_elf_host"
+            },
+            "shape_language": {
+              "archetype": "high_elf_warrior",
+              "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+              "anatomy": [
+                "elongated_limbs",
+                "narrow_waist",
+                "heroic_posture",
+                "long_neck"
+              ],
+              "armor": [
+                "layered_fantasy_armor",
+                "crested_elf_helm",
+                "slender_pauldrons",
+                "leaf_plate_edges"
+              ],
+              "equipment": [
+                "pointed_ears_or_elf_helm",
+                "sword_spear_or_glaive",
+                "cape_or_tabard"
+              ],
+              "pose": [
+                "upright_heroic_stance",
+                "weapon_forward_readable"
+              ],
+              "required_silhouette_tags": [
+                "high_elf_warrior_shape",
+                "elongated_limbs",
+                "narrow_waist",
+                "heroic_posture",
+                "pointed_ears_or_elf_helm",
+                "layered_fantasy_armor",
+                "sword_spear_or_glaive",
+                "cape_or_tabard"
+              ]
+            }
+          },
+          "silhouette_critic": {
+            "score": 0.95,
+            "present_identity_tags": [
+              "advancing_stride",
+              "weapon_barrel"
+            ],
+            "width_height_ratio": 0.881,
+            "depth_height_ratio": 0.881,
+            "concept": {
+              "faction": "high_elf_host",
+              "role": "high_elf_warrior",
+              "armor_class": "layered_fantasy_armor",
+              "equipment": [
+                "pointed_ears_or_elf_helm",
+                "glaive",
+                "cape_or_tabard",
+                "leaf_plate_edges"
+              ],
+              "pose": "heroic_posture",
+              "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+              "head_type": "elf_helm",
+              "armor_type": "layered_fantasy_armor",
+              "backpack_type": "cape_or_tabard",
+              "weapon_type": "glaive",
+              "pose_type": "heroic_posture",
+              "faction_style": "high_elf_host"
+            },
+            "shape_language": {
+              "archetype": "high_elf_warrior",
+              "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+              "anatomy": [
+                "elongated_limbs",
+                "narrow_waist",
+                "heroic_posture",
+                "long_neck"
+              ],
+              "armor": [
+                "layered_fantasy_armor",
+                "crested_elf_helm",
+                "slender_pauldrons",
+                "leaf_plate_edges"
+              ],
+              "equipment": [
+                "pointed_ears_or_elf_helm",
+                "sword_spear_or_glaive",
+                "cape_or_tabard"
+              ],
+              "pose": [
+                "upright_heroic_stance",
+                "weapon_forward_readable"
+              ],
+              "required_silhouette_tags": [
+                "high_elf_warrior_shape",
+                "elongated_limbs",
+                "narrow_waist",
+                "heroic_posture",
+                "pointed_ears_or_elf_helm",
+                "layered_fantasy_armor",
+                "sword_spear_or_glaive",
+                "cape_or_tabard"
+              ]
+            }
+          }
+        }
+      },
+      "mesh": "meshes\\high_elf_warrior_pre_sculpt_assembly.stl",
+      "stages": [
+        {
+          "stage_name": "concept_profile",
+          "input": "High Elf Warrior with glaive, layered fantasy armor, cape, heroic posture",
+          "output": "high_elf_warrior",
+          "vertices": 0,
+          "faces": 0,
+          "objects": 0,
+          "bbox_mm": [
+            0,
+            0,
+            0
+          ],
+          "watertight": false,
+          "screenshot": "images\\high_elf_warrior_00_concept_profile.png"
+        },
+        {
+          "stage_name": "head",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:head_1; tags=['head', 'helmet', 'pointed_ears_or_elf_helm', 'crested_elf_helm', 'elf_face', 'high_elf_warrior_shape', 'anatomical_component_library']",
+          "vertices": 886,
+          "faces": 1752,
+          "objects": 5,
+          "bbox_mm": [
+            4.8,
+            1.85,
+            4.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_head.png"
+        },
+        {
+          "stage_name": "torso",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:torso_1; tags=['body', 'torso', 'chest_armor', 'shoulder_pad', 'narrow_waist', 'heroic_posture', 'layered_fantasy_armor', 'cape_or_tabard', 'leaf_plate_edges', 'high_elf_warrior_shape', 'armor_component_library']",
+          "vertices": 1776,
+          "faces": 3520,
+          "objects": 8,
+          "bbox_mm": [
+            6.4,
+            3.86,
+            15.2
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_torso.png"
+        },
+        {
+          "stage_name": "legs",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:legs_1; tags=['legs', 'left_leg', 'right_leg', 'elongated_limbs', 'heroic_posture', 'advancing_stride', 'high_elf_warrior_shape', 'anatomical_component_library']",
+          "vertices": 1148,
+          "faces": 2272,
+          "objects": 6,
+          "bbox_mm": [
+            4.47,
+            2.544,
+            10.345
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_legs.png"
+        },
+        {
+          "stage_name": "left_arm",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:left_arm_1; tags=['arms', 'elongated_limbs', 'slender_arms', 'high_elf_warrior_shape', 'anatomical_component_library', 'left_arm']",
+          "vertices": 574,
+          "faces": 1136,
+          "objects": 3,
+          "bbox_mm": [
+            2.778,
+            1.92,
+            7.885
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_left_arm.png"
+        },
+        {
+          "stage_name": "right_arm",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:right_arm_1; tags=['arms', 'elongated_limbs', 'slender_arms', 'high_elf_warrior_shape', 'anatomical_component_library', 'right_arm']",
+          "vertices": 574,
+          "faces": 1136,
+          "objects": 3,
+          "bbox_mm": [
+            2.778,
+            1.92,
+            7.885
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_right_arm.png"
+        },
+        {
+          "stage_name": "weapons",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:weapons_1; tags=['weapon', 'weapon_barrel', 'sword_spear_or_glaive', 'glaive', 'weapon_forward_readable', 'high_elf_warrior_shape', 'weapon_component_library']",
+          "vertices": 492,
+          "faces": 968,
+          "objects": 4,
+          "bbox_mm": [
+            3.301,
+            0.68,
+            16.844
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_weapons.png"
+        },
+        {
+          "stage_name": "accessories",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:accessories_1; tags=['accessories', 'cape_or_tabard', 'cape', 'tabard', 'flowing_banner_shape', 'high_elf_warrior_shape', 'cloth_component_library']",
+          "vertices": 408,
+          "faces": 800,
+          "objects": 4,
+          "bbox_mm": [
+            5.1,
+            4.46,
+            13.6
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_accessories.png"
+        },
+        {
+          "stage_name": "base",
+          "input": "High Elf Warrior design profile",
+          "output": "procedural_modular_provider:base_1; tags=['base', 'round_base', 'base_texture']",
+          "vertices": 1014,
+          "faces": 1952,
+          "objects": 19,
+          "bbox_mm": [
+            23.6,
+            23.6,
+            2.2
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_base.png"
+        },
+        {
+          "stage_name": "assembly_pre_sculpt",
+          "input": "selected modular parts",
+          "output": "concatenated parts + socket connectors; no sculpt pass",
+          "vertices": 12746,
+          "faces": 25176,
+          "objects": 79,
+          "bbox_mm": [
+            23.6,
+            23.6,
+            26.8
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_assembly_render.png"
+        },
+        {
+          "stage_name": "silhouette_gate",
+          "input": "pre-sculpt assembly render/metadata/thumbnail metrics",
+          "output": "passed=True; issues=[]",
+          "vertices": 12746,
+          "faces": 25176,
+          "objects": 79,
+          "bbox_mm": [
+            23.6,
+            23.6,
+            26.8
+          ],
+          "watertight": true,
+          "screenshot": "images\\high_elf_warrior_silhouette.png"
+        }
+      ]
+    },
+    "Dwarf Warrior": {
+      "prompt": "Dwarf Warrior with axe, runic heavy armor, stocky proportions, shield",
+      "spec": {
+        "prompt": "Dwarf Warrior with axe, runic heavy armor, stocky proportions, shield",
+        "scale_mm": 32.0,
+        "archetype": "heavy_infantry",
+        "style": "sci_fi",
+        "pose": "heroic_standing",
+        "weapon": "sword",
+        "helmet": true,
+        "backpack": true,
+        "cape": false,
+        "robe": false,
+        "claws": false,
+        "base": "round_textured",
+        "target_faces": 250000,
+        "details": [
+          "panel_lines",
+          "rivets",
+          "armor_seams",
+          "base_texture",
+          "helmet_lenses",
+          "backpack_vents",
+          "weapon_barrel",
+          "cable_runs"
+        ]
+      },
+      "design": {
+        "faction": "original_sci_fi_warband",
+        "role": "line_trooper",
+        "armor_class": "heavy_power_armor",
+        "equipment": [
+          "weapon",
+          "backpack",
+          "pouches"
+        ],
+        "pose": "heroic_standing",
+        "silhouette": "heroic_armored_specialist",
+        "head_type": "helmet",
+        "armor_type": "heavy_power_armor",
+        "backpack_type": "power_backpack",
+        "weapon_type": "sword",
+        "pose_type": "heroic_standing",
+        "faction_style": "original_sci_fi_warband"
+      },
+      "shape_language": {
+        "archetype": "line_trooper",
+        "silhouette": "heroic_armored_specialist",
+        "anatomy": [
+          "heroic_scale",
+          "readable_head_torso_limbs"
+        ],
+        "armor": [
+          "heavy_power_armor"
+        ],
+        "equipment": [
+          "weapon",
+          "backpack",
+          "pouches"
+        ],
+        "pose": [
+          "heroic_standing"
+        ],
+        "required_silhouette_tags": [
+          "head",
+          "torso",
+          "legs",
+          "weapon",
+          "backpack"
+        ]
+      },
+      "selected_parts": {
+        "head": {
+          "part_id": "head_1",
+          "category": "head",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "head",
+            "helmet",
+            "helmet_lenses",
+            "helmet_mouth_grille",
+            "helmet_trim"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                23.1
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                21.200000000000003
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                25.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                23.1
+              ],
+              "radius_mm": 0.34559999999999996,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 368,
+            "vertices": 194,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 1,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.6633191164704968,
+            "detail_density": 0.5311150718104591,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "torso": {
+          "part_id": "torso_1",
+          "category": "torso",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "body",
+            "torso",
+            "chest_armor",
+            "shoulder_pad",
+            "wide_shoulders",
+            "chest_plate",
+            "chest_panel_line",
+            "panel_line",
+            "armor_trim",
+            "body_detail"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                16.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                10.9
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                21.1
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "head",
+              "kind": "neck",
+              "position": [
+                0.0,
+                0.0,
+                21.1
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "left_arm",
+              "kind": "shoulder",
+              "position": [
+                -5.6,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_arm",
+              "kind": "shoulder",
+              "position": [
+                5.6,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2016,
+            "vertices": 1030,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.32276532326477714,
+            "detail_density": 0.4868752196235804,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "legs": {
+          "part_id": "legs_1",
+          "category": "legs",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "legs",
+            "left_leg",
+            "right_leg",
+            "greaves",
+            "knee_pads",
+            "boot_trim",
+            "greave_trim",
+            "advancing_stride"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                6.95
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                1.65
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                12.25
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                6.95
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2728,
+            "vertices": 1380,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 6,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.26371944479912585,
+            "detail_density": 0.754602364991563,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "left_arm": {
+          "part_id": "left_arm_1",
+          "category": "left_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "gauntlets",
+            "finger_detail",
+            "armor_trim",
+            "left_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                10.725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                19.62
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1388,
+            "vertices": 706,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.16379937720508464,
+            "detail_density": 0.7070746772662815,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "right_arm": {
+          "part_id": "right_arm_1",
+          "category": "right_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "gauntlets",
+            "finger_detail",
+            "armor_trim",
+            "right_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                10.725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                19.62
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1388,
+            "vertices": 706,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.16379937720508464,
+            "detail_density": 0.7070746772662815,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "weapons": {
+          "part_id": "weapons_1",
+          "category": "weapons",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "weapon",
+            "weapon_barrel",
+            "magazine",
+            "scope",
+            "muzzle_detail"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.0,
+                -2.2275,
+                13.6
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.0,
+                -2.2275,
+                12.174999999999999
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.0,
+                -2.2275,
+                15.025
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.0,
+                -2.2275,
+                13.6
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_hand_grip",
+              "kind": "hand",
+              "position": [
+                2.0,
+                -2.0,
+                14.0
+              ],
+              "radius_mm": 0.35,
+              "direction": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 324,
+            "vertices": 192,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 2,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.9640896278107928,
+            "detail_density": 0.4568900910911104,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "accessories": {
+          "part_id": "accessories_1",
+          "category": "accessories",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "accessories",
+            "backpack",
+            "oversized_backpack",
+            "backpack_vent",
+            "backpack_vents",
+            "cable_runs",
+            "pouch",
+            "purity_seal"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                14.4375
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                10.275
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                18.599999999999998
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                14.4375
+              ],
+              "radius_mm": 0.6623999999999999,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 324,
+            "vertices": 194,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 1.0,
+            "detail_density": 0.38998625635114714,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "base": {
+          "part_id": "base_1",
+          "category": "base",
+          "scale_mm": 32.0,
+          "symmetry": "radial",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "base",
+            "round_base",
+            "base_texture",
+            "rocks"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                0.1100000000000001
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                1.2200000000000002
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                0.1100000000000001
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "feet",
+              "kind": "base",
+              "position": [
+                0,
+                0,
+                1.0
+              ],
+              "radius_mm": 1.2,
+              "direction": [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1952,
+            "vertices": 1014,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 19,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.602123523912524,
+            "detail_density": 0.5492770323510252,
+            "issues": [],
+            "passed": true
+          }
+        }
+      },
+      "assembly_stats": {
+        "vertices": 11290,
+        "faces": 22128,
+        "objects": 113,
+        "bbox_mm": [
+          26.0,
+          26.0,
+          26.0
+        ],
+        "watertight": true
+      },
+      "silhouette_gate": {
+        "name": "pre_sculpt_silhouette_and_part_recognizability_gate",
+        "passed": true,
+        "issues": [],
+        "artifacts": {
+          "recognizability_gate": {
+            "part_checks": {
+              "head_recognizable": true,
+              "torso_recognizable": true,
+              "arms_recognizable": true,
+              "legs_recognizable": true,
+              "weapon_recognizable": true
+            },
+            "silhouette_64_thumbnail": {
+              "view": "front",
+              "resolution": 64,
+              "occupancy": 0.1792,
+              "width_span": 1.0,
+              "height_span": 1.0,
+              "edge_transitions": 701
+            },
+            "concept": {
+              "faction": "original_sci_fi_warband",
+              "role": "line_trooper",
+              "armor_class": "heavy_power_armor",
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": "heroic_standing",
+              "silhouette": "heroic_armored_specialist",
+              "head_type": "helmet",
+              "armor_type": "heavy_power_armor",
+              "backpack_type": "power_backpack",
+              "weapon_type": "sword",
+              "pose_type": "heroic_standing",
+              "faction_style": "original_sci_fi_warband"
+            },
+            "shape_language": {
+              "archetype": "line_trooper",
+              "silhouette": "heroic_armored_specialist",
+              "anatomy": [
+                "heroic_scale",
+                "readable_head_torso_limbs"
+              ],
+              "armor": [
+                "heavy_power_armor"
+              ],
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": [
+                "heroic_standing"
+              ],
+              "required_silhouette_tags": [
+                "head",
+                "torso",
+                "legs",
+                "weapon",
+                "backpack"
+              ]
+            }
+          },
+          "silhouette_critic": {
+            "score": 0.85,
+            "present_identity_tags": [
+              "advancing_stride",
+              "oversized_backpack",
+              "weapon_barrel",
+              "wide_shoulders"
+            ],
+            "width_height_ratio": 1.0,
+            "depth_height_ratio": 1.0,
+            "concept": {
+              "faction": "original_sci_fi_warband",
+              "role": "line_trooper",
+              "armor_class": "heavy_power_armor",
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": "heroic_standing",
+              "silhouette": "heroic_armored_specialist",
+              "head_type": "helmet",
+              "armor_type": "heavy_power_armor",
+              "backpack_type": "power_backpack",
+              "weapon_type": "sword",
+              "pose_type": "heroic_standing",
+              "faction_style": "original_sci_fi_warband"
+            },
+            "shape_language": {
+              "archetype": "line_trooper",
+              "silhouette": "heroic_armored_specialist",
+              "anatomy": [
+                "heroic_scale",
+                "readable_head_torso_limbs"
+              ],
+              "armor": [
+                "heavy_power_armor"
+              ],
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": [
+                "heroic_standing"
+              ],
+              "required_silhouette_tags": [
+                "head",
+                "torso",
+                "legs",
+                "weapon",
+                "backpack"
+              ]
+            }
+          }
+        }
+      },
+      "mesh": "meshes\\dwarf_warrior_pre_sculpt_assembly.stl",
+      "stages": [
+        {
+          "stage_name": "concept_profile",
+          "input": "Dwarf Warrior with axe, runic heavy armor, stocky proportions, shield",
+          "output": "line_trooper",
+          "vertices": 0,
+          "faces": 0,
+          "objects": 0,
+          "bbox_mm": [
+            0,
+            0,
+            0
+          ],
+          "watertight": false,
+          "screenshot": "images\\dwarf_warrior_00_concept_profile.png"
+        },
+        {
+          "stage_name": "head",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:head_1; tags=['head', 'helmet', 'helmet_lenses', 'helmet_mouth_grille', 'helmet_trim']",
+          "vertices": 194,
+          "faces": 368,
+          "objects": 5,
+          "bbox_mm": [
+            3.4,
+            2.88,
+            3.8
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_head.png"
+        },
+        {
+          "stage_name": "torso",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:torso_1; tags=['body', 'torso', 'chest_armor', 'shoulder_pad', 'wide_shoulders', 'chest_plate', 'chest_panel_line', 'panel_line', 'armor_trim', 'body_detail']",
+          "vertices": 1030,
+          "faces": 2016,
+          "objects": 11,
+          "bbox_mm": [
+            11.2,
+            4.4,
+            10.2
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_torso.png"
+        },
+        {
+          "stage_name": "legs",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:legs_1; tags=['legs', 'left_leg', 'right_leg', 'greaves', 'knee_pads', 'boot_trim', 'greave_trim', 'advancing_stride']",
+          "vertices": 1380,
+          "faces": 2728,
+          "objects": 8,
+          "bbox_mm": [
+            4.799,
+            2.251,
+            10.6
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_legs.png"
+        },
+        {
+          "stage_name": "left_arm",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:left_arm_1; tags=['arms', 'gauntlets', 'finger_detail', 'armor_trim', 'left_arm']",
+          "vertices": 706,
+          "faces": 1388,
+          "objects": 6,
+          "bbox_mm": [
+            2.662,
+            2.485,
+            8.895
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_left_arm.png"
+        },
+        {
+          "stage_name": "right_arm",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:right_arm_1; tags=['arms', 'gauntlets', 'finger_detail', 'armor_trim', 'right_arm']",
+          "vertices": 706,
+          "faces": 1388,
+          "objects": 6,
+          "bbox_mm": [
+            2.662,
+            2.485,
+            8.895
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_right_arm.png"
+        },
+        {
+          "stage_name": "weapons",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:weapons_1; tags=['weapon', 'weapon_barrel', 'magazine', 'scope', 'muzzle_detail']",
+          "vertices": 192,
+          "faces": 324,
+          "objects": 15,
+          "bbox_mm": [
+            8.8,
+            1.055,
+            2.85
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_weapons.png"
+        },
+        {
+          "stage_name": "accessories",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:accessories_1; tags=['accessories', 'backpack', 'oversized_backpack', 'backpack_vent', 'backpack_vents', 'cable_runs', 'pouch', 'purity_seal']",
+          "vertices": 194,
+          "faces": 324,
+          "objects": 16,
+          "bbox_mm": [
+            5.52,
+            5.943,
+            8.325
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_accessories.png"
+        },
+        {
+          "stage_name": "base",
+          "input": "Dwarf Warrior design profile",
+          "output": "procedural_modular_provider:base_1; tags=['base', 'round_base', 'base_texture', 'rocks']",
+          "vertices": 1014,
+          "faces": 1952,
+          "objects": 19,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            2.22
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_base.png"
+        },
+        {
+          "stage_name": "assembly_pre_sculpt",
+          "input": "selected modular parts",
+          "output": "concatenated parts + socket connectors; no sculpt pass",
+          "vertices": 11290,
+          "faces": 22128,
+          "objects": 113,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            26.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_assembly_render.png"
+        },
+        {
+          "stage_name": "silhouette_gate",
+          "input": "pre-sculpt assembly render/metadata/thumbnail metrics",
+          "output": "passed=True; issues=[]",
+          "vertices": 11290,
+          "faces": 22128,
+          "objects": 113,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            26.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\dwarf_warrior_silhouette.png"
+        }
+      ]
+    },
+    "Orc Brute": {
+      "prompt": "Orc Brute with cleaver, hunched muscular body, tusks, crude armor",
+      "spec": {
+        "prompt": "Orc Brute with cleaver, hunched muscular body, tusks, crude armor",
+        "scale_mm": 32.0,
+        "archetype": "heavy_infantry",
+        "style": "fantasy",
+        "pose": "heroic_standing",
+        "weapon": "rifle",
+        "helmet": true,
+        "backpack": false,
+        "cape": false,
+        "robe": false,
+        "claws": false,
+        "base": "round_textured",
+        "target_faces": 250000,
+        "details": [
+          "panel_lines",
+          "rivets",
+          "armor_seams",
+          "base_texture",
+          "cloth_folds",
+          "trim",
+          "scrolls"
+        ]
+      },
+      "design": {
+        "faction": "original_fantasy_warband",
+        "role": "line_trooper",
+        "armor_class": "layered_plate_armor",
+        "equipment": [
+          "weapon",
+          "backpack",
+          "pouches"
+        ],
+        "pose": "heroic_standing",
+        "silhouette": "heroic_armored_specialist",
+        "head_type": "helmet",
+        "armor_type": "layered_plate_armor",
+        "backpack_type": "power_backpack",
+        "weapon_type": "rifle",
+        "pose_type": "heroic_standing",
+        "faction_style": "original_fantasy_warband"
+      },
+      "shape_language": {
+        "archetype": "line_trooper",
+        "silhouette": "heroic_armored_specialist",
+        "anatomy": [
+          "heroic_scale",
+          "readable_head_torso_limbs"
+        ],
+        "armor": [
+          "layered_plate_armor"
+        ],
+        "equipment": [
+          "weapon",
+          "backpack",
+          "pouches"
+        ],
+        "pose": [
+          "heroic_standing"
+        ],
+        "required_silhouette_tags": [
+          "head",
+          "torso",
+          "legs",
+          "weapon",
+          "backpack"
+        ]
+      },
+      "selected_parts": {
+        "head": {
+          "part_id": "head_1",
+          "category": "head",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "head",
+            "helmet",
+            "helmet_lenses",
+            "helmet_mouth_grille",
+            "helmet_trim"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                23.1
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                21.200000000000003
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                25.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                23.1
+              ],
+              "radius_mm": 0.34559999999999996,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 368,
+            "vertices": 194,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 1,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.6633191164704968,
+            "detail_density": 0.5311150718104591,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "torso": {
+          "part_id": "torso_1",
+          "category": "torso",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "body",
+            "torso",
+            "chest_armor",
+            "shoulder_pad",
+            "wide_shoulders",
+            "chest_plate",
+            "chest_panel_line",
+            "panel_line",
+            "armor_trim",
+            "body_detail"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                16.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                10.9
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                21.1
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "head",
+              "kind": "neck",
+              "position": [
+                0.0,
+                0.0,
+                21.1
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "left_arm",
+              "kind": "shoulder",
+              "position": [
+                -5.6,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_arm",
+              "kind": "shoulder",
+              "position": [
+                5.6,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2016,
+            "vertices": 1030,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.32276532326477714,
+            "detail_density": 0.4868752196235804,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "legs": {
+          "part_id": "legs_1",
+          "category": "legs",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "legs",
+            "left_leg",
+            "right_leg",
+            "greaves",
+            "knee_pads",
+            "boot_trim",
+            "greave_trim",
+            "advancing_stride"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                6.95
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                1.65
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                12.25
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                6.95
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2728,
+            "vertices": 1380,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 6,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.26371944479912585,
+            "detail_density": 0.754602364991563,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "left_arm": {
+          "part_id": "left_arm_1",
+          "category": "left_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "gauntlets",
+            "finger_detail",
+            "armor_trim",
+            "left_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                10.725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                19.62
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1388,
+            "vertices": 706,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.16379937720508464,
+            "detail_density": 0.7070746772662815,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "right_arm": {
+          "part_id": "right_arm_1",
+          "category": "right_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "gauntlets",
+            "finger_detail",
+            "armor_trim",
+            "right_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                10.725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                19.62
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1388,
+            "vertices": 706,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.16379937720508464,
+            "detail_density": 0.7070746772662815,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "weapons": {
+          "part_id": "weapons_1",
+          "category": "weapons",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "weapon",
+            "weapon_barrel",
+            "magazine",
+            "scope",
+            "muzzle_detail"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.0,
+                -2.2275,
+                13.6
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.0,
+                -2.2275,
+                12.174999999999999
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.0,
+                -2.2275,
+                15.025
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.0,
+                -2.2275,
+                13.6
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_hand_grip",
+              "kind": "hand",
+              "position": [
+                2.0,
+                -2.0,
+                14.0
+              ],
+              "radius_mm": 0.35,
+              "direction": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 324,
+            "vertices": 192,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 2,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.9640896278107928,
+            "detail_density": 0.4568900910911104,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "accessories": {
+          "part_id": "accessories_1",
+          "category": "accessories",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "accessories",
+            "backpack",
+            "oversized_backpack",
+            "backpack_vent",
+            "backpack_vents",
+            "cable_runs",
+            "pouch",
+            "purity_seal"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                14.4375
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                10.275
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                18.599999999999998
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                14.4375
+              ],
+              "radius_mm": 0.6623999999999999,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 324,
+            "vertices": 194,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 1.0,
+            "detail_density": 0.38998625635114714,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "base": {
+          "part_id": "base_1",
+          "category": "base",
+          "scale_mm": 32.0,
+          "symmetry": "radial",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "base",
+            "round_base",
+            "base_texture",
+            "rocks"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                0.1100000000000001
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                1.2200000000000002
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                0.1100000000000001
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "feet",
+              "kind": "base",
+              "position": [
+                0,
+                0,
+                1.0
+              ],
+              "radius_mm": 1.2,
+              "direction": [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1952,
+            "vertices": 1014,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 19,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.602123523912524,
+            "detail_density": 0.5492770323510252,
+            "issues": [],
+            "passed": true
+          }
+        }
+      },
+      "assembly_stats": {
+        "vertices": 11290,
+        "faces": 22128,
+        "objects": 113,
+        "bbox_mm": [
+          26.0,
+          26.0,
+          26.0
+        ],
+        "watertight": true
+      },
+      "silhouette_gate": {
+        "name": "pre_sculpt_silhouette_and_part_recognizability_gate",
+        "passed": true,
+        "issues": [],
+        "artifacts": {
+          "recognizability_gate": {
+            "part_checks": {
+              "head_recognizable": true,
+              "torso_recognizable": true,
+              "arms_recognizable": true,
+              "legs_recognizable": true,
+              "weapon_recognizable": true
+            },
+            "silhouette_64_thumbnail": {
+              "view": "front",
+              "resolution": 64,
+              "occupancy": 0.1792,
+              "width_span": 1.0,
+              "height_span": 1.0,
+              "edge_transitions": 701
+            },
+            "concept": {
+              "faction": "original_fantasy_warband",
+              "role": "line_trooper",
+              "armor_class": "layered_plate_armor",
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": "heroic_standing",
+              "silhouette": "heroic_armored_specialist",
+              "head_type": "helmet",
+              "armor_type": "layered_plate_armor",
+              "backpack_type": "power_backpack",
+              "weapon_type": "rifle",
+              "pose_type": "heroic_standing",
+              "faction_style": "original_fantasy_warband"
+            },
+            "shape_language": {
+              "archetype": "line_trooper",
+              "silhouette": "heroic_armored_specialist",
+              "anatomy": [
+                "heroic_scale",
+                "readable_head_torso_limbs"
+              ],
+              "armor": [
+                "layered_plate_armor"
+              ],
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": [
+                "heroic_standing"
+              ],
+              "required_silhouette_tags": [
+                "head",
+                "torso",
+                "legs",
+                "weapon",
+                "backpack"
+              ]
+            }
+          },
+          "silhouette_critic": {
+            "score": 0.85,
+            "present_identity_tags": [
+              "advancing_stride",
+              "oversized_backpack",
+              "weapon_barrel",
+              "wide_shoulders"
+            ],
+            "width_height_ratio": 1.0,
+            "depth_height_ratio": 1.0,
+            "concept": {
+              "faction": "original_fantasy_warband",
+              "role": "line_trooper",
+              "armor_class": "layered_plate_armor",
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": "heroic_standing",
+              "silhouette": "heroic_armored_specialist",
+              "head_type": "helmet",
+              "armor_type": "layered_plate_armor",
+              "backpack_type": "power_backpack",
+              "weapon_type": "rifle",
+              "pose_type": "heroic_standing",
+              "faction_style": "original_fantasy_warband"
+            },
+            "shape_language": {
+              "archetype": "line_trooper",
+              "silhouette": "heroic_armored_specialist",
+              "anatomy": [
+                "heroic_scale",
+                "readable_head_torso_limbs"
+              ],
+              "armor": [
+                "layered_plate_armor"
+              ],
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": [
+                "heroic_standing"
+              ],
+              "required_silhouette_tags": [
+                "head",
+                "torso",
+                "legs",
+                "weapon",
+                "backpack"
+              ]
+            }
+          }
+        }
+      },
+      "mesh": "meshes\\orc_brute_pre_sculpt_assembly.stl",
+      "stages": [
+        {
+          "stage_name": "concept_profile",
+          "input": "Orc Brute with cleaver, hunched muscular body, tusks, crude armor",
+          "output": "line_trooper",
+          "vertices": 0,
+          "faces": 0,
+          "objects": 0,
+          "bbox_mm": [
+            0,
+            0,
+            0
+          ],
+          "watertight": false,
+          "screenshot": "images\\orc_brute_00_concept_profile.png"
+        },
+        {
+          "stage_name": "head",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:head_1; tags=['head', 'helmet', 'helmet_lenses', 'helmet_mouth_grille', 'helmet_trim']",
+          "vertices": 194,
+          "faces": 368,
+          "objects": 5,
+          "bbox_mm": [
+            3.4,
+            2.88,
+            3.8
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_head.png"
+        },
+        {
+          "stage_name": "torso",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:torso_1; tags=['body', 'torso', 'chest_armor', 'shoulder_pad', 'wide_shoulders', 'chest_plate', 'chest_panel_line', 'panel_line', 'armor_trim', 'body_detail']",
+          "vertices": 1030,
+          "faces": 2016,
+          "objects": 11,
+          "bbox_mm": [
+            11.2,
+            4.4,
+            10.2
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_torso.png"
+        },
+        {
+          "stage_name": "legs",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:legs_1; tags=['legs', 'left_leg', 'right_leg', 'greaves', 'knee_pads', 'boot_trim', 'greave_trim', 'advancing_stride']",
+          "vertices": 1380,
+          "faces": 2728,
+          "objects": 8,
+          "bbox_mm": [
+            4.799,
+            2.251,
+            10.6
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_legs.png"
+        },
+        {
+          "stage_name": "left_arm",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:left_arm_1; tags=['arms', 'gauntlets', 'finger_detail', 'armor_trim', 'left_arm']",
+          "vertices": 706,
+          "faces": 1388,
+          "objects": 6,
+          "bbox_mm": [
+            2.662,
+            2.485,
+            8.895
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_left_arm.png"
+        },
+        {
+          "stage_name": "right_arm",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:right_arm_1; tags=['arms', 'gauntlets', 'finger_detail', 'armor_trim', 'right_arm']",
+          "vertices": 706,
+          "faces": 1388,
+          "objects": 6,
+          "bbox_mm": [
+            2.662,
+            2.485,
+            8.895
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_right_arm.png"
+        },
+        {
+          "stage_name": "weapons",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:weapons_1; tags=['weapon', 'weapon_barrel', 'magazine', 'scope', 'muzzle_detail']",
+          "vertices": 192,
+          "faces": 324,
+          "objects": 15,
+          "bbox_mm": [
+            8.8,
+            1.055,
+            2.85
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_weapons.png"
+        },
+        {
+          "stage_name": "accessories",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:accessories_1; tags=['accessories', 'backpack', 'oversized_backpack', 'backpack_vent', 'backpack_vents', 'cable_runs', 'pouch', 'purity_seal']",
+          "vertices": 194,
+          "faces": 324,
+          "objects": 16,
+          "bbox_mm": [
+            5.52,
+            5.943,
+            8.325
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_accessories.png"
+        },
+        {
+          "stage_name": "base",
+          "input": "Orc Brute design profile",
+          "output": "procedural_modular_provider:base_1; tags=['base', 'round_base', 'base_texture', 'rocks']",
+          "vertices": 1014,
+          "faces": 1952,
+          "objects": 19,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            2.22
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_base.png"
+        },
+        {
+          "stage_name": "assembly_pre_sculpt",
+          "input": "selected modular parts",
+          "output": "concatenated parts + socket connectors; no sculpt pass",
+          "vertices": 11290,
+          "faces": 22128,
+          "objects": 113,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            26.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_assembly_render.png"
+        },
+        {
+          "stage_name": "silhouette_gate",
+          "input": "pre-sculpt assembly render/metadata/thumbnail metrics",
+          "output": "passed=True; issues=[]",
+          "vertices": 11290,
+          "faces": 22128,
+          "objects": 113,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            26.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\orc_brute_silhouette.png"
+        }
+      ]
+    },
+    "Human Knight": {
+      "prompt": "Human Knight with sword, shield, plate armor, upright heroic posture",
+      "spec": {
+        "prompt": "Human Knight with sword, shield, plate armor, upright heroic posture",
+        "scale_mm": 32.0,
+        "archetype": "heavy_infantry",
+        "style": "fantasy",
+        "pose": "heroic_standing",
+        "weapon": "sword",
+        "helmet": true,
+        "backpack": false,
+        "cape": false,
+        "robe": false,
+        "claws": false,
+        "base": "round_textured",
+        "target_faces": 250000,
+        "details": [
+          "panel_lines",
+          "rivets",
+          "armor_seams",
+          "base_texture",
+          "cloth_folds",
+          "trim",
+          "scrolls"
+        ]
+      },
+      "design": {
+        "faction": "original_fantasy_warband",
+        "role": "line_trooper",
+        "armor_class": "layered_plate_armor",
+        "equipment": [
+          "weapon",
+          "backpack",
+          "pouches"
+        ],
+        "pose": "heroic_standing",
+        "silhouette": "heroic_armored_specialist",
+        "head_type": "helmet",
+        "armor_type": "layered_plate_armor",
+        "backpack_type": "power_backpack",
+        "weapon_type": "sword",
+        "pose_type": "heroic_standing",
+        "faction_style": "original_fantasy_warband"
+      },
+      "shape_language": {
+        "archetype": "line_trooper",
+        "silhouette": "heroic_armored_specialist",
+        "anatomy": [
+          "heroic_scale",
+          "readable_head_torso_limbs"
+        ],
+        "armor": [
+          "layered_plate_armor"
+        ],
+        "equipment": [
+          "weapon",
+          "backpack",
+          "pouches"
+        ],
+        "pose": [
+          "heroic_standing"
+        ],
+        "required_silhouette_tags": [
+          "head",
+          "torso",
+          "legs",
+          "weapon",
+          "backpack"
+        ]
+      },
+      "selected_parts": {
+        "head": {
+          "part_id": "head_1",
+          "category": "head",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "head",
+            "helmet",
+            "helmet_lenses",
+            "helmet_mouth_grille",
+            "helmet_trim"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                23.1
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                21.200000000000003
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                25.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                -0.1399999999999999,
+                23.1
+              ],
+              "radius_mm": 0.34559999999999996,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 368,
+            "vertices": 194,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 1,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.6633191164704968,
+            "detail_density": 0.5311150718104591,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "torso": {
+          "part_id": "torso_1",
+          "category": "torso",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "body",
+            "torso",
+            "chest_armor",
+            "shoulder_pad",
+            "wide_shoulders",
+            "chest_plate",
+            "chest_panel_line",
+            "panel_line",
+            "armor_trim",
+            "body_detail"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                16.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                10.9
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                21.1
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "head",
+              "kind": "neck",
+              "position": [
+                0.0,
+                0.0,
+                21.1
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "left_arm",
+              "kind": "shoulder",
+              "position": [
+                -5.6,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_arm",
+              "kind": "shoulder",
+              "position": [
+                5.6,
+                0.0,
+                16.0
+              ],
+              "radius_mm": 0.528,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2016,
+            "vertices": 1030,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.32276532326477714,
+            "detail_density": 0.4868752196235804,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "legs": {
+          "part_id": "legs_1",
+          "category": "legs",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "legs",
+            "left_leg",
+            "right_leg",
+            "greaves",
+            "knee_pads",
+            "boot_trim",
+            "greave_trim",
+            "advancing_stride"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                6.95
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                1.65
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                12.25
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -0.10008030731100193,
+                -0.02931297507461028,
+                6.95
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 2728,
+            "vertices": 1380,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 6,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.26371944479912585,
+            "detail_density": 0.754602364991563,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "left_arm": {
+          "part_id": "left_arm_1",
+          "category": "left_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "gauntlets",
+            "finger_detail",
+            "armor_trim",
+            "left_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                10.725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                19.62
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                -3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1388,
+            "vertices": 706,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.16379937720508464,
+            "detail_density": 0.7070746772662815,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "right_arm": {
+          "part_id": "right_arm_1",
+          "category": "right_arm",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "arms",
+            "gauntlets",
+            "finger_detail",
+            "armor_trim",
+            "right_arm"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                10.725
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                19.62
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.5638224053485392,
+                -0.7250000000000001,
+                15.1725
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1388,
+            "vertices": 706,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.16379937720508464,
+            "detail_density": 0.7070746772662815,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "weapons": {
+          "part_id": "weapons_1",
+          "category": "weapons",
+          "scale_mm": 32.0,
+          "symmetry": "none",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "weapon",
+            "weapon_barrel",
+            "magazine",
+            "scope",
+            "muzzle_detail"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                3.0,
+                -2.2275,
+                13.6
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                3.0,
+                -2.2275,
+                12.174999999999999
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                3.0,
+                -2.2275,
+                15.025
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                3.0,
+                -2.2275,
+                13.6
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "right_hand_grip",
+              "kind": "hand",
+              "position": [
+                2.0,
+                -2.0,
+                14.0
+              ],
+              "radius_mm": 0.35,
+              "direction": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 324,
+            "vertices": 192,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 2,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.9640896278107928,
+            "detail_density": 0.4568900910911104,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "accessories": {
+          "part_id": "accessories_1",
+          "category": "accessories",
+          "scale_mm": 32.0,
+          "symmetry": "bilateral",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "accessories",
+            "backpack",
+            "oversized_backpack",
+            "backpack_vent",
+            "backpack_vents",
+            "cable_runs",
+            "pouch",
+            "purity_seal"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                14.4375
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                10.275
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                18.599999999999998
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.5013724410747851,
+                14.4375
+              ],
+              "radius_mm": 0.6623999999999999,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 324,
+            "vertices": 194,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 3,
+            "sheet_artifacts": 0,
+            "primitive_score": 1.0,
+            "detail_density": 0.38998625635114714,
+            "issues": [],
+            "passed": true
+          }
+        },
+        "base": {
+          "part_id": "base_1",
+          "category": "base",
+          "scale_mm": 32.0,
+          "symmetry": "radial",
+          "source": "procedural_modular_provider",
+          "detail_tags": [
+            "base",
+            "round_base",
+            "base_texture",
+            "rocks"
+          ],
+          "anchors": [
+            {
+              "name": "center",
+              "position": [
+                0.0,
+                0.0,
+                0.1100000000000001
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "bottom",
+              "position": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                -1.0
+              ]
+            },
+            {
+              "name": "top",
+              "position": [
+                0.0,
+                0.0,
+                1.2200000000000002
+              ],
+              "normal": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            }
+          ],
+          "connection_sockets": [
+            {
+              "name": "root",
+              "kind": "root",
+              "position": [
+                0.0,
+                0.0,
+                0.1100000000000001
+              ],
+              "radius_mm": 0.3,
+              "direction": [
+                0.0,
+                0.0,
+                1.0
+              ]
+            },
+            {
+              "name": "feet",
+              "kind": "base",
+              "position": [
+                0,
+                0,
+                1.0
+              ],
+              "radius_mm": 1.2,
+              "direction": [
+                0,
+                0,
+                1
+              ]
+            }
+          ],
+          "cleanup_report": {
+            "faces": 1952,
+            "vertices": 1014,
+            "watertight": true,
+            "boundary_edges": 0,
+            "non_manifold_edges": 0,
+            "components": 19,
+            "sheet_artifacts": 0,
+            "primitive_score": 0.602123523912524,
+            "detail_density": 0.5492770323510252,
+            "issues": [],
+            "passed": true
+          }
+        }
+      },
+      "assembly_stats": {
+        "vertices": 11290,
+        "faces": 22128,
+        "objects": 113,
+        "bbox_mm": [
+          26.0,
+          26.0,
+          26.0
+        ],
+        "watertight": true
+      },
+      "silhouette_gate": {
+        "name": "pre_sculpt_silhouette_and_part_recognizability_gate",
+        "passed": true,
+        "issues": [],
+        "artifacts": {
+          "recognizability_gate": {
+            "part_checks": {
+              "head_recognizable": true,
+              "torso_recognizable": true,
+              "arms_recognizable": true,
+              "legs_recognizable": true,
+              "weapon_recognizable": true
+            },
+            "silhouette_64_thumbnail": {
+              "view": "front",
+              "resolution": 64,
+              "occupancy": 0.1792,
+              "width_span": 1.0,
+              "height_span": 1.0,
+              "edge_transitions": 701
+            },
+            "concept": {
+              "faction": "original_fantasy_warband",
+              "role": "line_trooper",
+              "armor_class": "layered_plate_armor",
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": "heroic_standing",
+              "silhouette": "heroic_armored_specialist",
+              "head_type": "helmet",
+              "armor_type": "layered_plate_armor",
+              "backpack_type": "power_backpack",
+              "weapon_type": "sword",
+              "pose_type": "heroic_standing",
+              "faction_style": "original_fantasy_warband"
+            },
+            "shape_language": {
+              "archetype": "line_trooper",
+              "silhouette": "heroic_armored_specialist",
+              "anatomy": [
+                "heroic_scale",
+                "readable_head_torso_limbs"
+              ],
+              "armor": [
+                "layered_plate_armor"
+              ],
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": [
+                "heroic_standing"
+              ],
+              "required_silhouette_tags": [
+                "head",
+                "torso",
+                "legs",
+                "weapon",
+                "backpack"
+              ]
+            }
+          },
+          "silhouette_critic": {
+            "score": 0.85,
+            "present_identity_tags": [
+              "advancing_stride",
+              "oversized_backpack",
+              "weapon_barrel",
+              "wide_shoulders"
+            ],
+            "width_height_ratio": 1.0,
+            "depth_height_ratio": 1.0,
+            "concept": {
+              "faction": "original_fantasy_warband",
+              "role": "line_trooper",
+              "armor_class": "layered_plate_armor",
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": "heroic_standing",
+              "silhouette": "heroic_armored_specialist",
+              "head_type": "helmet",
+              "armor_type": "layered_plate_armor",
+              "backpack_type": "power_backpack",
+              "weapon_type": "sword",
+              "pose_type": "heroic_standing",
+              "faction_style": "original_fantasy_warband"
+            },
+            "shape_language": {
+              "archetype": "line_trooper",
+              "silhouette": "heroic_armored_specialist",
+              "anatomy": [
+                "heroic_scale",
+                "readable_head_torso_limbs"
+              ],
+              "armor": [
+                "layered_plate_armor"
+              ],
+              "equipment": [
+                "weapon",
+                "backpack",
+                "pouches"
+              ],
+              "pose": [
+                "heroic_standing"
+              ],
+              "required_silhouette_tags": [
+                "head",
+                "torso",
+                "legs",
+                "weapon",
+                "backpack"
+              ]
+            }
+          }
+        }
+      },
+      "mesh": "meshes\\human_knight_pre_sculpt_assembly.stl",
+      "stages": [
+        {
+          "stage_name": "concept_profile",
+          "input": "Human Knight with sword, shield, plate armor, upright heroic posture",
+          "output": "line_trooper",
+          "vertices": 0,
+          "faces": 0,
+          "objects": 0,
+          "bbox_mm": [
+            0,
+            0,
+            0
+          ],
+          "watertight": false,
+          "screenshot": "images\\human_knight_00_concept_profile.png"
+        },
+        {
+          "stage_name": "head",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:head_1; tags=['head', 'helmet', 'helmet_lenses', 'helmet_mouth_grille', 'helmet_trim']",
+          "vertices": 194,
+          "faces": 368,
+          "objects": 5,
+          "bbox_mm": [
+            3.4,
+            2.88,
+            3.8
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_head.png"
+        },
+        {
+          "stage_name": "torso",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:torso_1; tags=['body', 'torso', 'chest_armor', 'shoulder_pad', 'wide_shoulders', 'chest_plate', 'chest_panel_line', 'panel_line', 'armor_trim', 'body_detail']",
+          "vertices": 1030,
+          "faces": 2016,
+          "objects": 11,
+          "bbox_mm": [
+            11.2,
+            4.4,
+            10.2
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_torso.png"
+        },
+        {
+          "stage_name": "legs",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:legs_1; tags=['legs', 'left_leg', 'right_leg', 'greaves', 'knee_pads', 'boot_trim', 'greave_trim', 'advancing_stride']",
+          "vertices": 1380,
+          "faces": 2728,
+          "objects": 8,
+          "bbox_mm": [
+            4.799,
+            2.251,
+            10.6
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_legs.png"
+        },
+        {
+          "stage_name": "left_arm",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:left_arm_1; tags=['arms', 'gauntlets', 'finger_detail', 'armor_trim', 'left_arm']",
+          "vertices": 706,
+          "faces": 1388,
+          "objects": 6,
+          "bbox_mm": [
+            2.662,
+            2.485,
+            8.895
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_left_arm.png"
+        },
+        {
+          "stage_name": "right_arm",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:right_arm_1; tags=['arms', 'gauntlets', 'finger_detail', 'armor_trim', 'right_arm']",
+          "vertices": 706,
+          "faces": 1388,
+          "objects": 6,
+          "bbox_mm": [
+            2.662,
+            2.485,
+            8.895
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_right_arm.png"
+        },
+        {
+          "stage_name": "weapons",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:weapons_1; tags=['weapon', 'weapon_barrel', 'magazine', 'scope', 'muzzle_detail']",
+          "vertices": 192,
+          "faces": 324,
+          "objects": 15,
+          "bbox_mm": [
+            8.8,
+            1.055,
+            2.85
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_weapons.png"
+        },
+        {
+          "stage_name": "accessories",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:accessories_1; tags=['accessories', 'backpack', 'oversized_backpack', 'backpack_vent', 'backpack_vents', 'cable_runs', 'pouch', 'purity_seal']",
+          "vertices": 194,
+          "faces": 324,
+          "objects": 16,
+          "bbox_mm": [
+            5.52,
+            5.943,
+            8.325
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_accessories.png"
+        },
+        {
+          "stage_name": "base",
+          "input": "Human Knight design profile",
+          "output": "procedural_modular_provider:base_1; tags=['base', 'round_base', 'base_texture', 'rocks']",
+          "vertices": 1014,
+          "faces": 1952,
+          "objects": 19,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            2.22
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_base.png"
+        },
+        {
+          "stage_name": "assembly_pre_sculpt",
+          "input": "selected modular parts",
+          "output": "concatenated parts + socket connectors; no sculpt pass",
+          "vertices": 11290,
+          "faces": 22128,
+          "objects": 113,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            26.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_assembly_render.png"
+        },
+        {
+          "stage_name": "silhouette_gate",
+          "input": "pre-sculpt assembly render/metadata/thumbnail metrics",
+          "output": "passed=True; issues=[]",
+          "vertices": 11290,
+          "faces": 22128,
+          "objects": 113,
+          "bbox_mm": [
+            26.0,
+            26.0,
+            26.0
+          ],
+          "watertight": true,
+          "screenshot": "images\\human_knight_silhouette.png"
+        }
+      ]
+    }
+  },
+  "silhouette_similarity": {
+    "High Elf Warrior vs Dwarf Warrior": 0.7264,
+    "High Elf Warrior vs Orc Brute": 0.7264,
+    "High Elf Warrior vs Human Knight": 0.7264,
+    "Dwarf Warrior vs Orc Brute": 1.0,
+    "Dwarf Warrior vs Human Knight": 1.0,
+    "Orc Brute vs Human Knight": 1.0
+  },
+  "failure": {
+    "passed_mandatory_test": false,
+    "reason": "Mandatory four-archetype pre-sculpt test fails because Dwarf, Orc, and Human Knight do not have dedicated staged archetype geometry; they fall back to generic humanoid procedural modules. High Elf has a branch, but it is still primitive-built rather than authored anatomical/armor assets.",
+    "max_pairwise_silhouette_iou": 1.0,
+    "non_high_elf_roles": {
+      "Dwarf Warrior": "line_trooper",
+      "Orc Brute": "line_trooper",
+      "Human Knight": "line_trooper"
+    }
+  },
+  "root_cause": [
+    "The humanoid body originates in procedural primitive builders, not in a race-specific anatomical or armor asset library.",
+    "Cube/cylinder/capsule/ellipsoid primitives survive because they are the actual production part geometry. The code names them component-library parts, but the library is generated from primitives at runtime.",
+    "High Elf requests affect the concept profile, metadata tags, and some proportions, and route to _build_high_elf_category_mesh. They do not replace the body generator with authored High Elf sculpt assets.",
+    "Dwarf Warrior, Orc Brute, and Human Knight are not implemented as staged shape-language branches in CharacterArchetypeGenerator or ShapeLanguageEngine, so their silhouettes are generic humanoid layouts with different labels/details.",
+    "Silhouette validation is not a semantic vision critic. It uses tags, bbox ratios, and simple projected metrics, so it can pass a mesh whose silhouette is still mannequin-like to a human.",
+    "Faction-specific assets are mostly procedural branches and metadata tags, not curated faction/race asset libraries."
+  ],
+  "side_by_side_silhouette_comparison": "images\\race_role_pre_sculpt_silhouette_comparison.png"
+}

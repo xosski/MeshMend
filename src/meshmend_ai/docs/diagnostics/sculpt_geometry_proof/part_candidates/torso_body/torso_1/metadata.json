@@ -1,0 +1,136 @@
+{
+  "part_id": "torso_1",
+  "category": "torso",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "procedural_modular_provider",
+  "detail_tags": [
+    "body",
+    "torso",
+    "chest_armor",
+    "shoulder_pad",
+    "chest_plate",
+    "chest_panel_line",
+    "panel_line",
+    "armor_trim",
+    "body_detail"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.0,
+        0.0,
+        16.0
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.0,
+        0.0,
+        10.9
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.0,
+        0.0,
+        21.1
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.0,
+        0.0,
+        16.0
+      ],
+      "radius_mm": 0.528,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "head",
+      "kind": "neck",
+      "position": [
+        0.0,
+        0.0,
+        21.1
+      ],
+      "radius_mm": 0.528,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "left_arm",
+      "kind": "shoulder",
+      "position": [
+        -5.6,
+        0.0,
+        16.0
+      ],
+      "radius_mm": 0.528,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "right_arm",
+      "kind": "shoulder",
+      "position": [
+        5.6,
+        0.0,
+        16.0
+      ],
+      "radius_mm": 0.528,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 2016,
+    "vertices": 1030,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 3,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.32276532326477714,
+    "detail_density": 0.4868752196235804,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "torso_body",
+  "canonical_category": "torso"
+}

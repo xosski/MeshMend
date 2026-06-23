@@ -1,0 +1,64 @@
+{
+  "faction": "high_elf_host",
+  "role": "high_elf_warrior",
+  "armor_class": "layered_fantasy_armor",
+  "equipment": [
+    "pointed_ears_or_elf_helm",
+    "glaive",
+    "cape_or_tabard",
+    "leaf_plate_edges"
+  ],
+  "pose": "heroic_posture",
+  "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+  "head_type": "elf_helm",
+  "armor_type": "layered_fantasy_armor",
+  "backpack_type": "cape_or_tabard",
+  "weapon_type": "glaive",
+  "pose_type": "heroic_posture",
+  "faction_style": "high_elf_host",
+  "shape_language": {
+    "archetype": "high_elf_warrior",
+    "silhouette": "tall_slender_elven_warrior_with_cape_and_pole_weapon",
+    "anatomy": [
+      "elongated_limbs",
+      "narrow_waist",
+      "heroic_posture",
+      "long_neck"
+    ],
+    "armor": [
+      "layered_fantasy_armor",
+      "crested_elf_helm",
+      "slender_pauldrons",
+      "leaf_plate_edges"
+    ],
+    "equipment": [
+      "pointed_ears_or_elf_helm",
+      "sword_spear_or_glaive",
+      "cape_or_tabard"
+    ],
+    "pose": [
+      "upright_heroic_stance",
+      "weapon_forward_readable"
+    ],
+    "required_silhouette_tags": [
+      "high_elf_warrior_shape",
+      "elongated_limbs",
+      "narrow_waist",
+      "heroic_posture",
+      "pointed_ears_or_elf_helm",
+      "layered_fantasy_armor",
+      "sword_spear_or_glaive",
+      "cape_or_tabard"
+    ]
+  },
+  "required_traits": [
+    "high_elf_warrior_shape",
+    "elongated_limbs",
+    "narrow_waist",
+    "heroic_posture",
+    "pointed_ears_or_elf_helm",
+    "layered_fantasy_armor",
+    "sword_spear_or_glaive",
+    "cape_or_tabard"
+  ]
+}

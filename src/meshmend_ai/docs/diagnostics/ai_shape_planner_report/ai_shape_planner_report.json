@@ -1,0 +1,498 @@
+{
+  "summary": "AI shape planner is active in staged miniature generation. It emits pre-mesh part directives, applies them to modular part geometry, and records directives in assembly metadata.",
+  "archetypes": {
+    "High Elf Warrior": {
+      "role": "high_elf_warrior",
+      "ai_shape_plan_source": "local_semantic_ai_shape_planner",
+      "ai_shape_plan_confidence": 0.82,
+      "ai_subject": "high_elf_warrior",
+      "ai_part_directives": {
+        "head": {
+          "scale": [
+            0.92,
+            0.96,
+            1.08
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "slender elven helm and ears"
+        },
+        "torso": {
+          "scale": [
+            0.88,
+            0.96,
+            1.06
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "narrow waist and tall chest"
+        },
+        "legs": {
+          "scale": [
+            0.88,
+            0.95,
+            1.12
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "elongated graceful legs"
+        },
+        "left_arm": {
+          "scale": [
+            0.88,
+            0.95,
+            1.08
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "long slender arms"
+        },
+        "right_arm": {
+          "scale": [
+            0.88,
+            0.95,
+            1.08
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "long slender arms"
+        },
+        "weapons": {
+          "scale": [
+            1.06,
+            1.06,
+            1.08
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "long readable spear/glaive with printable thickness"
+        },
+        "accessories": {
+          "scale": [
+            0.9,
+            0.92,
+            1.08
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "flowing cape/tabard silhouette"
+        },
+        "base": {
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "base"
+        }
+      },
+      "directives_applied_count": 8,
+      "silhouette_gate_passed": true,
+      "issues": [],
+      "bbox_mm": [
+        18.0,
+        18.0,
+        27.12
+      ],
+      "faces": 25176,
+      "vertices": 12746,
+      "screenshot": "images\\high_elf_warrior_ai_shape_silhouette.png"
+    },
+    "Dwarf Warrior": {
+      "role": "dwarf_warrior",
+      "ai_shape_plan_source": "local_semantic_ai_shape_planner",
+      "ai_shape_plan_confidence": 0.82,
+      "ai_subject": "dwarf_warrior",
+      "ai_part_directives": {
+        "head": {
+          "scale": [
+            1.08,
+            1.0,
+            0.92
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "wide helm and beard mass"
+        },
+        "torso": {
+          "scale": [
+            1.16,
+            1.05,
+            0.88
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "short broad armored torso"
+        },
+        "legs": {
+          "scale": [
+            1.1,
+            1.02,
+            0.78
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "short thick legs"
+        },
+        "left_arm": {
+          "scale": [
+            1.1,
+            1.02,
+            0.88
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "compact powerful arm"
+        },
+        "right_arm": {
+          "scale": [
+            1.1,
+            1.02,
+            0.88
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "compact powerful arm"
+        },
+        "weapons": {
+          "scale": [
+            1.05,
+            1.0,
+            0.92
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "stout axe or hammer"
+        },
+        "accessories": {
+          "scale": [
+            1.12,
+            1.0,
+            0.92
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "round shield and runic mass"
+        },
+        "base": {
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "base"
+        }
+      },
+      "directives_applied_count": 8,
+      "silhouette_gate_passed": true,
+      "issues": [],
+      "bbox_mm": [
+        16.8,
+        16.8,
+        23.77
+      ],
+      "faces": 21168,
+      "vertices": 10720,
+      "screenshot": "images\\dwarf_warrior_ai_shape_silhouette.png"
+    },
+    "Orc Brute": {
+      "role": "orc_brute",
+      "ai_shape_plan_source": "local_semantic_ai_shape_planner",
+      "ai_shape_plan_confidence": 0.82,
+      "ai_subject": "orc brute",
+      "ai_part_directives": {
+        "head": {
+          "scale": [
+            1.18,
+            1.08,
+            0.95
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "heavy jaw tusk head"
+        },
+        "torso": {
+          "scale": [
+            1.18,
+            1.08,
+            0.96
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            -0.25
+          ],
+          "intent": "hunched massive shoulders"
+        },
+        "legs": {
+          "scale": [
+            1.05,
+            1.02,
+            0.92
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "thick squat charging legs"
+        },
+        "left_arm": {
+          "scale": [
+            1.22,
+            1.06,
+            1.12
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "long powerful brute arm"
+        },
+        "right_arm": {
+          "scale": [
+            1.22,
+            1.06,
+            1.12
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "long powerful brute arm"
+        },
+        "weapons": {
+          "scale": [
+            1.24,
+            1.08,
+            1.05
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "oversized crude choppa"
+        },
+        "accessories": {
+          "scale": [
+            1.12,
+            1.0,
+            1.05
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "spikes and trophy rack"
+        },
+        "base": {
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "base"
+        }
+      },
+      "directives_applied_count": 8,
+      "silhouette_gate_passed": true,
+      "issues": [],
+      "bbox_mm": [
+        19.6,
+        19.6,
+        23.77
+      ],
+      "faces": 20352,
+      "vertices": 10304,
+      "screenshot": "images\\orc_brute_ai_shape_silhouette.png"
+    },
+    "Human Knight": {
+      "role": "human_knight",
+      "ai_shape_plan_source": "local_semantic_ai_shape_planner",
+      "ai_shape_plan_confidence": 0.82,
+      "ai_subject": "human_knight",
+      "ai_part_directives": {
+        "head": {
+          "scale": [
+            1.0,
+            1.0,
+            1.05
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "crested knight helm"
+        },
+        "torso": {
+          "scale": [
+            1.0,
+            1.0,
+            1.02
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "upright balanced plate armor"
+        },
+        "legs": {
+          "scale": [
+            0.98,
+            1.0,
+            1.02
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "balanced human legs"
+        },
+        "left_arm": {
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "shield arm"
+        },
+        "right_arm": {
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "sword arm"
+        },
+        "weapons": {
+          "scale": [
+            1.0,
+            1.0,
+            1.08
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "longsword readable in silhouette"
+        },
+        "accessories": {
+          "scale": [
+            1.04,
+            1.0,
+            1.05
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "kite shield and tabard"
+        },
+        "base": {
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "intent": "base"
+        }
+      },
+      "directives_applied_count": 8,
+      "silhouette_gate_passed": true,
+      "issues": [],
+      "bbox_mm": [
+        17.6,
+        17.6,
+        27.444
+      ],
+      "faces": 21348,
+      "vertices": 10802,
+      "screenshot": "images\\human_knight_ai_shape_silhouette.png"
+    }
+  },
+  "silhouette_sheet": "images\\ai_shape_planner_silhouette_sheet.png"
+}

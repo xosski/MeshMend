@@ -1,0 +1,1694 @@
+{
+  "head": {
+    "part_id": "head_1",
+    "category": "head",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "head",
+      "helmet",
+      "helmet_lenses",
+      "field_helmet_rebreather",
+      "astra_shock_trooper_shape",
+      "human_military_proportions"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          21.78
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          20.560000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          23.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          21.78
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 668,
+      "vertices": 344,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 5,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2575258284395643,
+      "detail_density": 1.0,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "torso": {
+    "part_id": "torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "chest_flak_plate",
+      "flak_plate_and_fatigues",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          9.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -3.221957495385576,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          3.2797827142923888,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 876,
+      "vertices": 448,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.35150351440720023,
+      "detail_density": 0.45006479581711034,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "legs": {
+    "part_id": "legs_1",
+    "category": "legs",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "legs",
+      "left_leg",
+      "right_leg",
+      "knee_greaves",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          -0.18826247662062323,
+          -0.5568315399283001,
+          6.105246118504095
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          -0.18826247662062323,
+          -0.5568315399283001,
+          0.96
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          -0.18826247662062323,
+          -0.5568315399283001,
+          11.250492237008189
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          -0.18826247662062323,
+          -0.5568315399283001,
+          6.105246118504095
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 380,
+      "vertices": 198,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.6438869937673375,
+      "detail_density": 0.4159965292630613,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "left_arm": {
+    "part_id": "left_arm_1",
+    "category": "left_arm",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "arms",
+      "hands",
+      "astra_shock_trooper_shape",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "left_arm"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          15.37361157091606
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          13.32
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          17.42722314183212
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          15.37361157091606
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 190,
+      "vertices": 99,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 2,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.4497119152410699,
+      "detail_density": 0.5082241260030249,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "right_arm": {
+    "part_id": "right_arm_1",
+    "category": "right_arm",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "arms",
+      "hands",
+      "astra_shock_trooper_shape",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "right_arm"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          2.8664327841853043,
+          -1.055082470562286,
+          15.252822596742753
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          2.8664327841853043,
+          -1.055082470562286,
+          13.16
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          2.8664327841853043,
+          -1.055082470562286,
+          17.345645193485506
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          2.8664327841853043,
+          -1.055082470562286,
+          15.252822596742753
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 192,
+      "vertices": 100,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 2,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.45961392754649144,
+      "detail_density": 0.49122218803170176,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "weapons": {
+    "part_id": "weapons_1",
+    "category": "weapons",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "weapon",
+      "weapon_barrel",
+      "las_rifle",
+      "rifle_across_body_readable",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          13.7894
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          12.780000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          14.7988
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          13.7894
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_hand_grip",
+        "kind": "hand",
+        "position": [
+          2.0,
+          -2.0,
+          14.0
+        ],
+        "radius_mm": 0.35,
+        "direction": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 376,
+      "vertices": 196,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5437469214229103,
+      "detail_density": 0.507503672762815,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "accessories": {
+    "part_id": "accessories_1",
+    "category": "accessories",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "accessories",
+      "backpack",
+      "field_pack",
+      "ammo_pouches",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          14.015
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          10.13
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          17.900000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          14.015
+        ],
+        "radius_mm": 0.5038206307052346,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 408,
+      "vertices": 210,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 3,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.698756393201396,
+      "detail_density": 0.4172861787109111,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "base": {
+    "part_id": "base_1",
+    "category": "base",
+    "scale_mm": 32.0,
+    "symmetry": "radial",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "base",
+      "round_base",
+      "base_texture"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.0,
+          0.0,
+          0.10000000000000009
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.0,
+          0.0,
+          1.2000000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.0,
+          0.0,
+          0.10000000000000009
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "feet",
+        "kind": "base",
+        "position": [
+          0,
+          0,
+          1.0
+        ],
+        "radius_mm": 1.2,
+        "direction": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 1312,
+      "vertices": 678,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 11,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5869083957142684,
+      "detail_density": 0.554308513239242,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "helmet": {
+    "part_id": "head_1",
+    "category": "head",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "head",
+      "helmet",
+      "helmet_lenses",
+      "field_helmet_rebreather",
+      "astra_shock_trooper_shape",
+      "human_military_proportions"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          21.78
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          20.560000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          23.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          21.78
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 668,
+      "vertices": 344,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 5,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2575258284395643,
+      "detail_density": 1.0,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "head_helmet": {
+    "part_id": "head_1",
+    "category": "head",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "head",
+      "helmet",
+      "helmet_lenses",
+      "field_helmet_rebreather",
+      "astra_shock_trooper_shape",
+      "human_military_proportions"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          21.78
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          20.560000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          23.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.03400332108425097,
+          -0.3944934140577276,
+          21.78
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 668,
+      "vertices": 344,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 5,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2575258284395643,
+      "detail_density": 1.0,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "chest_armor": {
+    "part_id": "torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "chest_flak_plate",
+      "flak_plate_and_fatigues",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          9.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -3.221957495385576,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          3.2797827142923888,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 876,
+      "vertices": 448,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.35150351440720023,
+      "detail_density": 0.45006479581711034,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "torso_body": {
+    "part_id": "torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "chest_flak_plate",
+      "flak_plate_and_fatigues",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          9.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -3.221957495385576,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          3.2797827142923888,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 876,
+      "vertices": 448,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.35150351440720023,
+      "detail_density": 0.45006479581711034,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "shoulder_pads": {
+    "part_id": "torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "chest_flak_plate",
+      "flak_plate_and_fatigues",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          9.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.028912609453406457,
+          -0.15658435012900473,
+          19.6
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -3.221957495385576,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          3.2797827142923888,
+          -0.15658435012900473,
+          14.4
+        ],
+        "radius_mm": 0.3159713608496581,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 876,
+      "vertices": 448,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.35150351440720023,
+      "detail_density": 0.45006479581711034,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "arms": {
+    "part_id": "left_arm_1",
+    "category": "left_arm",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "arms",
+      "hands",
+      "astra_shock_trooper_shape",
+      "human_military_proportions",
+      "braced_firing_advance",
+      "left_arm"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          15.37361157091606
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          13.32
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          17.42722314183212
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          -2.690134078334654,
+          -1.0248192529617772,
+          15.37361157091606
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 190,
+      "vertices": 99,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 2,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.4497119152410699,
+      "detail_density": 0.5082241260030249,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "weapon": {
+    "part_id": "weapons_1",
+    "category": "weapons",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "weapon",
+      "weapon_barrel",
+      "las_rifle",
+      "rifle_across_body_readable",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          13.7894
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          12.780000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          14.7988
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          1.4803997377722098,
+          -2.1892439175829703,
+          13.7894
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_hand_grip",
+        "kind": "hand",
+        "position": [
+          2.0,
+          -2.0,
+          14.0
+        ],
+        "radius_mm": 0.35,
+        "direction": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 376,
+      "vertices": 196,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5437469214229103,
+      "detail_density": 0.507503672762815,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "backpack": {
+    "part_id": "accessories_1",
+    "category": "accessories",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "accessories",
+      "backpack",
+      "field_pack",
+      "ammo_pouches",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          14.015
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          10.13
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          17.900000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          14.015
+        ],
+        "radius_mm": 0.5038206307052346,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 408,
+      "vertices": 210,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 3,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.698756393201396,
+      "detail_density": 0.4172861787109111,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "backpack_accessories": {
+    "part_id": "accessories_1",
+    "category": "accessories",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "procedural_modular_provider",
+    "detail_tags": [
+      "accessories",
+      "backpack",
+      "field_pack",
+      "ammo_pouches",
+      "astra_shock_trooper_shape"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          14.015
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          10.13
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          17.900000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.020300412949918467,
+          0.19189105791135752,
+          14.015
+        ],
+        "radius_mm": 0.5038206307052346,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 408,
+      "vertices": 210,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 3,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.698756393201396,
+      "detail_density": 0.4172861787109111,
+      "issues": [],
+      "passed": true
+    }
+  }
+}

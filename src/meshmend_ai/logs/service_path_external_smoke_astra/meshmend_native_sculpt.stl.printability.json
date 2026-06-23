@@ -1,0 +1,18 @@
+{
+  "manifold": true,
+  "watertight": true,
+  "holes": 0,
+  "non_manifold_edges": 0,
+  "thin_parts": 88,
+  "floating_shells": 0,
+  "dimensions_mm": [
+    21.85228485928667,
+    21.821856507665018,
+    32.0
+  ],
+  "polygon_count": 322556,
+  "vertex_count": 161742,
+  "warnings": [
+    "88 sampled areas may be thinner than 0.80mm"
+  ]
+}

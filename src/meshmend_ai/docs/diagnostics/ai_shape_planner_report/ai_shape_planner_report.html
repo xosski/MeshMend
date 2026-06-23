@@ -1,0 +1,503 @@
+<!doctype html><meta charset="utf-8"><title>AI Shape Planner Report</title>
+<style>body{font-family:Arial;margin:24px}pre{background:#f5f5f5;padding:12px;overflow:auto}img{border:1px solid #ddd;max-width:100%}</style>
+<h1>AI Shape Planner Report</h1>
+<p>AI shape planner is active in staged miniature generation. It emits pre-mesh part directives, applies them to modular part geometry, and records directives in assembly metadata.</p>
+<img src="images\ai_shape_planner_silhouette_sheet.png">
+<pre>{
+  &quot;summary&quot;: &quot;AI shape planner is active in staged miniature generation. It emits pre-mesh part directives, applies them to modular part geometry, and records directives in assembly metadata.&quot;,
+  &quot;archetypes&quot;: {
+    &quot;High Elf Warrior&quot;: {
+      &quot;role&quot;: &quot;high_elf_warrior&quot;,
+      &quot;ai_shape_plan_source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+      &quot;ai_shape_plan_confidence&quot;: 0.82,
+      &quot;ai_subject&quot;: &quot;high_elf_warrior&quot;,
+      &quot;ai_part_directives&quot;: {
+        &quot;head&quot;: {
+          &quot;scale&quot;: [
+            0.92,
+            0.96,
+            1.08
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;slender elven helm and ears&quot;
+        },
+        &quot;torso&quot;: {
+          &quot;scale&quot;: [
+            0.88,
+            0.96,
+            1.06
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;narrow waist and tall chest&quot;
+        },
+        &quot;legs&quot;: {
+          &quot;scale&quot;: [
+            0.88,
+            0.95,
+            1.12
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;elongated graceful legs&quot;
+        },
+        &quot;left_arm&quot;: {
+          &quot;scale&quot;: [
+            0.88,
+            0.95,
+            1.08
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;long slender arms&quot;
+        },
+        &quot;right_arm&quot;: {
+          &quot;scale&quot;: [
+            0.88,
+            0.95,
+            1.08
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;long slender arms&quot;
+        },
+        &quot;weapons&quot;: {
+          &quot;scale&quot;: [
+            1.06,
+            1.06,
+            1.08
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;long readable spear/glaive with printable thickness&quot;
+        },
+        &quot;accessories&quot;: {
+          &quot;scale&quot;: [
+            0.9,
+            0.92,
+            1.08
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;flowing cape/tabard silhouette&quot;
+        },
+        &quot;base&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.0
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;base&quot;
+        }
+      },
+      &quot;directives_applied_count&quot;: 8,
+      &quot;silhouette_gate_passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;bbox_mm&quot;: [
+        18.0,
+        18.0,
+        27.12
+      ],
+      &quot;faces&quot;: 25176,
+      &quot;vertices&quot;: 12746,
+      &quot;screenshot&quot;: &quot;images\\high_elf_warrior_ai_shape_silhouette.png&quot;
+    },
+    &quot;Dwarf Warrior&quot;: {
+      &quot;role&quot;: &quot;dwarf_warrior&quot;,
+      &quot;ai_shape_plan_source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+      &quot;ai_shape_plan_confidence&quot;: 0.82,
+      &quot;ai_subject&quot;: &quot;dwarf_warrior&quot;,
+      &quot;ai_part_directives&quot;: {
+        &quot;head&quot;: {
+          &quot;scale&quot;: [
+            1.08,
+            1.0,
+            0.92
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;wide helm and beard mass&quot;
+        },
+        &quot;torso&quot;: {
+          &quot;scale&quot;: [
+            1.16,
+            1.05,
+            0.88
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;short broad armored torso&quot;
+        },
+        &quot;legs&quot;: {
+          &quot;scale&quot;: [
+            1.1,
+            1.02,
+            0.78
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;short thick legs&quot;
+        },
+        &quot;left_arm&quot;: {
+          &quot;scale&quot;: [
+            1.1,
+            1.02,
+            0.88
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;compact powerful arm&quot;
+        },
+        &quot;right_arm&quot;: {
+          &quot;scale&quot;: [
+            1.1,
+            1.02,
+            0.88
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;compact powerful arm&quot;
+        },
+        &quot;weapons&quot;: {
+          &quot;scale&quot;: [
+            1.05,
+            1.0,
+            0.92
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;stout axe or hammer&quot;
+        },
+        &quot;accessories&quot;: {
+          &quot;scale&quot;: [
+            1.12,
+            1.0,
+            0.92
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;round shield and runic mass&quot;
+        },
+        &quot;base&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.0
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;base&quot;
+        }
+      },
+      &quot;directives_applied_count&quot;: 8,
+      &quot;silhouette_gate_passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;bbox_mm&quot;: [
+        16.8,
+        16.8,
+        23.77
+      ],
+      &quot;faces&quot;: 21168,
+      &quot;vertices&quot;: 10720,
+      &quot;screenshot&quot;: &quot;images\\dwarf_warrior_ai_shape_silhouette.png&quot;
+    },
+    &quot;Orc Brute&quot;: {
+      &quot;role&quot;: &quot;orc_brute&quot;,
+      &quot;ai_shape_plan_source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+      &quot;ai_shape_plan_confidence&quot;: 0.82,
+      &quot;ai_subject&quot;: &quot;orc brute&quot;,
+      &quot;ai_part_directives&quot;: {
+        &quot;head&quot;: {
+          &quot;scale&quot;: [
+            1.18,
+            1.08,
+            0.95
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;heavy jaw tusk head&quot;
+        },
+        &quot;torso&quot;: {
+          &quot;scale&quot;: [
+            1.18,
+            1.08,
+            0.96
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            -0.25
+          ],
+          &quot;intent&quot;: &quot;hunched massive shoulders&quot;
+        },
+        &quot;legs&quot;: {
+          &quot;scale&quot;: [
+            1.05,
+            1.02,
+            0.92
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;thick squat charging legs&quot;
+        },
+        &quot;left_arm&quot;: {
+          &quot;scale&quot;: [
+            1.22,
+            1.06,
+            1.12
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;long powerful brute arm&quot;
+        },
+        &quot;right_arm&quot;: {
+          &quot;scale&quot;: [
+            1.22,
+            1.06,
+            1.12
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;long powerful brute arm&quot;
+        },
+        &quot;weapons&quot;: {
+          &quot;scale&quot;: [
+            1.24,
+            1.08,
+            1.05
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;oversized crude choppa&quot;
+        },
+        &quot;accessories&quot;: {
+          &quot;scale&quot;: [
+            1.12,
+            1.0,
+            1.05
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;spikes and trophy rack&quot;
+        },
+        &quot;base&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.0
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;base&quot;
+        }
+      },
+      &quot;directives_applied_count&quot;: 8,
+      &quot;silhouette_gate_passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;bbox_mm&quot;: [
+        19.6,
+        19.6,
+        23.77
+      ],
+      &quot;faces&quot;: 20352,
+      &quot;vertices&quot;: 10304,
+      &quot;screenshot&quot;: &quot;images\\orc_brute_ai_shape_silhouette.png&quot;
+    },
+    &quot;Human Knight&quot;: {
+      &quot;role&quot;: &quot;human_knight&quot;,
+      &quot;ai_shape_plan_source&quot;: &quot;local_semantic_ai_shape_planner&quot;,
+      &quot;ai_shape_plan_confidence&quot;: 0.82,
+      &quot;ai_subject&quot;: &quot;human_knight&quot;,
+      &quot;ai_part_directives&quot;: {
+        &quot;head&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.05
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;crested knight helm&quot;
+        },
+        &quot;torso&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.02
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;upright balanced plate armor&quot;
+        },
+        &quot;legs&quot;: {
+          &quot;scale&quot;: [
+            0.98,
+            1.0,
+            1.02
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;balanced human legs&quot;
+        },
+        &quot;left_arm&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.0
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;shield arm&quot;
+        },
+        &quot;right_arm&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.0
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;sword arm&quot;
+        },
+        &quot;weapons&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.08
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;longsword readable in silhouette&quot;
+        },
+        &quot;accessories&quot;: {
+          &quot;scale&quot;: [
+            1.04,
+            1.0,
+            1.05
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;kite shield and tabard&quot;
+        },
+        &quot;base&quot;: {
+          &quot;scale&quot;: [
+            1.0,
+            1.0,
+            1.0
+          ],
+          &quot;offset&quot;: [
+            0.0,
+            0.0,
+            0.0
+          ],
+          &quot;intent&quot;: &quot;base&quot;
+        }
+      },
+      &quot;directives_applied_count&quot;: 8,
+      &quot;silhouette_gate_passed&quot;: true,
+      &quot;issues&quot;: [],
+      &quot;bbox_mm&quot;: [
+        17.6,
+        17.6,
+        27.444
+      ],
+      &quot;faces&quot;: 21348,
+      &quot;vertices&quot;: 10802,
+      &quot;screenshot&quot;: &quot;images\\human_knight_ai_shape_silhouette.png&quot;
+    }
+  },
+  &quot;silhouette_sheet&quot;: &quot;images\\ai_shape_planner_silhouette_sheet.png&quot;
+}</pre>

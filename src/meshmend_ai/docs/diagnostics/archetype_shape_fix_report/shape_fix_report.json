@@ -1,0 +1,417 @@
+{
+  "result": "passed",
+  "summary": "Four requested archetypes now route to dedicated pre-sculpt shape-language branches and pass required silhouette tags before sculpting.",
+  "archetypes": {
+    "High Elf Warrior": {
+      "prompt": "High Elf Warrior with glaive layered fantasy armor cape heroic posture",
+      "role": "high_elf_warrior",
+      "faction": "high_elf_host",
+      "shape_archetype": "high_elf_warrior",
+      "silhouette_gate_passed": true,
+      "silhouette_gate_issues": [],
+      "required_shape_tags": [
+        "high_elf_warrior_shape",
+        "elongated_limbs",
+        "narrow_waist",
+        "heroic_posture",
+        "pointed_ears_or_elf_helm",
+        "layered_fantasy_armor",
+        "sword_spear_or_glaive",
+        "cape_or_tabard"
+      ],
+      "required_tags_present": [
+        "cape_or_tabard",
+        "elongated_limbs",
+        "heroic_posture",
+        "high_elf_warrior_shape",
+        "layered_fantasy_armor",
+        "narrow_waist",
+        "pointed_ears_or_elf_helm",
+        "sword_spear_or_glaive"
+      ],
+      "assembly_stats": {
+        "vertices": 12746,
+        "faces": 25176,
+        "objects": 79,
+        "bbox_mm": [
+          18.0,
+          18.0,
+          26.8
+        ]
+      },
+      "stage_results": [
+        {
+          "stage": "concept_profile",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "head",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "torso",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "legs",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "left_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "right_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "weapons",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "accessories",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "base",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "part_selection",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "final_assembly",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "pre_sculpt_silhouette_and_part_recognizability_gate",
+          "passed": true,
+          "issues": []
+        }
+      ],
+      "screenshot": "images\\high_elf_warrior_silhouette.png"
+    },
+    "Dwarf Warrior": {
+      "prompt": "Dwarf Warrior with axe runic heavy armor stocky proportions shield",
+      "role": "dwarf_warrior",
+      "faction": "dwarven_hold",
+      "shape_archetype": "dwarf_warrior",
+      "silhouette_gate_passed": true,
+      "silhouette_gate_issues": [],
+      "required_shape_tags": [
+        "dwarf_warrior_shape",
+        "short_stocky_proportions",
+        "broad_torso",
+        "braided_beard",
+        "axe_or_hammer",
+        "round_shield",
+        "runic_heavy_armor"
+      ],
+      "required_tags_present": [
+        "axe_or_hammer",
+        "braided_beard",
+        "broad_torso",
+        "dwarf_warrior_shape",
+        "round_shield",
+        "runic_heavy_armor",
+        "short_stocky_proportions"
+      ],
+      "assembly_stats": {
+        "vertices": 10720,
+        "faces": 21168,
+        "objects": 68,
+        "bbox_mm": [
+          16.8,
+          16.8,
+          23.77
+        ]
+      },
+      "stage_results": [
+        {
+          "stage": "concept_profile",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "head",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "torso",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "legs",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "left_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "right_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "weapons",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "accessories",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "base",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "part_selection",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "final_assembly",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "pre_sculpt_silhouette_and_part_recognizability_gate",
+          "passed": true,
+          "issues": []
+        }
+      ],
+      "screenshot": "images\\dwarf_warrior_silhouette.png"
+    },
+    "Orc Brute": {
+      "prompt": "Orc Brute with cleaver hunched muscular body tusks crude armor",
+      "role": "orc_brute",
+      "faction": "orc_warband",
+      "shape_archetype": "orc_brute",
+      "silhouette_gate_passed": true,
+      "silhouette_gate_issues": [],
+      "required_shape_tags": [
+        "orc_brute_shape",
+        "hunched_posture",
+        "massive_shoulders",
+        "long_powerful_arms",
+        "tusks",
+        "heavy_jaw",
+        "oversized_choppa",
+        "crude_scrap_armor"
+      ],
+      "required_tags_present": [
+        "crude_scrap_armor",
+        "heavy_jaw",
+        "hunched_posture",
+        "long_powerful_arms",
+        "massive_shoulders",
+        "orc_brute_shape",
+        "oversized_choppa",
+        "tusks"
+      ],
+      "assembly_stats": {
+        "vertices": 10304,
+        "faces": 20352,
+        "objects": 64,
+        "bbox_mm": [
+          19.6,
+          19.6,
+          23.77
+        ]
+      },
+      "stage_results": [
+        {
+          "stage": "concept_profile",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "head",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "torso",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "legs",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "left_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "right_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "weapons",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "accessories",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "base",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "part_selection",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "final_assembly",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "pre_sculpt_silhouette_and_part_recognizability_gate",
+          "passed": true,
+          "issues": []
+        }
+      ],
+      "screenshot": "images\\orc_brute_silhouette.png"
+    },
+    "Human Knight": {
+      "prompt": "Human Knight with sword shield plate armor upright heroic posture",
+      "role": "human_knight",
+      "faction": "human_kingdom",
+      "shape_archetype": "human_knight",
+      "silhouette_gate_passed": true,
+      "silhouette_gate_issues": [],
+      "required_shape_tags": [
+        "human_knight_shape",
+        "human_heroic_proportions",
+        "crested_helm",
+        "plate_armor",
+        "kite_shield",
+        "sword_or_longsword",
+        "surcoat_tabard"
+      ],
+      "required_tags_present": [
+        "crested_helm",
+        "human_heroic_proportions",
+        "human_knight_shape",
+        "kite_shield",
+        "plate_armor",
+        "surcoat_tabard",
+        "sword_or_longsword"
+      ],
+      "assembly_stats": {
+        "vertices": 10802,
+        "faces": 21348,
+        "objects": 64,
+        "bbox_mm": [
+          17.6,
+          17.6,
+          27.175
+        ]
+      },
+      "stage_results": [
+        {
+          "stage": "concept_profile",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "head",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "torso",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "legs",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "left_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "right_arm",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "weapons",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "accessories",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "base",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "part_selection",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "final_assembly",
+          "passed": true,
+          "issues": []
+        },
+        {
+          "stage": "pre_sculpt_silhouette_and_part_recognizability_gate",
+          "passed": true,
+          "issues": []
+        }
+      ],
+      "screenshot": "images\\human_knight_silhouette.png"
+    }
+  },
+  "silhouette_similarity": {
+    "High Elf Warrior vs Dwarf Warrior": 0.6333,
+    "High Elf Warrior vs Orc Brute": 0.534,
+    "High Elf Warrior vs Human Knight": 0.7142,
+    "Dwarf Warrior vs Orc Brute": 0.6414,
+    "Dwarf Warrior vs Human Knight": 0.6729,
+    "Orc Brute vs Human Knight": 0.5219
+  },
+  "artifacts": {
+    "side_by_side_silhouettes": "images\\pre_sculpt_silhouette_comparison_after_fix.png"
+  }
+}

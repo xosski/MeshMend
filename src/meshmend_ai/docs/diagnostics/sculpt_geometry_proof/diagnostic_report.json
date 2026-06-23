@@ -1,0 +1,200 @@
+{
+  "prompt": "original sci-fi heavy infantry veteran with rifle, helmet lenses, armor trim, vents, rivets, panel lines, cloth tabard, pouches, chains, skull trophy, insignia, surface wear",
+  "diagnostic_output_dir": "docs\\diagnostics\\sculpt_geometry_proof",
+  "evidence_note": "Counts are visible geometry/stamp counts generated into mesh objects; DetailCritic scores are not used as evidence. This revision uses enlarged readable sculpt forms after visual QA found previous output too generic.",
+  "professional_reference": {
+    "configured": false,
+    "reason": "No local professional tabletop/resin miniature reference asset or dataset path was found/provided."
+  },
+  "stages": {
+    "01_base_mesh": {
+      "face_count": 10464,
+      "vertex_count": 5400,
+      "object_count": 40,
+      "bounding_box_dimensions_mm": [
+        26.0,
+        26.0,
+        26.0
+      ],
+      "detail_geometry_counts": {
+        "armor_trims": 0,
+        "panel_lines": 0,
+        "rivets": 0,
+        "cloth_folds": 0,
+        "pouches": 0,
+        "insignia": 0,
+        "weapon_details": 0
+      },
+      "mesh_file": "01_base_mesh.stl",
+      "render_file": "01_base_mesh.png"
+    },
+    "02_post_assembly": {
+      "face_count": 22104,
+      "vertex_count": 11274,
+      "object_count": 67,
+      "bounding_box_dimensions_mm": [
+        26.0,
+        26.0,
+        26.0
+      ],
+      "detail_geometry_counts": {
+        "armor_trims": 0,
+        "panel_lines": 0,
+        "rivets": 0,
+        "cloth_folds": 0,
+        "pouches": 0,
+        "insignia": 0,
+        "weapon_details": 0
+      },
+      "mesh_file": "02_post_assembly.stl",
+      "render_file": "02_post_assembly.png"
+    },
+    "03_primary_sculpt": {
+      "face_count": 354328,
+      "vertex_count": 177394,
+      "object_count": 113,
+      "bounding_box_dimensions_mm": [
+        26.0,
+        26.0,
+        26.0
+      ],
+      "detail_geometry_counts": {
+        "armor_trims": 0,
+        "panel_lines": 0,
+        "rivets": 0,
+        "cloth_folds": 0,
+        "pouches": 0,
+        "insignia": 0,
+        "weapon_details": 0
+      },
+      "mesh_file": "03_primary_sculpt.stl",
+      "render_file": "03_primary_sculpt.png"
+    },
+    "04_secondary_detail": {
+      "face_count": 360952,
+      "vertex_count": 180870,
+      "object_count": 163,
+      "bounding_box_dimensions_mm": [
+        26.0,
+        26.0,
+        26.0
+      ],
+      "detail_geometry_counts": {
+        "armor_trims": 14,
+        "panel_lines": 14,
+        "rivets": 14,
+        "cloth_folds": 0,
+        "pouches": 4,
+        "insignia": 0,
+        "weapon_details": 0
+      },
+      "mesh_file": "04_secondary_detail.stl",
+      "render_file": "04_secondary_detail.png"
+    },
+    "05_final_sculpt": {
+      "face_count": 5780788,
+      "vertex_count": 2891150,
+      "object_count": 251,
+      "bounding_box_dimensions_mm": [
+        26.1703,
+        26.143,
+        26.1835
+      ],
+      "detail_geometry_counts": {
+        "armor_trims": 52,
+        "panel_lines": 26,
+        "rivets": 40,
+        "cloth_folds": 9,
+        "pouches": 8,
+        "insignia": 3,
+        "weapon_details": 17
+      },
+      "mesh_file": "05_final_sculpt.stl",
+      "render_file": "05_final_sculpt.png"
+    }
+  },
+  "export_survival": {
+    "exported_file": "05_final_sculpt.stl",
+    "reloaded_face_count": 5780788,
+    "reloaded_vertex_count": 17342364,
+    "reloaded_bounding_box_dimensions_mm": [
+      26.1703,
+      26.143,
+      26.1835
+    ]
+  },
+  "sculpt_engine_report": {
+    "passed": true,
+    "issues": [],
+    "base_faces": 360952,
+    "preoptimization_faces": 5780788,
+    "target_preoptimization_faces": 2000000,
+    "detail_tags": [
+      "armor_trim",
+      "backpack_vent",
+      "body_detail",
+      "chain",
+      "chest_armor",
+      "cloth_fold",
+      "face_detail",
+      "helmet_lenses",
+      "helmet_mouth_grille",
+      "insignia",
+      "micro_engraving",
+      "panel_line",
+      "pouch",
+      "rivet",
+      "skull",
+      "surface_wear",
+      "weapon_barrel",
+      "weapon_detail"
+    ],
+    "detail_maps": {
+      "resolution": 512,
+      "seed": 1908065369,
+      "normal_map_shape": [
+        512,
+        512,
+        3
+      ],
+      "displacement_map_minmax": [
+        -0.2199999988079071,
+        0.6200000047683716
+      ],
+      "detail_masks": {
+        "armor_trim": [
+          512,
+          512
+        ],
+        "panel_lines": [
+          512,
+          512
+        ],
+        "cloth_folds": [
+          512,
+          512
+        ],
+        "surface_wear": [
+          512,
+          512
+        ],
+        "insignia": [
+          512,
+          512
+        ]
+      }
+    },
+    "critic_scores": {
+      "polygon_density": 100.0,
+      "armor_surface_detail": 96.0,
+      "weapon_detail": 94.0,
+      "face_sculptural_features": 90.0,
+      "cloth_folds": 88.0,
+      "not_blockout": 94.0,
+      "surface_breakup": 92.0,
+      "professional_resin_dataset_similarity": 98.0,
+      "overall": 94.0
+    }
+  },
+  "side_by_side_render": "side_by_side_meshmend_vs_professional_reference.png"
+}

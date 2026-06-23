@@ -1,0 +1,19 @@
+{
+  "prompt": "Astra Shock Trooper resin miniature with field helmet rebreather, las rifle, flak armor, military advance pose",
+  "parsed_archetype": "astra_shock_trooper",
+  "generator_function_used": "_build_astra_shock_trooper_category_mesh",
+  "fallback_used": false,
+  "body_template_used": "human_military_flak_armor_authored_base",
+  "part_sources_used": {
+    "head": "procedural_modular_provider",
+    "torso": "procedural_modular_provider",
+    "legs": "procedural_modular_provider",
+    "left_arm": "procedural_modular_provider",
+    "right_arm": "procedural_modular_provider",
+    "weapons": "procedural_modular_provider",
+    "accessories": "procedural_modular_provider",
+    "base": "procedural_modular_provider"
+  },
+  "silhouette_score": 1.0,
+  "rejection_reason": null
+}

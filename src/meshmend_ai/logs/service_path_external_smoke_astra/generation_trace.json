@@ -1,0 +1,19 @@
+{
+  "prompt": "Astra Shock Trooper resin miniature with field helmet rebreather, las rifle, flak armor, military advance pose\n\nCreate a final store/studio-quality resin-printable tabletop miniature, not concept art and not a primitive blockout. Scale: 32.0mm. Archetype: generic_prompt_driven_humanoid. Weapon: rifle. Required visible landmarks: readable_face_or_helmet, hands_and_fingers, weapon_bevels, armor_trim, deep_panel_lines, scenic_base. Pipeline requirement: first create a complete concept/specification, then generate separate modular meshes for head, torso, legs, left arm, right arm, weapons, and accessories; assemble these modules into a complete miniature before sculpting. Run a primary sculpt pass for large anatomical and silhouette forms, a secondary sculpt pass for armor details/trims/vents/pouches, and a tertiary sculpt pass for micro-detail, engravings, insignia, and surface texture. Use clean 360-degree sculpt anatomy, readable face/helmet, hands/fingers or claws, bevelled weapons, layered armor/cloth/leather/metal details, deep recesses and raised trim that survive miniature painting, a fused scenic base, watertight topology, and commercial STL-ready geometry. Avoid and reject smooth blobs, flat bas-relief, planes, sheets, card-like depth, generic rocks, floating geometry, disconnected shells, non-manifold topology, open surfaces, and low-poly decimated surfaces. The final Miniature Quality Critic score must be at least 85/100 for silhouette quality, anatomical quality, armor design quality, detail density, printability, and professional resin miniature similarity.",
+  "parsed_archetype": "astra_shock_trooper",
+  "generator_function_used": "_build_astra_shock_trooper_category_mesh",
+  "fallback_used": false,
+  "body_template_used": "human_military_flak_armor_authored_base",
+  "part_sources_used": {
+    "head": "procedural_modular_provider",
+    "torso": "procedural_modular_provider",
+    "legs": "procedural_modular_provider",
+    "left_arm": "procedural_modular_provider",
+    "right_arm": "procedural_modular_provider",
+    "weapons": "procedural_modular_provider",
+    "accessories": "procedural_modular_provider",
+    "base": "procedural_modular_provider"
+  },
+  "silhouette_score": 1.0,
+  "rejection_reason": null
+}

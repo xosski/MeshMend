@@ -1,0 +1,88 @@
+{
+  "part_id": "accessories_1",
+  "category": "accessories",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "procedural_modular_provider",
+  "detail_tags": [
+    "accessories",
+    "backpack",
+    "backpack_vent",
+    "backpack_vents",
+    "cable_runs",
+    "pouch"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.0,
+        0.5463724410747848,
+        14.4375
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.0,
+        0.5463724410747848,
+        10.275
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.0,
+        0.5463724410747848,
+        18.599999999999998
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.0,
+        0.5463724410747848,
+        14.4375
+      ],
+      "radius_mm": 0.6623999999999999,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 300,
+    "vertices": 178,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 3,
+    "sheet_artifacts": 0,
+    "primitive_score": 1.0,
+    "detail_density": 0.3873267055575142,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "backpack_accessories",
+  "canonical_category": "accessories"
+}

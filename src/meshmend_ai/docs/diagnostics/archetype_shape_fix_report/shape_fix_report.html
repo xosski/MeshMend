@@ -1,0 +1,413 @@
+<!doctype html><meta charset="utf-8"><title>Archetype Shape Fix Report</title>
+<style>body{font-family:Arial;margin:24px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border:1px solid #ccc;padding:6px;vertical-align:top}img{max-width:100%;border:1px solid #ddd}code{background:#eee}</style>
+<h1>Archetype Shape Fix Report</h1>
+<p>Four requested archetypes now route to dedicated pre-sculpt shape-language branches and pass required silhouette tags before sculpting.</p>
+<img src="images\pre_sculpt_silhouette_comparison_after_fix.png">
+<h2>Similarity</h2><pre>{
+  &quot;High Elf Warrior vs Dwarf Warrior&quot;: 0.6333,
+  &quot;High Elf Warrior vs Orc Brute&quot;: 0.534,
+  &quot;High Elf Warrior vs Human Knight&quot;: 0.7142,
+  &quot;Dwarf Warrior vs Orc Brute&quot;: 0.6414,
+  &quot;Dwarf Warrior vs Human Knight&quot;: 0.6729,
+  &quot;Orc Brute vs Human Knight&quot;: 0.5219
+}</pre>
+<h2>High Elf Warrior</h2><img src="images\high_elf_warrior_silhouette.png" width="220"><pre>{
+  &quot;prompt&quot;: &quot;High Elf Warrior with glaive layered fantasy armor cape heroic posture&quot;,
+  &quot;role&quot;: &quot;high_elf_warrior&quot;,
+  &quot;faction&quot;: &quot;high_elf_host&quot;,
+  &quot;shape_archetype&quot;: &quot;high_elf_warrior&quot;,
+  &quot;silhouette_gate_passed&quot;: true,
+  &quot;silhouette_gate_issues&quot;: [],
+  &quot;required_shape_tags&quot;: [
+    &quot;high_elf_warrior_shape&quot;,
+    &quot;elongated_limbs&quot;,
+    &quot;narrow_waist&quot;,
+    &quot;heroic_posture&quot;,
+    &quot;pointed_ears_or_elf_helm&quot;,
+    &quot;layered_fantasy_armor&quot;,
+    &quot;sword_spear_or_glaive&quot;,
+    &quot;cape_or_tabard&quot;
+  ],
+  &quot;required_tags_present&quot;: [
+    &quot;cape_or_tabard&quot;,
+    &quot;elongated_limbs&quot;,
+    &quot;heroic_posture&quot;,
+    &quot;high_elf_warrior_shape&quot;,
+    &quot;layered_fantasy_armor&quot;,
+    &quot;narrow_waist&quot;,
+    &quot;pointed_ears_or_elf_helm&quot;,
+    &quot;sword_spear_or_glaive&quot;
+  ],
+  &quot;assembly_stats&quot;: {
+    &quot;vertices&quot;: 12746,
+    &quot;faces&quot;: 25176,
+    &quot;objects&quot;: 79,
+    &quot;bbox_mm&quot;: [
+      18.0,
+      18.0,
+      26.8
+    ]
+  },
+  &quot;stage_results&quot;: [
+    {
+      &quot;stage&quot;: &quot;concept_profile&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;head&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;torso&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;legs&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;left_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;right_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;weapons&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;accessories&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;base&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;part_selection&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;final_assembly&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;pre_sculpt_silhouette_and_part_recognizability_gate&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    }
+  ],
+  &quot;screenshot&quot;: &quot;images\\high_elf_warrior_silhouette.png&quot;
+}</pre>
+<h2>Dwarf Warrior</h2><img src="images\dwarf_warrior_silhouette.png" width="220"><pre>{
+  &quot;prompt&quot;: &quot;Dwarf Warrior with axe runic heavy armor stocky proportions shield&quot;,
+  &quot;role&quot;: &quot;dwarf_warrior&quot;,
+  &quot;faction&quot;: &quot;dwarven_hold&quot;,
+  &quot;shape_archetype&quot;: &quot;dwarf_warrior&quot;,
+  &quot;silhouette_gate_passed&quot;: true,
+  &quot;silhouette_gate_issues&quot;: [],
+  &quot;required_shape_tags&quot;: [
+    &quot;dwarf_warrior_shape&quot;,
+    &quot;short_stocky_proportions&quot;,
+    &quot;broad_torso&quot;,
+    &quot;braided_beard&quot;,
+    &quot;axe_or_hammer&quot;,
+    &quot;round_shield&quot;,
+    &quot;runic_heavy_armor&quot;
+  ],
+  &quot;required_tags_present&quot;: [
+    &quot;axe_or_hammer&quot;,
+    &quot;braided_beard&quot;,
+    &quot;broad_torso&quot;,
+    &quot;dwarf_warrior_shape&quot;,
+    &quot;round_shield&quot;,
+    &quot;runic_heavy_armor&quot;,
+    &quot;short_stocky_proportions&quot;
+  ],
+  &quot;assembly_stats&quot;: {
+    &quot;vertices&quot;: 10720,
+    &quot;faces&quot;: 21168,
+    &quot;objects&quot;: 68,
+    &quot;bbox_mm&quot;: [
+      16.8,
+      16.8,
+      23.77
+    ]
+  },
+  &quot;stage_results&quot;: [
+    {
+      &quot;stage&quot;: &quot;concept_profile&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;head&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;torso&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;legs&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;left_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;right_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;weapons&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;accessories&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;base&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;part_selection&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;final_assembly&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;pre_sculpt_silhouette_and_part_recognizability_gate&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    }
+  ],
+  &quot;screenshot&quot;: &quot;images\\dwarf_warrior_silhouette.png&quot;
+}</pre>
+<h2>Orc Brute</h2><img src="images\orc_brute_silhouette.png" width="220"><pre>{
+  &quot;prompt&quot;: &quot;Orc Brute with cleaver hunched muscular body tusks crude armor&quot;,
+  &quot;role&quot;: &quot;orc_brute&quot;,
+  &quot;faction&quot;: &quot;orc_warband&quot;,
+  &quot;shape_archetype&quot;: &quot;orc_brute&quot;,
+  &quot;silhouette_gate_passed&quot;: true,
+  &quot;silhouette_gate_issues&quot;: [],
+  &quot;required_shape_tags&quot;: [
+    &quot;orc_brute_shape&quot;,
+    &quot;hunched_posture&quot;,
+    &quot;massive_shoulders&quot;,
+    &quot;long_powerful_arms&quot;,
+    &quot;tusks&quot;,
+    &quot;heavy_jaw&quot;,
+    &quot;oversized_choppa&quot;,
+    &quot;crude_scrap_armor&quot;
+  ],
+  &quot;required_tags_present&quot;: [
+    &quot;crude_scrap_armor&quot;,
+    &quot;heavy_jaw&quot;,
+    &quot;hunched_posture&quot;,
+    &quot;long_powerful_arms&quot;,
+    &quot;massive_shoulders&quot;,
+    &quot;orc_brute_shape&quot;,
+    &quot;oversized_choppa&quot;,
+    &quot;tusks&quot;
+  ],
+  &quot;assembly_stats&quot;: {
+    &quot;vertices&quot;: 10304,
+    &quot;faces&quot;: 20352,
+    &quot;objects&quot;: 64,
+    &quot;bbox_mm&quot;: [
+      19.6,
+      19.6,
+      23.77
+    ]
+  },
+  &quot;stage_results&quot;: [
+    {
+      &quot;stage&quot;: &quot;concept_profile&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;head&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;torso&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;legs&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;left_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;right_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;weapons&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;accessories&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;base&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;part_selection&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;final_assembly&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;pre_sculpt_silhouette_and_part_recognizability_gate&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    }
+  ],
+  &quot;screenshot&quot;: &quot;images\\orc_brute_silhouette.png&quot;
+}</pre>
+<h2>Human Knight</h2><img src="images\human_knight_silhouette.png" width="220"><pre>{
+  &quot;prompt&quot;: &quot;Human Knight with sword shield plate armor upright heroic posture&quot;,
+  &quot;role&quot;: &quot;human_knight&quot;,
+  &quot;faction&quot;: &quot;human_kingdom&quot;,
+  &quot;shape_archetype&quot;: &quot;human_knight&quot;,
+  &quot;silhouette_gate_passed&quot;: true,
+  &quot;silhouette_gate_issues&quot;: [],
+  &quot;required_shape_tags&quot;: [
+    &quot;human_knight_shape&quot;,
+    &quot;human_heroic_proportions&quot;,
+    &quot;crested_helm&quot;,
+    &quot;plate_armor&quot;,
+    &quot;kite_shield&quot;,
+    &quot;sword_or_longsword&quot;,
+    &quot;surcoat_tabard&quot;
+  ],
+  &quot;required_tags_present&quot;: [
+    &quot;crested_helm&quot;,
+    &quot;human_heroic_proportions&quot;,
+    &quot;human_knight_shape&quot;,
+    &quot;kite_shield&quot;,
+    &quot;plate_armor&quot;,
+    &quot;surcoat_tabard&quot;,
+    &quot;sword_or_longsword&quot;
+  ],
+  &quot;assembly_stats&quot;: {
+    &quot;vertices&quot;: 10802,
+    &quot;faces&quot;: 21348,
+    &quot;objects&quot;: 64,
+    &quot;bbox_mm&quot;: [
+      17.6,
+      17.6,
+      27.175
+    ]
+  },
+  &quot;stage_results&quot;: [
+    {
+      &quot;stage&quot;: &quot;concept_profile&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;head&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;torso&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;legs&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;left_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;right_arm&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;weapons&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;accessories&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;base&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;part_selection&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;final_assembly&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    },
+    {
+      &quot;stage&quot;: &quot;pre_sculpt_silhouette_and_part_recognizability_gate&quot;,
+      &quot;passed&quot;: true,
+      &quot;issues&quot;: []
+    }
+  ],
+  &quot;screenshot&quot;: &quot;images\\human_knight_silhouette.png&quot;
+}</pre>

@@ -1,0 +1,13 @@
+{
+  "prompt": "Astra Shock Trooper resin miniature with field helmet rebreather, las rifle, flak armor, military advance pose",
+  "quality": "standard",
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 100000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

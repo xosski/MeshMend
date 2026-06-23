@@ -1,0 +1,102 @@
+{
+  "part_id": "weapons_1",
+  "category": "weapons",
+  "scale_mm": 32.0,
+  "symmetry": "none",
+  "source": "procedural_modular_provider",
+  "detail_tags": [
+    "weapon",
+    "weapon_barrel",
+    "magazine",
+    "scope",
+    "muzzle_detail"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        3.0,
+        -2.2275,
+        13.6
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        3.0,
+        -2.2275,
+        12.174999999999999
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        3.0,
+        -2.2275,
+        15.025
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        3.0,
+        -2.2275,
+        13.6
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "right_hand_grip",
+      "kind": "hand",
+      "position": [
+        2.0,
+        -2.0,
+        14.0
+      ],
+      "radius_mm": 0.35,
+      "direction": [
+        0,
+        1,
+        0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 324,
+    "vertices": 192,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 2,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.9640896278107928,
+    "detail_density": 0.4568900910911104,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "weapon",
+  "canonical_category": "weapons"
+}
