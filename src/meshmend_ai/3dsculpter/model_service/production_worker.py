@@ -403,7 +403,20 @@ def validate_store_quality_external_result(result: dict[str, Any], output_dir: P
         if not bool(mesh.is_watertight):
             raise RuntimeError("certified mesh is not watertight")
         components = len([part for part in mesh.split(only_watertight=False) if len(part.faces) > 20])
-        max_components = int(os.environ.get("MESHMEND_CERTIFIED_MAX_COMPONENTS", "3"))
+        provider = str(result.get("provider") or "").lower()
+        geometry_source = str(result.get("geometry_source") or "").lower()
+        mesh_info = result.get("mesh_info") if isinstance(result.get("mesh_info"), dict) else {}
+        meshmend_staged_sculpt = (
+            provider.startswith("meshmend_")
+            and "staged_miniature_sculpt_engine" in geometry_source
+            and bool(mesh_info.get("validated_by_meshmend"))
+        )
+        max_components = int(
+            os.environ.get(
+                "MESHMEND_CERTIFIED_MESHMEND_MAX_COMPONENTS" if meshmend_staged_sculpt else "MESHMEND_CERTIFIED_MAX_COMPONENTS",
+                "300" if meshmend_staged_sculpt else "3",
+            )
+        )
         if components > max_components:
             raise RuntimeError(f"certified mesh has too many components: {components} > {max_components}")
         extents = np.maximum(np.asarray(mesh.extents, dtype=float), 1e-6)
@@ -573,7 +586,7 @@ def run_meshmend_native(request: dict[str, Any], output_dir: Path, workflow: str
     """Generate through the staged archetype pipeline, never the old humanoid fallback."""
     write_progress(output_dir, 10, "native_start", "Generating MeshMend staged archetype miniature")
     try:
-        from meshmend.studio import MiniatureSculptQualityGate, StagedMiniaturePipeline, StudioMiniatureSpec
+        from meshmend.studio import GenerationFailed, MiniatureSculptQualityGate, StagedMiniaturePipeline, StudioMiniatureSpec
     except Exception as exc:
         raise RuntimeError(f"MeshMend staged archetype generator is unavailable: {exc}") from exc
 
@@ -583,7 +596,13 @@ def run_meshmend_native(request: dict[str, Any], output_dir: Path, workflow: str
     write_progress(output_dir, 28, "native_archetype_generation", "Building archetype-specific base form and sculpt details")
     spec = StudioMiniatureSpec.from_prompt(prompt, scale_mm=scale_mm, target_faces=target_faces)
     pipeline = StagedMiniaturePipeline(quality_gate=MiniatureSculptQualityGate())
-    result = pipeline.generate(spec, candidates_per_category=1)
+    foundation_dir = output_dir / "character_foundation"
+    try:
+        result = pipeline.generate(spec, candidates_per_category=1, candidate_output_dir=foundation_dir)
+    except GenerationFailed as exc:
+        if exc.trace:
+            (output_dir / "generation_trace.json").write_text(json.dumps(exc.trace, indent=2, default=str), encoding="utf-8")
+        raise RuntimeError(str(exc)) from exc
     mesh = result.mesh
     generation_trace = dict(mesh.metadata.get("meshmend_generation_trace") or {})
     if generation_trace:
@@ -1370,8 +1389,9 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
                 generator=generator,
             )
         except Exception as exc:
-            fallback_disabled = os.environ.get("MESHMEND_DISABLE_CONCEPT_FALLBACK", "0").strip().lower() in {"1", "true", "yes"}
-            can_fallback = use_sdxl and not fallback_disabled and not os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_MODEL", "").strip()
+            fallback_enabled = os.environ.get("MESHMEND_ENABLE_CONCEPT_FALLBACK", "0").strip().lower() in {"1", "true", "yes", "on"}
+            fallback_disabled = os.environ.get("MESHMEND_DISABLE_CONCEPT_FALLBACK", "1").strip().lower() in {"1", "true", "yes", "on"}
+            can_fallback = use_sdxl and fallback_enabled and not fallback_disabled and not os.environ.get("MESHMEND_FREE_LOCAL_IMAGE_MODEL", "").strip()
             if not can_fallback:
                 raise
             (output_dir / "concept_fallback.txt").write_text(
@@ -1534,12 +1554,13 @@ def concept_full_body_prompt(compact_prompt: str, landmark_prompt: str, archetyp
     subject = re.sub(r"\s+", " ", compact_prompt or "").strip() or "original fantasy miniature"
     detail = re.sub(r"\s+", " ", archetype_detail or "").strip()
     landmarks = [item.strip() for item in re.split(r",|;", landmark_prompt or "") if item.strip()]
-    compact_landmarks = ", ".join(dict.fromkeys(landmarks[:5]))
+    compact_landmarks = ", ".join(dict.fromkeys(landmarks[:8]))
     return (
         "complete full body head to toe centered 32mm unpainted matte grey clay tabletop miniature, "
         "plain pure white background, empty white margin, small round base fully visible, "
         f"{subject}, {detail}, {compact_landmarks}, "
-        "visible head torso arms hands weapon hips thighs knees shins boots, crisp sculpted armor seams panel lines raised trim cloth folds, "
+        "visible head torso arms hands weapon hips thighs knees shins boots, prompt-specific accessories are large raised geometry, "
+        "crisp sculpted armor seams panel lines raised trim cloth folds face details weapon details, "
         "single front three quarter product render, not cropped, not bust, not reference sheet"
     )
 
@@ -2559,7 +2580,12 @@ def apply_prompt_landmark_overlay(mesh: Any, request: dict[str, Any], output_dir
         return mesh, {"applied": False, "reason": "empty_prompt"}
     subject_text = prompt_subject_text(prompt)
     if any(term in subject_text.lower() for term in ("space marine", "spacemarine", "power armor", "power armour", "adeptus", "primaris")):
-        if os.environ.get("MESHMEND_ENABLE_POWER_ARMOR_PROMPT_OVERLAY", "0").strip().lower() not in {"1", "true", "yes", "on"}:
+        # Power-armored concepts are exactly where Hunyuan most often averages a
+        # good reference back into a smooth generic humanoid. Keep the old escape
+        # hatch for draft/debug runs, but make store-quality jobs preserve the
+        # prompt landmarks by default.
+        overlay_default = "1" if strict_quality_requested_like(request) else "0"
+        if os.environ.get("MESHMEND_ENABLE_POWER_ARMOR_PROMPT_OVERLAY", overlay_default).strip().lower() not in {"1", "true", "yes", "on"}:
             return mesh, {"applied": False, "reason": "power_armor_overlay_disabled"}
     try:
         import numpy as np

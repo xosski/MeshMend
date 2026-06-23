@@ -411,7 +411,14 @@ def _store_quality_requested(payload: dict[str, Any]) -> bool:
 
 
 def _modular_fallback_enabled() -> bool:
-    return os.environ.get("MESHMEND_ENABLE_MODULAR_FALLBACK", "0").strip().lower() in {"1", "true", "yes", "on"}
+    # Do not let an old shell/service environment silently resurrect the
+    # procedural placeholder miniature path. It was the source of repeated
+    # generic mannequin outputs. Keep any future fallback behind a deliberately
+    # named debug-only double opt-in so production/UI requests fail loudly.
+    return (
+        os.environ.get("MESHMEND_ENABLE_MODULAR_FALLBACK", "0").strip().lower() in {"1", "true", "yes", "on"}
+        and os.environ.get("MESHMEND_ALLOW_PROCEDURAL_PLACEHOLDER_FALLBACK_FOR_DEBUG", "0").strip().lower() in {"1", "true", "yes", "on"}
+    )
 
 
 def _capability_tier(engine: str) -> str:
@@ -509,36 +516,15 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
     _update(task_id, status="IN_PROGRESS", progress=5, stage="starting", message="Starting production worker", started_at=time.time())
     forced_fallback_reason = str(payload.get("_meshmend_force_modular_fallback_reason") or "").strip()
     if forced_fallback_reason:
-        try:
-            _update(task_id, status="IN_PROGRESS", progress=40, stage="modular_fallback", message="Using validated procedural fallback because local AI is not certified/available")
-            fallback_result = _generate_modular_fallback(
-                prompt=str(payload.get("prompt") or "fallback miniature"),
-                scale_mm=float(payload.get("scale_mm") or 32.0),
-                target_faces=int(payload.get("target_polycount") or payload.get("target_faces") or 90_000),
-                output_format="stl",
-                candidates_per_category=3,
-                output_dir=output_dir,
-                reason=forced_fallback_reason,
-            )
-            result_json.write_text(json.dumps(fallback_result, indent=2, default=str), encoding="utf-8")
-            model_urls = {str(k): str(v) for k, v in fallback_result.get("model_urls", {}).items()}
-            _update(
-                task_id,
-                status="SUCCEEDED",
-                progress=100,
-                stage="fallback_complete",
-                message="Valid procedural fallback miniature ready; not studio-quality certified",
-                finished_at=time.time(),
-                model_urls=model_urls,
-                thumbnail_url=None,
-                consumed_credits=0,
-            )
-            LOGGER.info(json.dumps({"event": "task_forced_fallback_succeeded", "task_id": task_id, "reason": forced_fallback_reason, "model_urls": model_urls}, default=str))
-            return
-        except Exception as exc:
-            LOGGER.exception("task_forced_modular_fallback_failed")
-            _update(task_id, status="FAILED", progress=100, stage="failed", message="Forced fallback failed", finished_at=time.time(), error=str(exc))
-            return
+        error = (
+            "GENERATION FAILED: archetype generator failed. "
+            "Failing function name: _generate_modular_fallback. "
+            "Procedural mannequin/placeholder fallback is disabled. Original reason: " + forced_fallback_reason
+        )
+        result_json.write_text(json.dumps({"error": error, "fallback_used": False}, indent=2), encoding="utf-8")
+        _update(task_id, status="FAILED", progress=100, stage="failed", message=error, finished_at=time.time(), error=error)
+        LOGGER.error(json.dumps({"event": "task_forced_fallback_blocked", "task_id": task_id, "reason": forced_fallback_reason}, default=str))
+        return
     try:
         command = command_template.format(input_json=str(input_json), output_dir=str(output_dir), task_id=task_id)
         command_args = _worker_command_args(command, input_json=input_json, output_dir=output_dir)
@@ -851,6 +837,12 @@ def _generate_modular_fallback(
     reason: str,
     output_dir: Path | None = None,
 ) -> dict[str, Any]:
+    if not _modular_fallback_enabled():
+        raise RuntimeError(
+            "GENERATION FAILED: archetype generator failed. "
+            "Failing function name: _generate_modular_fallback. "
+            "Procedural mannequin/placeholder fallback is disabled."
+        )
     from meshmend.studio.pipeline import StudioMiniatureSpec
     from meshmend.studio.staged_pipeline import StagedMiniaturePipeline
 

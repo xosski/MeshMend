@@ -267,6 +267,10 @@ def build_mounted_creature(scale_mm: float) -> tuple[trimesh.Trimesh, list[str]]
 
 
 def build_armored_humanoid(scale_mm: float, prompt: str = "") -> tuple[trimesh.Trimesh, list[str]]:
+    raise RuntimeError(
+        "GENERATION FAILED: archetype generator failed. "
+        "Failing function name: build_armored_humanoid. Primitive humanoid mannequin fallback is disabled."
+    )
     parts: list[trimesh.Trimesh] = []
     names: list[str] = []
     base = trimesh.creation.cylinder(radius=8.2, height=1.6, sections=96)

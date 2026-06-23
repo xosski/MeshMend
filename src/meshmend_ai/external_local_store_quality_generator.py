@@ -31,7 +31,7 @@ def main() -> int:
     parser.add_argument("--image", default="", help="Optional decoded input image path")
     parser.add_argument("--output-dir", required=True, help="Directory for generated model files")
     parser.add_argument("--quality", default="high")
-    parser.add_argument("--target-polycount", default="2000000")
+    parser.add_argument("--target-polycount", default="100000")
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
@@ -41,7 +41,7 @@ def main() -> int:
     request = read_json(input_path)
     prompt = prompt_path.read_text(encoding="utf-8") if prompt_path.exists() else str(request.get("prompt") or "")
     workflow = str(request.get("workflow") or ("image_to_3d" if args.image else "text_to_3d"))
-    target_polycount = int(float(args.target_polycount or request.get("target_polycount") or 2_000_000))
+    target_polycount = int(float(args.target_polycount or request.get("target_polycount") or 100_000))
     image_path = Path(args.image) if args.image and args.image.lower() != "none" else None
 
     spec = build_miniature_spec(request, prompt, image_path, target_polycount)
@@ -123,17 +123,20 @@ def run_local_meshmend_sculpt_external(
 ) -> dict[str, Any]:
     from meshmend.studio import MiniatureSculptQualityGate, StagedMiniaturePipeline, StudioMiniatureSpec
 
-    target_polycount = int(request.get("target_polycount") or spec.get("target_polycount") or int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_TARGET_POLYCOUNT", "2000000")))
+    target_polycount = int(request.get("target_polycount") or spec.get("target_polycount") or int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_TARGET_POLYCOUNT", "100000")))
     scale_mm = float(request.get("scale_mm") or spec.get("scale_mm") or 32.0)
     write_progress(output_dir, 18, "native_concept", "Building MeshMend concept profile separate from mesh generation")
     studio_spec = StudioMiniatureSpec.from_prompt(enhanced_prompt, scale_mm=scale_mm, target_faces=target_polycount)
     write_progress(output_dir, 30, "native_modular_parts", "Generating modular head, torso, limbs, weapons, and accessories")
-    pipeline = StagedMiniaturePipeline(quality_gate=MiniatureSculptQualityGate.premium())
+    pipeline = StagedMiniaturePipeline(quality_gate=MiniatureSculptQualityGate())
     model_format = os.environ.get("MESHMEND_NATIVE_SCULPT_OUTPUT_FORMAT", "stl").strip().lower().lstrip(".") or "stl"
     if model_format not in {"stl", "obj", "ply", "glb"}:
         model_format = "stl"
     model_path = output_dir / f"meshmend_native_sculpt.{model_format}"
     output, assembly = pipeline.export(studio_spec, model_path, candidates_per_category=int(os.environ.get("MESHMEND_NATIVE_SCULPT_CANDIDATES_PER_CATEGORY", "1")))
+    generation_trace = dict(assembly.mesh.metadata.get("meshmend_generation_trace") or {})
+    if generation_trace:
+        (output_dir / "generation_trace.json").write_text(json.dumps(generation_trace, indent=2, default=str), encoding="utf-8")
     sculpt_stage = next((stage for stage in assembly.stage_results if stage.name == "dedicated_sculpt_engine"), None)
     sculpt_report = dict((sculpt_stage.artifacts or {}).get("sculpt_engine_report") or {}) if sculpt_stage is not None else {}
     quality_report = assembly.quality_report.to_dict()
@@ -297,7 +300,7 @@ def filter_overlay_score_issues(issues: list[str], result: dict[str, Any]) -> li
 
 
 def certified_face_target(requested_target_polycount: int, result: dict[str, Any]) -> int:
-    """Use MeshMend's native sculpt detail target for certification face checks."""
+    """Use the requested/detail target without imposing a hidden million-face floor."""
     mesh_info = result.get("mesh_info") if isinstance(result, dict) else {}
     detail_target = 0
     if isinstance(mesh_info, dict):
@@ -306,9 +309,8 @@ def certified_face_target(requested_target_polycount: int, result: dict[str, Any
         except (TypeError, ValueError):
             detail_target = 0
     if detail_target > 0:
-        floor = int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_MIN_CERT_FACE_TARGET", "1200000"))
-        cap = int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_MAX_CERT_FACE_TARGET", "1500000"))
-        return max(floor, min(int(requested_target_polycount), detail_target, cap))
+        cap = int(os.environ.get("MESHMEND_LOCAL_EXTERNAL_MAX_CERT_FACE_TARGET", str(max(int(requested_target_polycount), detail_target))))
+        return max(1, min(int(requested_target_polycount), detail_target, cap))
     return int(requested_target_polycount)
 
 

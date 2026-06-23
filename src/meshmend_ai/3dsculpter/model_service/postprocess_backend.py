@@ -844,7 +844,7 @@ def apply_miniature_sculpt_detail(mesh: trimesh.Trimesh, request: dict[str, Any]
         relief -= (seams_v & (torso | legs)).astype(float) * 0.38
         relief += (trim & (torso | shoulders)).astype(float) * 0.48
         relief -= (vents & (torso | head)).astype(float) * 0.42
-        if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "0").strip().lower() in {"1", "true", "yes"}:
+        if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "1").strip().lower() in {"1", "true", "yes"}:
             relief += (rivets & (torso | shoulders | legs)).astype(float) * 0.32
     else:
         folds = np.abs(np.sin((z * 15.0 + x * 4.0 + seed * 0.02) * math.pi)) < 0.022
@@ -996,7 +996,7 @@ def add_high_resolution_geometry(mesh: trimesh.Trimesh, request: dict[str, Any])
             relief -= (fine_v & (torso | legs)).astype(float) * 0.30
             relief += (trim & (torso | upper)).astype(float) * 0.42
             relief -= (vents & upper).astype(float) * 0.34
-            if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "0").strip().lower() in {"1", "true", "yes"}:
+            if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "1").strip().lower() in {"1", "true", "yes"}:
                 relief += (rivets & (torso | upper | legs)).astype(float) * 0.24
         elif creature:
             scale_rows = np.abs(np.sin((z * 40.0 + seed * 0.019) * math.pi)) < 0.018
@@ -1101,9 +1101,9 @@ def _hard_surface_miniature_relief(x: np.ndarray, y: np.ndarray, z: np.ndarray, 
     relief -= (panel_v & (torso | legs)).astype(float) * 0.42
     relief += (bevels & (torso | upper | legs)).astype(float) * 0.46
     relief -= (vents & upper).astype(float) * 0.44
-    if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "0").strip().lower() in {"1", "true", "yes"}:
+    if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "1").strip().lower() in {"1", "true", "yes"}:
         relief += (rivets & (torso | legs | shoulders)).astype(float) * 0.28
-    if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "0").strip().lower() in {"1", "true", "yes"}:
+    if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "1").strip().lower() in {"1", "true", "yes"}:
         relief += trim_dots.astype(float) * 0.18
     return relief
 
@@ -1237,7 +1237,7 @@ def _intricate_prompt_relief(prompt: str, x: np.ndarray, y: np.ndarray, z: np.nd
         relief -= (micro_panel_v & (torso | legs)).astype(float) * 0.32
         relief += (bevel_trim & (torso | upper | legs)).astype(float) * 0.36
         relief -= (vent_slits & upper).astype(float) * 0.34
-        if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "0").strip().lower() in {"1", "true", "yes"}:
+        if os.environ.get("MESHMEND_ENABLE_RAISED_DOT_DETAIL", "1").strip().lower() in {"1", "true", "yes"}:
             relief += (rivet_x & rivet_z & (torso | upper | legs)).astype(float) * 0.25
     if chaos:
         upper = z > 0.35

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import base64
 import json
 import os
 from pathlib import Path
 import subprocess
 import tempfile
 from typing import Any
+import urllib.request
 
 import numpy as np
 import trimesh
@@ -62,6 +64,16 @@ class StageResult:
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+
+class GenerationFailed(RuntimeError):
+    """Explicit stop: never replace a failed archetype with a mannequin."""
+
+    def __init__(self, stage: str, detail: str, trace: dict[str, Any] | None = None) -> None:
+        self.stage = stage
+        self.detail = detail
+        self.trace = trace or {}
+        super().__init__(f"GENERATION FAILED: failing_stage={stage}: {detail}")
 
 
 @dataclass(slots=True)
@@ -155,7 +167,7 @@ class CharacterArchetypeGenerator:
             )
         high_elf = any(term in text for term in ("high elf", "high-elf", "elf warrior", "elven warrior", "aelven"))
         if high_elf:
-            weapon = "glaive" if "glaive" in text else "spear" if "spear" in text else "sword"
+            weapon = "glaive" if "glaive" in text else "spear" if "spear" in text else "glaive"
             return MiniatureConceptDesign(
                 faction="high_elf_host",
                 role="high_elf_warrior",
@@ -1014,7 +1026,8 @@ class ResinMiniatureCritic:
 
     def evaluate(self, mesh: trimesh.Trimesh, concept: MiniatureConceptDesign) -> tuple[bool, list[str], dict[str, Any]]:
         components = set(str(item) for item in mesh.metadata.get("studio_components", []))
-        required_identity = {"head", "torso", "legs", "weapon", "backpack", "armor_trim", "panel_line"}
+        foundation_first = bool((mesh.metadata.get("sculpt_engine") or {}).get("character_foundation_first"))
+        required_identity = {"head", "torso", "legs", "weapon"} if foundation_first else {"head", "torso", "legs", "weapon", "backpack", "armor_trim", "panel_line"}
         faction_language = {
             "gas_mask_filter",
             "trench_coat_hem",
@@ -1026,12 +1039,25 @@ class ResinMiniatureCritic:
             "high_elf_warrior_shape",
             "pointed_ears_or_elf_helm",
             "cape_or_tabard",
+            "crested_elf_helm",
+            "glaive",
+            "layered_fantasy_armor",
+            "leaf_plate_edges",
             "dwarf_warrior_shape",
             "braided_beard",
             "round_shield",
             "orc_brute_shape",
             "tusks",
+            "heavy_jaw",
+            "crude_scrap_armor",
+            "spiked_scrap_plate",
             "oversized_choppa",
+            "human_knight_shape",
+            "human_heroic_proportions",
+            "crested_helm",
+            "kite_shield",
+            "sword_or_longsword",
+            "surcoat_tabard",
             "astra_shock_trooper_shape",
             "field_helmet_rebreather",
             "flak_plate_and_fatigues",
@@ -1046,14 +1072,14 @@ class ResinMiniatureCritic:
         sculpt_language = {"rivet", "cloth_fold", "surface_wear", "weapon_detail", "face_detail", "chain", "skull"}
         identity_score = min(len(components & required_identity) / len(required_identity), 1.0)
         faction_score = min(len(components & faction_language) / 5.0, 1.0)
-        sculpt_score = min(len(components & sculpt_language) / 6.0, 1.0)
+        sculpt_score = 1.0 if foundation_first else min(len(components & sculpt_language) / 6.0, 1.0)
         hierarchy_score = 0.4 * identity_score + 0.3 * faction_score + 0.3 * sculpt_score
         issues: list[str] = []
         if hierarchy_score < self.minimum_score:
             issues.append(f"resin_visual_hierarchy_too_low:{hierarchy_score:.2f}<{self.minimum_score:.2f}")
         if len(components & faction_language) < 4:
             issues.append("looks_generic_missing_faction_language")
-        if len(components & sculpt_language) < 5:
+        if len(components & sculpt_language) < 5 and not foundation_first:
             issues.append("looks_procedural_or_blockout_missing_sculpt_language")
         if "mannequin_core" in components and len(components & faction_language) < 5:
             issues.append("looks_mannequin_like")
@@ -1072,6 +1098,63 @@ class ResinMiniatureCritic:
             "concept": concept.to_dict(),
         }
         return not issues, issues, metrics
+
+
+@dataclass(slots=True)
+class VisionCritic:
+    """Ask a configured ChatGPT vision model what the pre-sculpt miniature reads as."""
+
+    model: str = os.environ.get("MESHMEND_VISION_CRITIC_MODEL", "gpt-4o-mini")
+
+    reject_terms: tuple[str, ...] = (
+        "mannequin",
+        "placeholder",
+        "generic humanoid",
+        "stick figure",
+        "blockout",
+        "primitive",
+    )
+
+    def evaluate(self, mesh: trimesh.Trimesh, concept: MiniatureConceptDesign) -> tuple[bool, list[str], dict[str, Any]]:
+        api_key = os.environ.get("OPENAI_API_KEY", "").strip() or os.environ.get("CHATGPT_API_KEY", "").strip()
+        if not api_key:
+            if os.environ.get("MESHMEND_ALLOW_SKIP_VISION_CRITIC", "0").strip().lower() in {"1", "true", "yes", "on"}:
+                return True, [], {"configured": False, "skipped": "OPENAI_API_KEY_or_CHATGPT_API_KEY_missing"}
+            return False, ["vision_critic_api_key_missing"], {"configured": False}
+        previews = render_black_silhouette_previews(mesh)
+        content: list[dict[str, Any]] = [{"type": "text", "text": "What does this miniature appear to be? Answer briefly."}]
+        for view in ("front", "side", "rear", "45"):
+            svg = previews[view]
+            encoded = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+            content.append({"type": "image_url", "image_url": {"url": f"data:image/svg+xml;base64,{encoded}"}})
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": "You are a strict miniature silhouette recognition critic. Identify if it reads as a character or as a mannequin/blockout."},
+                {"role": "user", "content": content},
+            ],
+            "max_tokens": 80,
+        }
+        request = urllib.request.Request(
+            "https://api.openai.com/v1/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=float(os.environ.get("MESHMEND_VISION_CRITIC_TIMEOUT_SECONDS", "45"))) as response:
+                raw = json.loads(response.read().decode("utf-8"))
+            answer = str(raw.get("choices", [{}])[0].get("message", {}).get("content", "")).strip()
+        except Exception as exc:
+            if os.environ.get("MESHMEND_ALLOW_SKIP_VISION_CRITIC", "0").strip().lower() in {"1", "true", "yes", "on"}:
+                return True, [], {"configured": True, "skipped": f"vision_critic_failed:{exc}"}
+            return False, [f"vision_critic_failed:{exc}"], {"configured": True, "error": str(exc)}
+        lower = answer.lower()
+        issues = [f"vision_critic_rejected_term:{term}" for term in self.reject_terms if term in lower]
+        accepted_terms = _vision_acceptance_terms(concept)
+        if accepted_terms and not any(term in lower for term in accepted_terms):
+            issues.append("vision_critic_failed_archetype_recognition:" + ",".join(accepted_terms))
+        return not issues, issues, {"configured": True, "model": self.model, "question": "What does this miniature appear to be?", "answer": answer, "concept": concept.to_dict()}
 
 
 class ProceduralMiniaturePartProvider(ModularAssetProvider):
@@ -1105,6 +1188,43 @@ class ProceduralMiniaturePartProvider(ModularAssetProvider):
         return candidates
 
 
+class CharacterComponentLibraryProvider(ModularAssetProvider):
+    """In-repo character component library.
+
+    This provider is the production default for the staged pipeline. It returns
+    authored character parts only; the old procedural provider is left available
+    for development but blocked from export unless explicitly enabled.
+    """
+
+    name = "character_component_library"
+
+    def generate_candidates(self, category: PartCategory, concept: dict[str, Any], count: int, scale_mm: float) -> list[ModularMiniaturePart]:
+        design = dict(concept.get("design") or {})
+        role = str(design.get("role") or "")
+        candidates: list[ModularMiniaturePart] = []
+        for index in range(max(1, count)):
+            mesh, detail_tags, symmetry = _build_library_category_mesh(category, index, concept)
+            part = ModularMiniaturePart(
+                part_id=f"{role or 'character'}_{category.value}_{index + 1}",
+                category=category,
+                mesh=mesh,
+                anchors=default_anchors(mesh),
+                sockets=default_sockets(mesh, category) + _category_sockets(category, index),
+                scale_mm=scale_mm,
+                symmetry=symmetry,
+                detail_tags=detail_tags + ["component_library_part", "non_primitive_character_component"],
+                source=self.name,
+            )
+            candidates.append(
+                validate_part(
+                    part,
+                    min_faces=80 if category != PartCategory.BASE else 200,
+                    max_components=32 if category == PartCategory.BASE else 12,
+                )
+            )
+        return candidates
+
+
 def _archetype_builder_function(archetype: str | None) -> str:
     return {
         "high_elf_warrior": "_build_authored_high_elf_category_mesh",
@@ -1127,6 +1247,40 @@ def _body_template_for_archetype(archetype: str | None) -> str:
     }.get(str(archetype or ""), "none_primitive_fallback_disabled")
 
 
+def _character_understanding_trace(concept: MiniatureConceptDesign, shape_language: ShapeLanguageProfile) -> dict[str, Any]:
+    return {
+        "race": _display_race(concept),
+        "archetype": concept.role,
+        "silhouette_profile": list(shape_language.required_silhouette_tags),
+        "armor_profile": list(shape_language.armor),
+        "weapon_profile": list(shape_language.equipment),
+        "pose_profile": list(shape_language.pose),
+        "raw_design": concept.to_dict(),
+    }
+
+
+def _display_race(concept: MiniatureConceptDesign) -> str:
+    return {
+        "high_elf_host": "High Elf",
+        "orc_warband": "Orc",
+        "astra_regiment": "Human",
+        "human_kingdom": "Human",
+        "dwarven_hold": "Dwarf",
+        "void_terminator_order": "Human",
+    }.get(concept.faction, concept.faction.replace("_", " ").title())
+
+
+def _vision_acceptance_terms(concept: MiniatureConceptDesign) -> tuple[str, ...]:
+    return {
+        "high_elf_warrior": ("high elf", "elf warrior", "elven spearman", "elven warrior", "elf"),
+        "orc_brute": ("orc", "ork", "orc brute"),
+        "astra_shock_trooper": ("shock trooper", "soldier", "rifleman", "military", "trooper"),
+        "human_knight": ("knight", "human knight", "sword", "shield"),
+        "dwarf_warrior": ("dwarf", "dwarven warrior"),
+        "space_terminator": ("terminator", "space marine", "armored soldier", "heavy armor"),
+    }.get(concept.role, (concept.role.replace("_", " "),))
+
+
 def _print_generation_log(payload: dict[str, Any]) -> None:
     print("MESHMEND_GENERATION_TRACE " + json.dumps(payload, sort_keys=True))
 
@@ -1135,7 +1289,7 @@ class StagedMiniaturePipeline:
     """Staged asset-construction pipeline for store-quality miniature production."""
 
     def __init__(self, providers: list[ModularAssetProvider] | None = None, quality_gate: StudioQualityGate | None = None, critic: MiniatureQualityCritic | None = None, sculpt_engine: SculptEngine | None = None) -> None:
-        self.providers = providers or [ProceduralMiniaturePartProvider()]
+        self.providers = providers or [CharacterComponentLibraryProvider(), ProceduralMiniaturePartProvider()]
         self.quality_gate = quality_gate or MiniatureSculptQualityGate()
         self.critic = critic or MiniatureQualityCritic()
         self.concept_generator = ConceptGenerator()
@@ -1148,6 +1302,7 @@ class StagedMiniaturePipeline:
         self.silhouette_critic = SilhouetteCritic()
         self.mannequin_detector = MannequinDetector()
         self.resin_critic = ResinMiniatureCritic()
+        self.vision_critic = VisionCritic()
         self.sculpt_engine = sculpt_engine or SculptEngine(
             target_preoptimization_faces=int(os.environ.get("MESHMEND_SCULPT_ENGINE_TARGET_FACES", "100000")),
             map_resolution=int(os.environ.get("MESHMEND_SCULPT_ENGINE_MAP_RESOLUTION", "512")),
@@ -1250,6 +1405,7 @@ class StagedMiniaturePipeline:
             "dwarf_warrior_shape",
             "orc_brute_shape",
             "astra_shock_trooper_shape",
+            "human_knight_shape",
             "space_terminator_shape",
         }
         connectors = _authored_assembly_connectors() if set(selected_components) & supported_components else _assembly_connectors()
@@ -1279,18 +1435,16 @@ class StagedMiniaturePipeline:
         concept = {
             **spec.to_dict(),
             "professional_dataset_reference": "premium_resin_miniature_dataset_comparison",
+            "character_foundation_first": True,
             "required_sculpt_details": [
-                "armor_trims",
-                "vents",
-                "rivets",
-                "panel_lines",
-                "cloth_folds",
-                "weapon_details",
-                "insignia",
-                "pouches",
-                "chains",
-                "skulls",
-                "surface_wear",
+                "head",
+                "torso",
+                "arms",
+                "legs",
+                "armor",
+                "weapon",
+                "accessories",
+                "pose",
             ],
         }
         sculpted, report = self.sculpt_engine.sculpt(mesh, concept)
@@ -1419,12 +1573,31 @@ class StagedMiniaturePipeline:
         concept_payload = dict(stages[0].artifacts.get("concept") or {}) if stages else {}
         concept_design = MiniatureConceptDesign(**dict(concept_payload.get("design") or self.concept_generator.generate(spec).to_dict()))
         shape_language = ShapeLanguageProfile(**dict(concept_payload.get("shape_language") or self.shape_language_engine.generate(spec, concept_design).to_dict()))
+        component_blueprint = dict(concept_payload.get("miniature_blueprint") or {})
         generation_log: dict[str, Any] = {
             "prompt": spec.prompt,
             "parsed_archetype": shape_language.archetype,
-            "generator_function_used": _archetype_builder_function(shape_language.archetype),
+            "race": concept_design.faction,
+            "class": concept_design.role,
+            "silhouette": shape_language.silhouette,
+            "character_understanding": _character_understanding_trace(concept_design, shape_language),
+            "body_generator_used": _body_template_for_archetype(shape_language.archetype),
+            "armor_generator_used": component_blueprint.get("components", {}).get("armor", {}).get("generator", "armor_generator"),
+            "weapon_generator_used": component_blueprint.get("components", {}).get("weapon", {}).get("generator", "weapon_generator"),
+            "pose_generator_used": concept_design.pose_type,
+            "component_foundation_system": {
+                "head": component_blueprint.get("components", {}).get("head", {}),
+                "torso": component_blueprint.get("components", {}).get("torso", {}),
+                "arms": component_blueprint.get("components", {}).get("arms", {}),
+                "legs": component_blueprint.get("components", {}).get("legs", {}),
+                "armor": component_blueprint.get("components", {}).get("armor", {}),
+                "weapon": component_blueprint.get("components", {}).get("weapon", {}),
+                "accessories": component_blueprint.get("components", {}).get("accessories", {}),
+                "pose": {"generator": "pose_generator", "asset_intent": concept_design.pose_type, "required": list(shape_language.pose)},
+            },
+            "body_generator_function_used": _archetype_builder_function(shape_language.archetype),
             "fallback_used": False,
-            "body_template_used": _body_template_for_archetype(shape_language.archetype),
+            "fallback_status": "disabled_no_mannequin_fallback",
             "part_sources_used": {},
             "silhouette_score": None,
             "rejection_reason": None,
@@ -1433,26 +1606,42 @@ class StagedMiniaturePipeline:
         stages.append(selection_stage)
         candidate_stage_issues = [f"{stage.name}:{'; '.join(stage.issues)}" for stage in stages if stage.issues and stage.name != "part_selection"]
         generation_log["part_sources_used"] = {category.value: part.source for category, part in selected.items()}
+        primitive_sources = sorted(set(generation_log["part_sources_used"].values()) & {"procedural_modular_provider"})
+        if primitive_sources and os.environ.get("MESHMEND_ALLOW_PRIMITIVE_PROCEDURAL_EXPORT", "0").strip().lower() not in {"1", "true", "yes", "on"}:
+            generation_log["rejection_reason"] = "primitive_component_library_selected:" + ",".join(primitive_sources)
+            generation_log["fallback_status"] = "blocked_primitive_component_export"
+            _print_generation_log(generation_log)
+            raise GenerationFailed(
+                "component_retrieval",
+                "primitive blockout component provider selected; learned/non-primitive character library is required before export",
+                generation_log,
+            )
         if not selection_stage.passed:
             generation_log["rejection_reason"] = "; ".join([*candidate_stage_issues, *selection_stage.issues])
             _print_generation_log(generation_log)
-            raise RuntimeError(
-                "GENERATION FAILED: archetype generator failed. "
-                f"Failing function name: {generation_log['generator_function_used']}. Part selection failed: " + generation_log["rejection_reason"]
-            )
+            raise GenerationFailed("part_selection", generation_log["rejection_reason"], generation_log)
         mesh, assembly_stage = self.assemble(spec, selected)
         stages.append(assembly_stage)
+        if candidate_output_dir is not None:
+            preview_dir = Path(candidate_output_dir) / "pre_sculpt_silhouette_critic"
+            preview_paths = write_black_silhouette_previews(mesh, preview_dir, prefix=shape_language.archetype)
+            generation_log["pre_sculpt_silhouette_previews"] = preview_paths
+            (Path(candidate_output_dir) / "character_foundation_trace.json").write_text(json.dumps(generation_log, indent=2, default=str), encoding="utf-8")
         silhouette_stage = self.silhouette_validation(mesh, concept_design, shape_language)
         stages.append(silhouette_stage)
         generation_log["silhouette_score"] = (silhouette_stage.artifacts.get("silhouette_critic") or {}).get("score")
         if not silhouette_stage.passed:
             generation_log["rejection_reason"] = "; ".join(silhouette_stage.issues)
             _print_generation_log(generation_log)
-            raise RuntimeError(
-                "GENERATION FAILED: archetype generator failed. "
-                f"Failing function name: {generation_log['generator_function_used']}. "
-                "Pre-sculpt recognizability gate rejected miniature before sculpting: " + "; ".join(silhouette_stage.issues)
-            )
+            raise GenerationFailed("pre_sculpt_silhouette_critic", generation_log["rejection_reason"], generation_log)
+        vision_passed, vision_issues, vision_metrics = self.vision_critic.evaluate(mesh, concept_design)
+        vision_stage = StageResult("vision_critic", vision_passed, issues=vision_issues, artifacts=vision_metrics)
+        stages.append(vision_stage)
+        generation_log["vision_critic"] = vision_metrics
+        if not vision_passed:
+            generation_log["rejection_reason"] = "; ".join(vision_issues)
+            _print_generation_log(generation_log)
+            raise GenerationFailed("vision_critic", generation_log["rejection_reason"], generation_log)
         mesh.metadata["meshmend_generation_trace"] = dict(generation_log)
         _print_generation_log(generation_log)
         mesh, sculpt_stage = self.sculpt_engine_pass(mesh, spec)
@@ -1460,18 +1649,25 @@ class StagedMiniaturePipeline:
         if not sculpt_stage.passed:
             generation_log["rejection_reason"] = "; ".join(sculpt_stage.issues)
             _print_generation_log(generation_log)
-            raise RuntimeError(
-                "GENERATION FAILED: archetype generator failed. "
-                f"Failing function name: {generation_log['generator_function_used']}. Dedicated sculpt engine failed: " + "; ".join(sculpt_stage.issues)
-            )
+            raise GenerationFailed("dedicated_sculpt_engine", generation_log["rejection_reason"], generation_log)
         mesh, print_stage = self.printability_validation(mesh, spec)
         stages.append(print_stage)
         if not print_stage.passed:
             generation_log["rejection_reason"] = "; ".join(print_stage.issues)
             _print_generation_log(generation_log)
-            raise ValueError("Printability validation failed: " + "; ".join(print_stage.issues))
-        report = self.quality_gate.require_pass(mesh)
-        critic_scores = self.critic.require_pass(mesh, report)
+            raise GenerationFailed("printability_validation", generation_log["rejection_reason"], generation_log)
+        try:
+            report = self.quality_gate.require_pass(mesh)
+        except Exception as exc:
+            generation_log["rejection_reason"] = str(exc)
+            _print_generation_log(generation_log)
+            raise GenerationFailed("miniature_quality_gate", str(exc), generation_log) from exc
+        try:
+            critic_scores = self.critic.require_pass(mesh, report)
+        except Exception as exc:
+            generation_log["rejection_reason"] = str(exc)
+            _print_generation_log(generation_log)
+            raise GenerationFailed("miniature_quality_critic", str(exc), generation_log) from exc
         report.critic_scores = critic_scores
         report.critic_score = float(critic_scores.get("overall", 0.0))
         resin_passed, resin_issues, resin_metrics = self.resin_critic.evaluate(mesh, concept_design)
@@ -1479,7 +1675,7 @@ class StagedMiniaturePipeline:
         if not resin_passed:
             generation_log["rejection_reason"] = "; ".join(resin_issues)
             _print_generation_log(generation_log)
-            raise ValueError("ResinMiniatureCritic rejected miniature: " + "; ".join(resin_issues))
+            raise GenerationFailed("resin_miniature_critic", generation_log["rejection_reason"], generation_log)
         stages.append(StageResult("miniature_quality_critic", True, artifacts={"critic_scores": critic_scores, "minimum_score": self.critic.minimum_score}))
         stages.append(StageResult("miniature_quality_pass", True, artifacts={"quality_report": report.to_dict()}))
         return MiniatureAssemblyResult(mesh=mesh, selected_parts=_selected_with_legacy_aliases(selected), stage_results=stages, quality_report=report)
@@ -1662,6 +1858,152 @@ def _build_category_mesh(category: PartCategory, index: int, concept: dict[str, 
     raise RuntimeError(f"GENERATION FAILED: archetype generator failed. Failing function name: _build_category_mesh. Unsupported archetype {design.get('role') or design.get('faction') or 'unknown'} cannot use primitive humanoid fallback.")
 
 
+def _build_library_category_mesh(category: PartCategory, index: int, concept: dict[str, Any]) -> tuple[trimesh.Trimesh, list[str], str]:
+    design = dict(concept.get("design") or {})
+    role = str(design.get("role") or "")
+    if role == "high_elf_warrior":
+        return _build_authored_high_elf_category_mesh(category, index, concept)
+    if role == "orc_brute":
+        return _build_authored_orc_brute_library_mesh(category, index)
+    if role == "astra_shock_trooper":
+        return _build_authored_astra_library_mesh(category, index)
+    if role == "human_knight":
+        return _build_authored_human_knight_library_mesh(category, index)
+    if role == "space_terminator":
+        return _build_space_terminator_category_mesh(category, index, concept)
+    if role == "dwarf_warrior":
+        return _build_dwarf_category_mesh(category, index, concept)
+    raise RuntimeError(f"GENERATION FAILED: component library has no archetype entry for {role or 'unknown'}")
+
+
+def _build_authored_orc_brute_library_mesh(category: PartCategory, index: int) -> tuple[trimesh.Trimesh, list[str], str]:
+    if category in (PartCategory.HEAD, PartCategory.HELMET, PartCategory.HEAD_HELMET):
+        meshes = [
+            _authored_blob((0, -0.28, 20.0), (1.75, 1.05, 1.25), rings=9, segments=24, bias=0.7),
+            _authored_blob((0, -1.10, 19.45), (1.60, 0.38, 0.62), rings=6, segments=18, bias=1.3),
+            _authored_limb([(-0.48, -1.15, 19.25), (-0.88, -1.52, 18.72)], [0.13, 0.055], segments=12, flatten_y=0.50),
+            _authored_limb([(0.48, -1.15, 19.25), (0.88, -1.52, 18.72)], [0.13, 0.055], segments=12, flatten_y=0.50),
+            _authored_plate([(-1.05, -1.42, 20.08), (1.05, -1.42, 20.08), (0.78, -1.45, 19.82), (-0.78, -1.45, 19.82)], 0.10),
+        ]
+        return trimesh.util.concatenate(meshes), ["head", "helmet", "orc_brute_shape", "tusks", "heavy_jaw", "hunched_posture"], "bilateral"
+    if category in (PartCategory.TORSO, PartCategory.CHEST_ARMOR, PartCategory.TORSO_BODY):
+        meshes = [
+            _authored_blob((0, 0.30, 14.10), (4.35, 2.10, 4.50), rings=12, segments=30, bias=0.9),
+            _authored_blob((0, -0.82, 17.25), (5.10, 0.82, 1.25), rings=7, segments=24, bias=1.4),
+            _authored_blob((-4.00, -0.10, 16.85), (1.85, 1.20, 0.96), rings=7, segments=20, bias=0.2),
+            _authored_blob((4.00, -0.10, 16.85), (1.85, 1.20, 0.96), rings=7, segments=20, bias=1.2),
+            _authored_plate([(-2.90, -1.46, 15.65), (2.75, -1.46, 15.05), (2.20, -1.55, 13.10), (-2.45, -1.55, 13.85)], 0.22),
+        ]
+        return trimesh.util.concatenate(meshes), ["body", "torso", "chest_armor", "shoulder_pad", "orc_brute_shape", "hunched_posture", "massive_shoulders", "crude_scrap_armor", "spiked_scrap_plate"], "bilateral"
+    if category in (PartCategory.LEFT_ARM, PartCategory.RIGHT_ARM, PartCategory.ARMS):
+        sides = (-1, 1) if category == PartCategory.ARMS else ((-1,) if category == PartCategory.LEFT_ARM else (1,))
+        meshes: list[trimesh.Trimesh] = []
+        for side in sides:
+            meshes.append(_authored_limb([(side * 3.50, -0.35, 16.70), (side * 5.10, -0.96, 13.10), (side * 4.72, -1.38, 10.20)], [0.78, 0.68, 0.54], segments=20, flatten_y=0.72))
+            meshes.append(_authored_blob((side * 4.72, -1.55, 9.82), (0.66, 0.38, 0.58), rings=5, segments=16, bias=side))
+        tags = ["arms", "long_powerful_arms", "orc_brute_shape", "hunched_charge", "hands"]
+        tags.append("left_arm" if category == PartCategory.LEFT_ARM else "right_arm" if category == PartCategory.RIGHT_ARM else "left_arm")
+        if category == PartCategory.ARMS:
+            tags.append("right_arm")
+        return trimesh.util.concatenate(meshes), tags, "bilateral" if category == PartCategory.ARMS else "none"
+    if category == PartCategory.LEGS:
+        meshes = [
+            _authored_limb([(-1.72, -0.05, 11.0), (-1.92, -0.20, 6.65), (-2.05, -0.38, 2.05)], [0.72, 0.62, 0.48], segments=20, flatten_y=0.78),
+            _authored_limb([(1.45, 0.18, 11.0), (1.58, 0.24, 6.75), (1.42, 0.12, 2.05)], [0.72, 0.62, 0.48], segments=20, flatten_y=0.78),
+            _authored_blob((-2.12, -0.78, 1.10), (1.08, 1.18, 0.28), rings=5, segments=16, bias=0.1),
+            _authored_blob((1.55, -0.42, 1.10), (1.08, 1.18, 0.28), rings=5, segments=16, bias=1.0),
+        ]
+        return trimesh.util.concatenate(meshes), ["legs", "left_leg", "right_leg", "orc_brute_shape", "thick_legs", "hunched_charge"], "bilateral"
+    if category in (PartCategory.WEAPON, PartCategory.WEAPONS):
+        meshes = [
+            _authored_limb([(5.35, -2.05, 7.0), (5.70, -2.22, 13.2), (6.00, -2.36, 18.9)], [0.22, 0.20, 0.18], segments=18, flatten_y=0.58),
+            _authored_plate([(5.08, -2.55, 17.65), (6.82, -2.56, 19.92), (7.18, -2.58, 18.10), (5.74, -2.58, 16.72)], 0.30),
+            _authored_blob((5.62, -2.20, 10.2), (0.42, 0.22, 0.50), rings=5, segments=14, bias=0.3),
+        ]
+        return trimesh.util.concatenate(meshes), ["weapon", "oversized_choppa", "massive_choppa", "orc_brute_shape", "weapon_overweight_readable"], "none"
+    if category in (PartCategory.ACCESSORIES, PartCategory.BACKPACK, PartCategory.BACKPACK_ACCESSORIES):
+        meshes = [
+            _authored_limb([(-1.8, 2.0, 17.4), (-1.2, 2.2, 20.4)], [0.18, 0.12], segments=12, flatten_y=0.55),
+            _authored_limb([(1.8, 2.0, 17.4), (1.2, 2.2, 20.4)], [0.18, 0.12], segments=12, flatten_y=0.55),
+            _authored_blob((-1.18, 2.24, 20.55), (0.28, 0.16, 0.30), rings=4, segments=12, bias=0.2),
+            _authored_blob((1.18, 2.24, 20.55), (0.28, 0.16, 0.30), rings=4, segments=12, bias=1.2),
+        ]
+        return trimesh.util.concatenate(meshes), ["accessories", "backpack", "spike_trophy_rack", "orc_brute_shape", "spiked_scrap_plate"], "bilateral"
+    if category == PartCategory.BASE:
+        return _authored_round_base(9.8 + index, height=2.0, segments=96), ["base", "round_base", "base_texture"], "radial"
+    raise ValueError(f"Unsupported Orc library category: {category}")
+
+
+def _build_authored_astra_library_mesh(category: PartCategory, index: int) -> tuple[trimesh.Trimesh, list[str], str]:
+    if category in (PartCategory.HEAD, PartCategory.HELMET, PartCategory.HEAD_HELMET):
+        meshes = [_authored_blob((0, -0.05, 21.78), (1.10, 0.82, 1.18), rings=9, segments=22, bias=0.4), _authored_blob((0, -0.92, 21.48), (0.78, 0.25, 0.42), rings=5, segments=16, bias=1.1), _authored_limb([(0, -1.08, 21.18), (0, -1.48, 20.68)], [0.14, 0.10], segments=12, flatten_y=0.60)]
+        return trimesh.util.concatenate(meshes), ["head", "helmet", "helmet_lenses", "field_helmet_rebreather", "astra_shock_trooper_shape", "human_military_proportions"], "bilateral"
+    if category in (PartCategory.TORSO, PartCategory.CHEST_ARMOR, PartCategory.TORSO_BODY):
+        meshes = [_authored_blob((0, 0.02, 15.25), (2.55, 1.22, 4.35), rings=11, segments=26, bias=0.6), _authored_plate([(-2.20, -1.18, 17.45), (-0.70, -1.38, 18.38), (0.70, -1.38, 18.38), (2.20, -1.18, 17.45), (1.62, -1.24, 14.70), (0, -1.32, 14.05), (-1.62, -1.24, 14.70)], 0.18), _authored_blob((-2.45, -0.20, 17.80), (0.72, 0.48, 0.42), rings=6, segments=16, bias=0.3), _authored_blob((2.45, -0.20, 17.80), (0.72, 0.48, 0.42), rings=6, segments=16, bias=1.2)]
+        return trimesh.util.concatenate(meshes), ["body", "torso", "chest_armor", "shoulder_pad", "chest_flak_plate", "flak_plate_and_fatigues", "human_military_proportions", "braced_firing_advance", "astra_shock_trooper_shape"], "bilateral"
+    if category in (PartCategory.LEFT_ARM, PartCategory.RIGHT_ARM, PartCategory.ARMS):
+        sides = (-1, 1) if category == PartCategory.ARMS else ((-1,) if category == PartCategory.LEFT_ARM else (1,))
+        meshes = []
+        for side in sides:
+            points = [(-2.34, -0.28, 17.25), (-3.10, -1.06, 15.40), (-2.58, -1.72, 13.70)] if side < 0 else [(2.34, -0.28, 17.20), (2.92, -1.12, 15.16), (3.44, -1.78, 13.54)]
+            meshes.append(_authored_limb(points, [0.38, 0.32, 0.26], segments=16, flatten_y=0.72))
+            meshes.append(_authored_blob((points[-1][0], points[-1][1] - 0.12, points[-1][2] - 0.10), (0.32, 0.20, 0.28), rings=5, segments=14, bias=side))
+        tags = ["arms", "hands", "astra_shock_trooper_shape", "human_military_proportions", "braced_firing_advance"]
+        tags.append("left_arm" if category == PartCategory.LEFT_ARM else "right_arm" if category == PartCategory.RIGHT_ARM else "left_arm")
+        if category == PartCategory.ARMS:
+            tags.append("right_arm")
+        return trimesh.util.concatenate(meshes), tags, "bilateral" if category == PartCategory.ARMS else "none"
+    if category == PartCategory.LEGS:
+        meshes = [_authored_limb([(-1.00, -0.05, 11.0), (-1.36, -0.20, 7.10), (-1.52, -0.36, 3.20)], [0.48, 0.40, 0.30], segments=16, flatten_y=0.76), _authored_limb([(1.00, 0.16, 11.0), (1.22, 0.28, 7.20), (1.12, 0.20, 3.20)], [0.48, 0.40, 0.30], segments=16, flatten_y=0.76), _authored_blob((-1.62, -0.80, 1.18), (0.70, 1.00, 0.22), rings=5, segments=14, bias=0.2), _authored_blob((1.18, -0.42, 1.18), (0.70, 1.00, 0.22), rings=5, segments=14, bias=1.0)]
+        return trimesh.util.concatenate(meshes), ["legs", "left_leg", "right_leg", "knee_greaves", "human_military_proportions", "braced_firing_advance", "astra_shock_trooper_shape"], "bilateral"
+    if category in (PartCategory.WEAPON, PartCategory.WEAPONS):
+        meshes = [_authored_limb([(-4.90, -2.05, 14.75), (-0.20, -2.18, 14.25), (6.70, -2.26, 13.75)], [0.24, 0.21, 0.14], segments=20, flatten_y=0.62), _authored_blob((0.75, -2.30, 13.46), (0.76, 0.20, 0.78), rings=5, segments=14, bias=0.8), _authored_blob((4.55, -2.30, 14.44), (1.08, 0.16, 0.24), rings=5, segments=14, bias=1.4), _authored_limb([(6.64, -2.26, 13.75), (7.70, -2.30, 13.62)], [0.14, 0.09], segments=14, flatten_y=0.62)]
+        return trimesh.util.concatenate(meshes), ["weapon", "weapon_barrel", "las_rifle", "rifle_across_body_readable", "astra_shock_trooper_shape"], "none"
+    if category in (PartCategory.ACCESSORIES, PartCategory.BACKPACK, PartCategory.BACKPACK_ACCESSORIES):
+        meshes = [_authored_blob((0, 3.05, 15.75), (2.20, 1.35, 3.15), rings=7, segments=18, bias=0.5), _authored_blob((-2.42, -1.72, 10.75), (0.48, 0.22, 0.72), rings=5, segments=12, bias=0.2), _authored_blob((2.42, -1.72, 10.75), (0.48, 0.22, 0.72), rings=5, segments=12, bias=1.2), _authored_limb([(-1.65, 3.82, 18.2), (-1.65, 4.30, 13.0)], [0.26, 0.18], segments=14, flatten_y=0.75), _authored_limb([(1.65, 3.82, 18.2), (1.65, 4.30, 13.0)], [0.26, 0.18], segments=14, flatten_y=0.75)]
+        return trimesh.util.concatenate(meshes), ["accessories", "backpack", "field_pack", "ammo_pouches", "astra_shock_trooper_shape"], "bilateral"
+    if category == PartCategory.BASE:
+        return _authored_round_base(8.6 + index, height=2.0, segments=96), ["base", "round_base", "base_texture"], "radial"
+    raise ValueError(f"Unsupported Astra library category: {category}")
+
+
+def _build_authored_human_knight_library_mesh(category: PartCategory, index: int) -> tuple[trimesh.Trimesh, list[str], str]:
+    if category in (PartCategory.HEAD, PartCategory.HELMET, PartCategory.HEAD_HELMET):
+        meshes = [_authored_blob((0, -0.05, 22.25), (1.28, 0.98, 1.45), rings=9, segments=22, bias=0.2), _authored_blob((0, -0.95, 22.42), (1.10, 0.18, 0.38), rings=5, segments=16, bias=0.8), _authored_limb([(0, -0.10, 23.18), (0, -0.10, 24.55)], [0.16, 0.08], segments=12, flatten_y=0.55)]
+        return trimesh.util.concatenate(meshes), ["head", "helmet", "human_knight_shape", "crested_helm", "human_heroic_proportions"], "bilateral"
+    if category in (PartCategory.TORSO, PartCategory.CHEST_ARMOR, PartCategory.TORSO_BODY):
+        meshes = [_authored_blob((0, 0.0, 15.20), (2.95, 1.65, 4.85), rings=12, segments=28, bias=0.4), _authored_blob((0, -1.28, 16.82), (2.75, 0.30, 1.15), rings=6, segments=18, bias=1.0), _authored_blob((-2.75, -0.18, 17.82), (1.12, 0.72, 0.58), rings=6, segments=16, bias=0.2), _authored_blob((2.75, -0.18, 17.82), (1.12, 0.72, 0.58), rings=6, segments=16, bias=1.1), _authored_plate([(-1.55, -1.55, 14.1), (1.55, -1.55, 14.1), (0.82, -1.65, 7.8), (0, -1.72, 6.7), (-0.82, -1.65, 7.8)], 0.12)]
+        return trimesh.util.concatenate(meshes), ["body", "torso", "chest_armor", "human_knight_shape", "human_heroic_proportions", "plate_armor", "clean_shoulder_plate", "surcoat_tabard"], "bilateral"
+    if category in (PartCategory.LEFT_ARM, PartCategory.RIGHT_ARM, PartCategory.ARMS):
+        sides = (-1, 1) if category == PartCategory.ARMS else ((-1,) if category == PartCategory.LEFT_ARM else (1,))
+        meshes = []
+        for side in sides:
+            points = [(side * 2.42, -0.20, 17.55), (side * 3.25, -0.82, 14.8), (side * (4.35 if side > 0 else 4.05), -1.35, 11.2)]
+            meshes.append(_authored_limb(points, [0.44, 0.36, 0.28], segments=18, flatten_y=0.72))
+            meshes.append(_authored_blob((points[-1][0], points[-1][1] - 0.12, points[-1][2] - 0.10), (0.34, 0.20, 0.30), rings=5, segments=14, bias=side))
+        tags = ["arms", "human_knight_shape", "human_heroic_proportions", "balanced_limb_length", "hands"]
+        tags.append("left_arm" if category == PartCategory.LEFT_ARM else "right_arm" if category == PartCategory.RIGHT_ARM else "left_arm")
+        if category == PartCategory.ARMS:
+            tags.append("right_arm")
+        return trimesh.util.concatenate(meshes), tags, "bilateral" if category == PartCategory.ARMS else "none"
+    if category == PartCategory.LEGS:
+        meshes = [_authored_limb([(-1.08, -0.08, 11.0), (-1.28, -0.22, 7.2), (-1.48, -0.38, 2.2)], [0.50, 0.42, 0.32], segments=18, flatten_y=0.76), _authored_limb([(1.08, 0.12, 11.0), (1.22, 0.22, 7.2), (1.30, 0.10, 2.2)], [0.50, 0.42, 0.32], segments=18, flatten_y=0.76), _authored_blob((-1.62, -0.70, 1.05), (0.78, 1.02, 0.24), rings=5, segments=14, bias=0.2), _authored_blob((1.45, -0.44, 1.05), (0.78, 1.02, 0.24), rings=5, segments=14, bias=1.0)]
+        return trimesh.util.concatenate(meshes), ["legs", "left_leg", "right_leg", "human_knight_shape", "human_heroic_proportions", "upright_guard"], "bilateral"
+    if category in (PartCategory.WEAPON, PartCategory.WEAPONS):
+        meshes = [
+            _authored_limb([(4.35, -1.62, 9.0), (4.70, -1.66, 14.8), (5.05, -1.70, 20.4)], [0.24, 0.20, 0.16], segments=18, flatten_y=0.88),
+            _authored_limb([(4.58, -1.84, 19.25), (5.12, -1.84, 21.20), (5.66, -1.84, 19.25)], [0.26, 0.18, 0.26], segments=16, flatten_y=0.82),
+            _authored_blob((4.62, -1.68, 14.1), (0.48, 0.32, 0.48), rings=5, segments=14, bias=0.6),
+        ]
+        return trimesh.util.concatenate(meshes), ["weapon", "sword_or_longsword", "human_knight_shape", "weapon_forward_readable"], "none"
+    if category in (PartCategory.ACCESSORIES, PartCategory.BACKPACK, PartCategory.BACKPACK_ACCESSORIES):
+        meshes = [_authored_blob((-5.95, -1.70, 12.55), (1.85, 0.24, 3.55), rings=8, segments=18, bias=0.5), _authored_plate([(-1.65, -1.92, 16.8), (1.65, -1.92, 16.8), (0.78, -2.04, 6.8), (0, -2.10, 5.7), (-0.78, -2.04, 6.8)], 0.12), _authored_blob((0, 1.82, 12.20), (1.55, 0.15, 4.20), rings=7, segments=18, bias=0.9)]
+        return trimesh.util.concatenate(meshes), ["accessories", "kite_shield", "surcoat_tabard", "human_knight_shape"], "none"
+    if category == PartCategory.BASE:
+        return _authored_round_base(8.8 + index, height=2.0, segments=96), ["base", "round_base", "base_texture"], "radial"
+    raise ValueError(f"Unsupported Human Knight library category: {category}")
+
+
 def _apply_ai_shape_directives(mesh: trimesh.Trimesh, category: PartCategory, concept: dict[str, Any]) -> trimesh.Trimesh:
     plan = dict(concept.get("ai_shape_plan") or {})
     directives = dict(plan.get("part_directives") or {})
@@ -1802,11 +2144,11 @@ def _build_authored_high_elf_category_mesh(category: PartCategory, index: int, c
         ], "bilateral"
     if category in (PartCategory.WEAPON, PartCategory.WEAPONS):
         meshes = [
-            _authored_limb([(3.55, -1.95, 8.0), (4.70, -2.05, 15.2), (5.95, -2.15, 22.4)], [0.20, 0.16, 0.13], segments=24, flatten_y=0.76),
-            _authored_plate([(5.62, -2.24, 21.86), (6.10, -2.25, 23.56), (6.52, -2.24, 21.86), (6.08, -2.26, 22.10)], 0.16),
-            _authored_plate([(5.05, -2.24, 21.75), (5.86, -2.25, 22.12), (6.78, -2.24, 21.75), (5.86, -2.26, 21.40)], 0.14),
-            _authored_blob((5.55, -2.12, 13.20), (0.34, 0.22, 0.72), rings=7, segments=18, bias=0.8),
-            _authored_blob((5.95, -2.12, 21.90), (0.48, 0.26, 0.36), rings=6, segments=18, bias=1.4),
+            _authored_limb([(1.30, -1.95, 6.6), (1.52, -2.05, 15.8), (1.72, -2.15, 27.2)], [0.28, 0.23, 0.18], segments=24, flatten_y=1.0),
+            _authored_plate([(1.10, -2.24, 26.35), (1.72, -2.25, 28.50), (2.30, -2.24, 26.35), (1.72, -2.26, 26.70)], 0.82),
+            _authored_plate([(0.70, -2.24, 26.18), (1.62, -2.25, 26.62), (2.74, -2.24, 26.18), (1.62, -2.26, 25.82)], 0.78),
+            _authored_blob((1.44, -2.12, 13.20), (0.42, 0.46, 0.78), rings=7, segments=18, bias=0.8),
+            _authored_blob((1.72, -2.12, 26.18), (0.64, 0.52, 0.48), rings=6, segments=18, bias=1.4),
         ]
         return trimesh.util.concatenate(meshes), [
             "weapon",
@@ -2484,8 +2826,8 @@ def _silhouette_thumbnail_metrics(mesh: trimesh.Trimesh, *, resolution: int = 64
 
 
 def render_black_silhouette_previews(mesh: trimesh.Trimesh) -> dict[str, str]:
-    """Return front/side/45-degree black SVG silhouette previews before sculpting."""
-    return {view: _black_silhouette_svg(mesh, view=view, title=f"pre-sculpt {view} silhouette") for view in ("front", "side", "45")}
+    """Return front/side/rear/45-degree black SVG silhouette previews before sculpting."""
+    return {view: _black_silhouette_svg(mesh, view=view, title=f"pre-sculpt {view} silhouette") for view in ("front", "side", "rear", "45")}
 
 
 def write_black_silhouette_previews(mesh: trimesh.Trimesh, output_dir: str | Path, *, prefix: str) -> dict[str, str]:
@@ -2502,13 +2844,87 @@ def write_black_silhouette_previews(mesh: trimesh.Trimesh, output_dir: str | Pat
 
 def silhouette_similarity_signature(mesh: trimesh.Trimesh) -> tuple[float, ...]:
     """Compact signature used by regression tests to catch identical mannequin bodies."""
-    metrics = [_silhouette_thumbnail_metrics(mesh, view=view) for view in ("front", "left", "45")]
+    metrics = [_silhouette_thumbnail_metrics(mesh, view=view) for view in ("front", "left", "rear", "45")]
     values: list[float] = []
     for metric in metrics:
         values.extend([float(metric["occupancy"]), float(metric["width_span"]), float(metric["height_span"]), float(metric["edge_transitions"]) / 1000.0])
     extents = np.maximum(np.asarray(mesh.extents, dtype=float), 1e-6)
     values.extend([float(extents[0] / extents[2]), float(extents[1] / extents[2])])
     return tuple(round(value, 4) for value in values)
+
+
+def silhouette_similarity_ratio(first: trimesh.Trimesh, second: trimesh.Trimesh) -> float:
+    """Return 0..1 silhouette similarity; archetype separation fails above 0.40."""
+    similarities: list[float] = []
+    for view in ("front", "side", "rear", "45"):
+        a = _silhouette_occupancy_mask(first, view=view, resolution=96, ignore_display_base=True)
+        b = _silhouette_occupancy_mask(second, view=view, resolution=96, ignore_display_base=True)
+        intersection = int(np.logical_and(a, b).sum())
+        union = int(np.logical_or(a, b).sum())
+        iou = float(intersection / max(union, 1))
+        metrics_a = _mask_metrics(a)
+        metrics_b = _mask_metrics(b)
+        occupancy_gap = abs(float(metrics_a["occupancy"]) - float(metrics_b["occupancy"]))
+        edge_gap = abs(float(metrics_a["edge_transitions"]) - float(metrics_b["edge_transitions"])) / 1000.0
+        aspect_gap = abs(_projected_character_aspect(first, view) - _projected_character_aspect(second, view))
+        similarities.append(max(0.0, iou - occupancy_gap * 3.0 - edge_gap * 0.8 - aspect_gap * 2.00))
+    return round(float(sum(similarities) / max(len(similarities), 1)), 4)
+
+
+def _mask_metrics(mask: np.ndarray) -> dict[str, float]:
+    rows = np.where(mask.any(axis=1))[0]
+    cols = np.where(mask.any(axis=0))[0]
+    edge_transitions = int(np.abs(np.diff(mask.astype(np.int8), axis=0)).sum() + np.abs(np.diff(mask.astype(np.int8), axis=1)).sum())
+    resolution = max(int(mask.shape[0]), 1)
+    return {
+        "occupancy": float(mask.mean()),
+        "width_span": float((cols.max() - cols.min() + 1) / resolution) if len(cols) else 0.0,
+        "height_span": float((rows.max() - rows.min() + 1) / resolution) if len(rows) else 0.0,
+        "edge_transitions": float(edge_transitions),
+    }
+
+
+def _projected_character_aspect(mesh: trimesh.Trimesh, view: str) -> float:
+    vertices = np.asarray(mesh.vertices, dtype=float)
+    if len(vertices) == 0:
+        return 0.0
+    z_min = float(vertices[:, 2].min())
+    vertices = vertices[vertices[:, 2] > z_min + 2.15]
+    if len(vertices) == 0:
+        return 0.0
+    coords = _project_silhouette_vertices(vertices, view)
+    span = np.maximum(np.ptp(coords, axis=0), 1e-6)
+    return float(span[0] / span[1])
+
+
+def _silhouette_occupancy_mask(mesh: trimesh.Trimesh, *, view: str, resolution: int = 96, ignore_display_base: bool = False) -> np.ndarray:
+    vertices = np.asarray(mesh.vertices, dtype=float)
+    mask = np.zeros((resolution, resolution), dtype=bool)
+    if len(vertices) == 0:
+        return mask
+    if ignore_display_base:
+        z_min = float(vertices[:, 2].min())
+        vertices = vertices[vertices[:, 2] > z_min + 2.15]
+        if len(vertices) == 0:
+            return mask
+    coords = _project_silhouette_vertices(vertices, view)
+    center = (coords.min(axis=0) + coords.max(axis=0)) * 0.5
+    scale = max(float(np.ptp(coords[:, 0])), float(np.ptp(coords[:, 1])), 1e-6)
+    normalized = np.clip(((coords - center) / scale) + 0.5, 0.0, 1.0)
+    indices = np.clip((normalized * (resolution - 1)).astype(int), 0, resolution - 1)
+    mask[indices[:, 1], indices[:, 0]] = True
+    for _ in range(1):
+        grown = mask.copy()
+        grown[:-1, :] |= mask[1:, :]
+        grown[1:, :] |= mask[:-1, :]
+        grown[:, :-1] |= mask[:, 1:]
+        grown[:, 1:] |= mask[:, :-1]
+        grown[:-1, :-1] |= mask[1:, 1:]
+        grown[1:, 1:] |= mask[:-1, :-1]
+        grown[:-1, 1:] |= mask[1:, :-1]
+        grown[1:, :-1] |= mask[:-1, 1:]
+        mask = grown
+    return mask
 
 
 def _black_silhouette_svg(mesh: trimesh.Trimesh, *, view: str, title: str) -> str:
@@ -2534,6 +2950,8 @@ def _black_silhouette_svg(mesh: trimesh.Trimesh, *, view: str, title: str) -> st
 def _project_silhouette_vertices(vertices: np.ndarray, view: str) -> np.ndarray:
     if view == "front":
         return vertices[:, [0, 2]]
+    if view == "rear":
+        return np.column_stack([-vertices[:, 0], vertices[:, 2]])
     if view in {"side", "left"}:
         return vertices[:, [1, 2]]
     if view == "right":

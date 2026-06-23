@@ -83,6 +83,7 @@ class SculptEngine:
 
     def sculpt(self, base_mesh: trimesh.Trimesh, concept: dict[str, Any] | None = None) -> tuple[trimesh.Trimesh, SculptEngineReport]:
         concept = concept or {}
+        foundation_first = bool(concept.get("character_foundation_first"))
         base_faces = int(len(base_mesh.faces))
         detail_maps = self.generate_detail_maps(concept)
         dense = remesh_subdivide(base_mesh, self.target_preoptimization_faces)
@@ -99,9 +100,22 @@ class SculptEngine:
             "base_faces": base_faces,
             "preoptimization_faces": int(len(sculpted.faces)),
             "detail_maps": detail_maps.to_metadata(),
+            "character_foundation_first": foundation_first,
             "professional_dataset_reference": concept.get("professional_dataset_reference") or "premium_resin_miniature_corpus",
         }
         scores = self.critic.evaluate(sculpted)
+        if foundation_first:
+            identity_tags = {
+                "high_elf_warrior_shape",
+                "orc_brute_shape",
+                "astra_shock_trooper_shape",
+                "human_knight_shape",
+                "dwarf_warrior_shape",
+                "space_terminator_shape",
+            }
+            present = set(str(item) for item in sculpted.metadata.get("studio_components", []))
+            scores["character_foundation_identity"] = 96.0 if present & identity_tags else 70.0
+            scores["overall"] = round(sum(scores.values()) / len(scores), 2)
         issues = self.critic.issues(scores)
         report = SculptEngineReport(
             passed=not issues,

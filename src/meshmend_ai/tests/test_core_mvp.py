@@ -7,7 +7,7 @@ from meshmend.compliance.filters import sanitize_prompt
 from meshmend.core import add_circular_base, auto_scale_to_height, build_printability_report, load_mesh
 from meshmend.export import export_slicer_ready
 from meshmend.repair import repair_mesh
-from meshmend.studio import DetailCritic, MannequinDetector, PartCategory, MiniatureSculptQualityGate, SculptEngine, StagedMiniaturePipeline, StudioMiniaturePipeline, StudioMiniatureSpec, StudioQualityGate, silhouette_similarity_signature, write_black_silhouette_previews
+from meshmend.studio import DetailCritic, MannequinDetector, PartCategory, MiniatureSculptQualityGate, SculptEngine, StagedMiniaturePipeline, StudioMiniaturePipeline, StudioMiniatureSpec, StudioQualityGate, silhouette_similarity_ratio, silhouette_similarity_signature, write_black_silhouette_previews
 
 
 def test_repair_fills_simple_box_hole() -> None:
@@ -153,7 +153,7 @@ def test_staged_pipeline_generates_distinct_pre_sculpt_archetypes(tmp_path: Path
         silhouette_stage = pipeline.silhouette_validation(mesh, design, shape)
         assert silhouette_stage.passed, silhouette_stage.issues
         preview_paths = write_black_silhouette_previews(mesh, tmp_path / "pre_sculpt_silhouettes", prefix=key)
-        assert set(preview_paths) == {"front", "side", "45"}
+        assert set(preview_paths) == {"front", "side", "rear", "45"}
         assert all(Path(path).exists() for path in preview_paths.values())
         components = set(mesh.metadata.get("studio_components", []))
         assert shape.archetype == expected_roles[key]
@@ -168,6 +168,29 @@ def test_staged_pipeline_generates_distinct_pre_sculpt_archetypes(tmp_path: Path
                 continue
             distance = sum(abs(a - b) for a, b in zip(first_signature, second_signature))
             assert distance > 0.20, f"{first_key} and {second_key} share a mannequin-like silhouette"
+
+
+def test_archetype_separation_fails_above_40_percent_similarity() -> None:
+    prompts = [
+        "High Elf Warrior with glaive layered fantasy armor cape heroic posture",
+        "Orc Brute with cleaver hunched muscular body tusks crude armor",
+        "Astra Shock Trooper with helmet flak armor las rifle field pack braced firing advance",
+        "Human Knight with crested helm kite shield longsword tabard",
+    ]
+    pipeline = StagedMiniaturePipeline()
+    meshes = []
+    for prompt in prompts:
+        spec = StudioMiniatureSpec.from_prompt(prompt, target_faces=250_000)
+        candidates, stages = pipeline.generate_candidates(spec, candidates_per_category=1)
+        assert all(stage.passed for stage in stages)
+        selected, selection_stage = pipeline.select_parts(candidates)
+        assert selection_stage.passed
+        mesh, assembly_stage = pipeline.assemble(spec, selected)
+        assert assembly_stage.passed
+        meshes.append(mesh)
+    for index, first in enumerate(meshes):
+        for second in meshes[index + 1:]:
+            assert silhouette_similarity_ratio(first, second) <= 0.40
 
 
 def test_mannequin_detector_rejects_primitive_tagged_blockout() -> None:
@@ -196,6 +219,22 @@ def test_sculpt_engine_creates_detail_maps_before_geometry() -> None:
     assert maps.displacement_map.shape == (512, 512)
     assert {"armor_trim", "panel_lines", "cloth_folds", "surface_wear", "insignia"}.issubset(maps.detail_masks)
     assert float(maps.displacement_map.max()) > float(maps.displacement_map.min())
+
+
+def test_foundation_first_sculpt_still_adds_readable_detail_geometry() -> None:
+    base = trimesh.creation.uv_sphere(radius=8.0, count=[48, 24])
+    base.metadata["studio_components"] = ["body", "head", "helmet", "weapon", "base", "high_elf_warrior_shape"]
+    sculpted, report = SculptEngine(target_preoptimization_faces=80_000).sculpt(
+        base,
+        {
+            "prompt": "High Elf Warrior with glaive layered armor cape leaf trim",
+            "character_foundation_first": True,
+        },
+    )
+    components = set(sculpted.metadata.get("studio_components", []))
+    assert report.passed
+    assert {"armor_trim", "panel_line", "rivet", "weapon_detail", "face_detail", "micro_engraving"}.issubset(components)
+    assert report.critic_scores["overall"] >= 85.0
 
 
 def test_detail_critic_rejects_smooth_blockout() -> None:
