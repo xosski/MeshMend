@@ -1,0 +1,91 @@
+{
+  "part_id": "space_terminator_left_arm_1",
+  "category": "left_arm",
+  "scale_mm": 32.0,
+  "symmetry": "none",
+  "source": "character_component_library",
+  "detail_tags": [
+    "arms",
+    "hands",
+    "thick_power_limbs",
+    "space_terminator_shape",
+    "bulky_exo_proportions",
+    "slow_braced_advance",
+    "left_arm",
+    "component_library_part",
+    "non_primitive_character_component"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        -4.200846019413478,
+        -0.649725845823663,
+        13.771843863166714
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        -4.200846019413478,
+        -0.649725845823663,
+        9.850000000000001
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        -4.200846019413478,
+        -0.649725845823663,
+        17.693687726333426
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        -4.200846019413478,
+        -0.649725845823663,
+        13.771843863166714
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 226,
+    "vertices": 117,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 2,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.5059549182410359,
+    "detail_density": 0.4185852597241745,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "arms",
+  "canonical_category": "left_arm"
+}

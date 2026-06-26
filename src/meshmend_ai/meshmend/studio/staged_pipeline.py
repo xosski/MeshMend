@@ -131,9 +131,26 @@ class CharacterArchetypeGenerator:
 
     def generate(self, spec: StudioMiniatureSpec) -> MiniatureConceptDesign:
         text = spec.prompt.lower()
-        space_terminator = any(term in text for term in ("space terminator", "terminator", "tactical dreadnought"))
+        archetype_text = str(getattr(spec, "archetype", "") or "").lower().replace("_", " ")
+        searchable = f"{archetype_text} {text.replace('_', ' ')}"
+        space_terminator = any(
+            term in searchable
+            for term in (
+                "space terminator",
+                "terminator",
+                "tactical dreadnought",
+                "space marine",
+                "power armored space marine",
+                "power armoured space marine",
+                "power armored",
+                "power armoured",
+                "armored star knight",
+                "armoured star knight",
+                "star knight",
+            )
+        )
         if space_terminator:
-            weapon = "heavy_storm_rifle" if any(term in text for term in ("rifle", "bolter", "gun")) else "power_fist_cannon"
+            weapon = "heavy_storm_rifle" if any(term in searchable for term in ("rifle", "bolter", "gun")) else "power_fist_cannon"
             return MiniatureConceptDesign(
                 faction="void_terminator_order",
                 role="space_terminator",
@@ -1106,6 +1123,10 @@ class VisionCritic:
 
     model: str = os.environ.get("MESHMEND_VISION_CRITIC_MODEL", "gpt-4o-mini")
 
+    @staticmethod
+    def allow_skip_when_unconfigured() -> bool:
+        return os.environ.get("MESHMEND_ALLOW_SKIP_VISION_CRITIC", "1").strip().lower() in {"1", "true", "yes", "on"}
+
     reject_terms: tuple[str, ...] = (
         "mannequin",
         "placeholder",
@@ -1118,7 +1139,7 @@ class VisionCritic:
     def evaluate(self, mesh: trimesh.Trimesh, concept: MiniatureConceptDesign) -> tuple[bool, list[str], dict[str, Any]]:
         api_key = os.environ.get("OPENAI_API_KEY", "").strip() or os.environ.get("CHATGPT_API_KEY", "").strip()
         if not api_key:
-            if os.environ.get("MESHMEND_ALLOW_SKIP_VISION_CRITIC", "0").strip().lower() in {"1", "true", "yes", "on"}:
+            if self.allow_skip_when_unconfigured():
                 return True, [], {"configured": False, "skipped": "OPENAI_API_KEY_or_CHATGPT_API_KEY_missing"}
             return False, ["vision_critic_api_key_missing"], {"configured": False}
         previews = render_black_silhouette_previews(mesh)
@@ -1146,7 +1167,7 @@ class VisionCritic:
                 raw = json.loads(response.read().decode("utf-8"))
             answer = str(raw.get("choices", [{}])[0].get("message", {}).get("content", "")).strip()
         except Exception as exc:
-            if os.environ.get("MESHMEND_ALLOW_SKIP_VISION_CRITIC", "0").strip().lower() in {"1", "true", "yes", "on"}:
+            if self.allow_skip_when_unconfigured():
                 return True, [], {"configured": True, "skipped": f"vision_critic_failed:{exc}"}
             return False, [f"vision_critic_failed:{exc}"], {"configured": True, "error": str(exc)}
         lower = answer.lower()

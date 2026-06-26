@@ -170,6 +170,25 @@ def test_staged_pipeline_generates_distinct_pre_sculpt_archetypes(tmp_path: Path
             assert distance > 0.20, f"{first_key} and {second_key} share a mannequin-like silhouette"
 
 
+def test_store_quality_boilerplate_does_not_override_subject_archetype() -> None:
+    prompt = (
+        "a armored star knight with heavy rifle and reactor backpack\n\n"
+        "Create a final store/studio-quality resin-printable tabletop miniature, not concept art and not a primitive blockout. "
+        "Use readable face/helmet, hands/fingers or claws, weapon bevels, armor trim, deep recesses, and a scenic base."
+    )
+    spec = StudioMiniatureSpec.from_prompt(prompt, target_faces=250_000)
+    concept, stage = StagedMiniaturePipeline().concept_profile(spec)
+
+    assert stage.passed
+    assert spec.style == "sci_fi"
+    assert spec.archetype == "space_terminator"
+    assert spec.weapon == "rifle"
+    assert spec.claws is False
+    assert concept["design"]["role"] == "space_terminator"
+    assert concept["design"]["weapon_type"] == "heavy_storm_rifle"
+    assert "huge_pauldrons" in concept["shape_language"]["required_silhouette_tags"]
+
+
 def test_archetype_separation_fails_above_40_percent_similarity() -> None:
     prompts = [
         "High Elf Warrior with glaive layered fantasy armor cape heroic posture",
@@ -211,6 +230,42 @@ def test_miniature_sculpt_quality_gate_rejects_watertight_primitive_blockout() -
     assert not report.passed
     assert any("large_smooth_primitive_surfaces_dominate" in issue for issue in report.issues)
     assert any("no_armor_seams_or_panel_lines_detected" in issue for issue in report.issues)
+
+
+def test_miniature_sculpt_quality_gate_rejects_forged_metadata_primitive() -> None:
+    blockout = trimesh.creation.uv_sphere(radius=12.0, count=[128, 64])
+    blockout.metadata["studio_components"] = [
+        "body",
+        "head",
+        "helmet",
+        "weapon",
+        "weapon_barrel",
+        "weapon_detail",
+        "base",
+        "chest_armor",
+        "shoulder_pad",
+        "backpack",
+        "helmet_lenses",
+        "helmet_mouth_grille",
+        "face_detail",
+        "body_detail",
+        "armor_trim",
+        "panel_line",
+        "rivet",
+        "cloth_fold",
+        "insignia",
+        "micro_engraving",
+        "pouch",
+        "belt",
+        "base_texture",
+        "space_terminator_shape",
+    ]
+    blockout.metadata["sculpt_engine"] = {"character_foundation_first": True}
+
+    report = MiniatureSculptQualityGate(min_faces=1, min_vertices=1, min_height_mm=1.0, max_height_mm=30.0).evaluate(blockout)
+
+    assert not report.passed
+    assert any("large_smooth_primitive_surfaces_dominate" in issue for issue in report.issues)
 
 
 def test_sculpt_engine_creates_detail_maps_before_geometry() -> None:

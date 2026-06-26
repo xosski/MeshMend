@@ -1,0 +1,89 @@
+{
+  "part_id": "space_terminator_accessories_1",
+  "category": "accessories",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "character_component_library",
+  "detail_tags": [
+    "accessories",
+    "backpack",
+    "reactor_backpack",
+    "space_terminator_shape",
+    "bulky_exo_proportions",
+    "component_library_part",
+    "non_primitive_character_component"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.08308571617060712,
+        2.2939766687430656,
+        16.815
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.08308571617060712,
+        2.2939766687430656,
+        14.100000000000001
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.08308571617060712,
+        2.2939766687430656,
+        19.53
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.08308571617060712,
+        2.2939766687430656,
+        16.815
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 464,
+    "vertices": 238,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 3,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.5697466544435202,
+    "detail_density": 0.4851303737749214,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "backpack",
+  "canonical_category": "accessories"
+}

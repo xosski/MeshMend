@@ -1,0 +1,1733 @@
+{
+  "head": {
+    "part_id": "space_terminator_head_1",
+    "category": "head",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "head",
+      "helmet",
+      "helmet_lenses",
+      "recessed_exo_helmet",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          20.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          19.7
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          21.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          20.75
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 580,
+      "vertices": 298,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2458143269521076,
+      "detail_density": 1.0,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "torso": {
+    "part_id": "space_terminator_torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "massive_exo_plate_armor",
+      "huge_pauldrons",
+      "massive_shoulders",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          10.3
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -5.742399107669271,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          5.857757939521804,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 1280,
+      "vertices": 650,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2590040965691603,
+      "detail_density": 0.4411719055898434,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "legs": {
+    "part_id": "space_terminator_legs_1",
+    "category": "legs",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "legs",
+      "left_leg",
+      "right_leg",
+      "thick_power_limbs",
+      "slow_braced_advance",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          -0.128208516914202,
+          -0.5491567709442038,
+          6.062857584335487
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          -0.128208516914202,
+          -0.5491567709442038,
+          0.8200000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          -0.128208516914202,
+          -0.5491567709442038,
+          11.305715168670973
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          -0.128208516914202,
+          -0.5491567709442038,
+          6.062857584335487
+        ],
+        "radius_mm": 0.3298163819430878,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 460,
+      "vertices": 238,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.635303514953321,
+      "detail_density": 0.40731155590627954,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "left_arm": {
+    "part_id": "space_terminator_left_arm_1",
+    "category": "left_arm",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "character_component_library",
+    "detail_tags": [
+      "arms",
+      "hands",
+      "thick_power_limbs",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "slow_braced_advance",
+      "left_arm",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          13.771843863166714
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          9.850000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          17.693687726333426
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          13.771843863166714
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 226,
+      "vertices": 117,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 2,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5059549182410359,
+      "detail_density": 0.4185852597241745,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "right_arm": {
+    "part_id": "space_terminator_right_arm_1",
+    "category": "right_arm",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "character_component_library",
+    "detail_tags": [
+      "arms",
+      "hands",
+      "thick_power_limbs",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "slow_braced_advance",
+      "right_arm",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          4.242519851439022,
+          -0.6032007360664358,
+          13.881843863166713
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          4.242519851439022,
+          -0.6032007360664358,
+          10.07
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          4.242519851439022,
+          -0.6032007360664358,
+          17.693687726333426
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          4.242519851439022,
+          -0.6032007360664358,
+          13.881843863166713
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 226,
+      "vertices": 117,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 2,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.49799950722462527,
+      "detail_density": 0.4205424141999754,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "weapons": {
+    "part_id": "space_terminator_weapons_1",
+    "category": "weapons",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "character_component_library",
+    "detail_tags": [
+      "weapon",
+      "weapon_barrel",
+      "heavy_storm_rifle",
+      "power_fist_cannon",
+      "heavy_weapon_forward_readable",
+      "space_terminator_shape",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          13.565
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          12.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          14.729999999999999
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          13.565
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_hand_grip",
+        "kind": "hand",
+        "position": [
+          2.0,
+          -2.0,
+          14.0
+        ],
+        "radius_mm": 0.35,
+        "direction": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 472,
+      "vertices": 244,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5484214089518121,
+      "detail_density": 0.7570756569780104,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "accessories": {
+    "part_id": "space_terminator_accessories_1",
+    "category": "accessories",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "accessories",
+      "backpack",
+      "reactor_backpack",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          16.815
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          14.100000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          19.53
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          16.815
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 464,
+      "vertices": 238,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 3,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5697466544435202,
+      "detail_density": 0.4851303737749214,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "base": {
+    "part_id": "space_terminator_base_1",
+    "category": "base",
+    "scale_mm": 32.0,
+    "symmetry": "radial",
+    "source": "character_component_library",
+    "detail_tags": [
+      "base",
+      "round_base",
+      "base_texture",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.0,
+          0.0,
+          0.10000000000000009
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.0,
+          0.0,
+          1.2000000000000002
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.0,
+          0.0,
+          0.10000000000000009
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "feet",
+        "kind": "base",
+        "position": [
+          0,
+          0,
+          1.0
+        ],
+        "radius_mm": 1.2,
+        "direction": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 1312,
+      "vertices": 678,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 11,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5963721325695506,
+      "detail_density": 0.5157597371563661,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "helmet": {
+    "part_id": "space_terminator_head_1",
+    "category": "head",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "head",
+      "helmet",
+      "helmet_lenses",
+      "recessed_exo_helmet",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          20.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          19.7
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          21.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          20.75
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 580,
+      "vertices": 298,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2458143269521076,
+      "detail_density": 1.0,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "head_helmet": {
+    "part_id": "space_terminator_head_1",
+    "category": "head",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "head",
+      "helmet",
+      "helmet_lenses",
+      "recessed_exo_helmet",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          20.75
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          19.7
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          21.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.0367824703966928,
+          -0.41423559244579855,
+          20.75
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 580,
+      "vertices": 298,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2458143269521076,
+      "detail_density": 1.0,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "chest_armor": {
+    "part_id": "space_terminator_torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "massive_exo_plate_armor",
+      "huge_pauldrons",
+      "massive_shoulders",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          10.3
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -5.742399107669271,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          5.857757939521804,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 1280,
+      "vertices": 650,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2590040965691603,
+      "detail_density": 0.4411719055898434,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "torso_body": {
+    "part_id": "space_terminator_torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "massive_exo_plate_armor",
+      "huge_pauldrons",
+      "massive_shoulders",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          10.3
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -5.742399107669271,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          5.857757939521804,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 1280,
+      "vertices": 650,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2590040965691603,
+      "detail_density": 0.4411719055898434,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "shoulder_pads": {
+    "part_id": "space_terminator_torso_1",
+    "category": "torso",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "body",
+      "torso",
+      "chest_armor",
+      "shoulder_pad",
+      "massive_exo_plate_armor",
+      "huge_pauldrons",
+      "massive_shoulders",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          10.3
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "head",
+        "kind": "neck",
+        "position": [
+          0.057679415926266575,
+          -0.027570589160060832,
+          19.8
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "left_arm",
+        "kind": "shoulder",
+        "position": [
+          -5.742399107669271,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_arm",
+        "kind": "shoulder",
+        "position": [
+          5.857757939521804,
+          -0.027570589160060832,
+          15.05
+        ],
+        "radius_mm": 0.4962596385388342,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 1280,
+      "vertices": 650,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.2590040965691603,
+      "detail_density": 0.4411719055898434,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "arms": {
+    "part_id": "space_terminator_left_arm_1",
+    "category": "left_arm",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "character_component_library",
+    "detail_tags": [
+      "arms",
+      "hands",
+      "thick_power_limbs",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "slow_braced_advance",
+      "left_arm",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          13.771843863166714
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          9.850000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          17.693687726333426
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          -4.200846019413478,
+          -0.649725845823663,
+          13.771843863166714
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 226,
+      "vertices": 117,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 2,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5059549182410359,
+      "detail_density": 0.4185852597241745,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "weapon": {
+    "part_id": "space_terminator_weapons_1",
+    "category": "weapons",
+    "scale_mm": 32.0,
+    "symmetry": "none",
+    "source": "character_component_library",
+    "detail_tags": [
+      "weapon",
+      "weapon_barrel",
+      "heavy_storm_rifle",
+      "power_fist_cannon",
+      "heavy_weapon_forward_readable",
+      "space_terminator_shape",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          13.565
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          12.4
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          14.729999999999999
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          5.272525228079827,
+          -2.0290872587686364,
+          13.565
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "right_hand_grip",
+        "kind": "hand",
+        "position": [
+          2.0,
+          -2.0,
+          14.0
+        ],
+        "radius_mm": 0.35,
+        "direction": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 472,
+      "vertices": 244,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 4,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5484214089518121,
+      "detail_density": 0.7570756569780104,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "backpack": {
+    "part_id": "space_terminator_accessories_1",
+    "category": "accessories",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "accessories",
+      "backpack",
+      "reactor_backpack",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          16.815
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          14.100000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          19.53
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          16.815
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 464,
+      "vertices": 238,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 3,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5697466544435202,
+      "detail_density": 0.4851303737749214,
+      "issues": [],
+      "passed": true
+    }
+  },
+  "backpack_accessories": {
+    "part_id": "space_terminator_accessories_1",
+    "category": "accessories",
+    "scale_mm": 32.0,
+    "symmetry": "bilateral",
+    "source": "character_component_library",
+    "detail_tags": [
+      "accessories",
+      "backpack",
+      "reactor_backpack",
+      "space_terminator_shape",
+      "bulky_exo_proportions",
+      "component_library_part",
+      "non_primitive_character_component"
+    ],
+    "anchors": [
+      {
+        "name": "center",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          16.815
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "name": "bottom",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          14.100000000000001
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      },
+      {
+        "name": "top",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          19.53
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "connection_sockets": [
+      {
+        "name": "root",
+        "kind": "root",
+        "position": [
+          0.08308571617060712,
+          2.2939766687430656,
+          16.815
+        ],
+        "radius_mm": 0.3,
+        "direction": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "cleanup_report": {
+      "faces": 464,
+      "vertices": 238,
+      "watertight": true,
+      "boundary_edges": 0,
+      "non_manifold_edges": 0,
+      "components": 3,
+      "sheet_artifacts": 0,
+      "primitive_score": 0.5697466544435202,
+      "detail_density": 0.4851303737749214,
+      "issues": [],
+      "passed": true
+    }
+  }
+}

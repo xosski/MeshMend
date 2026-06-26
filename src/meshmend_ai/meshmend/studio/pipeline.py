@@ -34,10 +34,25 @@ class StudioMiniatureSpec:
     @classmethod
     def from_prompt(cls, prompt: str, *, scale_mm: float = 32.0, target_faces: int = 250_000) -> "StudioMiniatureSpec":
         clean_prompt, _warnings = sanitize_prompt(prompt)
-        text = clean_prompt.lower()
-        style = "fantasy" if any(word in text for word in ("fantasy", "knight", "orc", "elf", "robe", "wizard", "claw")) else "sci_fi"
-        weapon = "sword" if any(word in text for word in ("sword", "blade", "axe", "mace")) else "rifle"
-        if "claw" in text:
+        subject_text = _miniature_subject_text(clean_prompt).lower()
+        searchable = subject_text.replace("_", " ")
+        power_armored = any(
+            term in searchable
+            for term in (
+                "space marine",
+                "power armored space marine",
+                "power armoured space marine",
+                "power armored",
+                "power armoured",
+                "armored star knight",
+                "armoured star knight",
+                "star knight",
+            )
+        )
+        style = "sci_fi" if power_armored else "fantasy" if any(word in subject_text for word in ("fantasy", "knight", "orc", "elf", "robe", "wizard", "claw")) else "sci_fi"
+        archetype = "space_terminator" if power_armored else "heavy_infantry"
+        weapon = "rifle" if power_armored or any(word in subject_text for word in ("rifle", "bolter", "gun")) else "sword" if any(word in subject_text for word in ("sword", "blade", "axe", "mace")) else "rifle"
+        if "claw" in subject_text and not power_armored:
             weapon = "claws"
         details = ["panel_lines", "rivets", "armor_seams", "base_texture"]
         if style == "sci_fi":
@@ -47,13 +62,14 @@ class StudioMiniatureSpec:
         return cls(
             prompt=clean_prompt,
             scale_mm=float(scale_mm),
+            archetype=archetype,
             style=style,
             weapon=weapon,
-            helmet=not any(word in text for word in ("bare head", "unhelmeted")),
-            backpack=style == "sci_fi" or "backpack" in text,
-            cape="cape" in text or "cloak" in text,
-            robe="robe" in text or "wizard" in text,
-            claws="claw" in text,
+            helmet=not any(word in subject_text for word in ("bare head", "unhelmeted")),
+            backpack=style == "sci_fi" or "backpack" in subject_text,
+            cape="cape" in subject_text or "cloak" in subject_text,
+            robe="robe" in subject_text or "wizard" in subject_text,
+            claws="claw" in subject_text and not power_armored,
             target_faces=int(target_faces),
             details=details,
         )
@@ -65,6 +81,33 @@ class StudioMiniatureSpec:
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
+
+
+def _miniature_subject_text(prompt: str) -> str:
+    """Keep boilerplate quality instructions from changing the requested subject.
+
+    Store-mode callers append long text such as "fingers/claws" and "weapon
+    bevels" to every prompt. If archetype parsing reads that whole block, an
+    armored rifleman can be misclassified as a clawed fantasy knight. Parse the
+    first user-subject clause for identity/equipment, then leave the full prompt
+    available for downstream detail instructions.
+    """
+    markers = (
+        "\n\ncreate a production",
+        "\n\ncreate a final",
+        "create a production/studio-quality",
+        "create a final store/studio-quality",
+        "pipeline requirement:",
+        "required visible landmarks:",
+    )
+    lowered = prompt.lower()
+    cut = len(prompt)
+    for marker in markers:
+        index = lowered.find(marker)
+        if index >= 0:
+            cut = min(cut, index)
+    subject = prompt[:cut].strip()
+    return subject or prompt
 
 
 class StudioMiniaturePipeline:
@@ -216,7 +259,11 @@ class StudioMiniaturePipeline:
             parts.append(_box((0.22, 0.22, 1.25), (side * 4.55, -1.68, 12.1))); names.append("finger_detail")
         for x in (-2.2, -1.2, 1.2, 2.2):
             parts.append(_box((0.65, 0.36, 0.48), (x, -2.12, 10.75))); names.append("pouch")
-        names.extend(["armor_trim", "bolt", "body_detail"])
+        for z in (15.25, 17.15):
+            parts.append(_box((4.95, 0.14, 0.13), (0, -2.22, z))); names.append("armor_trim")
+        for x in (-1.15, 1.15):
+            parts.append(_rivet((x, -2.25, 16.15), 0.15)); names.append("bolt")
+        parts.append(_box((1.15, 0.16, 0.92), (0, -2.28, 16.7))); names.append("body_detail")
         if spec.style == "fantasy":
             for z in (15.2, 16.7, 18.1):
                 parts.append(_box((4.4, 0.16, 0.1), (0, -2.18, z))); names.append("fantasy_trim")

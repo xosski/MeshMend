@@ -1,0 +1,1297 @@
+[
+  {
+    "name": "concept_profile",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "concept": {
+        "prompt": "a armored star knight with heavy rifle and reactor backpack\n\nCreate a final store/studio-quality resin-printable tabletop miniature, not concept art and not a primitive blockout. Scale: 32.0mm. Archetype: space_terminator. Weapon: rifle. Required visible landmarks: readable_face_or_helmet, hands_and_fingers, weapon_bevels, armor_trim, deep_panel_lines, scenic_base, oversized_pauldrons, recessed_helmet_visor, reactor_backpack, chest_emblem, heavy_bolter/rifle, chunky_greaves. Pipeline requirement: first create a complete concept/specification, then generate separate modular meshes for head, torso, legs, left arm, right arm, weapons, and accessories; assemble these modules into a complete miniature before sculpting. Run a primary sculpt pass for large anatomical and silhouette forms, a secondary sculpt pass for armor details/trims/vents/pouches, and a tertiary sculpt pass for micro-detail, engravings, insignia, and surface texture. Use clean 360-degree sculpt anatomy, readable face/helmet, hands/fingers or claws, bevelled weapons, layered armor/cloth/leather/metal details, deep recesses and raised trim that survive miniature painting, a fused scenic base, watertight topology, and commercial STL-ready geometry. Avoid and reject smooth blobs, flat bas-relief, planes, sheets, card-like depth, generic rocks, floating geometry, disconnected shells, non-manifold topology, open surfaces, and low-poly decimated surfaces. The final Miniature Quality Critic score must be at least 85/100 for silhouette quality, anatomical quality, armor design quality, detail density, printability, and professional resin miniature similarity.",
+        "scale_mm": 32.0,
+        "style": "sci_fi",
+        "archetype": "space_terminator",
+        "pose": "heroic_standing",
+        "weapon": "rifle",
+        "design": {
+          "faction": "void_terminator_order",
+          "role": "space_terminator",
+          "armor_class": "massive_exo_plate_armor",
+          "equipment": [
+            "helmet_lenses",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "huge_pauldrons"
+          ],
+          "pose": "slow_braced_advance",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "head_type": "recessed_exo_helmet",
+          "armor_type": "massive_exo_plate_armor",
+          "backpack_type": "reactor_backpack",
+          "weapon_type": "heavy_storm_rifle",
+          "pose_type": "slow_braced_advance",
+          "faction_style": "void_terminator_order"
+        },
+        "head_type": "recessed_exo_helmet",
+        "armor_type": "massive_exo_plate_armor",
+        "backpack_type": "reactor_backpack",
+        "weapon_type": "heavy_storm_rifle",
+        "pose_type": "slow_braced_advance",
+        "faction_style": "void_terminator_order",
+        "director_brief": {
+          "selected": {
+            "heads": {
+              "kind": "head",
+              "name": "recessed_exo_helmet",
+              "tags": [
+                "head",
+                "recessed_exo_helmet",
+                "faction_head_identity"
+              ],
+              "silhouette_weight": 0.9
+            },
+            "bodies": {
+              "kind": "body",
+              "name": "massive_exo_plate_armor",
+              "tags": [
+                "body",
+                "torso",
+                "massive_exo_plate_armor",
+                "wide_shoulders"
+              ],
+              "silhouette_weight": 0.92
+            },
+            "weapons": {
+              "kind": "weapon",
+              "name": "heavy_storm_rifle",
+              "tags": [
+                "weapon",
+                "weapon_barrel",
+                "heavy_storm_rifle"
+              ],
+              "silhouette_weight": 0.9
+            },
+            "equipment": {
+              "kind": "equipment",
+              "name": "helmet_lenses",
+              "tags": [
+                "accessory",
+                "helmet_lenses"
+              ],
+              "silhouette_weight": 0.75
+            },
+            "poses": {
+              "kind": "pose",
+              "name": "slow_braced_advance",
+              "tags": [
+                "pose",
+                "slow_braced_advance"
+              ],
+              "silhouette_weight": 0.88
+            },
+            "factions": {
+              "kind": "faction",
+              "name": "void_terminator_order",
+              "tags": [
+                "faction",
+                "void_terminator_order"
+              ],
+              "silhouette_weight": 0.95
+            }
+          },
+          "silhouette_tags": [
+            "accessory",
+            "body",
+            "faction",
+            "faction_head_identity",
+            "head",
+            "heavy_storm_rifle",
+            "helmet_lenses",
+            "massive_exo_plate_armor",
+            "pose",
+            "recessed_exo_helmet",
+            "slow_braced_advance",
+            "torso",
+            "void_terminator_order",
+            "weapon",
+            "weapon_barrel",
+            "wide_shoulders"
+          ],
+          "candidate_counts": {
+            "heads": 5,
+            "bodies": 5,
+            "weapons": 5,
+            "equipment": 9,
+            "poses": 5,
+            "factions": 5
+          }
+        },
+        "shape_language": {
+          "archetype": "space_terminator",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "anatomy": [
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "slow_braced_advance",
+            "thick_power_limbs"
+          ],
+          "armor": [
+            "massive_exo_plate_armor",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "reactor_backpack"
+          ],
+          "equipment": [
+            "heavy_storm_rifle",
+            "power_fist_cannon",
+            "helmet_lenses"
+          ],
+          "pose": [
+            "slow_braced_advance",
+            "heavy_weapon_forward_readable"
+          ],
+          "required_silhouette_tags": [
+            "space_terminator_shape",
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "massive_exo_plate_armor",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "hands"
+          ]
+        },
+        "ai_shape_plan": {
+          "source": "local_semantic_ai_shape_planner",
+          "confidence": 0.82,
+          "archetype": "space_terminator",
+          "subject": "space_terminator",
+          "scale_mm": 32.0,
+          "part_directives": {
+            "head": {
+              "scale": [
+                1.08,
+                1.02,
+                0.98
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "small recessed helmet inside exo armor"
+            },
+            "torso": {
+              "scale": [
+                1.34,
+                1.18,
+                1.08
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "huge exo torso and pauldrons"
+            },
+            "legs": {
+              "scale": [
+                1.2,
+                1.08,
+                0.96
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "thick armored legs"
+            },
+            "left_arm": {
+              "scale": [
+                1.26,
+                1.1,
+                1.02
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "oversized power fist arm"
+            },
+            "right_arm": {
+              "scale": [
+                1.22,
+                1.08,
+                1.02
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "heavy weapon arm"
+            },
+            "weapons": {
+              "scale": [
+                1.28,
+                1.12,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "blocky heavy storm rifle with printable silhouette"
+            },
+            "accessories": {
+              "scale": [
+                1.18,
+                1.12,
+                1.04
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "large reactor backpack"
+            },
+            "base": {
+              "scale": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "intent": "base"
+            }
+          },
+          "required_silhouette_features": [
+            "space_terminator_shape",
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "massive_exo_plate_armor",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "hands"
+          ],
+          "planner_parts": [
+            {
+              "name": "torso",
+              "kind": "body",
+              "shape": "barrel chest",
+              "size": "large",
+              "position": [
+                0,
+                0,
+                13
+              ],
+              "scale": [
+                4.5,
+                3.0,
+                6.5
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "head",
+              "kind": "body",
+              "shape": "snarling head",
+              "size": "medium",
+              "position": [
+                0,
+                0,
+                19
+              ],
+              "scale": [
+                2.5,
+                2.0,
+                2.8
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "left_leg",
+              "kind": "limb",
+              "shape": "bent armored leg",
+              "size": "large",
+              "position": [
+                -1.8,
+                0,
+                7
+              ],
+              "scale": [
+                1.6,
+                1.4,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "right_leg",
+              "kind": "limb",
+              "shape": "braced armored leg",
+              "size": "large",
+              "position": [
+                1.8,
+                0,
+                7
+              ],
+              "scale": [
+                1.6,
+                1.4,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "left_arm",
+              "kind": "limb",
+              "shape": "muscular weapon arm",
+              "size": "large",
+              "position": [
+                -4.2,
+                0,
+                14
+              ],
+              "scale": [
+                1.4,
+                1.2,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "right_arm",
+              "kind": "limb",
+              "shape": "muscular weapon arm",
+              "size": "large",
+              "position": [
+                4.2,
+                0,
+                14
+              ],
+              "scale": [
+                1.4,
+                1.2,
+                6
+              ],
+              "detail_tags": []
+            },
+            {
+              "name": "bear_trap_claw",
+              "kind": "weapon_arm",
+              "shape": "crescent mechanical jaw",
+              "size": "large",
+              "position": [
+                5.5,
+                0,
+                12
+              ],
+              "scale": [
+                2.8,
+                1.2,
+                2.8
+              ],
+              "detail_tags": [
+                "spring hinge",
+                "jagged trap teeth",
+                "bolts"
+              ]
+            }
+          ]
+        },
+        "miniature_blueprint": {
+          "blueprint_type": "pre_geometry_miniature_blueprint",
+          "archetype": "space_terminator",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "race_faction": "void_terminator_order",
+          "role": "space_terminator",
+          "required_traits": [
+            "space_terminator_shape",
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "massive_exo_plate_armor",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "hands"
+          ],
+          "components": {
+            "head": {
+              "generator": "head_generator",
+              "asset_intent": "recessed_exo_helmet",
+              "shape_directive": {
+                "scale": [
+                  1.08,
+                  1.02,
+                  0.98
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "small recessed helmet inside exo armor"
+              }
+            },
+            "helmet": {
+              "generator": "helmet_generator",
+              "asset_intent": "recessed_exo_helmet",
+              "shape_directive": {
+                "scale": [
+                  1.08,
+                  1.02,
+                  0.98
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "small recessed helmet inside exo armor"
+              }
+            },
+            "torso": {
+              "generator": "torso_generator",
+              "asset_intent": "massive_exo_plate_armor",
+              "shape_directive": {
+                "scale": [
+                  1.34,
+                  1.18,
+                  1.08
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "huge exo torso and pauldrons"
+              }
+            },
+            "arms": {
+              "generator": "arm_generator",
+              "asset_intent": "archetype arms",
+              "shape_directive": {
+                "left": {
+                  "scale": [
+                    1.26,
+                    1.1,
+                    1.02
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "oversized power fist arm"
+                },
+                "right": {
+                  "scale": [
+                    1.22,
+                    1.08,
+                    1.02
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "heavy weapon arm"
+                }
+              }
+            },
+            "legs": {
+              "generator": "leg_generator",
+              "asset_intent": "archetype legs",
+              "shape_directive": {
+                "scale": [
+                  1.2,
+                  1.08,
+                  0.96
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "thick armored legs"
+              }
+            },
+            "hands": {
+              "generator": "hand_generator",
+              "asset_intent": "weapon grip hands",
+              "shape_directive": {
+                "left": {
+                  "scale": [
+                    1.26,
+                    1.1,
+                    1.02
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "oversized power fist arm"
+                },
+                "right": {
+                  "scale": [
+                    1.22,
+                    1.08,
+                    1.02
+                  ],
+                  "offset": [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "intent": "heavy weapon arm"
+                }
+              }
+            },
+            "armor": {
+              "generator": "armor_generator",
+              "asset_intent": "massive_exo_plate_armor",
+              "required": [
+                "massive_exo_plate_armor",
+                "huge_pauldrons",
+                "recessed_exo_helmet",
+                "reactor_backpack"
+              ]
+            },
+            "weapon": {
+              "generator": "weapon_generator",
+              "asset_intent": "heavy_storm_rifle",
+              "shape_directive": {
+                "scale": [
+                  1.28,
+                  1.12,
+                  1.0
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "blocky heavy storm rifle with printable silhouette"
+              }
+            },
+            "cloak": {
+              "generator": "cloak_generator",
+              "asset_intent": "reactor_backpack",
+              "shape_directive": {
+                "scale": [
+                  1.18,
+                  1.12,
+                  1.04
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "large reactor backpack"
+              }
+            },
+            "accessories": {
+              "generator": "accessory_generator",
+              "asset_intent": [
+                "helmet_lenses",
+                "heavy_storm_rifle",
+                "reactor_backpack",
+                "huge_pauldrons"
+              ],
+              "shape_directive": {
+                "scale": [
+                  1.18,
+                  1.12,
+                  1.04
+                ],
+                "offset": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "intent": "large reactor backpack"
+              }
+            }
+          },
+          "no_geometry": true
+        },
+        "required_categories": [
+          "head",
+          "torso",
+          "legs",
+          "left_arm",
+          "right_arm",
+          "weapons",
+          "accessories",
+          "base"
+        ],
+        "quality_target": "premium_resin_tabletop_miniature"
+      }
+    }
+  },
+  {
+    "name": "head",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_head_1"
+      ]
+    }
+  },
+  {
+    "name": "torso",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_torso_1"
+      ]
+    }
+  },
+  {
+    "name": "legs",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_legs_1"
+      ]
+    }
+  },
+  {
+    "name": "left_arm",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_left_arm_1"
+      ]
+    }
+  },
+  {
+    "name": "right_arm",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_right_arm_1"
+      ]
+    }
+  },
+  {
+    "name": "weapons",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_weapons_1"
+      ]
+    }
+  },
+  {
+    "name": "accessories",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_accessories_1"
+      ]
+    }
+  },
+  {
+    "name": "base",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "candidate_ids": [
+        "space_terminator_base_1"
+      ]
+    }
+  },
+  {
+    "name": "part_selection",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "head": "space_terminator_head_1",
+      "torso": "space_terminator_torso_1",
+      "legs": "space_terminator_legs_1",
+      "left_arm": "space_terminator_left_arm_1",
+      "right_arm": "space_terminator_right_arm_1",
+      "weapons": "space_terminator_weapons_1",
+      "accessories": "space_terminator_accessories_1",
+      "base": "space_terminator_base_1"
+    }
+  },
+  {
+    "name": "final_assembly",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "parts": {
+        "head": "space_terminator_head_1",
+        "torso": "space_terminator_torso_1",
+        "legs": "space_terminator_legs_1",
+        "left_arm": "space_terminator_left_arm_1",
+        "right_arm": "space_terminator_right_arm_1",
+        "weapons": "space_terminator_weapons_1",
+        "accessories": "space_terminator_accessories_1",
+        "base": "space_terminator_base_1"
+      },
+      "socket_connectors": 9
+    }
+  },
+  {
+    "name": "pre_sculpt_silhouette_and_part_recognizability_gate",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "recognizability_gate": {
+        "part_checks": {
+          "head_recognizable": true,
+          "torso_recognizable": true,
+          "arms_recognizable": true,
+          "legs_recognizable": true,
+          "weapon_recognizable": true,
+          "terminator_silhouette_recognizable": true,
+          "bulky_exo_proportions_recognizable": true,
+          "huge_pauldrons_recognizable": true,
+          "exo_helmet_recognizable": true,
+          "massive_armor_recognizable": true,
+          "heavy_weapon_recognizable": true,
+          "reactor_backpack_recognizable": true,
+          "hands_recognizable": true
+        },
+        "silhouette_64_thumbnail": {
+          "view": "front",
+          "resolution": 64,
+          "occupancy": 0.1533,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 901
+        },
+        "black_silhouette_previews": {
+          "front": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt front silhouette</text><polygon points='30.0,290.0 89.6,74.5 93.7,69.7 155.1,30.1 156.9,30.0 160.0,30.0 163.3,30.0 164.4,30.1 226.6,69.7 231.0,74.5 248.9,119.7 290.0,267.5 289.8,290.0' fill='black' stroke='black' stroke-width='1'/></svg>",
+          "side": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt side silhouette</text><polygon points='30.0,290.0 143.8,43.1 156.2,30.1 161.9,30.0 162.9,30.0 195.3,61.2 290.0,290.0' fill='black' stroke='black' stroke-width='1'/></svg>",
+          "rear": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt rear silhouette</text><polygon points='30.0,267.5 71.1,119.7 89.0,74.5 93.4,69.7 155.6,30.1 156.7,30.0 160.0,30.0 163.1,30.0 164.9,30.1 226.3,69.7 230.4,74.5 290.0,290.0 30.2,290.0' fill='black' stroke='black' stroke-width='1'/></svg>",
+          "45": "<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'><rect width='320' height='320' fill='white'/><text x='12' y='22' font-size='13' font-family='monospace' fill='#222'>pre-sculpt 45 silhouette</text><polygon points='30.0,290.0 108.1,74.5 111.6,69.7 156.5,30.0 158.0,30.0 161.0,30.0 163.4,30.1 164.5,30.1 209.7,69.7 242.5,119.7 290.0,290.0' fill='black' stroke='black' stroke-width='1'/></svg>"
+        },
+        "concept": {
+          "faction": "void_terminator_order",
+          "role": "space_terminator",
+          "armor_class": "massive_exo_plate_armor",
+          "equipment": [
+            "helmet_lenses",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "huge_pauldrons"
+          ],
+          "pose": "slow_braced_advance",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "head_type": "recessed_exo_helmet",
+          "armor_type": "massive_exo_plate_armor",
+          "backpack_type": "reactor_backpack",
+          "weapon_type": "heavy_storm_rifle",
+          "pose_type": "slow_braced_advance",
+          "faction_style": "void_terminator_order"
+        },
+        "shape_language": {
+          "archetype": "space_terminator",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "anatomy": [
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "slow_braced_advance",
+            "thick_power_limbs"
+          ],
+          "armor": [
+            "massive_exo_plate_armor",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "reactor_backpack"
+          ],
+          "equipment": [
+            "heavy_storm_rifle",
+            "power_fist_cannon",
+            "helmet_lenses"
+          ],
+          "pose": [
+            "slow_braced_advance",
+            "heavy_weapon_forward_readable"
+          ],
+          "required_silhouette_tags": [
+            "space_terminator_shape",
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "massive_exo_plate_armor",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "hands"
+          ]
+        }
+      },
+      "silhouette_critic": {
+        "score": 1.0,
+        "present_identity_tags": [
+          "bulky_exo_proportions",
+          "heavy_storm_rifle",
+          "huge_pauldrons",
+          "massive_exo_plate_armor",
+          "massive_shoulders",
+          "reactor_backpack",
+          "recessed_exo_helmet",
+          "space_terminator_shape",
+          "weapon_barrel"
+        ],
+        "width_height_ratio": 0.916,
+        "depth_height_ratio": 0.916,
+        "concept": {
+          "faction": "void_terminator_order",
+          "role": "space_terminator",
+          "armor_class": "massive_exo_plate_armor",
+          "equipment": [
+            "helmet_lenses",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "huge_pauldrons"
+          ],
+          "pose": "slow_braced_advance",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "head_type": "recessed_exo_helmet",
+          "armor_type": "massive_exo_plate_armor",
+          "backpack_type": "reactor_backpack",
+          "weapon_type": "heavy_storm_rifle",
+          "pose_type": "slow_braced_advance",
+          "faction_style": "void_terminator_order"
+        },
+        "shape_language": {
+          "archetype": "space_terminator",
+          "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+          "anatomy": [
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "slow_braced_advance",
+            "thick_power_limbs"
+          ],
+          "armor": [
+            "massive_exo_plate_armor",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "reactor_backpack"
+          ],
+          "equipment": [
+            "heavy_storm_rifle",
+            "power_fist_cannon",
+            "helmet_lenses"
+          ],
+          "pose": [
+            "slow_braced_advance",
+            "heavy_weapon_forward_readable"
+          ],
+          "required_silhouette_tags": [
+            "space_terminator_shape",
+            "bulky_exo_proportions",
+            "massive_shoulders",
+            "huge_pauldrons",
+            "recessed_exo_helmet",
+            "massive_exo_plate_armor",
+            "heavy_storm_rifle",
+            "reactor_backpack",
+            "hands"
+          ]
+        }
+      },
+      "MANNEQUIN_DETECTOR": {
+        "mannequin_score": 0.0,
+        "threshold": 0.1,
+        "silhouette_complexity": 0.942,
+        "armor_segmentation_count": 4,
+        "unique_feature_count": 11,
+        "weapon_recognition": true,
+        "head_recognition": true,
+        "pose_recognition": true,
+        "primitive_tags": [],
+        "missing_required_traits": [],
+        "view_metrics": {
+          "front": {
+            "view": "front",
+            "resolution": 64,
+            "occupancy": 0.1533,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 901
+          },
+          "left": {
+            "view": "left",
+            "resolution": 64,
+            "occupancy": 0.0898,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 519
+          },
+          "right": {
+            "view": "right",
+            "resolution": 64,
+            "occupancy": 0.0898,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 519
+          },
+          "rear": {
+            "view": "rear",
+            "resolution": 64,
+            "occupancy": 0.1533,
+            "width_span": 1.0,
+            "height_span": 1.0,
+            "edge_transitions": 901
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "vision_critic",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "configured": false,
+      "skipped": "OPENAI_API_KEY_or_CHATGPT_API_KEY_missing"
+    }
+  },
+  {
+    "name": "dedicated_sculpt_engine",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "sculpt_engine_report": {
+        "passed": true,
+        "issues": [],
+        "base_faces": 5568,
+        "preoptimization_faces": 362176,
+        "target_preoptimization_faces": 100000,
+        "detail_tags": [
+          "armor_trim",
+          "backpack_vent",
+          "body_detail",
+          "chain",
+          "chest_armor",
+          "cloth_fold",
+          "face_detail",
+          "heavy_storm_rifle",
+          "helmet_lenses",
+          "helmet_mouth_grille",
+          "huge_pauldrons",
+          "insignia",
+          "massive_exo_plate_armor",
+          "micro_engraving",
+          "panel_line",
+          "pouch",
+          "reactor_backpack",
+          "rivet",
+          "skull",
+          "space_terminator_shape",
+          "surface_wear",
+          "weapon_barrel",
+          "weapon_detail"
+        ],
+        "detail_maps": {
+          "resolution": 512,
+          "seed": 3946590701,
+          "normal_map_shape": [
+            512,
+            512,
+            3
+          ],
+          "displacement_map_minmax": [
+            -0.07999999821186066,
+            0.38536423444747925
+          ],
+          "detail_masks": {
+            "armor_trim": [
+              512,
+              512
+            ],
+            "panel_lines": [
+              512,
+              512
+            ],
+            "cloth_folds": [
+              512,
+              512
+            ],
+            "surface_wear": [
+              512,
+              512
+            ],
+            "insignia": [
+              512,
+              512
+            ]
+          }
+        },
+        "critic_scores": {
+          "polygon_density": 75.43,
+          "armor_surface_detail": 96.0,
+          "weapon_detail": 94.0,
+          "face_sculptural_features": 90.0,
+          "cloth_folds": 88.0,
+          "not_blockout": 94.0,
+          "surface_breakup": 92.0,
+          "professional_resin_dataset_similarity": 98.0,
+          "overall": 91.44,
+          "character_foundation_identity": 96.0
+        }
+      }
+    }
+  },
+  {
+    "name": "printability_validation",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "components_after_fusion": 101,
+      "sculpt_engine_geometry_preserved": true
+    }
+  },
+  {
+    "name": "resin_miniature_critic",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "score": 1.0,
+      "identity_tags": [
+        "head",
+        "legs",
+        "torso",
+        "weapon"
+      ],
+      "faction_language_tags": [
+        "heavy_storm_rifle",
+        "insignia",
+        "massive_exo_plate_armor",
+        "pouch",
+        "reactor_backpack",
+        "recessed_exo_helmet",
+        "space_terminator_shape"
+      ],
+      "sculpt_language_tags": [
+        "chain",
+        "cloth_fold",
+        "face_detail",
+        "rivet",
+        "skull",
+        "surface_wear",
+        "weapon_detail"
+      ],
+      "four_view_preview_confidence": 1.0,
+      "four_view_silhouette_metrics": {
+        "front": {
+          "view": "front",
+          "resolution": 64,
+          "occupancy": 0.3499,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 434
+        },
+        "left": {
+          "view": "left",
+          "resolution": 64,
+          "occupancy": 0.2285,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 321
+        },
+        "right": {
+          "view": "right",
+          "resolution": 64,
+          "occupancy": 0.2285,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 321
+        },
+        "rear": {
+          "view": "rear",
+          "resolution": 64,
+          "occupancy": 0.3499,
+          "width_span": 1.0,
+          "height_span": 1.0,
+          "edge_transitions": 434
+        }
+      },
+      "professional_reference_dataset": "not_configured",
+      "concept": {
+        "faction": "void_terminator_order",
+        "role": "space_terminator",
+        "armor_class": "massive_exo_plate_armor",
+        "equipment": [
+          "helmet_lenses",
+          "heavy_storm_rifle",
+          "reactor_backpack",
+          "huge_pauldrons"
+        ],
+        "pose": "slow_braced_advance",
+        "silhouette": "towering_bulky_exo_armored_terminator_with_huge_pauldrons_and_heavy_weapon",
+        "head_type": "recessed_exo_helmet",
+        "armor_type": "massive_exo_plate_armor",
+        "backpack_type": "reactor_backpack",
+        "weapon_type": "heavy_storm_rifle",
+        "pose_type": "slow_braced_advance",
+        "faction_style": "void_terminator_order"
+      }
+    }
+  },
+  {
+    "name": "miniature_quality_critic",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "critic_scores": {
+        "silhouette_quality": 100.0,
+        "anatomical_quality": 100.0,
+        "armor_design_quality": 100.0,
+        "detail_density": 97.5,
+        "printability": 100.0,
+        "professional_resin_similarity": 97.5,
+        "character_foundation_identity": 100.0,
+        "overall": 99.29
+      },
+      "minimum_score": 85.0
+    }
+  },
+  {
+    "name": "miniature_quality_pass",
+    "passed": true,
+    "issues": [],
+    "artifacts": {
+      "quality_report": {
+        "passed": true,
+        "issues": [],
+        "faces": 362176,
+        "vertices": 181550,
+        "watertight": true,
+        "components": 101,
+        "floating_shells": 0,
+        "boundary_edges": 0,
+        "non_manifold_edges": 0,
+        "sheet_artifacts": 0,
+        "outlier_shells": 0,
+        "extents_mm": [
+          26.893499652147447,
+          26.869086845049484,
+          32.0
+        ],
+        "required_components_present": [
+          "accessories",
+          "armor_trim",
+          "arms",
+          "backpack",
+          "backpack_vent",
+          "base",
+          "base_texture",
+          "body",
+          "body_detail",
+          "bulky_exo_proportions",
+          "chain",
+          "chest_armor",
+          "cloth_fold",
+          "component_library_part",
+          "dedicated_sculpt_engine",
+          "detail_mask_geometry",
+          "displacement_map_geometry",
+          "face_detail",
+          "hands",
+          "head",
+          "heavy_storm_rifle",
+          "heavy_weapon_forward_readable",
+          "helmet",
+          "helmet_lenses",
+          "helmet_mouth_grille",
+          "huge_pauldrons",
+          "insignia",
+          "left_arm",
+          "left_leg",
+          "legs",
+          "massive_exo_plate_armor",
+          "massive_shoulders",
+          "micro_engraving",
+          "non_primitive_character_component",
+          "normal_map_geometry",
+          "panel_line",
+          "pouch",
+          "power_fist_cannon",
+          "reactor_backpack",
+          "recessed_exo_helmet",
+          "right_arm",
+          "right_leg",
+          "rivet",
+          "round_base",
+          "shoulder_pad",
+          "skull",
+          "slow_braced_advance",
+          "space_terminator_shape",
+          "surface_wear",
+          "thick_power_limbs",
+          "torso",
+          "weapon",
+          "weapon_barrel",
+          "weapon_detail",
+          "weapons"
+        ],
+        "smooth_surface_area_ratio": 0.9654722281926622,
+        "sculptural_detail_tags_present": [
+          "armor_trim",
+          "backpack_vent",
+          "base_texture",
+          "chain",
+          "cloth_fold",
+          "face_detail",
+          "insignia",
+          "micro_engraving",
+          "panel_line",
+          "pouch",
+          "rivet",
+          "skull",
+          "surface_wear",
+          "weapon_barrel",
+          "weapon_detail"
+        ],
+        "equipment_tags_present": [
+          "backpack",
+          "base",
+          "chest_armor",
+          "helmet",
+          "shoulder_pad",
+          "weapon"
+        ],
+        "artifact_rejections": null,
+        "critic_scores": {
+          "silhouette_quality": 100.0,
+          "anatomical_quality": 100.0,
+          "armor_design_quality": 100.0,
+          "detail_density": 97.5,
+          "printability": 100.0,
+          "professional_resin_similarity": 97.5,
+          "character_foundation_identity": 100.0,
+          "overall": 99.29
+        },
+        "critic_score": 99.29
+      }
+    }
+  }
+]

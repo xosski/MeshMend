@@ -1,0 +1,55 @@
+{
+  "scale_mm": 32.0,
+  "target_polycount": 250000,
+  "archetype": "space_terminator",
+  "weapon": "rifle",
+  "quality_bar": "commercial tabletop miniature STL, 360-degree sculpt, resin-printable, not a blockout",
+  "generation_pipeline": {
+    "concept_generation_separate_from_mesh_generation": true,
+    "modular_parts": [
+      "head",
+      "torso",
+      "legs",
+      "left_arm",
+      "right_arm",
+      "weapons",
+      "accessories"
+    ],
+    "assembly_before_sculpting": true,
+    "sculpt_passes": [
+      "primary_large_forms",
+      "secondary_armor_details_trims_vents_pouches",
+      "tertiary_micro_detail_engravings_insignia_texture"
+    ],
+    "artifact_rejection": [
+      "planes",
+      "sheets",
+      "floating_geometry",
+      "disconnected_shells",
+      "non_manifold_topology",
+      "open_surfaces"
+    ],
+    "quality_critic_minimum_score": 85
+  },
+  "input_image": null,
+  "required_landmarks": [
+    "readable_face_or_helmet",
+    "hands_and_fingers",
+    "weapon_bevels",
+    "armor_trim",
+    "deep_panel_lines",
+    "scenic_base",
+    "oversized_pauldrons",
+    "recessed_helmet_visor",
+    "reactor_backpack",
+    "chest_emblem",
+    "heavy_bolter/rifle",
+    "chunky_greaves"
+  ],
+  "printability": {
+    "watertight": true,
+    "max_components": 3,
+    "minimum_feature_mm": 0.16,
+    "preferred_scale_mm": 32.0
+  }
+}

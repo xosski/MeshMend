@@ -1,0 +1,138 @@
+{
+  "part_id": "space_terminator_torso_1",
+  "category": "torso",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "character_component_library",
+  "detail_tags": [
+    "body",
+    "torso",
+    "chest_armor",
+    "shoulder_pad",
+    "massive_exo_plate_armor",
+    "huge_pauldrons",
+    "massive_shoulders",
+    "space_terminator_shape",
+    "bulky_exo_proportions",
+    "component_library_part",
+    "non_primitive_character_component"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.057679415926266575,
+        -0.027570589160060832,
+        15.05
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.057679415926266575,
+        -0.027570589160060832,
+        10.3
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.057679415926266575,
+        -0.027570589160060832,
+        19.8
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.057679415926266575,
+        -0.027570589160060832,
+        15.05
+      ],
+      "radius_mm": 0.4962596385388342,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "head",
+      "kind": "neck",
+      "position": [
+        0.057679415926266575,
+        -0.027570589160060832,
+        19.8
+      ],
+      "radius_mm": 0.4962596385388342,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "left_arm",
+      "kind": "shoulder",
+      "position": [
+        -5.742399107669271,
+        -0.027570589160060832,
+        15.05
+      ],
+      "radius_mm": 0.4962596385388342,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "right_arm",
+      "kind": "shoulder",
+      "position": [
+        5.857757939521804,
+        -0.027570589160060832,
+        15.05
+      ],
+      "radius_mm": 0.4962596385388342,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 1280,
+    "vertices": 650,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 4,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.2590040965691603,
+    "detail_density": 0.4411719055898434,
+    "issues": [],
+    "passed": true
+  },
+  "category_alias": "chest_armor",
+  "canonical_category": "torso"
+}

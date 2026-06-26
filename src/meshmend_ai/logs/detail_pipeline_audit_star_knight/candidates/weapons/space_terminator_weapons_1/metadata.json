@@ -1,0 +1,103 @@
+{
+  "part_id": "space_terminator_weapons_1",
+  "category": "weapons",
+  "scale_mm": 32.0,
+  "symmetry": "none",
+  "source": "character_component_library",
+  "detail_tags": [
+    "weapon",
+    "weapon_barrel",
+    "heavy_storm_rifle",
+    "power_fist_cannon",
+    "heavy_weapon_forward_readable",
+    "space_terminator_shape",
+    "component_library_part",
+    "non_primitive_character_component"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        5.272525228079827,
+        -2.0290872587686364,
+        13.565
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        5.272525228079827,
+        -2.0290872587686364,
+        12.4
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        5.272525228079827,
+        -2.0290872587686364,
+        14.729999999999999
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        5.272525228079827,
+        -2.0290872587686364,
+        13.565
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "right_hand_grip",
+      "kind": "hand",
+      "position": [
+        2.0,
+        -2.0,
+        14.0
+      ],
+      "radius_mm": 0.35,
+      "direction": [
+        0,
+        1,
+        0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 472,
+    "vertices": 244,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 4,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.5484214089518121,
+    "detail_density": 0.7570756569780104,
+    "issues": [],
+    "passed": true
+  }
+}

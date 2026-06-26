@@ -1,0 +1,100 @@
+{
+  "part_id": "space_terminator_base_1",
+  "category": "base",
+  "scale_mm": 32.0,
+  "symmetry": "radial",
+  "source": "character_component_library",
+  "detail_tags": [
+    "base",
+    "round_base",
+    "base_texture",
+    "component_library_part",
+    "non_primitive_character_component"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.0,
+        0.0,
+        0.10000000000000009
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.0,
+        0.0,
+        1.2000000000000002
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.0,
+        0.0,
+        0.10000000000000009
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "feet",
+      "kind": "base",
+      "position": [
+        0,
+        0,
+        1.0
+      ],
+      "radius_mm": 1.2,
+      "direction": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 1312,
+    "vertices": 678,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 11,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.5963721325695506,
+    "detail_density": 0.5157597371563661,
+    "issues": [],
+    "passed": true
+  }
+}

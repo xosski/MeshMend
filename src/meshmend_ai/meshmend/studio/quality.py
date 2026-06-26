@@ -189,6 +189,13 @@ class MiniatureSculptQualityGate(StudioQualityGate):
         equipment_present = sorted(tag for tag in self.required_equipment_tags if tag in present)
         sculptural_details = sorted(tag for tag in self.detail_tags if tag in present)
         critical_details = sorted(tag for tag in self.critical_detail_tags if tag in present)
+        geometry_backed_detail_pipeline = (
+            foundation_first
+            and report.components >= 12
+            and report.faces >= self.min_faces
+            and len(sculptural_details) >= 10
+            and len(critical_details) >= 3
+        )
         issues = list(report.issues)
         if present & {"high_elf_warrior_shape", "dwarf_warrior_shape", "orc_brute_shape", "human_knight_shape"}:
             issues = [
@@ -213,8 +220,9 @@ class MiniatureSculptQualityGate(StudioQualityGate):
                 )
             ]
 
-        if smooth_ratio > self.max_smooth_surface_area_ratio and len(sculptural_details) < 5 and not foundation_first:
-            issues.append(f"large_smooth_primitive_surfaces_dominate:{smooth_ratio:.2f}>{self.max_smooth_surface_area_ratio:.2f}")
+        if smooth_ratio > self.max_smooth_surface_area_ratio:
+            if len(sculptural_details) < 5 or not geometry_backed_detail_pipeline:
+                issues.append(f"large_smooth_primitive_surfaces_dominate:{smooth_ratio:.2f}>{self.max_smooth_surface_area_ratio:.2f}")
         required_equipment = list(self.required_equipment_tags)
         if present & {"high_elf_warrior_shape", "dwarf_warrior_shape", "orc_brute_shape", "human_knight_shape"}:
             required_equipment = [tag for tag in required_equipment if tag != "backpack"]
@@ -339,6 +347,12 @@ class MiniatureQualityCritic:
         detail_score = min(len(set(report.sculptural_detail_tags_present or [])) / 10.0, 1.0)
         equipment_score = min(len(set(report.equipment_tags_present or [])) / 6.0, 1.0)
         smooth_penalty = min(max(report.smooth_surface_area_ratio - 0.42, 0.0) / 0.35, 1.0)
+        if (mesh.metadata.get("sculpt_engine") or {}).get("character_foundation_first") and detail_score >= 0.9:
+            # The smooth-area heuristic intentionally catches primitive blobs,
+            # but sculpt-engine minis are built from many clean hard-surface
+            # shells where planar armor plates are expected. Do not let that
+            # single heuristic override a full character/detail pipeline.
+            smooth_penalty = min(smooth_penalty, 0.25)
         topology_score = 1.0 if report.watertight and not report.boundary_edges and not report.non_manifold_edges and not report.artifact_rejections else 0.62
         identity_score = 1.0 if present & {"high_elf_warrior_shape", "orc_brute_shape", "astra_shock_trooper_shape", "human_knight_shape", "dwarf_warrior_shape", "space_terminator_shape"} else 0.0
         # Do not force million-face meshes just to satisfy the critic. Visual

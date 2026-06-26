@@ -12,6 +12,23 @@ import trimesh
 
 
 ARCHETYPE_KNOWLEDGE: dict[str, dict[str, Any]] = {
+    "space_terminator": {
+        "terms": (
+            "space terminator",
+            "terminator",
+            "tactical dreadnought",
+            "space marine",
+            "power armored space marine",
+            "power armoured space marine",
+            "power armor",
+            "power armour",
+            "armored star knight",
+            "armoured star knight",
+            "star knight",
+        ),
+        "silhouette": "towering bulky power-armored miniature; huge pauldrons; recessed helmet; reactor backpack; heavy rifle",
+        "landmarks": ("oversized pauldrons", "recessed helmet visor", "reactor backpack", "chest emblem", "heavy bolter/rifle", "chunky greaves"),
+    },
     "high_elf_warrior": {
         "terms": ("high elf", "high-elf", "elven warrior", "elf warrior", "elven knight", "aelf", "aelves"),
         "silhouette": "tall slender fantasy warrior; pointed ears; elegant crested helm; refined armor",
@@ -531,6 +548,9 @@ def build_humanoid_prompt_features(prompt: str) -> tuple[list[trimesh.Trimesh], 
             "power armour",
             "adeptus",
             "primaris",
+            "armored star knight",
+            "armoured star knight",
+            "star knight",
             "sci fi armored soldier",
             "sci-fi armored soldier",
         )
@@ -673,7 +693,26 @@ def build_semantic_archetype_features(prompt: str) -> tuple[list[trimesh.Trimesh
         parts.append(mesh)
         names.append(name)
 
-    if archetype == "high_elf_warrior":
+    if archetype == "space_terminator":
+        add(ellipsoid((0, -0.05, 12.6), (5.6, 2.55, 5.6), 3), "semantic_power_armor_barrel_torso")
+        add(ellipsoid((0, -0.28, 17.4), (1.65, 1.05, 1.35), 2), "semantic_recessed_exo_helmet")
+        add(box((2.25, 0.16, 0.28), (0, -1.34, 17.55)), "semantic_helmet_visor_slit")
+        add(box((0.64, 0.34, 0.98), (0, -1.38, 16.82)), "semantic_respirator_grille")
+        for side in (-1.0, 1.0):
+            add(ellipsoid((side * 4.05, -0.18, 15.7), (2.05, 1.22, 1.12), 2), "semantic_huge_power_pauldron")
+            add(box((1.35, 0.22, 2.55), (side * 1.65, -1.84, 8.4)), "semantic_chunky_greave_plate")
+            add(box((1.16, 0.20, 0.18), (side * 1.65, -2.02, 9.1)), "semantic_greave_panel_line")
+        add(box((3.4, 1.45, 4.8), (0, 2.18, 13.0)), "semantic_reactor_backpack")
+        for x in (-0.95, 0.95):
+            add(cylinder_between((x, 2.95, 13.9), (x, 3.24, 16.3), 0.24, 18), "semantic_backpack_exhaust_stack")
+        add(box((1.08, 0.18, 1.0), (0, -1.92, 13.72)), "semantic_chest_emblem")
+        add(box((6.4, 0.58, 0.74), (2.1, -2.1, 12.8)), "semantic_heavy_bolter_body")
+        add(cylinder_between((4.9, -2.12, 12.82), (7.35, -2.12, 12.82), 0.23, 18), "semantic_heavy_bolter_barrel")
+        add(box((0.86, 0.62, 1.42), (0.15, -2.1, 11.66)), "semantic_heavy_bolter_magazine")
+        for z in (10.7, 12.0, 13.3, 14.6):
+            add(box((4.75, 0.18, 0.15), (0, -2.03, z)), "semantic_power_armor_deep_panel_line")
+
+    elif archetype == "high_elf_warrior":
         add(ellipsoid((0, -0.08, 13.5), (3.9, 1.45, 4.8), 3), "semantic_high_elf_tall_slender_torso")
         add(trimesh.creation.cone(radius=0.42, height=2.1, sections=18), "semantic_high_elf_helmet_crest")
         parts[-1].apply_translation([0, -0.12, 20.15])

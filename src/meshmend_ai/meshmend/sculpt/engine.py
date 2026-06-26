@@ -339,7 +339,7 @@ def _archetype_primary_sculpt_forms(concept: dict[str, Any]) -> tuple[list[trime
             _box((5.2, 0.20, 0.55), (0.0, -2.96, 11.65)),
         ])
         tags.extend(["dwarf_warrior_shape", "braided_beard", "round_shield", "runic_heavy_armor", "axe_or_hammer"])
-    elif any(term in prompt for term in ("terminator", "tactical dreadnought")):
+    elif any(term in prompt for term in ("terminator", "tactical dreadnought", "armored star knight", "space marine", "power armor", "power-armored")):
         stamps.extend([
             _ellipsoid((-4.35, -0.82, 18.10), (1.95, 0.54, 1.28), 1),
             _ellipsoid((4.35, -0.82, 18.10), (1.95, 0.54, 1.28), 1),

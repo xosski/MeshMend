@@ -1,0 +1,88 @@
+{
+  "part_id": "space_terminator_head_1",
+  "category": "head",
+  "scale_mm": 32.0,
+  "symmetry": "bilateral",
+  "source": "character_component_library",
+  "detail_tags": [
+    "head",
+    "helmet",
+    "helmet_lenses",
+    "recessed_exo_helmet",
+    "space_terminator_shape",
+    "bulky_exo_proportions",
+    "component_library_part",
+    "non_primitive_character_component"
+  ],
+  "anchors": [
+    {
+      "name": "center",
+      "position": [
+        0.0367824703966928,
+        -0.41423559244579855,
+        20.75
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "bottom",
+      "position": [
+        0.0367824703966928,
+        -0.41423559244579855,
+        19.7
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    {
+      "name": "top",
+      "position": [
+        0.0367824703966928,
+        -0.41423559244579855,
+        21.8
+      ],
+      "normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "connection_sockets": [
+    {
+      "name": "root",
+      "kind": "root",
+      "position": [
+        0.0367824703966928,
+        -0.41423559244579855,
+        20.75
+      ],
+      "radius_mm": 0.3,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "cleanup_report": {
+    "faces": 580,
+    "vertices": 298,
+    "watertight": true,
+    "boundary_edges": 0,
+    "non_manifold_edges": 0,
+    "components": 4,
+    "sheet_artifacts": 0,
+    "primitive_score": 0.2458143269521076,
+    "detail_density": 1.0,
+    "issues": [],
+    "passed": true
+  }
+}
