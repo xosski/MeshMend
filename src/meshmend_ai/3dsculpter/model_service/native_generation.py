@@ -559,7 +559,7 @@ def build_humanoid_prompt_features(prompt: str) -> tuple[list[trimesh.Trimesh], 
     wants_hood = wants_robes or any(term in prompt for term in ("hood", "hooded", "ranger", "rogue", "assassin"))
     wants_cape = wants_robes or any(term in prompt for term in ("cape", "cloak", "tattered", "fur cloak"))
     wants_rogue = any(term in prompt for term in ("rogue", "assassin", "ranger", "thief", "ninja", "dagger", "dual wield", "dual-wield"))
-    wants_knight = any(term in prompt for term in ("knight", "paladin", "templar", "crusader", "champion"))
+    wants_knight = (not wants_power_armor) and any(term in prompt for term in ("knight", "paladin", "templar", "crusader", "champion"))
     wants_demon = any(term in prompt for term in ("demon", "devil", "fiend", "tiefling"))
     wants_angel = any(term in prompt for term in ("angel", "celestial", "seraph", "wing", "wings"))
     wants_shield = any(term in prompt for term in ("shield", "buckler"))
@@ -567,7 +567,7 @@ def build_humanoid_prompt_features(prompt: str) -> tuple[list[trimesh.Trimesh], 
     wants_plague_doctor = any(term in prompt for term in ("plague doctor", "plague mask", "beaked mask", "bird mask", "doctor mask"))
     wants_staff = wants_robes or any(term in prompt for term in ("staff", "spear", "lance"))
     wants_axe = any(term in prompt for term in ("axe", "halberd"))
-    wants_sword = not wants_alien_bioform and (wants_knight or any(term in prompt for term in ("sword", "blade", "katana", "khopesh", "scimitar")))
+    wants_sword = (not wants_alien_bioform) and (not wants_power_armor) and (wants_knight or any(term in prompt for term in ("sword", "blade", "katana", "khopesh", "scimitar")))
 
     if wants_alien_bioform:
         add(ellipsoid((0.0, -1.35, 17.45), (1.35, 1.15, 0.72), subdivisions=2), "prompt_alien_sloped_chitin_head")

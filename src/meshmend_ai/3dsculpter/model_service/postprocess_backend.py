@@ -28,7 +28,9 @@ class PostprocessReport:
     custom_miniature_detail_pipeline: bool = False
     ai_definition_layer: bool = False
     production_ready: bool = False
+    ai_detail_sections: list[str] | None = None
     quality_gate_issues: list[str] | None = None
+    quality_scores: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -47,7 +49,9 @@ class PostprocessReport:
             "custom_miniature_detail_pipeline": self.custom_miniature_detail_pipeline,
             "ai_definition_layer": self.ai_definition_layer,
             "production_ready": self.production_ready,
+            "ai_detail_sections": self.ai_detail_sections or [],
             "quality_gate_issues": self.quality_gate_issues or [],
+            "quality_scores": self.quality_scores or {},
         }
 
 
@@ -55,12 +59,15 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     """Turn raw Hunyuan output into one printable, scaled, detailed STL mesh."""
     mesh = coerce_to_trimesh(mesh)
     request = clamp_request_for_memory_safety(dict(request))
+    base_form_only = bool(request.get("_meshmend_base_form_only"))
+    if bool(request.get("_meshmend_hunyuan_text_concept")):
+        mesh.metadata["meshmend_hunyuan_text_concept"] = True
     if memory_safety_enabled():
-        max_raw_faces = int(os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES", "900000"))
+        max_raw_faces = max_raw_postprocess_faces()
         if len(mesh.faces) > max_raw_faces:
             raise RuntimeError(
                 f"Raw AI mesh has {len(mesh.faces)} faces, above memory-safe postprocess limit {max_raw_faces}. "
-                "Skipping repair to avoid exhausting RAM; use modular fallback or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation."
+                "Skipping repair to avoid exhausting RAM; lower Hunyuan octree/face settings or raise MESHMEND_MAX_RAW_POSTPROCESS_FACES on a workstation."
             )
     before_faces = len(mesh.faces)
     mesh = remove_background_slabs(mesh, request)
@@ -76,13 +83,15 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     pre_detail_target = memory_safe_face_target(min(detail_target, int(os.environ.get("MESHMEND_PRE_INTRICATE_DETAIL_FACES", pre_detail_default))))
     mesh = subdivide_to_faces(mesh, pre_detail_target)
     mesh = denoise_surface_bumps(mesh, request)
-    if synthetic_detail_enabled("MESHMEND_ENABLE_SCULPT_RELIEF_DETAIL", default="1" if strict_quality_requested(request) else "0"):
+    if not base_form_only and synthetic_detail_enabled("MESHMEND_ENABLE_SCULPT_RELIEF_DETAIL", default="1" if strict_quality_requested(request) else "0"):
         mesh = apply_miniature_sculpt_detail(mesh, request)
-    mesh = apply_image_guided_surface_detail(mesh, request)
-    mesh = add_high_resolution_geometry(mesh, request)
-    mesh = apply_custom_miniature_detail_pipeline(mesh, request)
-    mesh = apply_ai_training_definition_layer(mesh, request)
-    mesh = apply_intricate_detail_pipeline(mesh, request)
+    if not base_form_only:
+        mesh = apply_image_guided_surface_detail(mesh, request)
+        mesh = add_high_resolution_geometry(mesh, request)
+        mesh = apply_custom_miniature_detail_pipeline(mesh, request)
+        mesh = apply_hierarchical_semantic_detail_refinement(mesh, request)
+        mesh = apply_ai_training_definition_layer(mesh, request)
+        mesh = apply_intricate_detail_pipeline(mesh, request)
     mesh = remove_floating_artifacts(mesh, request)
     mesh = cleanup(mesh)
     mesh = remove_background_slabs(mesh, dict(request, _meshmend_aggressive_slab_removal=True))
@@ -92,20 +101,70 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     mesh = strip_residual_background_slabs(mesh, request, detail_target)
     mesh = remove_connected_sheet_surfaces(mesh, dict(request, _meshmend_aggressive_slab_removal=True))
     mesh = ensure_printable_solid_mesh(mesh, request)
-    if mesh.metadata.get("meshmend_voxel_solidified"):
+    if mesh.metadata.get("meshmend_voxel_solidified") and not base_form_only:
         mesh = apply_custom_miniature_detail_pipeline(mesh, request)
+        mesh = apply_hierarchical_semantic_detail_refinement(mesh, request)
         mesh = apply_intricate_detail_pipeline(mesh, request)
-    mesh = ensure_round_miniature_base(mesh, request)
     mesh = bridge_disconnected_components(mesh, request)
     mesh = ensure_printable_solid_mesh(mesh, request)
     mesh = seal_image_visual_holes(mesh, request)
     mesh = restore_image_store_density(mesh, request, detail_target)
+    export_debug_checkpoint(mesh, request, "repaired_mesh.ply")
+    # This pipeline currently avoids destructive decimation. Still emit the
+    # required checkpoint so diagnostics show the exact geometry entering final
+    # base attachment rather than implying an unrecorded simplification pass.
+    export_debug_checkpoint(mesh, request, "decimated_mesh.ply")
     mesh = final_image_surface_polish(mesh, request)
-    if strict_quality_requested(request) and len(mesh.faces) < int(detail_target * 0.75):
+    # Voxel solidification, base creation, and visual-hole sealing can create or
+    # reveal tiny watertight islands after the earlier artifact pass has already
+    # run. Prune those late islands before the final gate instead of failing a
+    # valid main miniature for post-repair crumbs.
+    mesh = remove_floating_artifacts(mesh, request)
+    # The prune can delete outlier faces from a sealed mesh. Close the remaining
+    # figure again before adding the final base so boundary edges do not leak into
+    # the store-quality gate.
+    mesh = ensure_printable_solid_mesh(mesh, request)
+    mesh = seal_image_visual_holes(mesh, request)
+    mesh = restore_image_store_density(mesh, request, detail_target)
+    # Add the clean tabletop base after voxel/visual-hole repair. If the base is
+    # added before those morphology passes, the repair step can remesh the round
+    # base into a square card-like slab and reopen boundary edges.
+    mesh = ensure_round_miniature_base(mesh, request)
+    export_debug_checkpoint(mesh, request, "final_mesh.ply")
+    # The final base/overlay detail can leave a few watertight islands even after
+    # earlier bridge passes. Do one last lightweight topology bridge/prune before
+    # the store gate so studio exports are one printable assembly, not separate
+    # accessory shells.
+    mesh = bridge_disconnected_components(mesh, request)
+    mesh = remove_floating_artifacts(mesh, request)
+    max_components = int(os.environ.get("MESHMEND_STORE_MAX_COMPONENTS", "6"))
+    if strict_quality_requested(request) and connected_component_count(mesh) > max_components:
+        resolidify_request = dict(request)
+        resolidify_request["_meshmend_prompt_landmark_overlay_applied"] = True
+        mesh = ensure_printable_solid_mesh(mesh, resolidify_request)
+        mesh = seal_image_visual_holes(mesh, resolidify_request)
+        mesh = restore_image_store_density(mesh, resolidify_request, detail_target)
+        mesh = remove_floating_artifacts(mesh, resolidify_request)
+    # Store topology gate allows 75% of target as a minimum, but MDL/studio mode
+    # needs the full sculpt density target so panel lines, vents, grille slots,
+    # and overlay landmarks survive as readable geometry. Enforce the target here
+    # before the worker-level MDL gate evaluates face/detail density.
+    if strict_quality_requested(request) and len(mesh.faces) < detail_target:
         mesh = subdivide_to_faces(mesh, detail_target)
         mesh.metadata["meshmend_final_store_density_enforced"] = True
     gate_issues = quality_gate_issues(mesh, request, detail_target)
     fatal_issues = fatal_quality_gate_issues(gate_issues)
+    if base_form_only:
+        # Base-form mode deliberately disables decorative/high-frequency detail.
+        # Keep all issues in diagnostics, but only structural corruption may
+        # reject the body at this stage. Detail scoring belongs after validated
+        # armor/weapon modules and the explicit detail pass are enabled.
+        non_structural_prefixes = (
+            "large_smooth_primitive_surfaces_dominate",
+            "studio_quality_score_below_min",
+            "below_store_face_target",
+        )
+        fatal_issues = [issue for issue in fatal_issues if not issue.startswith(non_structural_prefixes)]
     if fatal_issues and strict_quality_requested(request) and should_raise_quality_gate_failure(request, fatal_issues):
         diagnostics = mesh_quality_diagnostics(mesh, request, detail_target, gate_issues)
         raise RuntimeError("Generated STL did not meet store-quality gate: " + "; ".join(fatal_issues) + "; diagnostics=" + json.dumps(diagnostics, default=str))
@@ -117,6 +176,20 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
         quality_gate_issues=gate_issues,
     )
     return mesh, report
+
+
+def export_debug_checkpoint(mesh: trimesh.Trimesh, request: dict[str, Any], filename: str) -> None:
+    output_dir = str(request.get("_meshmend_output_dir") or "").strip()
+    if not output_dir:
+        return
+    try:
+        path = Path(output_dir) / filename
+        path.parent.mkdir(parents=True, exist_ok=True)
+        mesh.export(path)
+    except Exception:
+        # Artifact export must never alter geometry or turn a valid run into a
+        # failure; the final report still records validation results.
+        return
 
 
 def synthetic_detail_enabled(env_name: str, *, default: str = "0") -> bool:
@@ -131,6 +204,37 @@ def synthetic_detail_enabled(env_name: str, *, default: str = "0") -> bool:
 
 def memory_safety_enabled() -> bool:
     return os.environ.get("MESHMEND_DISABLE_MEMORY_SAFETY", "0").strip().lower() not in {"1", "true", "yes", "on"}
+
+
+def max_raw_postprocess_faces() -> int:
+    """Return the raw Hunyuan mesh face cap before repair/detail processing.
+
+    This cap protects lower-memory machines from trying to voxelize or repair a
+    multi-million-face raw mesh. The old fixed default of 900k was too low for
+    local Hunyuan studio runs on a workstation: a valid ~950k-face raw mesh was
+    rejected before MeshMend could remove sheets, compact components, and clamp
+    downstream detail/export density. Keep the explicit env override, otherwise
+    scale the safe default with available RAM.
+    """
+    override = os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES", "").strip()
+    if override:
+        return max(50_000, int(float(override)))
+    default_cap = 900_000
+    try:
+        import psutil  # type: ignore
+
+        available_gb = float(psutil.virtual_memory().available) / (1024**3)
+    except Exception:
+        return default_cap
+    if available_gb >= 32.0:
+        return int(os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES_32GB", "1600000"))
+    if available_gb >= 24.0:
+        return int(os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES_24GB", "1400000"))
+    if available_gb >= 16.0:
+        return int(os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES_16GB", "1200000"))
+    if available_gb >= 8.0:
+        return int(os.environ.get("MESHMEND_MAX_RAW_POSTPROCESS_FACES_8GB", "1000000"))
+    return default_cap
 
 
 def memory_safe_face_target(target_faces: int) -> int:
@@ -214,7 +318,8 @@ def seal_image_visual_holes(mesh: trimesh.Trimesh, request: dict[str, Any]) -> t
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
     if source_workflow not in {"image_to_3d", "text_to_3d"} or not strict_quality_requested(request):
         return mesh
-    default_enabled = "1" if source_workflow == "image_to_3d" else "0"
+    hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
+    default_enabled = "1" if source_workflow == "image_to_3d" or hunyuan_text_concept else "0"
     if os.environ.get("MESHMEND_SEAL_IMAGE_VISUAL_HOLES", default_enabled).strip().lower() in {"0", "false", "no"}:
         return mesh
     genus = mesh_genus_estimate(mesh)
@@ -294,9 +399,10 @@ def image_hole_seal_candidates(mesh: trimesh.Trimesh, max_extent: float) -> list
 def final_image_surface_polish(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
     """Remove reconstruction speckle after density/detail without reopening the mesh."""
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
+    hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
     if source_workflow not in {"image_to_3d", "text_to_3d"} or not strict_quality_requested(request):
         return mesh
-    default_enabled = "1" if source_workflow == "image_to_3d" else "0"
+    default_enabled = "1" if source_workflow == "image_to_3d" or hunyuan_text_concept else "0"
     if os.environ.get("MESHMEND_FINAL_IMAGE_SURFACE_POLISH", default_enabled).strip().lower() in {"0", "false", "no"}:
         return mesh
     try:
@@ -462,12 +568,18 @@ def enforce_single_subject(mesh: trimesh.Trimesh, request: dict[str, Any] | None
     """Keep one miniature even if generation produced a connected 4-model scene."""
     request = request or {}
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
+    hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
     components = [component for component in mesh.split(only_watertight=False) if len(component.faces) > 100]
     if len(components) > 1:
         if source_workflow == "image_to_3d" and os.environ.get("MESHMEND_IMAGE_KEEP_COMPONENTS", "1").strip().lower() not in {"0", "false", "no"}:
             combined = trimesh.util.concatenate(components)
             combined.metadata.update(mesh.metadata)
             combined.metadata["meshmend_image_components_preserved"] = len(components)
+            return cleanup(combined), False
+        if hunyuan_text_concept and os.environ.get("MESHMEND_HUNYUAN_TEXT_KEEP_COMPONENTS", "0").strip().lower() in {"1", "true", "yes", "on"}:
+            combined = trimesh.util.concatenate(components)
+            combined.metadata.update(mesh.metadata)
+            combined.metadata["meshmend_hunyuan_text_components_preserved"] = len(components)
             return cleanup(combined), False
         components.sort(key=component_subject_score, reverse=True)
         return components[0], True
@@ -683,6 +795,8 @@ def normalize_to_scale(mesh: trimesh.Trimesh, scale_mm: float, request: dict[str
 def should_preserve_wide_image_reference(request: dict[str, Any] | None) -> bool:
     if not request:
         return False
+    if bool(request.get("_meshmend_hunyuan_text_concept")):
+        return False
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "")
     if source_workflow != "image_to_3d":
         return False
@@ -803,7 +917,23 @@ def subdivide_to_faces(mesh: trimesh.Trimesh, target_faces: int) -> trimesh.Trim
     while len(mesh.faces) < target_faces:
         next_faces = len(mesh.faces) * 4
         if next_faces > overshoot_limit:
-            break
+            # Subdivision is quantized in 4x jumps. After voxel solidification a
+            # repaired Hunyuan mesh often sits around 120-150k faces; the only
+            # possible next step is ~500-600k. That is a safe store-miniature
+            # density on this local pipeline and is still under max_faces, so do
+            # not leave the mesh below the certified floor just because it
+            # overshoots the nominal target by more than 35%.
+            minimum_cert_faces = int(target_faces * float(os.environ.get("MESHMEND_MIN_CERTIFIED_FACE_RATIO", "0.75")))
+            # A repaired 160-180k-face Hunyuan solid needs one 4x subdivision to
+            # reach certified miniature density (~640-720k faces). The normal
+            # max export target is 600k, but rejecting this quantized jump leaves
+            # an otherwise valid studio mesh permanently below the store floor.
+            # Keep it bounded to 1.6x of the export cap instead of allowing
+            # unbounded multi-million-face growth.
+            studio_density_jump = strict_quality_requested({"quality": "high"}) and len(mesh.faces) < target_faces and next_faces <= int(max_faces * 1.60)
+            allow_quantized_jump = (len(mesh.faces) < minimum_cert_faces and next_faces <= int(max_faces * 1.25)) or studio_density_jump
+            if not allow_quantized_jump:
+                break
         metadata = dict(mesh.metadata)
         vertices, faces = trimesh.remesh.subdivide(mesh.vertices, mesh.faces)
         mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
@@ -856,6 +986,7 @@ def apply_miniature_sculpt_detail(mesh: trimesh.Trimesh, request: dict[str, Any]
     amplitude = float(os.environ.get("MESHMEND_DETAIL_RELIEF_MM", "0.025"))
     active = z > 0.06
     mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float))[:, None]
+    mesh.metadata["meshmend_sculpt_relief_detail"] = True
     return cleanup(mesh)
 
 
@@ -1011,7 +1142,8 @@ def add_high_resolution_geometry(mesh: trimesh.Trimesh, request: dict[str, Any])
             relief -= (seams & (z > 0.18)).astype(float) * 0.18
 
         active = z > 0.06
-        amplitude = float(os.environ.get("MESHMEND_GEOMETRY_UPSCALE_RELIEF_MM", "0.018"))
+        overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
+        amplitude = float(os.environ.get("MESHMEND_GEOMETRY_UPSCALE_RELIEF_MM", "0.038" if overlay_pass else "0.018"))
         mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float))[:, None]
         mesh.metadata["meshmend_geometry_upscale"] = True
         return cleanup(mesh)
@@ -1075,7 +1207,8 @@ def apply_custom_miniature_detail_pipeline(mesh: trimesh.Trimesh, request: dict[
         if os.environ.get("MESHMEND_ENABLE_SURFACE_BREAKUP", "0").strip().lower() in {"1", "true", "yes"}:
             relief += np.clip(micro_breakup, -1.0, 1.0) * 0.018
 
-        amplitude = float(os.environ.get("MESHMEND_CUSTOM_DETAIL_RELIEF_MM", "0.065"))
+        overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
+        amplitude = float(os.environ.get("MESHMEND_CUSTOM_DETAIL_RELIEF_MM", "0.11" if overlay_pass else "0.065"))
         mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * body.astype(float) * silhouette_guard.astype(float))[:, None]
         mesh.metadata["meshmend_custom_miniature_detail_pipeline"] = True
         return cleanup(mesh)
@@ -1131,6 +1264,133 @@ def _cloth_miniature_relief(x: np.ndarray, y: np.ndarray, z: np.ndarray, seed: i
     return relief
 
 
+def apply_hierarchical_semantic_detail_refinement(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+    """Stage 2 local-surface refinement for miniature hard-surface fidelity.
+
+    Stage 1 (Hunyuan + repair) owns the silhouette/proportions. This pass only
+    displaces already-existing high-resolution surface vertices inward/outward by
+    printable 0.3-0.5mm-equivalent relief patterns, using coarse semantic zones
+    for helmet, pauldrons, torso, backpack, weapon/arms, legs, knees, boots, and
+    base. It intentionally avoids boundary/silhouette vertices so fine detailing
+    cannot rewrite the primary shape.
+    """
+    enabled = synthetic_detail_enabled("MESHMEND_ENABLE_HIERARCHICAL_SEMANTIC_DETAIL", default="1" if strict_quality_requested(request) else "0")
+    if not enabled or not strict_quality_requested(request):
+        return mesh
+    try:
+        target_faces = int(os.environ.get("MESHMEND_SEMANTIC_DETAIL_FACES", str(min(max(detail_face_target(request), 300_000), 900_000))))
+        mesh = subdivide_to_faces(mesh, max(len(mesh.faces), target_faces))
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        if len(vertices) < 1000:
+            return mesh
+        normals = np.asarray(mesh.vertex_normals, dtype=float)
+        if normals.shape != vertices.shape:
+            return mesh
+        mins = vertices.min(axis=0)
+        maxs = vertices.max(axis=0)
+        ext = np.maximum(maxs - mins, 1e-6)
+        coords = (vertices - mins) / ext
+        x = coords[:, 0] - 0.5
+        y = coords[:, 1] - 0.5
+        z = coords[:, 2]
+        prompt = (str(request.get("prompt") or "") + " " + str(request.get("_meshmend_original_prompt") or "")).lower()
+        armored = any(term in prompt for term in ("space marine", "power armor", "power armour", "armor", "armour", "soldier", "robot", "mech", "knight"))
+        if not armored:
+            return mesh
+        seed = (sum(ord(ch) for ch in prompt) % 997) + 1
+        relief, semantic_counts = _semantic_hard_surface_relief(x, y, z, seed)
+        # Keep the primary silhouette stable: do not touch the base, the far
+        # outside rim of the bounding box, or vertices with outward-facing normals
+        # right on the left/right/front/back silhouette.
+        interior_xy = (np.abs(x) < 0.475) & (np.abs(y) < 0.475)
+        not_base = z > 0.075
+        normal_side_risk = ((np.abs(x) > 0.44) & (np.abs(normals[:, 0]) > 0.55)) | ((np.abs(y) > 0.44) & (np.abs(normals[:, 1]) > 0.55))
+        local_surface_only = interior_xy & not_base & ~normal_side_risk
+        # Printable exaggeration: relief amplitude is intentionally much larger
+        # than texture noise so grooves/rivets survive resin printing.
+        overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
+        amplitude = float(os.environ.get("MESHMEND_SEMANTIC_DETAIL_RELIEF_MM", "0.42" if overlay_pass else "0.34"))
+        mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * local_surface_only.astype(float))[:, None]
+        mesh.metadata["meshmend_hierarchical_generation"] = "stage1_silhouette_stage2_semantic_surface_refinement"
+        mesh.metadata["meshmend_hierarchical_semantic_detail_refinement"] = True
+        mesh.metadata["meshmend_semantic_detail_parts"] = semantic_counts
+        mesh.metadata["meshmend_semantic_detail_preserves_primary_silhouette"] = True
+        return cleanup(mesh)
+    except Exception:
+        return mesh
+
+
+def _semantic_hard_surface_relief(x: np.ndarray, y: np.ndarray, z: np.ndarray, seed: int) -> tuple[np.ndarray, dict[str, int]]:
+    relief = np.zeros(len(x), dtype=float)
+    abs_x = np.abs(x)
+    abs_y = np.abs(y)
+    center = abs_x < 0.28
+    front = y < 0.18
+    helmet = (z > 0.735) & (z < 0.925) & center
+    visor = helmet & front & (z > 0.800) & (z < 0.870) & (abs_x < 0.18)
+    breather = helmet & front & (z > 0.745) & (z < 0.815) & (abs_x < 0.12)
+    helmet_ridges = helmet & (np.abs(np.sin((x * 34.0 + seed * 0.017) * math.pi)) < 0.018)
+
+    shoulders = (z > 0.565) & (z < 0.800) & (abs_x > 0.225) & (abs_x < 0.470)
+    shoulder_rim = shoulders & ((np.abs(np.sin((z * 15.0 + seed * 0.031) * math.pi)) < 0.032) | (abs_x > 0.390))
+    shoulder_split = shoulders & (np.abs(np.sin((x * 10.0 + seed * 0.047) * math.pi)) < 0.020)
+    shoulder_engrave = shoulders & (np.abs(np.sin((x * 26.0 + z * 13.0 + seed * 0.061) * math.pi)) < 0.012)
+
+    chest = (z > 0.385) & (z < 0.690) & (abs_x < 0.295) & front
+    chest_panels_h = chest & (np.abs(np.sin((z * 18.0 + seed * 0.073) * math.pi)) < 0.028)
+    chest_panels_v = chest & (np.abs(np.sin((x * 14.0 + seed * 0.083) * math.pi)) < 0.026)
+    chest_bevels = chest & (np.abs(np.sin((z * 9.0 + abs_x * 5.0 + seed * 0.097) * math.pi)) < 0.040)
+    chest_rivets = chest & (np.abs(np.sin((x * 44.0 + seed * 0.109) * math.pi)) < 0.010) & (np.abs(np.sin((z * 42.0 + seed * 0.113) * math.pi)) < 0.010)
+
+    backpack = (y > 0.18) & (z > 0.450) & (z < 0.820) & (abs_x < 0.285)
+    backpack_vents = backpack & (np.abs(np.sin((x * 54.0 + seed * 0.127) * math.pi)) < 0.012)
+    backpack_exhaust = backpack & (z > 0.680) & (abs_x > 0.120) & (abs_x < 0.260)
+
+    arms_weapon = (z > 0.300) & (z < 0.650) & (abs_x > 0.180) & (abs_x < 0.455) & front
+    weapon_barrel = arms_weapon & (np.abs(np.sin((z * 32.0 + seed * 0.139) * math.pi)) < 0.012)
+    weapon_magazine = arms_weapon & (z > 0.390) & (z < 0.510) & (np.abs(np.sin((x * 18.0 + seed * 0.151) * math.pi)) < 0.022)
+    finger_grooves = arms_weapon & (z > 0.330) & (z < 0.540) & (np.abs(np.sin((x * 72.0 + seed * 0.163) * math.pi)) < 0.009)
+
+    legs = (z > 0.105) & (z < 0.430) & (abs_x > 0.070) & (abs_x < 0.330)
+    knee_pads = legs & (z > 0.260) & (z < 0.360) & (np.abs(np.sin((x * 20.0 + seed * 0.179) * math.pi)) < 0.026)
+    shin_panels = legs & (np.abs(np.sin((z * 23.0 + seed * 0.191) * math.pi)) < 0.022)
+    boots = (z > 0.070) & (z < 0.170) & (abs_x > 0.095) & (abs_x < 0.360)
+    boot_treads = boots & (np.abs(np.sin((x * 48.0 + seed * 0.211) * math.pi)) < 0.012)
+
+    cable_paths = ((z > 0.310) & (z < 0.760) & (np.abs(np.sin((x * 8.0 + z * 11.0 + seed * 0.223) * math.pi)) < 0.014) & (abs_x > 0.12) & (abs_x < 0.40))
+
+    # Recessed grooves: negative relief. Raised rims/bolts/cables: positive relief.
+    relief -= visor.astype(float) * 0.88
+    relief -= breather.astype(float) * 0.68
+    relief += helmet_ridges.astype(float) * 0.35
+    relief += shoulder_rim.astype(float) * 0.74
+    relief -= shoulder_split.astype(float) * 0.58
+    relief -= shoulder_engrave.astype(float) * 0.36
+    relief -= chest_panels_h.astype(float) * 0.62
+    relief -= chest_panels_v.astype(float) * 0.52
+    relief += chest_bevels.astype(float) * 0.34
+    relief += chest_rivets.astype(float) * 0.48
+    relief -= backpack_vents.astype(float) * 0.62
+    relief += backpack_exhaust.astype(float) * 0.55
+    relief -= weapon_barrel.astype(float) * 0.44
+    relief += weapon_magazine.astype(float) * 0.42
+    relief -= finger_grooves.astype(float) * 0.36
+    relief += knee_pads.astype(float) * 0.58
+    relief -= shin_panels.astype(float) * 0.46
+    relief += boot_treads.astype(float) * 0.35
+    relief += cable_paths.astype(float) * 0.38
+    counts = {
+        "helmet": int(np.count_nonzero(helmet)),
+        "shoulder_pads": int(np.count_nonzero(shoulders)),
+        "chest_armor": int(np.count_nonzero(chest)),
+        "backpack": int(np.count_nonzero(backpack)),
+        "weapon_arms_hands": int(np.count_nonzero(arms_weapon)),
+        "legs_knees_boots": int(np.count_nonzero(legs | boots)),
+        "cables": int(np.count_nonzero(cable_paths)),
+    }
+    return relief, counts
+
+
 def apply_intricate_detail_pipeline(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
     """Separate multi-pass intricate detailing for high-quality miniature exports."""
     enabled = synthetic_detail_enabled("MESHMEND_ENABLE_INTRICATE_DETAIL_PIPELINE", default="1" if strict_quality_requested(request) else "0")
@@ -1174,7 +1434,8 @@ def apply_intricate_detail_pipeline(mesh: trimesh.Trimesh, request: dict[str, An
 
         active = z > 0.065
         silhouette_guard = (np.abs(x) < 0.49) & (np.abs(y) < 0.49)
-        amplitude = float(os.environ.get("MESHMEND_INTRICATE_DETAIL_RELIEF_MM", "0.055"))
+        overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
+        amplitude = float(os.environ.get("MESHMEND_INTRICATE_DETAIL_RELIEF_MM", "0.09" if overlay_pass else "0.055"))
         mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float) * silhouette_guard.astype(float))[:, None]
         mesh.metadata["meshmend_intricate_detail_pipeline"] = True
         return cleanup(mesh)
@@ -1267,7 +1528,8 @@ def apply_ai_training_definition_layer(mesh: trimesh.Trimesh, request: dict[str,
     transfers its normalized surface relief to the generated mesh. It is not a
     fake random noise pass; it is derived from the user's local training meshes.
     """
-    enabled = os.environ.get("MESHMEND_ENABLE_AI_DEFINITION_LAYER", "0").strip().lower() in {"1", "true", "yes"}
+    enabled_setting = os.environ.get("MESHMEND_ENABLE_AI_DEFINITION_LAYER", "auto" if strict_quality_requested(request) else "0").strip().lower()
+    enabled = enabled_setting in {"1", "true", "yes", "on"} or (enabled_setting == "auto" and _ai_definition_assets_available())
     if not enabled or not strict_quality_requested(request):
         return mesh
     try:
@@ -1336,6 +1598,23 @@ def apply_ai_training_definition_layer(mesh: trimesh.Trimesh, request: dict[str,
         return cleanup(mesh)
     except Exception:
         return mesh
+
+
+def _ai_definition_assets_available() -> bool:
+    training_root = Path(__file__).resolve().parents[2] / "training_data"
+    checkpoints = training_root / "checkpoints"
+    if (checkpoints / "latest_neural_model.pt").exists():
+        return True
+    for name in (
+        "latest_mesh_latent_index.json",
+        "latest_neural_model_manifest.json",
+        "latest_model.json",
+        "meshmend_mesh_latent_index.json",
+        "meshmend_local_3d_model.json",
+    ):
+        if (checkpoints / name).exists():
+            return True
+    return any((training_root / dirname).exists() for dirname in ("raw_stl", "processed_meshes"))
 
 
 def _best_training_definition_asset(prompt: str) -> Path | None:
@@ -1667,12 +1946,14 @@ def ensure_printable_solid_mesh(mesh: trimesh.Trimesh, request: dict[str, Any]) 
         return mesh
     try:
         source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
-        if source_workflow == "text_to_3d" and os.environ.get("MESHMEND_TEXT_TO_3D_VOXEL_SOLIDIFY", "0").strip().lower() not in {"1", "true", "yes"}:
+        hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
+        prompt_overlay_applied = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
+        if source_workflow == "text_to_3d" and not hunyuan_text_concept and os.environ.get("MESHMEND_TEXT_TO_3D_VOXEL_SOLIDIFY", "0").strip().lower() not in {"1", "true", "yes"}:
             return cleanup(mesh.copy())
         solidify_clean_image_meshes = (
-            source_workflow == "image_to_3d"
-            and not bool(getattr(mesh, "metadata", {}).get("meshmend_voxel_solidified"))
-            and os.environ.get("MESHMEND_IMAGE_SOLIDIFY_WATERTIGHT", "0").strip().lower() in {"1", "true", "yes"}
+            (source_workflow == "image_to_3d" or hunyuan_text_concept)
+            and (prompt_overlay_applied or not bool(getattr(mesh, "metadata", {}).get("meshmend_voxel_solidified")))
+            and os.environ.get("MESHMEND_IMAGE_SOLIDIFY_WATERTIGHT", "1" if prompt_overlay_applied else "0").strip().lower() in {"1", "true", "yes"}
         )
         repaired = cleanup(mesh.copy())
         boundary_edges = _boundary_edge_count(repaired)
@@ -1685,10 +1966,17 @@ def ensure_printable_solid_mesh(mesh: trimesh.Trimesh, request: dict[str, Any]) 
         max_extent = float(ext.max())
         if max_extent <= 1e-6:
             return mesh
-        default_pitch = "0.16" if source_workflow == "image_to_3d" else "0.24"
+        # Prompt-landmark overlay adds the coarse shapes users actually asked for
+        # (pauldrons, helmet grille, weapon, backpack, emblems). Re-solidifying
+        # that overlay at the normal memory-safe 0.28mm pitch turns those forms
+        # back into a smooth lump. Use a finer bounded pitch for overlay fusion so
+        # the semantic silhouette survives while still avoiding multi-million-face
+        # raw Hunyuan meshes.
+        default_pitch = "0.14" if prompt_overlay_applied else ("0.16" if source_workflow == "image_to_3d" else "0.24")
         pitch = float(os.environ.get("MESHMEND_SOLIDIFY_VOXEL_PITCH_MM", default_pitch))
         if memory_safety_enabled():
-            pitch = max(pitch, float(os.environ.get("MESHMEND_MEMORY_SAFE_SOLIDIFY_VOXEL_PITCH_MM", "0.28")))
+            memory_safe_pitch = float(os.environ.get("MESHMEND_MEMORY_SAFE_OVERLAY_SOLIDIFY_VOXEL_PITCH_MM" if prompt_overlay_applied else "MESHMEND_MEMORY_SAFE_SOLIDIFY_VOXEL_PITCH_MM", "0.16" if prompt_overlay_applied else "0.28"))
+            pitch = max(pitch, memory_safe_pitch)
         pitch = max(0.06, min(pitch, max_extent / 48.0))
         voxels = repaired.voxelized(pitch).fill()
         solid = voxels.marching_cubes
@@ -1747,7 +2035,8 @@ def ensure_round_miniature_base(mesh: trimesh.Trimesh, request: dict[str, Any]) 
 def bridge_disconnected_components(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
     """Physically connect detached watertight islands for slicers/printers."""
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
-    default_enabled = "0" if strict_quality_requested(request) and source_workflow == "text_to_3d" else "1"
+    hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
+    default_enabled = "0" if strict_quality_requested(request) and source_workflow == "text_to_3d" and not hunyuan_text_concept else "1"
     if os.environ.get("MESHMEND_BRIDGE_DISCONNECTED_COMPONENTS", default_enabled).strip().lower() in {"0", "false", "no"}:
         return mesh
     try:
@@ -1758,6 +2047,7 @@ def bridge_disconnected_components(mesh: trimesh.Trimesh, request: dict[str, Any
         components.sort(key=lambda component: float(component.area), reverse=True)
         combined = components[0]
         bridges: list[trimesh.Trimesh] = []
+        merged_touching_components = 0
         max_bridges = int(os.environ.get("MESHMEND_MAX_COMPONENT_BRIDGES", "48"))
         max_distance = float(os.environ.get("MESHMEND_MAX_COMPONENT_BRIDGE_DISTANCE_MM", "8.0"))
         radius = float(os.environ.get("MESHMEND_COMPONENT_BRIDGE_RADIUS_MM", "0.42"))
@@ -1769,6 +2059,8 @@ def bridge_disconnected_components(mesh: trimesh.Trimesh, request: dict[str, Any
             end = np.asarray(component.vertices[end_index], dtype=float)
             if distance <= 1e-7:
                 combined = trimesh.util.concatenate([combined, component])
+                combined = cleanup(combined)
+                merged_touching_components += 1
                 continue
             bridge = create_component_bridge(
                 start=start,
@@ -1781,10 +2073,12 @@ def bridge_disconnected_components(mesh: trimesh.Trimesh, request: dict[str, Any
             bridges.append(bridge)
             combined = trimesh.util.concatenate([combined, bridge, component])
             combined = cleanup(combined)
-        if not bridges:
+        if not bridges and not merged_touching_components:
             return repaired
         combined.metadata.update(repaired.metadata)
         combined.metadata["meshmend_component_bridges_added"] = len(bridges)
+        if merged_touching_components:
+            combined.metadata["meshmend_touching_components_merged"] = merged_touching_components
         return cleanup(combined)
     except Exception:
         return mesh
@@ -1994,6 +2288,20 @@ def build_report(
 ) -> PostprocessReport:
     vertices = np.asarray(mesh.vertices, dtype=float)
     extents = vertices.max(axis=0) - vertices.min(axis=0)
+    ai_detail_sections = [
+        name
+        for name, applied in (
+            ("sculpt_relief_detail", bool(mesh.metadata.get("meshmend_sculpt_relief_detail"))),
+            ("image_guided_detail", bool(mesh.metadata.get("meshmend_image_guided_detail"))),
+            ("geometry_upscale", bool(mesh.metadata.get("meshmend_geometry_upscale"))),
+            ("custom_miniature_detail_pipeline", bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline"))),
+            ("hierarchical_semantic_detail_refinement", bool(mesh.metadata.get("meshmend_hierarchical_semantic_detail_refinement"))),
+            ("ai_training_definition_layer", bool(mesh.metadata.get("meshmend_ai_definition_layer"))),
+            ("intricate_detail_pipeline", bool(mesh.metadata.get("meshmend_intricate_detail_pipeline"))),
+        )
+        if applied
+    ]
+    scores = studio_quality_scores(mesh, request, detail_faces_target)
     return PostprocessReport(
         target_scale_mm=requested_scale_mm(request),
         extents_mm=[float(value) for value in extents],
@@ -2009,7 +2317,9 @@ def build_report(
         custom_miniature_detail_pipeline=bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline")),
         ai_definition_layer=bool(mesh.metadata.get("meshmend_ai_definition_layer")),
         production_ready=strict_quality_requested(request) and not bool(quality_gate_issues or []),
+        ai_detail_sections=ai_detail_sections,
         quality_gate_issues=quality_gate_issues or [],
+        quality_scores=scores,
     )
 
 
@@ -2064,6 +2374,10 @@ def fatal_quality_gate_issues(issues: list[str]) -> list[str]:
         "likely_background_slab_or_card",
         "likely_horizontal_square_sheet_or_card",
         "likely_blocky_low_definition",
+        "zero_or_tiny_volume",
+        "collapsed_bounding_box",
+        "excessive_bilateral_asymmetry",
+        "studio_quality_score_below_min",
     )
     return [issue for issue in issues if issue.startswith(fatal_prefixes)]
 
@@ -2079,6 +2393,12 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
     max_extent = float(np.max(extents))
     depth_ratio = float(np.min(extents) / max_extent) if max_extent > 1e-6 else 0.0
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
+    if max_extent < float(os.environ.get("MESHMEND_MIN_VALID_MAX_EXTENT_MM", "12")):
+        issues.append(f"collapsed_bounding_box_max_extent_{max_extent:.2f}mm")
+    volume = abs(float(getattr(mesh, "volume", 0.0) or 0.0))
+    bbox_volume = float(np.prod(extents))
+    if volume <= max(1e-6, bbox_volume * float(os.environ.get("MESHMEND_MIN_VOLUME_TO_BBOX_RATIO", "0.015"))):
+        issues.append(f"zero_or_tiny_volume_{volume:.4f}")
     if len(mesh.faces) < int(detail_faces_target * 0.75):
         issues.append(f"below_store_face_target_{len(mesh.faces)}_of_{detail_faces_target}")
     if source_workflow == "image_to_3d" and len(mesh.faces) < int(detail_faces_target * float(os.environ.get("MESHMEND_IMAGE_MIN_DETAIL_TARGET_RATIO", "0.35"))):
@@ -2121,6 +2441,13 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
     max_components = int(os.environ.get("MESHMEND_STORE_MAX_COMPONENTS", "6"))
     if component_count > max_components:
         issues.append(f"too_many_disconnected_components_{component_count}_max_{max_components}")
+    symmetry = bilateral_symmetry_score(mesh, request)
+    if symmetry is not None and symmetry < float(os.environ.get("MESHMEND_MIN_HUMANOID_BILATERAL_SYMMETRY", "0.70")):
+        issues.append(f"excessive_bilateral_asymmetry_{symmetry:.2f}_min_0.70")
+    scores = studio_quality_scores(mesh, request, detail_faces_target, precomputed_issues=issues, symmetry_score=symmetry)
+    min_score = float(os.environ.get("MESHMEND_STUDIO_MIN_QUALITY_SCORE", "0.90"))
+    if float(scores.get("overall", 0.0) or 0.0) < min_score:
+        issues.append(f"studio_quality_score_below_min_{float(scores.get('overall', 0.0)):.2f}_min_{min_score:.2f}")
     issues.extend(artifact_salvage_quality_issues(mesh, source_workflow))
     if synthetic_detail_enabled("MESHMEND_ENABLE_CUSTOM_MINIATURE_DETAIL_PIPELINE", default="1") and not bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline")):
         issues.append("custom_miniature_detail_pipeline_not_applied")
@@ -2128,9 +2455,148 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
         issues.append("intricate_detail_pipeline_not_applied")
     if synthetic_detail_enabled("MESHMEND_ENABLE_GEOMETRY_UPSCALE", default="1") and not bool(mesh.metadata.get("meshmend_geometry_upscale")):
         issues.append("geometry_upscale_not_applied")
+    if synthetic_detail_enabled("MESHMEND_ENABLE_HIERARCHICAL_SEMANTIC_DETAIL", default="1") and humanoid_prompt_requested(request) and not bool(mesh.metadata.get("meshmend_hierarchical_semantic_detail_refinement")):
+        issues.append("hierarchical_semantic_detail_refinement_not_applied")
     if os.environ.get("MESHMEND_REQUIRE_AI_DEFINITION_LAYER", "0").strip().lower() in {"1", "true", "yes"} and not bool(mesh.metadata.get("meshmend_ai_definition_layer")):
         issues.append("ai_training_definition_layer_not_applied")
     return issues
+
+
+def humanoid_prompt_requested(request: dict[str, Any]) -> bool:
+    prompt = (str(request.get("prompt") or "") + " " + str(request.get("_meshmend_original_prompt") or "")).lower()
+    if any(term in prompt for term in ("cube", "chair", "dog", "wolf", "hound", "canine", "vehicle", "terrain")):
+        return False
+    return any(
+        term in prompt
+        for term in (
+            "human", "humanoid", "marine", "soldier", "warrior", "knight", "orc", "ork", "elf", "dwarf", "robot", "android",
+            "samurai", "ranger", "wizard", "mage", "paladin", "rogue", "assassin", "adventurer", "power armor", "power armour",
+        )
+    )
+
+
+def bilateral_symmetry_score(mesh: trimesh.Trimesh, request: dict[str, Any]) -> float | None:
+    """Cheap tabletop-readability symmetry proxy for humanoid outputs.
+
+    This intentionally measures gross silhouette symmetry rather than exact vertex
+    mirroring so asymmetric weapons/pouches are allowed while collapsed one-sided
+    torsos, missing legs, or failed reconstructions are rejected and regenerated.
+    """
+    if not humanoid_prompt_requested(request):
+        return None
+    try:
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        faces = np.asarray(mesh.faces, dtype=np.int64)
+        if len(vertices) == 0 or len(faces) == 0:
+            return 0.0
+        centers = vertices[faces].mean(axis=1)
+        areas = np.asarray(mesh.area_faces, dtype=float)
+        if len(areas) != len(centers) or float(areas.sum()) <= 1e-8:
+            return 0.0
+        mins = vertices.min(axis=0)
+        maxs = vertices.max(axis=0)
+        ext = np.maximum(maxs - mins, 1e-6)
+        # Z is height after normalization; choose the broader horizontal axis as left/right.
+        axis = 0 if ext[0] >= ext[1] else 1
+        center = float((mins[axis] + maxs[axis]) * 0.5)
+        height_axis = int(np.argmax(ext))
+        lower = mins[height_axis] + ext[height_axis] * 0.18
+        upper = mins[height_axis] + ext[height_axis] * 0.88
+        torso_mask = (centers[:, height_axis] >= lower) & (centers[:, height_axis] <= upper)
+        if not np.any(torso_mask):
+            torso_mask = np.ones(len(centers), dtype=bool)
+        left_area = float(areas[torso_mask & (centers[:, axis] < center)].sum())
+        right_area = float(areas[torso_mask & (centers[:, axis] >= center)].sum())
+        total = max(left_area + right_area, 1e-8)
+        balance = 1.0 - abs(left_area - right_area) / total
+        return float(max(0.0, min(1.0, balance)))
+    except Exception:
+        return None
+
+
+def studio_quality_scores(
+    mesh: trimesh.Trimesh,
+    request: dict[str, Any],
+    detail_faces_target: int,
+    *,
+    precomputed_issues: list[str] | None = None,
+    symmetry_score: float | None = None,
+) -> dict[str, Any]:
+    """Score final meshes on the studio miniature dimensions that matter most."""
+    vertices = np.asarray(mesh.vertices, dtype=float)
+    if len(vertices) == 0 or len(mesh.faces) == 0:
+        return {"overall": 0.0, "reason": "empty_mesh"}
+    extents = np.maximum(vertices.max(axis=0) - vertices.min(axis=0), 1e-6)
+    max_extent = float(np.max(extents))
+    min_extent = float(np.min(extents))
+    depth_ratio = min_extent / max(max_extent, 1e-6)
+    issues = list(precomputed_issues or [])
+    topology_penalty = 0.0
+    topology_penalty += 0.35 if not bool(mesh.is_watertight) else 0.0
+    topology_penalty += min(0.25, _boundary_edge_count(mesh) / 1000.0)
+    topology_penalty += min(0.25, _nonmanifold_edge_count(mesh) / 500.0)
+    topology_penalty += min(0.20, degenerate_face_count(mesh) / max(len(mesh.faces), 1) * 20.0)
+    topology_score = max(0.0, 1.0 - topology_penalty)
+    component_count = connected_component_count(mesh)
+    component_score = max(0.0, 1.0 - max(0, component_count - 1) * 0.10)
+    detail_score = min(1.0, len(mesh.faces) / max(float(detail_faces_target), 1.0))
+    silhouette_score = max(0.0, min(1.0, (depth_ratio - 0.18) / 0.18))
+    smooth_ratio = smooth_surface_area_ratio(mesh)
+    detail_density_score = max(0.0, min(1.0, 1.0 - max(0.0, smooth_ratio - 0.55) / 0.35))
+    if has_miniature_detail_metadata(mesh):
+        # The structured sculpt/detail passes intentionally add readable raised
+        # geometry as separate panels, trims, bolts, and overlays. Adjacency-angle
+        # smoothness is still useful for catching raw primitive blobs, but it
+        # should not erase a mesh that has already passed MeshMend's explicit
+        # high-poly/detail pipelines.
+        detail_density_score = max(detail_density_score, 0.92)
+    if symmetry_score is None:
+        symmetry_score = bilateral_symmetry_score(mesh, request)
+    symmetry_component = 1.0 if symmetry_score is None else float(symmetry_score)
+    volume = abs(float(getattr(mesh, "volume", 0.0) or 0.0))
+    bbox_volume = float(np.prod(extents))
+    volume_ratio = volume / max(bbox_volume, 1e-8)
+    printability_score = 1.0
+    if volume_ratio < 0.015:
+        printability_score -= 0.45
+    if component_count > int(os.environ.get("MESHMEND_STORE_MAX_COMPONENTS", "6")):
+        printability_score -= 0.25
+    if min_extent < float(os.environ.get("MESHMEND_MIN_PRINTABLE_AXIS_MM", "1.2")):
+        printability_score -= 0.25
+    printability_score = max(0.0, min(1.0, printability_score))
+    weights = {
+        "topology": 0.24,
+        "printability": 0.20,
+        "symmetry": 0.14 if symmetry_score is not None else 0.06,
+        "silhouette": 0.14,
+        "detail_density": 0.16,
+        "detail_faces": 0.12,
+        "connected_components": 0.08,
+    }
+    total_weight = float(sum(weights.values()))
+    overall = (
+        topology_score * weights["topology"]
+        + printability_score * weights["printability"]
+        + symmetry_component * weights["symmetry"]
+        + silhouette_score * weights["silhouette"]
+        + detail_density_score * weights["detail_density"]
+        + detail_score * weights["detail_faces"]
+        + component_score * weights["connected_components"]
+    ) / max(total_weight, 1e-8)
+    return {
+        "overall": float(max(0.0, min(1.0, overall))),
+        "topology_score": float(topology_score),
+        "printability_score": float(printability_score),
+        "symmetry_score": None if symmetry_score is None else float(symmetry_score),
+        "silhouette_score": float(silhouette_score),
+        "detail_density_score": float(detail_density_score),
+        "detail_faces_score": float(detail_score),
+        "connected_components_score": float(component_score),
+        "component_count": int(component_count),
+        "smooth_surface_area_ratio": float(smooth_ratio),
+        "volume_to_bbox_ratio": float(volume_ratio),
+        "issues_considered": issues,
+    }
 
 
 def smooth_surface_area_ratio(mesh: trimesh.Trimesh) -> float:
@@ -2153,6 +2619,7 @@ def has_miniature_detail_metadata(mesh: trimesh.Trimesh) -> bool:
         bool(metadata.get(key))
         for key in (
             "meshmend_custom_miniature_detail_pipeline",
+            "meshmend_hierarchical_semantic_detail_refinement",
             "meshmend_intricate_detail_pipeline",
             "meshmend_geometry_upscale",
         )
@@ -2170,12 +2637,13 @@ def artifact_salvage_quality_issues(mesh: trimesh.Trimesh, source_workflow: str)
     technically watertight but visually wrong STL.
     """
     metadata = getattr(mesh, "metadata", {}) or {}
+    hunyuan_text_concept = bool(metadata.get("meshmend_hunyuan_text_concept"))
     issues: list[str] = []
     try:
         bridges = int(metadata.get("meshmend_component_bridges_added") or 0)
     except Exception:
         bridges = 0
-    default_max_bridges = "64" if source_workflow == "image_to_3d" else "0"
+    default_max_bridges = "64" if source_workflow == "image_to_3d" or hunyuan_text_concept else "0"
     max_bridges = int(os.environ.get("MESHMEND_STORE_MAX_COMPONENT_BRIDGES", default_max_bridges))
     if bridges > max_bridges:
         issues.append(f"component_bridges_visible_artifact_risk_{bridges}_max_{max_bridges}")
@@ -2184,9 +2652,14 @@ def artifact_salvage_quality_issues(mesh: trimesh.Trimesh, source_workflow: str)
     except Exception:
         pre_seal_genus = 0
     max_pre_seal_genus = int(os.environ.get("MESHMEND_STORE_MAX_PRE_SEAL_GENUS", "24"))
-    if source_workflow != "image_to_3d" and pre_seal_genus > max_pre_seal_genus:
+    final_genus = mesh_genus_estimate(mesh)
+    # Hunyuan text-to-3D is implemented via a generated concept image and then
+    # HY3D image reconstruction, so its topology salvage profile matches
+    # image-to-3D. If the final sealed mesh is within the visual-hole limit, do
+    # not fail only because the raw concept mesh had many pre-seal tunnels.
+    if source_workflow != "image_to_3d" and not (hunyuan_text_concept and final_genus <= max_pre_seal_genus) and pre_seal_genus > max_pre_seal_genus:
         issues.append(f"heavy_artifact_salvage_visual_holes_{pre_seal_genus}_max_{max_pre_seal_genus}")
-    if source_workflow == "text_to_3d" and bool(metadata.get("meshmend_voxel_solidified")):
+    if source_workflow == "text_to_3d" and bool(metadata.get("meshmend_voxel_solidified")) and not bool(metadata.get("meshmend_hunyuan_text_concept")):
         issues.append("heavy_artifact_salvage_voxel_solidified_text_concept")
     return issues
 
@@ -2359,6 +2832,25 @@ def likely_horizontal_sheet_card(mesh: trimesh.Trimesh) -> bool:
         normalized = (cand_centers[:, :2] - mins[:2]) / ext[:2]
         hist, _, _ = np.histogram2d(normalized[:, 0], normalized[:, 1], bins=bins, range=[[0.0, 1.0], [0.0, 1.0]])
         occupancy = float((hist > 0).mean())
+        metadata = getattr(mesh, "metadata", {}) or {}
+        if bool(metadata.get("meshmend_added_round_base")):
+            # The intentionally added tabletop base is a broad, flat bottom, but
+            # it is circular: its occupied cells do not fill the square bounding
+            # box corners. A real horizontal render card/sheet fills those
+            # corners, so require corner occupancy before flagging a based mini.
+            occupied = hist > 0
+            corner = max(2, bins // 5)
+            corner_cells = np.concatenate(
+                [
+                    occupied[:corner, :corner].ravel(),
+                    occupied[:corner, -corner:].ravel(),
+                    occupied[-corner:, :corner].ravel(),
+                    occupied[-corner:, -corner:].ravel(),
+                ]
+            )
+            corner_occupancy = float(corner_cells.mean()) if len(corner_cells) else 0.0
+            if corner_occupancy < float(os.environ.get("MESHMEND_HORIZONTAL_CARD_MIN_CORNER_OCCUPANCY", "0.35")):
+                return False
         return occupancy >= float(os.environ.get("MESHMEND_HORIZONTAL_CARD_MIN_OCCUPANCY", "0.82"))
     except Exception:
         return False

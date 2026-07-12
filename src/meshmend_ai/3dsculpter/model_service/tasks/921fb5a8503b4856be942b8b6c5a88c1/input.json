@@ -1,0 +1,11 @@
+{
+  "prompt": "space marine post patch coherent fused detail armor trim rivets helmet vents weapon bevels 20260707_082817",
+  "quality": "high",
+  "target_formats": [
+    "stl"
+  ],
+  "target_polycount": 600000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

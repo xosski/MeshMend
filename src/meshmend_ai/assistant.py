@@ -24,6 +24,7 @@ class AssistantPlan:
     max_bridge_distance: float | None
     merge_digits: int
     max_hole_edges: int
+    max_existing_vertex_displacement: float
     components_detected: int
     boundary_edges_detected: int
     reasons: list[str] = field(default_factory=list)
@@ -36,6 +37,7 @@ class AssistantPlan:
             max_bridge_distance=self.max_bridge_distance,
             merge_digits=self.merge_digits,
             max_hole_edges=self.max_hole_edges,
+            max_existing_vertex_displacement=self.max_existing_vertex_displacement,
         )
 
     def to_dict(self) -> dict[str, object]:
@@ -81,6 +83,7 @@ class MeshMendAssistant:
         max_bridge_distance: float | None = None,
         merge_digits: int = 6,
         max_hole_edges: int = 80,
+        max_existing_vertex_displacement: float = 0.005,
         force_bridge: bool = False,
     ) -> AssistantPlan:
         mesh = _load_mesh_for_planning(Path(input_path))
@@ -89,9 +92,13 @@ class MeshMendAssistant:
         radius = connector_radius if connector_radius is not None else _suggest_connector_radius(mesh)
 
         reasons: list[str] = []
-        if component_count > 1:
+        if component_count > 1 and force_bridge:
             reasons.append(
                 f"Detected {component_count} disconnected mesh components; detached islands will be anchored to the main body."
+            )
+        elif component_count > 1:
+            reasons.append(
+                f"Detected {component_count} disconnected mesh components; museum-scan mode will not add generic connector geometry unless bridging is explicitly requested."
             )
         elif force_bridge:
             reasons.append("Detached-piece repair was requested, but only one component was detected.")
@@ -102,14 +109,19 @@ class MeshMendAssistant:
             reasons.append(f"Detected {boundary_edges} boundary edges; eligible small holes will be capped.")
         if connector_radius is None:
             reasons.append(f"Selected connector radius {radius:.4g} from the model size.")
+        reasons.append(
+            "Museum-scan preservation enabled: no smoothing, remeshing, decimation, subdivision, inflation, shrink, or global topology optimization."
+        )
+        reasons.append(f"Existing sculpt vertices must remain within {max_existing_vertex_displacement:g} model units.")
 
         return AssistantPlan(
-            bridge_disconnected=force_bridge or component_count > 1,
+            bridge_disconnected=force_bridge,
             connector_radius=radius,
             connector_sections=max(6, int(connector_sections)),
             max_bridge_distance=max_bridge_distance,
             merge_digits=merge_digits,
             max_hole_edges=max_hole_edges,
+            max_existing_vertex_displacement=max_existing_vertex_displacement,
             components_detected=component_count,
             boundary_edges_detected=boundary_edges,
             reasons=reasons,
@@ -125,7 +137,8 @@ class MeshMendAssistant:
         max_bridge_distance: float | None = None,
         merge_digits: int = 6,
         max_hole_edges: int = 80,
-        force_bridge: bool = True,
+        max_existing_vertex_displacement: float = 0.005,
+        force_bridge: bool = False,
     ) -> AssistantResult:
         plan = self.build_plan(
             input_path,
@@ -134,6 +147,7 @@ class MeshMendAssistant:
             max_bridge_distance=max_bridge_distance,
             merge_digits=merge_digits,
             max_hole_edges=max_hole_edges,
+            max_existing_vertex_displacement=max_existing_vertex_displacement,
             force_bridge=force_bridge,
         )
         report = repair_stl(input_path, output_path, plan.to_repair_options())
@@ -151,6 +165,8 @@ class MeshMendAssistant:
             f"Boundary edges: {report.boundary_edges_before} -> {report.boundary_edges_after}.",
             f"Holes capped: {report.holes_capped}; anchored bridges added: {report.bridges_added}.",
             f"Watertight: {report.watertight_before} -> {report.watertight_after}.",
+            f"Max existing vertex displacement: {report.max_existing_vertex_displacement:.6g}.",
+            f"Detail preservation: {report.detail_preservation}.",
         ]
         if plan.reasons:
             lines.append("Plan: " + " ".join(plan.reasons))

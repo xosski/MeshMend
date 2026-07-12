@@ -1,0 +1,13 @@
+{
+  "prompt": "Space Marine",
+  "quality": "high",
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 300000,
+  "scale_mm": null,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

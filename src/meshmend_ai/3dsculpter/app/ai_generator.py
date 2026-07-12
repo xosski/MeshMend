@@ -5,6 +5,7 @@ AI-powered model generation using Diffusers and 3D volumetric conversion
 from PyQt6.QtCore import QObject, pyqtSignal
 import numpy as np
 from pathlib import Path
+import os
 import re
 import sys
 import trimesh
@@ -243,8 +244,16 @@ class AIGeneratorWorker(QObject):
             mesh = trimesh.load(output_path, force="mesh")
             if isinstance(mesh, trimesh.Trimesh) and len(mesh.faces) >= 1000:
                 return mesh
+            raise RuntimeError(f"MeshMend sculptor returned an unusable mesh from {output_path}")
         except Exception as exc:
-            print(f"MeshMend sculptor primary generation unavailable; falling back: {exc}")
+            if os.environ.get("MESHMEND_ALLOW_LEGACY_CREATION_FALLBACK", "0").strip().lower() in {"1", "true", "yes", "on"}:
+                print(f"MeshMend sculptor primary generation unavailable; explicit legacy fallback enabled: {exc}")
+                return None
+            raise RuntimeError(
+                "MeshMend could not get a detail-preserving sculpt backend, so it stopped instead of returning the old generic primitive blockout. "
+                "Start the model service / production sculpt backend, or set MESHMEND_ALLOW_LEGACY_CREATION_FALLBACK=1 for an explicit draft-only fallback. "
+                f"Details: {exc}"
+            ) from exc
         return None
 
     def _emit_progress(self, percent: int, message: str) -> None:

@@ -1,0 +1,13 @@
+{
+  "prompt": "a space marine studio quality miniature with unmistakable bulky power armor silhouette, oversized round pauldrons, recessed helmet visor and respirator grille, raised chest emblem, heavy bolter rifle with visible barrel and magazine, reactor backpack with exhaust stacks, chunky greaves, engraved armor panel lines, deep readable bevels and resin printable crisp details",
+  "quality": "high",
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 600000,
+  "scale_mm": null,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

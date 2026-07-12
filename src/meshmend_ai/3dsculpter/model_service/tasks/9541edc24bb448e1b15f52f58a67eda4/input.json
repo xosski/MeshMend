@@ -1,0 +1,11 @@
+{
+  "prompt": "space marine crisp armor trim rivets face fingers weapon bevels detail verification 20260707_081919",
+  "quality": "high",
+  "target_formats": [
+    "stl"
+  ],
+  "target_polycount": 1200000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

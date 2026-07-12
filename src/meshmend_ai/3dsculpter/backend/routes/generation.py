@@ -218,6 +218,46 @@ def _is_usable_trained_mesh(mesh) -> bool:
         return False
 
 
+def _requires_detail_preserving_backend(prompt: str, quality: str) -> bool:
+    """Return True when a generic fallback would be worse than failing loudly.
+
+    The SDXL/image-to-mesh and legacy procedural paths are useful for rough
+    drafts, but they are exactly the paths that collapse different prompts into
+    the same broad block/blob. Studio miniature requests must not silently fall
+    back to those paths.
+    """
+    q = (quality or "standard").lower().strip()
+    text = (prompt or "").lower()
+    if q == "high":
+        return True
+    studio_terms = (
+        "studio",
+        "store quality",
+        "store-quality",
+        "8k",
+        "8 k",
+        "maximum detail",
+        "production",
+        "meshy",
+        "semantic",
+        "miniature-quality",
+        "tabletop miniature",
+        "warhammer",
+        "grimdark",
+    )
+    return any(term in text for term in studio_terms)
+
+
+def _is_detail_preserving_backend(backend: str | None) -> bool:
+    """Backends whose output should not be globally smoothed/remeshed/decimated."""
+    return (backend or "").lower() in {
+        "meshmend_image_text_sculptor",
+        "hosted_model_service",
+        "neural_3d_diffusion",
+        "local_3d_exemplar",
+    }
+
+
 def _is_blob_like_mesh(mesh) -> bool:
     """Detect collapsed/overfilled meshes that look like generic blobs."""
     try:
@@ -417,6 +457,16 @@ async def generate_from_text(
                 print(f"[GENERATION] Using trained 3D backend: {generation_backend}")
             else:
                 print("[GENERATION] No usable trained 3D output; using SDXL image-to-mesh pipeline.")
+
+        if mesh is None and _requires_detail_preserving_backend(prompt, quality):
+            raise HTTPException(
+                status_code=502,
+                detail=(
+                    "MeshMend could not get a detail-preserving sculpt backend for this studio/high-detail request. "
+                    "Stopped instead of falling back to the generic SDXL/image-to-mesh path that produces the same broad shapes. "
+                    "Start the model service with a configured MeshMend sculpt/external backend or request standard draft quality."
+                ),
+            )
         
         file_hash = hash(prompt) % 100000
 
@@ -453,19 +503,33 @@ async def generate_from_text(
         print(f"[GENERATION] Step 4: Validating scale (target: {scale})...")
         mesh, scale_report = ScaleValidator.validate_and_normalize(mesh, target_scale=scale)
         print(f"  Status: {scale_report['status']} - Height: {scale_report['final_height_mm']:.1f}mm")
-        
-        # Polish mesh surface/topology before optional simplification.
-        print("[GENERATION] Step 5: Polishing surface...")
-        mesh = MeshSimplifier.polish_mesh(mesh, quality=quality)
-        
-        # Flesh-out pass for thin/shell-like reconstructions.
-        if _is_underfleshed_mesh(mesh):
-            print("[GENERATION] Mesh is under-fleshed; thickening volume...")
-            mesh = _flesh_out_mesh(mesh, quality=quality)
 
-        # Simplify mesh for optimal printing
-        print("[GENERATION] Step 6: Optimizing for printing...")
-        mesh = MeshSimplifier.simplify_for_printing(mesh, quality=quality)
+        if _is_detail_preserving_backend(generation_backend):
+            print("[GENERATION] Step 5: Preserving sculpt backend geometry; skipping global polish/simplify")
+            try:
+                mesh.remove_unreferenced_vertices()
+                mesh.remove_duplicate_faces()
+                mesh.remove_degenerate_faces()
+                mesh.fix_normals()
+            except Exception:
+                pass
+        else:
+            # Polish mesh surface/topology before optional simplification. This
+            # is only safe for draft fallbacks; never run it on a sculpt backend
+            # output because it erases miniature-scale surface language.
+            print("[GENERATION] Step 5: Polishing draft fallback surface...")
+            mesh = MeshSimplifier.polish_mesh(mesh, quality=quality)
+
+            # Flesh-out pass for thin/shell-like reconstructions.
+            if _is_underfleshed_mesh(mesh):
+                print("[GENERATION] Mesh is under-fleshed; thickening volume...")
+                mesh = _flesh_out_mesh(mesh, quality=quality)
+
+            # Simplify mesh for draft printing only. Studio/detail-preserving
+            # outputs must keep their generated faces unless the user explicitly
+            # asks for decimation elsewhere.
+            print("[GENERATION] Step 6: Optimizing draft fallback for printing...")
+            mesh = MeshSimplifier.simplify_for_printing(mesh, quality=quality)
 
         # Analyze printability
         print("[GENERATION] Step 7: Analyzing printability...")
@@ -545,24 +609,27 @@ async def generate_from_image(file: UploadFile = File(...), x_api_key: str | Non
             scale="32mm",
             quality="high",
         )
-        
-        # Generate 3D mesh from uploaded image
-        if mesh is None:
-            backend = "uploaded_image_to_mesh_reconstruction"
-            mesh = reconstruct_mesh_from_image(image, num_points=20000, method="poisson")
-            if _is_blob_like_mesh(mesh):
-                print("[GENERATION] Poisson mesh looked blob-like for uploaded image; retrying with ball-pivot...")
-                mesh = reconstruct_mesh_from_image(image, num_points=26000, method="ball_pivot")
-            if _is_collapsed_mesh(mesh):
-                print("[GENERATION] Uploaded mesh collapsed; rebuilding via volumetric fallback...")
-                mesh = reconstruct_mesh_from_image_volumetric(image, vol_size=128, voxel_size_mm=0.22)
 
-        # Polish and lightly optimize before export.
-        mesh = MeshSimplifier.polish_mesh(mesh, quality="high")
-        if _is_underfleshed_mesh(mesh):
-            print("[GENERATION] Uploaded-image mesh is under-fleshed; thickening volume...")
-            mesh = _flesh_out_mesh(mesh, quality="high")
-        mesh = MeshSimplifier.simplify_for_printing(mesh, quality="high")
+        if mesh is None:
+            raise HTTPException(
+                status_code=502,
+                detail=(
+                    "MeshMend could not get a detail-preserving image-to-3D sculpt backend. "
+                    "Stopped instead of falling back to the generic uploaded-image reconstruction path that collapses references into similar blobs. "
+                    "Start the model service with an image-capable MeshMend sculpt/external backend."
+                ),
+            )
+        
+        # Preserve sculpt backend geometry. Do not globally smooth, remesh, or
+        # decimate an image-conditioned sculpt; those operations are the exact
+        # source of generic/blobby results.
+        try:
+            mesh.remove_unreferenced_vertices()
+            mesh.remove_duplicate_faces()
+            mesh.remove_degenerate_faces()
+            mesh.fix_normals()
+        except Exception:
+            pass
         
         # Save STL
         stl_path = OUTPUT_DIR / f"{filename}_3d.stl"

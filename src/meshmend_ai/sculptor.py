@@ -424,6 +424,8 @@ class SculptorFoundation:
 
         progress(88, "Downloading production model")
         output_path = self._download_hosted_creation_model(completed, task_id or "completed")
+        if task_id:
+            _cleanup_hosted_creation_task(task_id)
         progress(100, f"Created production model: {output_path.name}")
         return output_path
 
@@ -2503,6 +2505,16 @@ def _model_service_request_json(method: str, path: str, payload: dict | None = N
         raise RuntimeError(f"model service HTTP {exc.code}: {details}") from exc
     except urllib.error.URLError as exc:
         raise RuntimeError(f"model service connection failed at {HOSTED_CREATION_URL}: {exc}") from exc
+
+
+def _cleanup_hosted_creation_task(task_id: str) -> None:
+    """Best-effort server-side cleanup after the downloaded model is saved locally."""
+    try:
+        _model_service_request_json("POST", f"/v1/tasks/{urllib.parse.quote(task_id)}/cleanup")
+    except Exception:
+        # The downloaded model is already saved under the sculptor outputs folder;
+        # cleanup is a space-saving convenience and must not fail creation.
+        pass
 
 
 def _image_data_uri(image_path: Path) -> str:

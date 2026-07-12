@@ -28,6 +28,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--generate", type=str, help="Generate from a structured prompt with a local adapter")
     parser.add_argument("--studio-generate", type=str, help="Generate a gated offline studio/store-style miniature from a prompt")
     parser.add_argument("--studio-config", type=Path, help="Generate a gated offline studio/store-style miniature from a JSON spec")
+    parser.add_argument("--detail-demo", action="store_true", help="Generate a procedural studio-detail demo armor plate scene")
     parser.add_argument("--target-faces", type=int, default=250_000, help="Target faces for draft high-detail studio generation/detail subdivision")
     parser.add_argument("--studio-candidates-dir", type=Path, help="Write per-category candidate part bundles for review/selection")
     parser.add_argument("--studio-candidates-per-category", type=int, default=3, help="Generate this many validated candidates per part category")
@@ -39,12 +40,20 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    if args.cli or args.input or args.generate:
+    if args.cli or args.input or args.generate or args.detail_demo:
         return run_cli(args)
     return run_desktop()
 
 
 def run_cli(args: argparse.Namespace) -> int:
+    if args.detail_demo:
+        from meshmend.app.demo_scene import build_studio_detail_demo
+
+        output = args.output or Path("meshmend_studio_detail_demo.stl")
+        result = build_studio_detail_demo(output)
+        print(json.dumps(result.summary, indent=2))
+        return 0
+
     if args.studio_config or args.studio_generate:
         if args.studio_config:
             spec = StudioMiniatureSpec.from_json(args.studio_config)
@@ -111,14 +120,14 @@ def run_desktop() -> int:
     try:
         from PySide6 import QtWidgets
     except Exception as exc:
-        print("PySide6 is not installed. Run `pip install -r requirements.txt` or use `python -m meshmend --cli`.", file=sys.stderr)
+        print("PySide6 is not installed. Install PySide6, or use `python -m meshmend --cli`.", file=sys.stderr)
         print(str(exc), file=sys.stderr)
         return 2
 
-    from meshmend.app.main_window import MainWindow
+    from meshmend.app.ui_main import MeshMendWindow
 
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow()
+    window = MeshMendWindow()
     window.resize(1280, 820)
     window.show()
     return int(app.exec())

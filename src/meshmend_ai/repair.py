@@ -15,6 +15,7 @@ class RepairOptions:
     max_bridge_distance: float | None = None
     merge_digits: int = 6
     max_hole_edges: int = 80
+    max_existing_vertex_displacement: float = 0.005
 
 
 @dataclass(slots=True)
@@ -33,6 +34,8 @@ class RepairReport:
     boundary_edges_after: int
     holes_capped: int
     bridges_added: int
+    max_existing_vertex_displacement: float
+    detail_preservation: str
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -48,6 +51,11 @@ def repair_stl(
     The repair path intentionally favors predictable geometry operations over a
     generative model. AI can choose settings and explain tradeoffs, but the STL
     changes themselves should be deterministic and repeatable.
+
+    Museum-scan rule: do not smooth, decimate, subdivide, remesh, relax, inflate,
+    shrink, or average the source surface. Existing vertex coordinates are kept
+    fixed; repair adds/removes only structural faces/vertices needed for duplicate
+    cleanup, degenerate removal, normal orientation, and small boundary closure.
     """
 
     options = options or RepairOptions()
@@ -72,6 +80,13 @@ def repair_stl(
         _repair_orientation(repaired)
         _clean_mesh(repaired, options.merge_digits)
 
+    max_existing_vertex_displacement = _max_existing_vertex_displacement(original, repaired, options.max_existing_vertex_displacement)
+    if max_existing_vertex_displacement > options.max_existing_vertex_displacement:
+        raise ValueError(
+            "Repair would move or remove original sculpt vertices beyond the museum-scan tolerance "
+            f"({max_existing_vertex_displacement:.6g} > {options.max_existing_vertex_displacement:.6g} model units)."
+        )
+
     output_path.parent.mkdir(parents=True, exist_ok=True)
     repaired.export(output_path)
 
@@ -90,6 +105,11 @@ def repair_stl(
         boundary_edges_after=_boundary_edge_count(repaired),
         holes_capped=holes_capped,
         bridges_added=bridges_added,
+        max_existing_vertex_displacement=max_existing_vertex_displacement,
+        detail_preservation=(
+            "museum_scan: preserved source vertex coordinates; no smoothing, subdivision, decimation, remeshing, "
+            "inflation, shrink, or topology optimization outside structural defects"
+        ),
     )
 
 
@@ -164,6 +184,59 @@ def _boundary_edge_count(mesh: trimesh.Trimesh) -> int:
         return 0
     counts = np.bincount(mesh.edges_unique_inverse)
     return int(np.count_nonzero(counts == 1))
+
+
+def _max_existing_vertex_displacement(
+    original: trimesh.Trimesh,
+    repaired: trimesh.Trimesh,
+    tolerance: float,
+) -> float:
+    """Verify original sculpt vertices still exist within the allowed tolerance.
+
+    The repair pipeline should not move source vertices at all. Duplicate welding
+    may collapse repeated coordinates, and degenerate-face cleanup may remove
+    unused references, but every original coordinate must still be represented by
+    a repaired vertex within the miniature-scale tolerance.
+    """
+
+    if len(original.vertices) == 0 or len(original.faces) == 0 or len(repaired.vertices) == 0:
+        return 0.0
+    original_referenced = np.unique(np.asarray(original.faces).reshape(-1))
+    original_vertices = np.asarray(original.vertices)[original_referenced]
+    tolerance = max(float(tolerance), 0.0)
+    if tolerance <= 0.0:
+        return 0.0 if _all_vertices_exactly_represented(original_vertices, repaired.vertices) else float("inf")
+
+    repaired_keys = {tuple(np.round(vertex / tolerance).astype(np.int64)) for vertex in np.asarray(repaired.vertices)}
+    missing = []
+    for vertex in original_vertices:
+        key = tuple(np.round(vertex / tolerance).astype(np.int64))
+        if key not in repaired_keys:
+            missing.append(vertex)
+            if len(missing) >= 64:
+                break
+    if not missing:
+        return 0.0
+
+    # Slow path only runs for unexpected drift/removal. Keep it chunked so very
+    # large miniature scans fail with a useful displacement estimate instead of
+    # trying to allocate an NxM distance matrix.
+    repaired_vertices = np.asarray(repaired.vertices, dtype=float)
+    worst = 0.0
+    for vertex in missing:
+        best_squared = float("inf")
+        for start in range(0, len(repaired_vertices), 50_000):
+            chunk = repaired_vertices[start : start + 50_000]
+            deltas = chunk - vertex
+            distances = np.einsum("ij,ij->i", deltas, deltas)
+            best_squared = min(best_squared, float(np.min(distances)))
+        worst = max(worst, float(np.sqrt(best_squared)))
+    return worst
+
+
+def _all_vertices_exactly_represented(original_vertices: np.ndarray, repaired_vertices: np.ndarray) -> bool:
+    repaired_keys = {tuple(np.asarray(vertex, dtype=float)) for vertex in repaired_vertices}
+    return all(tuple(np.asarray(vertex, dtype=float)) in repaired_keys for vertex in original_vertices)
 
 
 def _cap_boundary_holes(mesh: trimesh.Trimesh, max_hole_edges: int) -> int:

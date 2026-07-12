@@ -669,15 +669,15 @@ class MeshMendGUI:
                 input_path,
                 connector_radius=connector_radius,
                 max_bridge_distance=max_bridge_distance,
-                force_bridge=True,
+                force_bridge=False,
             )
-            self._post_progress(38, "Repairing holes, normals, and detached components")
+            self._post_progress(38, "Repairing structural mesh defects without smoothing or remeshing")
             result = assistant.repair(
                 input_path,
                 output_path,
                 connector_radius=connector_radius,
                 max_bridge_distance=max_bridge_distance,
-                force_bridge=True,
+                force_bridge=False,
             )
             self._post_progress(82, "Running explanation and learning layer")
             if use_perseus and result.perseus is None:

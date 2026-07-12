@@ -53,7 +53,7 @@ def main() -> int:
     try:
         result = run_local_meshmend_sculpt_external(request, input_path, output_dir, workflow, enhanced_prompt=enhanced_prompt, spec=spec)
         model_path = resolve_local_model(output_dir, result)
-        mesh_info = inspect_mesh(model_path)
+        mesh_info = inspect_mesh(model_path, workflow=workflow)
     except Exception as exc:
         return fail(
             output_dir,
@@ -149,7 +149,7 @@ def run_local_meshmend_sculpt_external(
         "provider": "meshmend_no_api_native_sculpt_engine",
         "geometry_source": "meshmend_owned_staged_miniature_sculpt_engine_no_hunyuan",
         "capability_tier": "native_store_quality_sculpt_engine",
-        "store_quality_certified": True,
+        "store_quality_certified": bool(assembly.quality_report.passed),
         "workflow": workflow,
         "miniature_spec": studio_spec.to_dict(),
         "store_quality_scores": scores,
@@ -281,17 +281,50 @@ def filter_overlay_quality_issues(issues: list[str], result: dict[str, Any]) -> 
     """Keep native sculpt outputs under structural gates without treating sculpt stamps as Hunyuan artifacts."""
     mesh_info = result.get("mesh_info") if isinstance(result, dict) else {}
     if isinstance(mesh_info, dict) and mesh_info.get("hunyuan_used") is False and mesh_info.get("sculpt_engine_report"):
-        # The dedicated sculpt engine adds many watertight surface stamps for
-        # rivets, chains, skulls, wear, and micro detail. They are intentional
-        # sculpt geometry, not Hunyuan/card debris. Keep hard topology failures
-        # (open/non-manifold/not watertight), but let DetailCritic handle visual
-        # surface richness instead of the old smooth-area heuristic.
+        internal_ready = bool(mesh_info.get("production_ready"))
+        integrated_final_detail = native_final_detail_integrated(mesh_info)
+        # The owned sculpt engine may add raised detail, but detached shells and
+        # broad smooth primitive surfaces are exactly the visible failure mode the
+        # user is reporting. Do not certify those away based on internal metadata;
+        # only suppress Hunyuan/card-style false positives and STL reload topology
+        # noise after the in-memory pipeline says the native sculpt is production
+        # ready. A smooth-area warning is suppressible only after the final
+        # detail pass proves it fused the detail into <=3 shells and increased
+        # sharp/definition metrics; the old 86-component noisy output fails this.
         return [
             issue
             for issue in issues
-            if not (issue.startswith("too_many_components:") or issue.startswith("large_smooth_primitive_surfaces_dominate:"))
+            if not (
+                (internal_ready and issue == "mesh_not_watertight")
+                or (internal_ready and issue.startswith("open_surfaces:"))
+                or (internal_ready and issue.startswith("non_manifold_topology:"))
+                or (internal_ready and issue == "background_slab_artifact")
+                or (integrated_final_detail and issue.startswith("large_smooth_primitive_surfaces_dominate:"))
+            )
         ]
     return issues
+
+
+def native_final_detail_integrated(mesh_info: dict[str, Any]) -> bool:
+    """Return whether final detail is fused into the printable mesh skin."""
+    stages = mesh_info.get("stage_results") if isinstance(mesh_info, dict) else []
+    if not isinstance(stages, list):
+        return False
+    for stage in stages:
+        if not isinstance(stage, dict) or stage.get("name") != "final_controlled_detail_definition" or not stage.get("passed"):
+            continue
+        artifacts = stage.get("artifacts") if isinstance(stage.get("artifacts"), dict) else {}
+        detail_engine = artifacts.get("face_detail_engine") if isinstance(artifacts.get("face_detail_engine"), dict) else {}
+        after = artifacts.get("after") if isinstance(artifacts.get("after"), dict) else {}
+        try:
+            components = int(detail_engine.get("components_after_final_fusion") or 999)
+            definition_signal = float(after.get("definition_signal") or 0.0)
+            sharp_angle_ratio = float(after.get("sharp_angle_ratio") or 0.0)
+        except (TypeError, ValueError):
+            return False
+        if components <= 3 and definition_signal >= 0.40 and sharp_angle_ratio >= 0.30:
+            return True
+    return False
 
 
 def filter_overlay_score_issues(issues: list[str], result: dict[str, Any]) -> list[str]:

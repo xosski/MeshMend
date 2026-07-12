@@ -2,12 +2,13 @@ from pathlib import Path
 
 import trimesh
 
+from meshmend_ai.repair import RepairOptions, repair_stl
 from meshmend.ai import GenerationRequest, get_adapter
 from meshmend.compliance.filters import sanitize_prompt
 from meshmend.core import add_circular_base, auto_scale_to_height, build_printability_report, load_mesh
 from meshmend.export import export_slicer_ready
 from meshmend.repair import repair_mesh
-from meshmend.studio import DetailCritic, MannequinDetector, PartCategory, MiniatureSculptQualityGate, SculptEngine, StagedMiniaturePipeline, StudioMiniaturePipeline, StudioMiniatureSpec, StudioQualityGate, silhouette_similarity_ratio, silhouette_similarity_signature, write_black_silhouette_previews
+from meshmend.studio import DetailCritic, MannequinDetector, PartCategory, MiniatureSculptQualityGate, SculptDetailControlProfile, SculptEngine, StagedMiniaturePipeline, StudioMiniaturePipeline, StudioMiniatureSpec, StudioQualityGate, silhouette_similarity_ratio, silhouette_similarity_signature, write_black_silhouette_previews
 
 
 def test_repair_fills_simple_box_hole() -> None:
@@ -17,6 +18,20 @@ def test_repair_fills_simple_box_hole() -> None:
     repaired = repair_mesh(mesh)
     assert before.holes > 0
     assert repaired.after.holes <= before.holes
+
+
+def test_file_repair_preserves_existing_vertices_within_museum_scan_tolerance(tmp_path: Path) -> None:
+    mesh = trimesh.creation.box(extents=[10, 10, 10])
+    mesh.update_faces([i for i in range(len(mesh.faces)) if i != 0])
+    input_path = tmp_path / "scan_with_hole.stl"
+    output_path = tmp_path / "scan_repaired.stl"
+    mesh.export(input_path)
+
+    report = repair_stl(input_path, output_path, RepairOptions(max_existing_vertex_displacement=0.005))
+
+    assert output_path.exists()
+    assert report.max_existing_vertex_displacement <= 0.005
+    assert "no smoothing" in report.detail_preservation
 
 
 def test_scale_and_base_change_dimensions() -> None:
@@ -189,6 +204,19 @@ def test_store_quality_boilerplate_does_not_override_subject_archetype() -> None
     assert "huge_pauldrons" in concept["shape_language"]["required_silhouette_tags"]
 
 
+def test_miniature_spec_routes_fantasy_weapons_before_detail_controls() -> None:
+    elf = StudioMiniatureSpec.from_prompt("High Elf Warrior with glaive layered fantasy armor cape leaf trim")
+    orc = StudioMiniatureSpec.from_prompt("Orc Brute with cleaver hunched muscular body tusks crude armor")
+    dwarf = StudioMiniatureSpec.from_prompt("Dwarf Warrior with axe runic heavy armor stocky proportions shield")
+
+    assert elf.style == "fantasy"
+    assert elf.weapon == "spear"
+    assert orc.style == "fantasy"
+    assert orc.weapon == "axe"
+    assert dwarf.style == "fantasy"
+    assert dwarf.weapon == "axe"
+
+
 def test_archetype_separation_fails_above_40_percent_similarity() -> None:
     prompts = [
         "High Elf Warrior with glaive layered fantasy armor cape heroic posture",
@@ -290,6 +318,37 @@ def test_foundation_first_sculpt_still_adds_readable_detail_geometry() -> None:
     assert report.passed
     assert {"armor_trim", "panel_line", "rivet", "weapon_detail", "face_detail", "micro_engraving"}.issubset(components)
     assert report.critic_scores["overall"] >= 85.0
+
+
+def test_final_detail_definition_pass_changes_printable_mesh_geometry() -> None:
+    mesh = trimesh.creation.uv_sphere(radius=12.0, count=[96, 48])
+    mesh.metadata["studio_components"] = ["body", "head", "helmet", "weapon", "base", "space_terminator_shape"]
+    mesh.metadata["sculpt_engine"] = {"character_foundation_first": True}
+    spec = StudioMiniatureSpec.from_prompt(
+        "original sci-fi heavy infantry with rifle backpack vents helmet lenses rivets panel lines",
+        target_faces=20_000,
+    )
+
+    detailed, stage = StagedMiniaturePipeline().final_detail_definition_pass(mesh, spec, {})
+
+    assert stage.passed, stage.issues
+    assert stage.artifacts["max_vertex_delta_mm"] > 0.0
+    assert stage.artifacts["face_detail_engine"]["panel_lines"] >= 40
+    assert stage.artifacts["face_detail_engine"]["rivets"] >= 60
+    assert stage.artifacts["face_detail_engine"]["vents"] >= 40
+    assert stage.artifacts["face_detail_engine"]["added_faces"] >= 10_000
+    assert "final_controlled_sculpt_definition" in detailed.metadata
+    components = set(detailed.metadata.get("studio_components", []))
+    assert {"final_controlled_sculpt_definition", "panel_line", "armor_trim", "backpack_vent", "weapon_detail"}.issubset(components)
+
+
+def test_detail_control_profile_exposes_required_detail_families() -> None:
+    spec = StudioMiniatureSpec.from_prompt("8K ultra detail sci-fi rifle trooper with backpack vents and panel lines")
+    controls = SculptDetailControlProfile.from_spec(spec, {"design": {"role": "astra_shock_trooper"}})
+
+    assert controls.final_relief_amplitude_mm > 0.42
+    assert controls.minimum_detail_tags >= 14
+    assert {"face_detail", "weapon_detail", "panel_line", "backpack_vent"}.issubset(set(controls.required_detail_families))
 
 
 def test_detail_critic_rejects_smooth_blockout() -> None:

@@ -289,7 +289,7 @@ def main(argv: list[str] | None = None) -> int:
             max_bridge_distance=args.max_bridge_distance,
             merge_digits=args.merge_digits,
             max_hole_edges=args.max_hole_edges,
-            force_bridge=True,
+            force_bridge=args.bridge_disconnected or args.fix_overhangs,
         )
         if args.report:
             print(json.dumps(result.to_dict(), indent=2))

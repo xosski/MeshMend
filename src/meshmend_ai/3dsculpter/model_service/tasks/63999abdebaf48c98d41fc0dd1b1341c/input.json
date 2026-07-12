@@ -1,0 +1,13 @@
+{
+  "prompt": "a space marine backend verification after final component base gate fix studio quality crisp armor lenses grille chest emblem weapon bevels reactor backpack 20260707_final_gate_fix",
+  "quality": "high",
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 600000,
+  "scale_mm": null,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

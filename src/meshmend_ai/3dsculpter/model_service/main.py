@@ -17,6 +17,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from starlette.background import BackgroundTask
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -61,6 +62,8 @@ app = FastAPI(title="MeshMend Independent 3D Model Service", version="0.1.0")
 class TextTo3DRequest(BaseModel):
     prompt: str
     quality: str = "high"
+    studio_mode: bool = True
+    debug_mode: bool = False
     target_formats: list[str] = ["stl", "glb", "obj"]
     # Keep the service default memory-safe. Local repair/detail passes can grow
     # faces in 4x jumps, so million-face requests can become 3-5M face meshes and
@@ -113,6 +116,7 @@ class TaskRecord:
 
 
 _tasks: dict[str, TaskRecord] = {}
+_served_files: dict[str, Path] = {}
 _lock = threading.Lock()
 _hunyuan_import_cache: dict[str, Any] | None = None
 _hunyuan_import_cache_at = 0.0
@@ -134,7 +138,7 @@ async def health():
         "status": "healthy",
         "backend_running": True,
         "model_quality_acceptable": bool(studio_ready),
-        "model_quality_note": "backend health is separate from miniature quality; only certified external runners may report model_quality_acceptable=true",
+        "model_quality_note": "backend health is separate from miniature quality; studio output is accepted only when the worker returns a passing strict quality report",
         "memory_safety": _memory_safety_status(),
         "service_build_id": SERVICE_BUILD_ID,
         "service_root": str(SERVICE_ROOT),
@@ -151,7 +155,7 @@ async def health():
         "ready_for_studio_quality": studio_ready,
         "ready_for_experimental_high_detail": experimental_high_detail_ready,
         "capability_tier": _capability_tier(production_engine),
-        "store_quality_reason": _store_quality_reason(production_engine) if not studio_ready else "certified production backend configured",
+        "store_quality_reason": _store_quality_reason(production_engine) if not studio_ready else "strict studio-quality gate configured; outputs must return studio_quality_certified=true",
         "model_worker_python": MODEL_WORKER_PYTHON,
         "hunyuan3d_path": os.environ.get("MESHMEND_HUNYUAN3D_PATH", ""),
         "hunyuan3d_model": os.environ.get("MESHMEND_HUNYUAN3D_MODEL", ""),
@@ -322,7 +326,21 @@ async def get_file(filename: str):
     path = OUTPUTS_DIR / safe_name
     if not path.exists() or not path.is_file():
         raise HTTPException(status_code=404, detail="File not found")
-    return FileResponse(path)
+    background = None
+    if _cleanup_outputs_after_download_enabled():
+        background = BackgroundTask(_cleanup_downloaded_file_artifacts, safe_name)
+    return FileResponse(path, background=background)
+
+
+@app.post("/v1/tasks/{task_id}/cleanup")
+async def cleanup_task_outputs(task_id: str):
+    """Remove model-service task/output artifacts after the client has saved the result."""
+    safe_task_id = Path(task_id).name
+    if not safe_task_id or safe_task_id != task_id:
+        raise HTTPException(status_code=400, detail="Invalid task id")
+    removed = _cleanup_task_artifacts(safe_task_id, remove_flattened=True)
+    LOGGER.info(json.dumps({"event": "task_artifacts_cleanup_requested", "task_id": safe_task_id, "removed": removed}, default=str))
+    return {"status": "ok", "task_id": safe_task_id, "removed": removed}
 
 
 def _enqueue(workflow: str, payload: dict[str, Any]) -> dict[str, str]:
@@ -363,6 +381,10 @@ def _production_runner_ready(workflow: str) -> bool:
 
 def _studio_quality_runner_ready(workflow: str) -> bool:
     engine = os.environ.get("MESHMEND_PRODUCTION_ENGINE", "meshmend_native").strip().lower()
+    if engine in {"free_local", "free_local_hunyuan", "hunyuan", "hunyuan3d"}:
+        if not _production_runner_ready(workflow):
+            return False
+        return _strict_studio_gate_enforced()
     if engine not in {"external", "command"}:
         return False
     if os.environ.get("MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED", "0").strip().lower() not in {"1", "true", "yes", "on"}:
@@ -395,6 +417,15 @@ def _can_accept_high_detail_request(workflow: str) -> bool:
     # debugging only.
     allow_uncertified = os.environ.get("MESHMEND_ALLOW_UNCERTIFIED_STORE_QUALITY_OUTPUT", "0").strip().lower() in {"1", "true", "yes", "on"}
     return allow_uncertified and _experimental_high_detail_runner_ready(workflow)
+
+
+def _strict_studio_gate_enforced() -> bool:
+    """Return true only when studio requests fail closed instead of exporting best effort meshes."""
+    if os.environ.get("MESHMEND_DISABLE_STORE_QUALITY_GATE", "0").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    if os.environ.get("MESHMEND_ALLOW_BEST_EFFORT_EXPORT", "0").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+    return True
 
 
 def _store_quality_requested(payload: dict[str, Any]) -> bool:
@@ -430,13 +461,20 @@ def _capability_tier(engine: str) -> str:
     if engine in {"meshmend_sculpt", "native_sculpt", "sculpt"}:
         return "experimental_image_conditioned_native_sculpt"
     if engine in {"free_local", "free_local_hunyuan", "hunyuan", "hunyuan3d"}:
-        return "experimental_image_reconstruction"
+        return "strict_gated_local_hunyuan" if _strict_studio_gate_enforced() else "experimental_image_reconstruction"
     if engine in {"external", "command"}:
         return "external_uncertified"
     return "unconfigured"
 
 
 def _store_quality_reason(engine: str) -> str:
+    if engine.strip().lower() in {"free_local", "free_local_hunyuan", "hunyuan", "hunyuan3d"}:
+        if not _strict_studio_gate_enforced():
+            return (
+                "Local Hunyuan is configured, but strict store/studio-quality enforcement is disabled. "
+                "Unset MESHMEND_DISABLE_STORE_QUALITY_GATE and MESHMEND_ALLOW_BEST_EFFORT_EXPORT so studio requests fail unless the postprocess report is production_ready."
+            )
+        return "Local Hunyuan is not ready; verify Hunyuan3D imports successfully in the configured worker Python."
     if engine.strip().lower() in {"meshmend_sculpt", "native_sculpt", "sculpt"}:
         return (
             "Configured engine 'meshmend_sculpt' is an experimental native MiniatureSpec -> rig -> sculpt backend. "
@@ -549,6 +587,14 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
             raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
 
         result = _load_worker_result(result_json, completed.stdout, output_dir)
+
+        if _store_quality_requested(payload) and not _result_studio_certified(result):
+            certification = _result_studio_certification_summary(result)
+            raise RuntimeError(
+                "Studio-quality request completed without certification. "
+                "The mesh was not released because strict studio requests must return studio_quality_certified=true "
+                f"or mesh_info.production_ready=true. Certification summary: {json.dumps(certification, default=str)}"
+            )
 
         progress_result = _read_worker_progress(output_dir)
         if progress_result:
@@ -1056,6 +1102,37 @@ def _load_worker_result(result_json: Path, stdout: str, output_dir: Path) -> dic
     return {}
 
 
+def _result_studio_certified(result: dict[str, Any]) -> bool:
+    if bool(result.get("studio_quality_certified")):
+        return True
+    if bool(result.get("store_quality_certified")):
+        return True
+    mesh_info = result.get("mesh_info")
+    if isinstance(mesh_info, dict) and bool(mesh_info.get("production_ready")):
+        return True
+    if isinstance(mesh_info, dict) and bool(mesh_info.get("store_quality_certified")):
+        return True
+    quality_report = result.get("quality_report")
+    if isinstance(quality_report, dict) and bool(quality_report.get("production_ready")):
+        return True
+    return False
+
+
+def _result_studio_certification_summary(result: dict[str, Any]) -> dict[str, Any]:
+    mesh_info = result.get("mesh_info") if isinstance(result.get("mesh_info"), dict) else {}
+    quality_report = result.get("quality_report") if isinstance(result.get("quality_report"), dict) else {}
+    return {
+        "provider": result.get("provider"),
+        "studio_quality_certified": bool(result.get("studio_quality_certified")),
+        "store_quality_certified": bool(result.get("store_quality_certified")),
+        "mesh_info_production_ready": bool(mesh_info.get("production_ready")),
+        "mesh_info_store_quality_certified": bool(mesh_info.get("store_quality_certified")),
+        "quality_report_production_ready": bool(quality_report.get("production_ready")),
+        "quality_gate_issues": mesh_info.get("quality_gate_issues") or quality_report.get("quality_gate_issues") or [],
+        "studio_quality_note": result.get("studio_quality_note"),
+    }
+
+
 def _worker_error_message(result_json: Path, stdout: str, stderr: str) -> str:
     """Return a concise worker error instead of progress bars and model logs."""
     try:
@@ -1109,7 +1186,88 @@ def task_file_name(path: Path) -> str:
     target = OUTPUTS_DIR / flattened
     if not target.exists():
         shutil.copy2(path, target)
+    with _lock:
+        _served_files[flattened] = path
     return flattened
+
+
+def _cleanup_outputs_after_download_enabled() -> bool:
+    return os.environ.get("MESHMEND_CLEAN_MODEL_SERVICE_OUTPUTS_AFTER_DOWNLOAD", "1").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def _cleanup_downloaded_file_artifacts(filename: str) -> None:
+    """Best-effort cleanup after FastAPI has finished streaming a generated model."""
+    safe_name = Path(filename).name
+    if not safe_name:
+        return
+    removed: dict[str, list[str]] = {"files": [], "dirs": []}
+    try:
+        source_path = None
+        with _lock:
+            source_path = _served_files.pop(safe_name, None)
+        flattened_path = OUTPUTS_DIR / safe_name
+        if flattened_path.exists() and flattened_path.is_file():
+            flattened_path.unlink()
+            removed["files"].append(str(flattened_path))
+        if source_path is not None:
+            source_path = source_path.resolve()
+            outputs_root = OUTPUTS_DIR.resolve()
+            try:
+                source_path.relative_to(outputs_root)
+            except ValueError:
+                source_path = None
+        if source_path is not None:
+            removed = _merge_cleanup_removed(removed, _cleanup_task_artifacts(source_path.parent.name, remove_flattened=False))
+        LOGGER.info(json.dumps({"event": "download_cleanup_complete", "filename": safe_name, "removed": removed}, default=str))
+    except Exception:
+        LOGGER.exception("download_cleanup_failed")
+
+
+def _cleanup_task_artifacts(task_id: str, *, remove_flattened: bool) -> dict[str, list[str]]:
+    removed: dict[str, list[str]] = {"files": [], "dirs": []}
+    task_output_dir = OUTPUTS_DIR / task_id
+    task_input_dir = TASKS_DIR / task_id
+
+    if remove_flattened:
+        with _lock:
+            flattened_names = [name for name, source in _served_files.items() if source.parent.name == task_id]
+            for name in flattened_names:
+                _served_files.pop(name, None)
+        for name in flattened_names:
+            path = OUTPUTS_DIR / Path(name).name
+            if path.exists() and path.is_file():
+                try:
+                    path.unlink()
+                    removed["files"].append(str(path))
+                except Exception:
+                    LOGGER.exception("flattened_output_cleanup_failed")
+        for path in OUTPUTS_DIR.glob(f"{task_id}_*"):
+            if path.is_file():
+                try:
+                    path.unlink()
+                    removed["files"].append(str(path))
+                except Exception:
+                    LOGGER.exception("flattened_output_cleanup_failed")
+
+    for directory in (task_output_dir, task_input_dir):
+        if directory.exists() and directory.is_dir():
+            try:
+                shutil.rmtree(directory)
+                removed["dirs"].append(str(directory))
+            except Exception:
+                LOGGER.exception("task_directory_cleanup_failed")
+    return removed
+
+
+def _merge_cleanup_removed(left: dict[str, list[str]], right: dict[str, list[str]]) -> dict[str, list[str]]:
+    for key in ("files", "dirs"):
+        left.setdefault(key, []).extend(right.get(key, []))
+    return left
 
 
 def _update(task_id: str, **changes: Any) -> None:

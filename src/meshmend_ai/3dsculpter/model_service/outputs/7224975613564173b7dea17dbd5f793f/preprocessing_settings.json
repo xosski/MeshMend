@@ -1,0 +1,9 @@
+{
+  "background_removed": true,
+  "alpha_mask": "foreground_mask.png",
+  "subject_height_target_fraction": 0.78,
+  "centered": true,
+  "base_removed_from_mask": true,
+  "view_requirement": "neutral_front_three_quarter_not_top_down",
+  "backend_source": "backend_source_exact.png"
+}

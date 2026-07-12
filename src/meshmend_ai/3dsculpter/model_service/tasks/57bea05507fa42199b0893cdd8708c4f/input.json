@@ -1,0 +1,11 @@
+{
+  "prompt": "a space marine backend fix verification studio level crisp details armor trim rivets helmet vents weapon bevels 20260707_085507",
+  "quality": "high",
+  "target_formats": [
+    "stl"
+  ],
+  "target_polycount": 600000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

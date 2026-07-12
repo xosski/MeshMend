@@ -38,6 +38,7 @@ def main() -> int:
 
     request = read_json(Path(args.input))
     prompt = Path(args.prompt).read_text(encoding="utf-8") if Path(args.prompt).exists() else str(request.get("prompt") or "")
+    workflow = str(request.get("workflow") or ("image_to_3d" if args.image else "text_to_3d"))
     target_polycount = int(float(args.target_polycount or request.get("target_polycount") or 2_000_000))
     image_path = Path(args.image) if args.image else None
     spec = build_miniature_spec(request, prompt, image_path, target_polycount)
@@ -92,7 +93,7 @@ def main() -> int:
     try:
         result = load_backend_result(output_dir, completed.stdout)
         model_path = resolve_model_path(output_dir, result)
-        mesh_info = inspect_mesh(model_path)
+        mesh_info = inspect_mesh(model_path, workflow=workflow)
     except Exception as exc:
         return fail(output_dir, f"External generator did not produce a valid model artifact: {exc}", spec=spec)
 
@@ -144,6 +145,7 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
     image_cues = reference_image_subject_cues(image_path) if image_path is not None else {}
     semantic_plan = local_semantic_plan(subject_text)
     semantic_archetype = str(semantic_plan.get("archetype") or "generic_humanoid")
+    semantic_archetype_is_generic = semantic_archetype in {"", "generic_humanoid", "generic_prompt_driven_humanoid"}
     is_alien_bioform = any(
         term in subject_text
         for term in (
@@ -173,7 +175,7 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
     archetype = (
         "alien_chitin_bioform" if is_alien_bioform
         else "power_armored_space_marine" if is_space_marine
-        else semantic_archetype if semantic_archetype != "generic_humanoid"
+        else semantic_archetype if not semantic_archetype_is_generic
         else "mounted_beast" if any(term in subject_text for term in ("mounted", "rider", "dragon", "beast", "cavalry"))
         else "robed_caster" if any(term in subject_text for term in ("wizard", "mage", "sorcerer", "witch", "warlock", "cleric", "priest", "robe", "robed"))
         else "stealth_rogue" if any(term in subject_text for term in ("rogue", "assassin", "ranger", "thief", "ninja", "dagger"))
@@ -229,6 +231,8 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
         landmarks += ["boxy_panels", "sensor_visor", "cables", "mechanical_joints"]
     if archetype == "lizardfolk_warrior":
         landmarks += ["long_snout", "visible_tail", "scale_rows", "claws", "crest_spines"]
+    if archetype == "mounted_beast" and any(term in subject_text for term in ("dragon", "drake", "wyvern", "wyrm")):
+        landmarks += ["dragon_head", "long_snout", "visible_tail", "scale_rows", "claws", "crest_spines", "wings_or_large_back_silhouette"]
     if archetype == "mounted_beast" and image_path is not None and not prompt_has_subject:
         landmarks += [
             "preserve_uploaded_reference_silhouette",
@@ -274,6 +278,8 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
         "quality_bar": "commercial tabletop miniature STL, 360-degree sculpt, resin-printable, not a blockout",
         "generation_pipeline": {
             "concept_generation_separate_from_mesh_generation": True,
+            "return_policy": "never_return_first_unevaluated_mesh",
+            "automatic_refinement": "regenerate_or_refine_until_topology_symmetry_manifold_silhouette_and_printability_gates_pass",
             "modular_parts": ["head", "torso", "legs", "left_arm", "right_arm", "weapons", "accessories"],
             "assembly_before_sculpting": True,
             "sculpt_passes": [
@@ -282,6 +288,7 @@ def build_miniature_spec(request: dict[str, Any], prompt: str, image_path: Path 
                 "tertiary_micro_detail_engravings_insignia_texture",
             ],
             "artifact_rejection": ["planes", "sheets", "floating_geometry", "disconnected_shells", "non_manifold_topology", "open_surfaces"],
+            "hard_quality_gates": ["topology", "gross_bilateral_symmetry", "manifold_edges", "multi_view_silhouette_readability", "watertight_printability"],
             "quality_critic_minimum_score": 85,
         },
         "input_image": image_path.name if image_path else None,
@@ -356,6 +363,7 @@ def build_enhanced_prompt(prompt: str, spec: dict[str, Any]) -> str:
         f"{reference_sentence}"
         "Pipeline requirement: first create a complete concept/specification, then generate separate modular meshes for head, torso, legs, left arm, right arm, weapons, and accessories; assemble these modules into a complete miniature before sculpting. "
         "Run a primary sculpt pass for large anatomical and silhouette forms, a secondary sculpt pass for armor details/trims/vents/pouches, and a tertiary sculpt pass for micro-detail, engravings, insignia, and surface texture. "
+        "Do not return the first generated mesh by default: score every generated/refined candidate as a printable tabletop miniature, then automatically repair, refine, or regenerate if topology, symmetry, manifold, silhouette, watertightness, heroic proportions, or detail-readability checks fail. "
         "Use clean 360-degree sculpt anatomy, readable face/helmet, hands/fingers or claws, bevelled weapons, layered armor/cloth/leather/metal details, "
         "deep recesses and raised trim that survive miniature painting, a fused scenic base, watertight topology, and commercial STL-ready geometry. "
         "Avoid and reject smooth blobs, flat bas-relief, planes, sheets, card-like depth, generic rocks, floating geometry, disconnected shells, non-manifold topology, open surfaces, and low-poly decimated surfaces. "
@@ -390,11 +398,11 @@ def resolve_model_path(output_dir: Path, result: dict[str, Any]) -> Path:
     return max(candidates, key=lambda item: item.stat().st_mtime)
 
 
-def inspect_mesh(model_path: Path) -> dict[str, Any]:
+def inspect_mesh(model_path: Path, *, process: bool = True, workflow: str | None = None) -> dict[str, Any]:
     import numpy as np
     import trimesh
 
-    mesh = trimesh.load(model_path, force="mesh", process=True)
+    mesh = trimesh.load(model_path, force="mesh", process=process)
     if isinstance(mesh, trimesh.Scene):
         mesh = trimesh.util.concatenate(tuple(mesh.geometry.values()))
     if not isinstance(mesh, trimesh.Trimesh) or len(mesh.faces) == 0:
@@ -415,7 +423,7 @@ def inspect_mesh(model_path: Path) -> dict[str, Any]:
         from postprocess_backend import likely_background_slab, likely_horizontal_sheet_card, likely_image_low_relief_sheet
 
         sheet_card_artifact = bool(likely_horizontal_sheet_card(mesh))
-        background_slab_artifact = bool(likely_background_slab(mesh, {"workflow": "image_to_3d"}))
+        background_slab_artifact = bool(likely_background_slab(mesh, {"workflow": workflow or "text_to_3d"}))
         low_relief_sheet = bool(likely_image_low_relief_sheet(mesh))
     except Exception:
         pass

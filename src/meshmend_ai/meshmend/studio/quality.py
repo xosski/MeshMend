@@ -28,6 +28,9 @@ class StudioQualityReport:
     artifact_rejections: list[str] | None = None
     critic_scores: dict[str, float] | None = None
     critic_score: float = 0.0
+    printable_miniature_score: float = 0.0
+    symmetry_score: float = 0.0
+    silhouette_readability_score: float = 0.0
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
@@ -53,9 +56,11 @@ class StudioQualityGate:
 
     def evaluate(self, mesh: trimesh.Trimesh) -> StudioQualityReport:
         diagnostic = mesh.copy()
+        sculpt_engine_output = "sculpt_engine" in diagnostic.metadata
         try:
             diagnostic.remove_unreferenced_vertices()
-            diagnostic.merge_vertices()
+            if not sculpt_engine_output:
+                diagnostic.merge_vertices()
             diagnostic.fix_normals()
         except Exception:
             pass
@@ -139,6 +144,8 @@ class MiniatureSculptQualityGate(StudioQualityGate):
     min_vertices: int = int(os.environ.get("MESHMEND_MINIATURE_DRAFT_MIN_VERTICES", "62500"))
     min_premium_faces: int = int(os.environ.get("MESHMEND_MINIATURE_PREMIUM_MIN_FACES", "500000"))
     max_smooth_surface_area_ratio: float = 0.68
+    min_symmetry_score: float = 0.35
+    min_silhouette_readability_score: float = 0.42
     required_components: tuple[str, ...] = (
         "body",
         "helmet",
@@ -171,8 +178,49 @@ class MiniatureSculptQualityGate(StudioQualityGate):
         "belt",
         "pouch",
         "base_texture",
+        "lamellar_plate_rows",
+        "scale_rows",
+        "crest_spines",
+        "long_tail",
+        "tail",
+        "claws",
+        "dragon_wings",
+        "wing_membranes",
+        "large_back_silhouette",
+        "defined_creature_jaw",
+        "brow_ridges",
+        "teeth",
+        "horns",
+        "large_ordered_scale_rows",
+        "hood_or_mask",
+        "quiver",
+        "bow_detail",
+        "studio_definition_forms",
+        "studio_definition_geometry",
     )
-    critical_detail_tags: tuple[str, ...] = ("helmet_lenses", "helmet_mouth_grille", "weapon_barrel", "weapon_detail", "face_detail", "body_detail")
+    critical_detail_tags: tuple[str, ...] = (
+        "helmet_lenses",
+        "helmet_mouth_grille",
+        "weapon_barrel",
+        "weapon_detail",
+        "face_detail",
+        "body_detail",
+        "kabuto_helmet",
+        "hood_or_mask",
+        "reptile_head",
+        "scale_rows",
+        "crest_spines",
+        "long_tail",
+        "tail",
+        "dragon_wings",
+        "wing_membranes",
+        "defined_creature_jaw",
+        "large_ordered_scale_rows",
+        "quiver",
+        "bow_detail",
+        "studio_definition_forms",
+        "studio_definition_geometry",
+    )
 
     @classmethod
     def premium(cls) -> "MiniatureSculptQualityGate":
@@ -186,6 +234,8 @@ class MiniatureSculptQualityGate(StudioQualityGate):
         present = set(report.required_components_present)
         foundation_first = bool((mesh.metadata.get("sculpt_engine") or {}).get("character_foundation_first"))
         smooth_ratio = _smooth_surface_area_ratio(mesh)
+        symmetry_score = _bilateral_symmetry_score(mesh)
+        silhouette_readability_score = _silhouette_readability_score(mesh)
         equipment_present = sorted(tag for tag in self.required_equipment_tags if tag in present)
         sculptural_details = sorted(tag for tag in self.detail_tags if tag in present)
         critical_details = sorted(tag for tag in self.critical_detail_tags if tag in present)
@@ -195,16 +245,33 @@ class MiniatureSculptQualityGate(StudioQualityGate):
             and report.faces >= self.min_faces
             and len(sculptural_details) >= 10
             and len(critical_details) >= 3
+            and {"studio_definition_forms", "studio_definition_geometry"}.issubset(present)
+        )
+        integrated_fused_detail_pipeline = (
+            foundation_first
+            and bool(mesh.metadata.get("studio_solid_fused"))
+            and bool(mesh.metadata.get("studio_fused_surface_definition_reprojected"))
+            and report.components <= 3
+            and report.faces >= self.min_faces
+            and len(sculptural_details) >= 10
+            and len(critical_details) >= 3
+            and {"studio_definition_forms", "studio_definition_geometry"}.issubset(present)
         )
         issues = list(report.issues)
+        semantic_shoulder_equivalent = present & {"sode_shoulders", "lamellar_plate_rows", "cloak", "scale_rows", "crest_spines", "dragon_wings"}
+        semantic_backpack_equivalent = present & {"waist_skirt_plates", "sashimono_back_banner", "cloak", "quiver", "long_tail", "tail", "dragon_wings", "large_back_silhouette"}
+        semantic_chest_equivalent = present & {"lamellar_plate_rows", "light_ranger_armor", "scaled_hide_and_scrap_armor", "overlapping_scale_hide", "scale_rows", "quadruped_body_plan"}
         if present & {"high_elf_warrior_shape", "dwarf_warrior_shape", "orc_brute_shape", "human_knight_shape"}:
-            issues = [
-                issue for issue in issues
-                if not (
-                    issue.startswith("missing_required_components:backpack")
-                    or issue.startswith("missing_required_components:shoulder_pad,backpack")
-                )
-            ]
+            issues = _remove_missing_required_components(issues, {"backpack"})
+        if present & {"samurai_warrior_shape", "ranger_warrior_shape", "reptilian_warrior_shape"}:
+            allowed_missing = {"backpack", "shoulder_pad"}
+            if semantic_chest_equivalent:
+                allowed_missing.add("chest_armor")
+            if "reptilian_warrior_shape" in present:
+                allowed_missing.add("helmet")
+            issues = _remove_missing_required_components(issues, allowed_missing)
+        if "dragon_beast_shape" in present:
+            issues = _remove_missing_required_components(issues, {"helmet", "chest_armor", "shoulder_pad", "backpack"})
         if "sculpt_engine" in mesh.metadata:
             # Sculpt-engine miniatures are intentionally assembled from visible
             # raised forms. A voxel union erases those forms into a noisy blob,
@@ -221,12 +288,18 @@ class MiniatureSculptQualityGate(StudioQualityGate):
             ]
 
         if smooth_ratio > self.max_smooth_surface_area_ratio:
-            if len(sculptural_details) < 5 or not geometry_backed_detail_pipeline:
+            if len(sculptural_details) < 5 or not (geometry_backed_detail_pipeline or integrated_fused_detail_pipeline):
                 issues.append(f"large_smooth_primitive_surfaces_dominate:{smooth_ratio:.2f}>{self.max_smooth_surface_area_ratio:.2f}")
         required_equipment = list(self.required_equipment_tags)
-        if present & {"high_elf_warrior_shape", "dwarf_warrior_shape", "orc_brute_shape", "human_knight_shape"}:
+        if present & {"high_elf_warrior_shape", "dwarf_warrior_shape", "orc_brute_shape", "human_knight_shape", "dragon_beast_shape"}:
             required_equipment = [tag for tag in required_equipment if tag != "backpack"]
-        if "clean_shoulder_plate" in present or "huge_pauldrons" in present or "massive_shoulders" in present:
+        if semantic_backpack_equivalent:
+            required_equipment = [tag for tag in required_equipment if tag != "backpack"]
+        if semantic_chest_equivalent:
+            required_equipment = [tag for tag in required_equipment if tag != "chest_armor"]
+        if "reptile_head" in present:
+            required_equipment = [tag for tag in required_equipment if tag != "helmet"]
+        if "clean_shoulder_plate" in present or "huge_pauldrons" in present or "massive_shoulders" in present or semantic_shoulder_equivalent:
             required_equipment = [tag for tag in required_equipment if tag != "shoulder_pad"]
         missing_equipment = [tag for tag in required_equipment if tag not in present]
         if missing_equipment:
@@ -235,8 +308,15 @@ class MiniatureSculptQualityGate(StudioQualityGate):
             issues.append("no_armor_seams_or_panel_lines_detected")
         if len(sculptural_details) < 10:
             issues.append("insufficient_sculptural_detail_geometry:" + ",".join(sculptural_details))
-        if not {"weapon", "helmet", "body"}.issubset(present) or len(critical_details) < 3:
+        if foundation_first and not {"studio_definition_forms", "studio_definition_geometry"}.issubset(present):
+            issues.append("missing_structured_studio_form_definition")
+        head_or_helmet_present = "helmet" in present or "reptile_head" in present or "hood_or_mask" in present or "kabuto_helmet" in present
+        if not ({"weapon", "body"}.issubset(present) and head_or_helmet_present) or len(critical_details) < 3:
             issues.append("missing_weapon_helmet_or_body_detail")
+        if symmetry_score < self.min_symmetry_score:
+            issues.append(f"gross_symmetry_check_failed:{symmetry_score:.2f}<{self.min_symmetry_score:.2f}")
+        if silhouette_readability_score < self.min_silhouette_readability_score:
+            issues.append(f"silhouette_readability_check_failed:{silhouette_readability_score:.2f}<{self.min_silhouette_readability_score:.2f}")
 
         return StudioQualityReport(
             passed=not issues,
@@ -255,6 +335,8 @@ class MiniatureSculptQualityGate(StudioQualityGate):
             smooth_surface_area_ratio=smooth_ratio,
             sculptural_detail_tags_present=sculptural_details,
             equipment_tags_present=equipment_present,
+            symmetry_score=symmetry_score,
+            silhouette_readability_score=silhouette_readability_score,
         )
 
     def require_pass(self, mesh: trimesh.Trimesh) -> StudioQualityReport:
@@ -284,9 +366,11 @@ class MiniatureArtifactDetector:
 
     def detect(self, mesh: trimesh.Trimesh) -> ArtifactDetectionReport:
         diagnostic = mesh.copy()
+        sculpt_engine_output = "sculpt_engine" in diagnostic.metadata
         try:
             diagnostic.remove_unreferenced_vertices()
-            diagnostic.merge_vertices()
+            if not sculpt_engine_output:
+                diagnostic.merge_vertices()
             diagnostic.fix_normals()
         except Exception:
             pass
@@ -345,7 +429,25 @@ class MiniatureQualityCritic:
         depth_ratio = float(extents.min() / extents.max())
         component_score = min(len(present & {"head", "body", "left_arm", "right_arm", "left_leg", "right_leg", "weapon", "base"}) / 8.0, 1.0)
         detail_score = min(len(set(report.sculptural_detail_tags_present or [])) / 10.0, 1.0)
-        equipment_score = min(len(set(report.equipment_tags_present or [])) / 6.0, 1.0)
+        semantic_equipment = present & {
+            "kabuto_helmet",
+            "lamellar_plate_rows",
+            "sode_shoulders",
+            "katana",
+            "waist_skirt_plates",
+            "hood_or_mask",
+            "bow",
+            "quiver",
+            "cloak",
+            "reptile_head",
+            "long_tail",
+            "tail",
+            "scale_rows",
+            "crest_spines",
+            "claws",
+            "primitive_blade_or_spear",
+        }
+        equipment_score = min(len(set(report.equipment_tags_present or []) | semantic_equipment) / 6.0, 1.0)
         smooth_penalty = min(max(report.smooth_surface_area_ratio - 0.42, 0.0) / 0.35, 1.0)
         if (mesh.metadata.get("sculpt_engine") or {}).get("character_foundation_first") and detail_score >= 0.9:
             # The smooth-area heuristic intentionally catches primitive blobs,
@@ -354,7 +456,7 @@ class MiniatureQualityCritic:
             # single heuristic override a full character/detail pipeline.
             smooth_penalty = min(smooth_penalty, 0.25)
         topology_score = 1.0 if report.watertight and not report.boundary_edges and not report.non_manifold_edges and not report.artifact_rejections else 0.62
-        identity_score = 1.0 if present & {"high_elf_warrior_shape", "orc_brute_shape", "astra_shock_trooper_shape", "human_knight_shape", "dwarf_warrior_shape", "space_terminator_shape"} else 0.0
+        identity_score = 1.0 if present & {"high_elf_warrior_shape", "orc_brute_shape", "astra_shock_trooper_shape", "human_knight_shape", "dwarf_warrior_shape", "space_terminator_shape", "samurai_warrior_shape", "ranger_warrior_shape", "reptilian_warrior_shape", "dragon_beast_shape"} else 0.0
         # Do not force million-face meshes just to satisfy the critic. Visual
         # detail is judged by semantic/sculptural tags and surface breakup; face
         # count only guards against draft-level geometry.
@@ -369,6 +471,9 @@ class MiniatureQualityCritic:
             "character_foundation_identity": round(100.0 * identity_score, 2),
         }
         scores["overall"] = round(sum(scores.values()) / len(scores), 2)
+        report.printable_miniature_score = float(scores["overall"])
+        report.critic_scores = scores
+        report.critic_score = float(scores["overall"])
         return scores
 
     def require_pass(self, mesh: trimesh.Trimesh, base_report: StudioQualityReport | None = None) -> dict[str, float]:
@@ -417,6 +522,66 @@ def _component_depth_ratio(mesh: trimesh.Trimesh) -> float:
         return 0.0
     extents = np.maximum(np.asarray(mesh.extents, dtype=float), 1e-6)
     return float(extents.min() / extents.max())
+
+
+def _bilateral_symmetry_score(mesh: trimesh.Trimesh) -> float:
+    """Coarse left/right mass balance check for heroic miniatures.
+
+    This intentionally allows asymmetric weapons, cloaks, and poses; it only
+    rejects gross failures where one side of the miniature is missing or most of
+    the printable mass collapsed into an off-axis artifact.
+    """
+    vertices = np.asarray(mesh.vertices, dtype=float)
+    if len(vertices) == 0:
+        return 0.0
+    # Authored/exported miniatures are centered on their display base.  Use the
+    # base axis rather than the mesh bounding-box center so a missing half does
+    # not hide by simply shifting the box center.
+    center_x = 0.0
+    left = int((vertices[:, 0] < center_x).sum())
+    right = int((vertices[:, 0] >= center_x).sum())
+    balance = 1.0 - abs(left - right) / max(left + right, 1)
+    bounds = np.asarray(mesh.bounds, dtype=float)
+    mirrored = vertices.copy()
+    mirrored[:, 0] = 2.0 * center_x - mirrored[:, 0]
+    mirrored_inside = np.all((mirrored >= bounds[0] - 0.35) & (mirrored <= bounds[1] + 0.35), axis=1)
+    return round(float(max(0.0, min(1.0, 0.70 * balance + 0.30 * float(mirrored_inside.mean())))), 4)
+
+
+def _silhouette_readability_score(mesh: trimesh.Trimesh) -> float:
+    vertices = np.asarray(mesh.vertices, dtype=float)
+    if len(vertices) == 0:
+        return 0.0
+    scores: list[float] = []
+    for axes in ((0, 2), (1, 2)):
+        coords = vertices[:, axes]
+        span = np.maximum(np.ptp(coords, axis=0), 1e-6)
+        normalized = np.clip((coords - coords.min(axis=0)) / span, 0.0, 1.0)
+        resolution = 64
+        pixels = np.clip((normalized * (resolution - 1)).astype(int), 0, resolution - 1)
+        mask = np.zeros((resolution, resolution), dtype=bool)
+        mask[pixels[:, 1], pixels[:, 0]] = True
+        occupancy = float(mask.mean())
+        transitions = float(np.abs(np.diff(mask.astype(np.int8), axis=0)).sum() + np.abs(np.diff(mask.astype(np.int8), axis=1)).sum())
+        edge_score = min(1.0, transitions / 360.0)
+        occupancy_score = 1.0 - min(1.0, abs(occupancy - 0.11) / 0.16)
+        aspect = float(span[0] / max(span[1], 1e-6))
+        heroic_aspect_score = 1.0 - min(1.0, abs(aspect - 0.55) / 0.65)
+        scores.append(max(0.0, 0.52 * edge_score + 0.28 * occupancy_score + 0.20 * heroic_aspect_score))
+    return round(float(sum(scores) / max(len(scores), 1)), 4)
+
+
+def _remove_missing_required_components(issues: list[str], allowed_missing: set[str]) -> list[str]:
+    filtered: list[str] = []
+    for issue in issues:
+        if not issue.startswith("missing_required_components:"):
+            filtered.append(issue)
+            continue
+        missing = [part for part in issue.split(":", 1)[1].split(",") if part]
+        remaining = [part for part in missing if part not in allowed_missing]
+        if remaining:
+            filtered.append("missing_required_components:" + ",".join(remaining))
+    return filtered
 
 
 def _large_sheet_artifact_count(mesh: trimesh.Trimesh) -> int:

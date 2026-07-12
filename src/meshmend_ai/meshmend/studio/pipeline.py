@@ -36,6 +36,21 @@ class StudioMiniatureSpec:
         clean_prompt, _warnings = sanitize_prompt(prompt)
         subject_text = _miniature_subject_text(clean_prompt).lower()
         searchable = subject_text.replace("_", " ")
+        reptilian_creature = any(
+            term in searchable
+            for term in (
+                "dragon",
+                "drake",
+                "wyvern",
+                "wyrm",
+                "lizardfolk",
+                "lizardman",
+                "saurus",
+                "dragonborn",
+                "reptile",
+                "reptilian",
+            )
+        )
         power_armored = any(
             term in searchable
             for term in (
@@ -49,10 +64,28 @@ class StudioMiniatureSpec:
                 "star knight",
             )
         )
-        style = "sci_fi" if power_armored else "fantasy" if any(word in subject_text for word in ("fantasy", "knight", "orc", "elf", "robe", "wizard", "claw")) else "sci_fi"
-        archetype = "space_terminator" if power_armored else "heavy_infantry"
-        weapon = "rifle" if power_armored or any(word in subject_text for word in ("rifle", "bolter", "gun")) else "sword" if any(word in subject_text for word in ("sword", "blade", "axe", "mace")) else "rifle"
-        if "claw" in subject_text and not power_armored:
+        fantasy_subject = reptilian_creature or any(
+            word in subject_text
+            for word in (
+                "fantasy", "knight", "orc", "ork", "brute", "dwarf", "elf", "glaive", "spear", "axe",
+                "cleaver", "shield", "robe", "wizard", "mage", "ranger", "bow", "claw",
+            )
+        )
+        style = "sci_fi" if power_armored else "fantasy" if fantasy_subject else "sci_fi"
+        archetype = "space_terminator" if power_armored else "reptilian_creature" if reptilian_creature else "heavy_infantry"
+        if power_armored or any(word in subject_text for word in ("rifle", "bolter", "gun", "carbine")):
+            weapon = "rifle"
+        elif any(word in subject_text for word in ("bow", "archer")):
+            weapon = "bow"
+        elif any(word in subject_text for word in ("glaive", "spear", "polearm")):
+            weapon = "spear"
+        elif any(word in subject_text for word in ("axe", "cleaver", "hammer", "mace")):
+            weapon = "axe"
+        elif any(word in subject_text for word in ("sword", "blade", "katana")):
+            weapon = "sword"
+        else:
+            weapon = "claws" if reptilian_creature else "sword" if style == "fantasy" else "rifle"
+        if ("claw" in subject_text or reptilian_creature) and not power_armored:
             weapon = "claws"
         details = ["panel_lines", "rivets", "armor_seams", "base_texture"]
         if style == "sci_fi":

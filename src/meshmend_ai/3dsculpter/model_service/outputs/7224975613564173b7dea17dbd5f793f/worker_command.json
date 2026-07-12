@@ -1,0 +1,16 @@
+{
+  "command_template": "\"C:\\Python313\\python.exe\" \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\production_worker.py\" --input \"{input_json}\" --output-dir \"{output_dir}\"",
+  "formatted_command": "\"C:\\Python313\\python.exe\" \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\production_worker.py\" --input \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\tasks\\7224975613564173b7dea17dbd5f793f\\input.json\" --output-dir \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\outputs\\7224975613564173b7dea17dbd5f793f\"",
+  "command_args": [
+    "C:\\Python313\\python.exe",
+    "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\production_worker.py",
+    "--input",
+    "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\tasks\\7224975613564173b7dea17dbd5f793f\\input.json",
+    "--output-dir",
+    "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\outputs\\7224975613564173b7dea17dbd5f793f"
+  ],
+  "model_worker_python": "C:\\Python313\\python.exe",
+  "worker_python_exists": true,
+  "service_python": "C:\\Python313\\python.exe",
+  "hunyuan3d_path": ""
+}

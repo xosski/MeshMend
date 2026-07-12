@@ -1,0 +1,11 @@
+{
+  "prompt": "a space marine final non generic sculpt verification visible helmet grille chest emblem pauldrons weapon barrel fingers reactor backpack 20260707_093644",
+  "quality": "high",
+  "target_formats": [
+    "stl"
+  ],
+  "target_polycount": 600000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend"
+}

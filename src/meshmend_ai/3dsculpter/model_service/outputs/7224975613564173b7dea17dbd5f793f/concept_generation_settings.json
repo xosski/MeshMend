@@ -1,0 +1,12 @@
+{
+  "model_id": "runwayml/stable-diffusion-v1-5",
+  "device": "cuda",
+  "use_sdxl": false,
+  "steps": 32,
+  "guidance": 8.0,
+  "size": 768,
+  "initial_candidates": 5,
+  "max_candidates": 12,
+  "prompt": "complete full body head to toe centered 3 2 mm unpainted matte grey clay tabletop miniature , plain pure white background , empty white margin , small round base fully visible , a dragon . production 3 2 mm heroic - scale resin printable sculpt , target height 3 2 mm . distinct original tabletop miniature . front - facing three - quarter orthographic sculpt reference plus consistent side and rear design cues",
+  "negative_prompt": "cropped , close - up , bust , portrait , cut off head , cut off feet , cropped weapon , missing legs , missing boots , outside frame , multiple characters , duplicates , lineup , squad , group , two views , three views , multi view , multiple views , triptych , front and back , rear view , side view , four views , reference sheet , turnaround"
+}
