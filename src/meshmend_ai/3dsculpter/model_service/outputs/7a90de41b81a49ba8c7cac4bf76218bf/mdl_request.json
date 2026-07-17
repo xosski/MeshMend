@@ -1,0 +1,27 @@
+{
+  "prompt": "a dragon. production 32mm heroic-scale resin printable sculpt, target height 32mm. distinct original tabletop miniature. front-facing three-quarter orthographic sculpt reference plus consistent side and rear design cues. high-poly sculpt language, clean topology intent, sharp hard-surface edges, deep recesses, bevels readable at miniature scale. multi-pass sculpt: body anatomy, armor, equipment, accessories, surface detail, panel lines, bolts, fabric, cables, decorative motifs only when explicitly requested. boolean-cleaned fused geometry, watertight manifold STL, minimum wall thickness 1.2mm. printability validated: no floating armor, no unsupported impossible thin parts, replace fragile details with chunky printable alternatives. studio quality professional digital sculpt, unpainted matte grey clay/resin material, not a noisy AI mesh. spend extra compute in studio mode for detail preservation, reconstruction cleanup, retopology-like remesh, final polish. heroic miniature proportions: head 110 percent, hands 120 percent, weapons 140 percent, shoulders 160 percent, chest 130 percent, feet 120 percent. readable silhouette from tabletop distance. support friendly grounded pose with connected arms hands weapons and equipment. no floating geometry, no melted surfaces, no disconnected fingers, no thin antennae, no fragile thin blades.",
+  "quality": "high",
+  "studio_mode": true,
+  "debug_mode": false,
+  "target_formats": [
+    "stl",
+    "glb",
+    "obj"
+  ],
+  "target_polycount": 1200000,
+  "scale_mm": 32.0,
+  "workflow": "text_to_3d",
+  "product": "meshmend",
+  "_meshmend_original_prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+  "_meshmend_mdl_expanded": true,
+  "_meshmend_mdl_version": "miniature-design-language-v1",
+  "_meshmend_mdl_principles": [
+    "heroic_exaggerated_proportions",
+    "readable_tabletop_silhouette",
+    "layered_armor_equipment_accessory_detail",
+    "support_friendly_pose",
+    "minimum_printable_thickness_1_2mm",
+    "watertight_manifold_single_subject",
+    "consistent_high_detail_density"
+  ]
+}

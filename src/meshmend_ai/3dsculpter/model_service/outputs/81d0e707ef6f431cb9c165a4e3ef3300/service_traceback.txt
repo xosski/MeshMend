@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\main.py", line 587, in _run_task
+    raise RuntimeError(worker_error or f"model command exited {completed.returncode}")
+RuntimeError: reconstruction validation failed: more_than_10_disconnected_components

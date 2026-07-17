@@ -1,0 +1,7 @@
+{
+  "error": "reconstruction validation failed: more_than_10_disconnected_components",
+  "error_type": "RuntimeError",
+  "diagnostics_file": "worker_diagnostics.json",
+  "traceback_file": "worker_traceback.txt",
+  "hint": "For no-API local generation set MESHMEND_PRODUCTION_ENGINE=free_local_hunyuan, install Hunyuan3D-2/2.1, and optionally set MESHMEND_HUNYUAN3D_PATH to its repo. For a custom local runner, set MESHMEND_PRODUCTION_TEXT_TO_3D_COMMAND and/or MESHMEND_PRODUCTION_IMAGE_TO_3D_COMMAND. Commands receive {prompt_path}, {image_path}, {output_dir}, {quality}, and {target_polycount} placeholders and must write a supported model file or result.json into {output_dir}."
+}

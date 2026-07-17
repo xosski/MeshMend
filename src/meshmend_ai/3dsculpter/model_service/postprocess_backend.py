@@ -83,15 +83,6 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     pre_detail_target = memory_safe_face_target(min(detail_target, int(os.environ.get("MESHMEND_PRE_INTRICATE_DETAIL_FACES", pre_detail_default))))
     mesh = subdivide_to_faces(mesh, pre_detail_target)
     mesh = denoise_surface_bumps(mesh, request)
-    if not base_form_only and synthetic_detail_enabled("MESHMEND_ENABLE_SCULPT_RELIEF_DETAIL", default="1" if strict_quality_requested(request) else "0"):
-        mesh = apply_miniature_sculpt_detail(mesh, request)
-    if not base_form_only:
-        mesh = apply_image_guided_surface_detail(mesh, request)
-        mesh = add_high_resolution_geometry(mesh, request)
-        mesh = apply_custom_miniature_detail_pipeline(mesh, request)
-        mesh = apply_hierarchical_semantic_detail_refinement(mesh, request)
-        mesh = apply_ai_training_definition_layer(mesh, request)
-        mesh = apply_intricate_detail_pipeline(mesh, request)
     mesh = remove_floating_artifacts(mesh, request)
     mesh = cleanup(mesh)
     mesh = remove_background_slabs(mesh, dict(request, _meshmend_aggressive_slab_removal=True))
@@ -101,10 +92,6 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     mesh = strip_residual_background_slabs(mesh, request, detail_target)
     mesh = remove_connected_sheet_surfaces(mesh, dict(request, _meshmend_aggressive_slab_removal=True))
     mesh = ensure_printable_solid_mesh(mesh, request)
-    if mesh.metadata.get("meshmend_voxel_solidified") and not base_form_only:
-        mesh = apply_custom_miniature_detail_pipeline(mesh, request)
-        mesh = apply_hierarchical_semantic_detail_refinement(mesh, request)
-        mesh = apply_intricate_detail_pipeline(mesh, request)
     mesh = bridge_disconnected_components(mesh, request)
     mesh = ensure_printable_solid_mesh(mesh, request)
     mesh = seal_image_visual_holes(mesh, request)
@@ -130,7 +117,6 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     # added before those morphology passes, the repair step can remesh the round
     # base into a square card-like slab and reopen boundary edges.
     mesh = ensure_round_miniature_base(mesh, request)
-    export_debug_checkpoint(mesh, request, "final_mesh.ply")
     # The final base/overlay detail can leave a few watertight islands even after
     # earlier bridge passes. Do one last lightweight topology bridge/prune before
     # the store gate so studio exports are one printable assembly, not separate
@@ -152,6 +138,30 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
     if strict_quality_requested(request) and len(mesh.faces) < detail_target:
         mesh = subdivide_to_faces(mesh, detail_target)
         mesh.metadata["meshmend_final_store_density_enforced"] = True
+    # All topology replacement, voxel sealing, smoothing, pruning, and base work
+    # must finish before sculpt detail. Moving vertices preserves connectivity;
+    # running another remesh afterward would erase the visible relief while stale
+    # metadata continued to claim that detailing survived.
+    if not base_form_only:
+        pre_detail_mesh = mesh.copy()
+        if synthetic_detail_enabled("MESHMEND_ENABLE_SCULPT_RELIEF_DETAIL", default="1" if strict_quality_requested(request) else "0"):
+            mesh = apply_miniature_sculpt_detail(mesh, request)
+        mesh = apply_image_guided_surface_detail(mesh, request)
+        mesh = add_high_resolution_geometry(mesh, request)
+        mesh = apply_custom_miniature_detail_pipeline(mesh, request)
+        mesh = apply_hierarchical_semantic_detail_refinement(mesh, request)
+        mesh = apply_ai_training_definition_layer(mesh, request)
+        mesh = apply_intricate_detail_pipeline(mesh, request)
+        # Detail passes intentionally run after all replacement-surface repairs,
+        # but their combined procedural relief can still leave sharp one-ring
+        # facets. Conservative Taubin polishing suppresses that print-scale
+        # chatter without changing topology or erasing broader grooves/ridges.
+        # Measure evidence after this polish so certification describes the
+        # geometry that is actually exported.
+        mesh = final_image_surface_polish(mesh, request, post_detail=True)
+        evidence = detail_geometry_evidence(pre_detail_mesh, mesh)
+        mesh.metadata["meshmend_detail_geometry_evidence"] = evidence
+    export_debug_checkpoint(mesh, request, "final_mesh.ply")
     gate_issues = quality_gate_issues(mesh, request, detail_target)
     fatal_issues = fatal_quality_gate_issues(gate_issues)
     if base_form_only:
@@ -161,6 +171,7 @@ def postprocess_miniature(mesh: Any, request: dict[str, Any]) -> tuple[trimesh.T
         # armor/weapon modules and the explicit detail pass are enabled.
         non_structural_prefixes = (
             "large_smooth_primitive_surfaces_dominate",
+            "insufficient_visible_detail",
             "studio_quality_score_below_min",
             "below_store_face_target",
         )
@@ -200,6 +211,71 @@ def synthetic_detail_enabled(env_name: str, *, default: str = "0") -> bool:
     conservative default unless the caller opts in with env flags.
     """
     return os.environ.get(env_name, default).strip().lower() in {"1", "true", "yes", "on"}
+
+
+DETAIL_METADATA_KEYS = (
+    "meshmend_sculpt_relief_detail",
+    "meshmend_image_guided_detail",
+    "meshmend_geometry_upscale",
+    "meshmend_custom_miniature_detail_pipeline",
+    "meshmend_hierarchical_semantic_detail_refinement",
+    "meshmend_ai_definition_layer",
+    "meshmend_intricate_detail_pipeline",
+    "meshmend_detail_geometry_evidence",
+)
+
+
+def invalidate_detail_metadata(mesh: trimesh.Trimesh, reason: str) -> None:
+    """Remove stale detail claims whenever a replacement surface is created."""
+    metadata = getattr(mesh, "metadata", {}) or {}
+    invalidated = [key for key in DETAIL_METADATA_KEYS if key in metadata]
+    for key in invalidated:
+        metadata.pop(key, None)
+    if invalidated:
+        metadata["meshmend_detail_invalidated_by"] = reason
+        metadata["meshmend_detail_invalidated_keys"] = invalidated
+
+
+def detail_geometry_evidence(before: trimesh.Trimesh, after: trimesh.Trimesh) -> dict[str, Any]:
+    """Measure actual final vertex displacement rather than trusting pass flags."""
+    before_vertices = np.asarray(before.vertices, dtype=float)
+    after_vertices = np.asarray(after.vertices, dtype=float)
+    if before_vertices.shape != after_vertices.shape or len(after_vertices) == 0:
+        return {
+            "passed": False,
+            "reason": "topology_changed_during_detail",
+            "before_vertices": int(len(before_vertices)),
+            "after_vertices": int(len(after_vertices)),
+        }
+    mins = before_vertices.min(axis=0)
+    extents = np.maximum(before_vertices.max(axis=0) - mins, 1e-6)
+    non_base = before_vertices[:, 2] > mins[2] + extents[2] * 0.07
+    displacement = np.linalg.norm(after_vertices - before_vertices, axis=1)
+    measured = displacement[non_base] if np.any(non_base) else displacement
+    p50, p90, p99 = [float(value) for value in np.percentile(measured, [50, 90, 99])]
+    visible_threshold = float(os.environ.get("MESHMEND_VISIBLE_DETAIL_MIN_DISPLACEMENT_MM", "0.04"))
+    strong_threshold = float(os.environ.get("MESHMEND_STRONG_DETAIL_MIN_DISPLACEMENT_MM", "0.08"))
+    visible_coverage = float(np.mean(measured >= visible_threshold))
+    strong_coverage = float(np.mean(measured >= strong_threshold))
+    min_coverage = float(os.environ.get("MESHMEND_MIN_VISIBLE_DETAIL_COVERAGE", "0.015"))
+    min_p99 = float(os.environ.get("MESHMEND_MIN_DETAIL_P99_MM", "0.06"))
+    passed = visible_coverage >= min_coverage and p99 >= min_p99
+    score = min(1.0, 0.55 * (visible_coverage / max(min_coverage * 2.5, 1e-8)) + 0.45 * (p99 / max(min_p99 * 1.75, 1e-8)))
+    return {
+        "passed": bool(passed),
+        "score": float(max(0.0, score)),
+        "vertex_count": int(len(after_vertices)),
+        "p50_displacement_mm": p50,
+        "p90_displacement_mm": p90,
+        "p99_displacement_mm": p99,
+        "max_displacement_mm": float(np.max(measured)),
+        "visible_threshold_mm": visible_threshold,
+        "strong_threshold_mm": strong_threshold,
+        "visible_coverage": visible_coverage,
+        "strong_coverage": strong_coverage,
+        "minimum_visible_coverage": min_coverage,
+        "minimum_p99_displacement_mm": min_p99,
+    }
 
 
 def memory_safety_enabled() -> bool:
@@ -344,6 +420,7 @@ def seal_image_visual_holes(mesh: trimesh.Trimesh, request: dict[str, Any]) -> t
         if not bool(solid.is_watertight) or _nonmanifold_edge_count(solid) > 0:
             return mesh
         solid.metadata.update(repaired.metadata)
+        invalidate_detail_metadata(solid, "visual_hole_seal")
         solid.metadata["meshmend_image_visual_holes_sealed"] = True
         solid.metadata["meshmend_pre_seal_genus"] = int(genus)
         solid = cleanup(solid)
@@ -396,7 +473,12 @@ def image_hole_seal_candidates(mesh: trimesh.Trimesh, max_extent: float) -> list
         return []
 
 
-def final_image_surface_polish(mesh: trimesh.Trimesh, request: dict[str, Any]) -> trimesh.Trimesh:
+def final_image_surface_polish(
+    mesh: trimesh.Trimesh,
+    request: dict[str, Any],
+    *,
+    post_detail: bool = False,
+) -> trimesh.Trimesh:
     """Remove reconstruction speckle after density/detail without reopening the mesh."""
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
     hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
@@ -412,13 +494,16 @@ def final_image_surface_polish(mesh: trimesh.Trimesh, request: dict[str, Any]) -
 
         filter_taubin(
             polished,
-            lamb=float(os.environ.get("MESHMEND_FINAL_POLISH_LAMBDA", "0.08")),
-            nu=float(os.environ.get("MESHMEND_FINAL_POLISH_NU", "-0.085")),
-            iterations=int(os.environ.get("MESHMEND_FINAL_POLISH_ITERATIONS", "1")),
+            lamb=float(os.environ.get("MESHMEND_FINAL_POLISH_LAMBDA", "0.14" if post_detail else "0.08")),
+            nu=float(os.environ.get("MESHMEND_FINAL_POLISH_NU", "-0.145" if post_detail else "-0.085")),
+            iterations=int(os.environ.get("MESHMEND_FINAL_POLISH_ITERATIONS", "4" if post_detail else "1")),
         )
         polished.metadata.update(metadata)
         polished.metadata["meshmend_final_surface_polished"] = True
-        return normalize_to_scale(cleanup(polished), requested_scale_mm(request), request)
+        polished = cleanup(polished)
+        # Rescaling after detail moves nearly every vertex and would make the
+        # geometry-evidence measurement report global scale correction as relief.
+        return polished if post_detail else normalize_to_scale(polished, requested_scale_mm(request), request)
     except Exception:
         return mesh
 
@@ -983,7 +1068,7 @@ def apply_miniature_sculpt_detail(mesh: trimesh.Trimesh, request: dict[str, Any]
     if os.environ.get("MESHMEND_ENABLE_MICRO_NOISE", "0").strip().lower() in {"1", "true", "yes"}:
         relief += 0.08 * np.sin((x * 47.0 + y * 19.0 + z * 31.0 + seed) * math.pi)
 
-    amplitude = float(os.environ.get("MESHMEND_DETAIL_RELIEF_MM", "0.025"))
+    amplitude = float(os.environ.get("MESHMEND_DETAIL_RELIEF_MM", "0.08" if strict_quality_requested(request) else "0.025"))
     active = z > 0.06
     mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float))[:, None]
     mesh.metadata["meshmend_sculpt_relief_detail"] = True
@@ -998,6 +1083,13 @@ def apply_image_guided_surface_detail(mesh: trimesh.Trimesh, request: dict[str, 
     quality = str(request.get("quality") or "standard").lower()
     prompt = str(request.get("prompt") or "").lower()
     source_workflow = str(request.get("_meshmend_source_workflow") or "").lower()
+    if bool(request.get("_meshmend_hunyuan_text_concept")) and os.environ.get(
+        "MESHMEND_ENABLE_TEXT_CONCEPT_PIXEL_RELIEF", "0"
+    ).strip().lower() not in {"1", "true", "yes", "on"}:
+        # Stable Diffusion shading/paint edges become unstructured bumps when
+        # projected onto Hunyuan geometry. Text concepts use prompt-structured
+        # sculpt passes instead; explicit image references may still opt in.
+        return mesh
     # Project reference/concept contrast into shallow printable relief. This is
     # automatic in studio mode so detail has a real geometry path instead of
     # relying on prompt wording alone; negative prompts and concept gates reduce
@@ -1143,7 +1235,7 @@ def add_high_resolution_geometry(mesh: trimesh.Trimesh, request: dict[str, Any])
 
         active = z > 0.06
         overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
-        amplitude = float(os.environ.get("MESHMEND_GEOMETRY_UPSCALE_RELIEF_MM", "0.038" if overlay_pass else "0.018"))
+        amplitude = float(os.environ.get("MESHMEND_GEOMETRY_UPSCALE_RELIEF_MM", "0.10" if overlay_pass else "0.08"))
         mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float))[:, None]
         mesh.metadata["meshmend_geometry_upscale"] = True
         return cleanup(mesh)
@@ -1208,7 +1300,7 @@ def apply_custom_miniature_detail_pipeline(mesh: trimesh.Trimesh, request: dict[
             relief += np.clip(micro_breakup, -1.0, 1.0) * 0.018
 
         overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
-        amplitude = float(os.environ.get("MESHMEND_CUSTOM_DETAIL_RELIEF_MM", "0.11" if overlay_pass else "0.065"))
+        amplitude = float(os.environ.get("MESHMEND_CUSTOM_DETAIL_RELIEF_MM", "0.20" if overlay_pass else "0.18"))
         mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * body.astype(float) * silhouette_guard.astype(float))[:, None]
         mesh.metadata["meshmend_custom_miniature_detail_pipeline"] = True
         return cleanup(mesh)
@@ -1425,7 +1517,11 @@ def apply_intricate_detail_pipeline(mesh: trimesh.Trimesh, request: dict[str, An
         y = coords[:, 1] - 0.5
         z = coords[:, 2]
         seed = (sum(ord(ch) for ch in prompt) % 997) + 1
-        relief = _intricate_image_relief(vertices, request, mins, ext)
+        relief = np.zeros(len(vertices), dtype=float)
+        if not bool(request.get("_meshmend_hunyuan_text_concept")) or os.environ.get(
+            "MESHMEND_ENABLE_TEXT_CONCEPT_PIXEL_RELIEF", "0"
+        ).strip().lower() in {"1", "true", "yes", "on"}:
+            relief = _intricate_image_relief(vertices, request, mins, ext)
         relief += _intricate_prompt_relief(prompt, x, y, z, seed)
 
         hatch = np.sin((x * 72.0 + z * 19.0 + seed * 0.07) * math.pi) * np.sin((y * 41.0 - z * 13.0) * math.pi)
@@ -1435,7 +1531,7 @@ def apply_intricate_detail_pipeline(mesh: trimesh.Trimesh, request: dict[str, An
         active = z > 0.065
         silhouette_guard = (np.abs(x) < 0.49) & (np.abs(y) < 0.49)
         overlay_pass = bool(request.get("_meshmend_prompt_landmark_overlay_applied"))
-        amplitude = float(os.environ.get("MESHMEND_INTRICATE_DETAIL_RELIEF_MM", "0.09" if overlay_pass else "0.055"))
+        amplitude = float(os.environ.get("MESHMEND_INTRICATE_DETAIL_RELIEF_MM", "0.16" if overlay_pass else "0.14"))
         mesh.vertices = vertices + normals * (np.clip(relief, -1.0, 1.0) * amplitude * active.astype(float) * silhouette_guard.astype(float))[:, None]
         mesh.metadata["meshmend_intricate_detail_pipeline"] = True
         return cleanup(mesh)
@@ -1983,6 +2079,7 @@ def ensure_printable_solid_mesh(mesh: trimesh.Trimesh, request: dict[str, Any]) 
         if not isinstance(solid, trimesh.Trimesh) or len(solid.faces) < 1000:
             return repaired
         solid.metadata.update(repaired.metadata)
+        invalidate_detail_metadata(solid, "voxel_solidification")
         solid.metadata["meshmend_voxel_solidified"] = True
         solid.metadata["meshmend_pre_solidify_boundary_edges"] = int(boundary_edges)
         solid = cleanup(solid)
@@ -2036,7 +2133,7 @@ def bridge_disconnected_components(mesh: trimesh.Trimesh, request: dict[str, Any
     """Physically connect detached watertight islands for slicers/printers."""
     source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
     hunyuan_text_concept = bool(request.get("_meshmend_hunyuan_text_concept"))
-    default_enabled = "0" if strict_quality_requested(request) and source_workflow == "text_to_3d" and not hunyuan_text_concept else "1"
+    default_enabled = "0" if strict_quality_requested(request) else "1"
     if os.environ.get("MESHMEND_BRIDGE_DISCONNECTED_COMPONENTS", default_enabled).strip().lower() in {"0", "false", "no"}:
         return mesh
     try:
@@ -2371,6 +2468,8 @@ def fatal_quality_gate_issues(issues: list[str]) -> list[str]:
         "image_visual_holes_unsealed",
         "image_low_relief_sheet",
         "large_smooth_primitive_surfaces_dominate",
+        "insufficient_visible_detail",
+        "excessive_micro_surface_noise",
         "likely_background_slab_or_card",
         "likely_horizontal_square_sheet_or_card",
         "likely_blocky_low_definition",
@@ -2421,9 +2520,17 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
     if likely_blocky_low_definition(mesh):
         issues.append("likely_blocky_low_definition")
     smooth_ratio = smooth_surface_area_ratio(mesh)
-    smooth_limit = float(os.environ.get("MESHMEND_MAX_SMOOTH_PRIMITIVE_SURFACE_RATIO", "0.68"))
-    if smooth_ratio > smooth_limit and not has_miniature_detail_metadata(mesh):
-        issues.append(f"large_smooth_primitive_surfaces_dominate_{smooth_ratio:.2f}_max_{smooth_limit:.2f}")
+    evidence = dict(mesh.metadata.get("meshmend_detail_geometry_evidence") or {})
+    if not bool(request.get("_meshmend_base_form_only")) and not bool(evidence.get("passed")):
+        issues.append(
+            "insufficient_visible_detail_"
+            f"coverage_{float(evidence.get('visible_coverage', 0.0) or 0.0):.4f}_"
+            f"p99_{float(evidence.get('p99_displacement_mm', 0.0) or 0.0):.4f}mm"
+        )
+    noise_ratio = micro_surface_noise_ratio(mesh)
+    max_noise_ratio = float(os.environ.get("MESHMEND_MAX_MICRO_SURFACE_NOISE_RATIO", "0.22"))
+    if noise_ratio > max_noise_ratio:
+        issues.append(f"excessive_micro_surface_noise_{noise_ratio:.2f}_max_{max_noise_ratio:.2f}")
     if not bool(mesh.is_watertight):
         issues.append("mesh_not_solid_watertight")
     boundary_edges = _boundary_edge_count(mesh)
@@ -2542,14 +2649,8 @@ def studio_quality_scores(
     detail_score = min(1.0, len(mesh.faces) / max(float(detail_faces_target), 1.0))
     silhouette_score = max(0.0, min(1.0, (depth_ratio - 0.18) / 0.18))
     smooth_ratio = smooth_surface_area_ratio(mesh)
-    detail_density_score = max(0.0, min(1.0, 1.0 - max(0.0, smooth_ratio - 0.55) / 0.35))
-    if has_miniature_detail_metadata(mesh):
-        # The structured sculpt/detail passes intentionally add readable raised
-        # geometry as separate panels, trims, bolts, and overlays. Adjacency-angle
-        # smoothness is still useful for catching raw primitive blobs, but it
-        # should not erase a mesh that has already passed MeshMend's explicit
-        # high-poly/detail pipelines.
-        detail_density_score = max(detail_density_score, 0.92)
+    evidence = dict(mesh.metadata.get("meshmend_detail_geometry_evidence") or {})
+    detail_density_score = float(max(0.0, min(1.0, evidence.get("score", 0.0) or 0.0)))
     if symmetry_score is None:
         symmetry_score = bilateral_symmetry_score(mesh, request)
     symmetry_component = 1.0 if symmetry_score is None else float(symmetry_score)
@@ -2594,6 +2695,8 @@ def studio_quality_scores(
         "connected_components_score": float(component_score),
         "component_count": int(component_count),
         "smooth_surface_area_ratio": float(smooth_ratio),
+        "micro_surface_noise_ratio": float(micro_surface_noise_ratio(mesh)),
+        "detail_geometry_evidence": evidence,
         "volume_to_bbox_ratio": float(volume_ratio),
         "issues_considered": issues,
     }
@@ -2611,6 +2714,29 @@ def smooth_surface_area_ratio(mesh: trimesh.Trimesh) -> float:
     if len(smooth_pairs):
         smooth_faces[np.unique(smooth_pairs)] = True
     return float(areas[smooth_faces].sum() / total_area)
+
+
+def micro_surface_noise_ratio(mesh: trimesh.Trimesh) -> float:
+    """Area fraction adjacent to sharp sub-print-scale edges (speckle/spikes)."""
+    try:
+        adjacency = np.asarray(mesh.face_adjacency, dtype=np.int64)
+        angles = np.asarray(mesh.face_adjacency_angles, dtype=float)
+        edges = np.asarray(mesh.face_adjacency_edges, dtype=np.int64)
+        if len(adjacency) == 0 or len(edges) != len(adjacency):
+            return 0.0
+        vertices = np.asarray(mesh.vertices, dtype=float)
+        lengths = np.linalg.norm(vertices[edges[:, 0]] - vertices[edges[:, 1]], axis=1)
+        max_edge = float(os.environ.get("MESHMEND_MICRO_NOISE_MAX_EDGE_MM", "0.30"))
+        min_angle = math.radians(float(os.environ.get("MESHMEND_MICRO_NOISE_MIN_ANGLE_DEG", "25")))
+        noisy_pairs = adjacency[(lengths < max_edge) & (angles > min_angle)]
+        if len(noisy_pairs) == 0:
+            return 0.0
+        noisy_faces = np.zeros(len(mesh.faces), dtype=bool)
+        noisy_faces[np.unique(noisy_pairs)] = True
+        areas = np.asarray(mesh.area_faces, dtype=float)
+        return float(areas[noisy_faces].sum() / max(float(areas.sum()), 1e-8))
+    except Exception:
+        return 0.0
 
 
 def has_miniature_detail_metadata(mesh: trimesh.Trimesh) -> bool:
@@ -2692,23 +2818,6 @@ def likely_blocky_low_definition(mesh: trimesh.Trimesh) -> bool:
             return True
         ext = np.maximum(np.asarray(mesh.extents, dtype=float), 1e-6)
         depth_ratio = float(ext.min() / max(ext.max(), 1e-6))
-        metadata = getattr(mesh, "metadata", {}) or {}
-        has_detail_pipeline = any(
-            bool(metadata.get(key))
-            for key in (
-                "meshmend_image_guided_detail",
-                "meshmend_custom_miniature_detail_pipeline",
-                "meshmend_intricate_detail_pipeline",
-                "meshmend_image_store_density_restored",
-            )
-        )
-        if (
-            has_detail_pipeline
-            and bool(mesh.is_watertight)
-            and len(mesh.faces) >= int(os.environ.get("MESHMEND_BLOCKY_EXEMPT_MIN_FACES", "1000000"))
-            and depth_ratio >= float(os.environ.get("MESHMEND_BLOCKY_EXEMPT_MIN_DEPTH_RATIO", "0.45"))
-        ):
-            return False
         normals = np.asarray(mesh.face_normals, dtype=float)
         areas = np.asarray(mesh.area_faces, dtype=float)
         if normals.shape[0] != areas.shape[0] or float(areas.sum()) <= 1e-8:

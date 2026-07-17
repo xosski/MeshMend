@@ -1,0 +1,7 @@
+{
+  "accepted": {
+    "num_inference_steps": 96,
+    "octree_resolution": 384
+  },
+  "dropped": []
+}

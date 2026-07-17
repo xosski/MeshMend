@@ -1,0 +1,83 @@
+MeshMend model service is already running at http://127.0.0.1:8090
+{
+  "status": "healthy",
+  "backend_running": true,
+  "model_quality_acceptable": true,
+  "model_quality_note": "backend health is separate from miniature quality; studio output is accepted only when the worker returns a passing strict quality report",
+  "memory_safety": {
+    "enabled": true,
+    "max_postprocess_faces": 350000,
+    "max_export_faces": 600000,
+    "available_gb": 38.34,
+    "total_gb": 63.92,
+    "percent_used": 40.0
+  },
+  "service_build_id": "meshmend-model-service-progress-v3",
+  "service_root": "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service",
+  "workspace_root": "D:\\MeshMend\\src\\meshmend_ai",
+  "service_python": "C:\\Python313\\python.exe",
+  "log_file": "D:\\MeshMend\\src\\meshmend_ai\\logs\\meshmend_backend.log",
+  "text_to_3d_configured": true,
+  "image_to_3d_configured": true,
+  "production_text_to_3d_configured": true,
+  "production_image_to_3d_configured": true,
+  "production_engine": "external",
+  "external_generator_configured": false,
+  "ready_for_generation": true,
+  "ready_for_studio_quality": true,
+  "ready_for_experimental_high_detail": false,
+  "capability_tier": "certified_store_quality_external",
+  "store_quality_reason": "strict studio-quality gate configured; outputs must return studio_quality_certified=true",
+  "model_worker_python": "C:\\Python313\\python.exe",
+  "hunyuan3d_path": "",
+  "hunyuan3d_model": "",
+  "hunyuan3d_subfolder": "",
+  "hunyuan_import": null,
+  "dependency_summary": {
+    "required_ok": true,
+    "required": {
+      "fastapi": {
+        "ok": true,
+        "version": "0.116.1",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\fastapi\\__init__.py"
+      },
+      "pydantic": {
+        "ok": true,
+        "version": "2.11.7",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\pydantic\\__init__.py"
+      },
+      "numpy": {
+        "ok": true,
+        "version": "2.2.5",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\numpy\\__init__.py"
+      },
+      "trimesh": {
+        "ok": true,
+        "version": "4.10.1",
+        "file": "C:\\Python313\\Lib\\site-packages\\trimesh\\__init__.py"
+      }
+    },
+    "optional": {
+      "torch": {
+        "ok": true,
+        "version": "2.6.0+cu124",
+        "file": "C:\\Python313\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "diffusers": {
+        "ok": true,
+        "version": "0.36.0",
+        "file": "C:\\Python313\\Lib\\site-packages\\diffusers\\__init__.py"
+      },
+      "open3d": {
+        "ok": false,
+        "error": "No module named 'open3d'",
+        "traceback": "Traceback (most recent call last):\n  File \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\main.py\", line 753, in _check_import\n  File \"C:\\Python313\\Lib\\importlib\\__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1324, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'open3d'\n"
+      },
+      "hy3dgen": {
+        "ok": true,
+        "version": "",
+        "file": "C:\\Python313\\Lib\\site-packages\\hy3dgen\\__init__.py"
+      }
+    }
+  }
+}

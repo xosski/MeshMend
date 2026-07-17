@@ -68,6 +68,9 @@ def _friendly_production_backend_error(exc: Exception) -> str:
         )
     quality_gate_terms = (
         "generated stl did not meet store-quality gate",
+        "studio-quality request completed without certification",
+        "strict studio requests must return",
+        "base_form_validated",
         "likely_background_slab_or_card",
         "mesh_not_solid_watertight",
         "mesh_nonmanifold_edges",

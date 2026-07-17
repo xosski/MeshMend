@@ -973,7 +973,7 @@ class MeshMendGUI:
             lowered = message.lower()
             is_concept_failure = "Concept generation" in message or "concept image" in lowered or "text-to-3d stopped before hunyuan" in lowered
             is_store_quality_unavailable = "Store-quality 8K miniature generation is not configured" in message or "Store/studio-quality 8K miniature generation is not available" in message
-            is_store_quality_gate = "store-quality gate" in lowered or "no_concept_image_received" in lowered or "low_vision_planner_confidence" in lowered or "ai_planner_required" in lowered or "image_to_3d_requires_ai_vision_planner" in lowered or "concept_match" in lowered or "planned_landmarks" in lowered or "multiple_components_" in lowered
+            is_store_quality_gate = "store-quality gate" in lowered or "without certification" in lowered or "base_form_validated" in lowered or "strict studio requests must return" in lowered or "no_concept_image_received" in lowered or "low_vision_planner_confidence" in lowered or "ai_planner_required" in lowered or "image_to_3d_requires_ai_vision_planner" in lowered or "concept_match" in lowered or "planned_landmarks" in lowered or "multiple_components_" in lowered
             self.status.set("Concept generation failed." if is_concept_failure else "Store-quality gate failed." if is_store_quality_gate else "Store-quality backend not configured." if is_store_quality_unavailable else "Model creation failed.")
             self._set_progress(0, "Concept generation failed" if is_concept_failure else "Store-quality gate failed" if is_store_quality_gate else "Store-quality backend not configured" if is_store_quality_unavailable else "Creation failed")
             self._close_creation_progress_dialog()

@@ -1,0 +1,139 @@
+{
+  "architecture": [
+    "text_prompt",
+    "miniature_design_language_expansion",
+    "local_concept_image_generation",
+    "single_subject_concept_validation",
+    "local_hunyuan3d_image_to_3d_reconstruction",
+    "meshmend_voxel_solidify_and_marching_cubes_repair",
+    "meshmend_high_poly_detail_and_prompt_landmark_overlay",
+    "two_stage_hierarchical_semantic_detail_refinement",
+    "mesh_topology_printability_and_mdl_gates",
+    "final_stl_export"
+  ],
+  "underlying_model": {
+    "geometry_reconstruction": "Hunyuan3D image-to-3D",
+    "model_path": "tencent/Hunyuan3D-2",
+    "subfolder": "hunyuan3d-dit-v2-0",
+    "custom_trained_meshmend_model": false,
+    "training_loss_available": false,
+    "tiny_dataset_overfit_check_applicable": false,
+    "notes": "Current production path uses pretrained local Hunyuan3D plus MeshMend concept/detail/repair; training diagnostics apply only to a future custom MeshMend model."
+  },
+  "text_conditioning": {
+    "direct_text_to_3d_embeddings": false,
+    "text_reaches_geometry_via_concept_image": true,
+    "original_prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+    "mdl_expanded": true,
+    "mdl_expanded_prompt": "a dragon. production 32mm heroic-scale resin printable sculpt, target height 32mm. distinct original tabletop miniature. front-facing three-quarter orthographic sculpt reference plus consistent side and rear design cues. high-poly sculpt language, clean topology intent, sharp hard-surface edges, deep recesses, bevels readable at miniature scale. multi-pass sculpt: body anatomy, armor, equipment, accessories, surface detail, panel lines, bolts, fabric, cables, decorative motifs only when explicitly requested. boolean-cleaned fused geometry, watertight manifold STL, minimum wall thickness 1.2mm. printability validated: no floating armor, no unsupported impossible thin parts, replace fragile details with chunky printable alternatives. studio quality professional digital sculpt, unpainted matte grey clay/resin material, not a noisy AI mesh. spend extra compute in studio mode for detail preservation, reconstruction cleanup, retopology-like remesh, final polish. heroic miniature proportions: head 110 percent, hands 120 percent, weapons 140 percent, shoulders 160 percent, chest 130 percent, feet 120 percent. readable silhouette from tabletop distance. support friendly grounded pose with connected arms hands weapons and equipment. no floating geometry, no melted surfaces, no disconnected fingers, no thin antennae, no fragile thin blades.",
+    "concept_model": "runwayml/stable-diffusion-v1-5",
+    "concept_prompt": "complete full body head to toe centered 3 2 mm unpainted matte grey clay tabletop miniature , plain pure white background , empty white margin , small round base fully visible , a dragon . production 3 2 mm heroic - scale resin printable sculpt , target height 3 2 mm . distinct original tabletop miniature . front - facing three - quarter orthographic sculpt reference plus consistent side and rear design cues",
+    "concept_negative_prompt": "cropped , close - up , bust , portrait , cut off head , cut off feet , cropped weapon , missing legs , missing boots , outside frame , multiple characters , duplicates , lineup , squad , group , two views , three views , multi view , multiple views , triptych , front and back , rear view , side view , four views , reference sheet , turnaround",
+    "concept_metrics": {
+      "score": 0.3910179138183594,
+      "active_column_bands": 1,
+      "active_row_bands": 1,
+      "border_contact_ratio": 0.0,
+      "top_contact_ratio": 0.0,
+      "bottom_contact_ratio": 0.0,
+      "left_contact_ratio": 0.0,
+      "right_contact_ratio": 0.0,
+      "foreground_ratio": 0.21102523803710938,
+      "bottom_width_ratio": 0.29296875,
+      "bottom_density": 0.0,
+      "subject_aspect_ratio": 1.132867132867133,
+      "subject_height_ratio": 0.6328125,
+      "subject_width_ratio": 0.55859375,
+      "upper_body_width_ratio": 0.6293706293706294,
+      "torso_width_ratio": 0.9335664335664335,
+      "lower_body_width_ratio": 0.9615384615384616,
+      "lower_body_density": 0.6832782602013372,
+      "likely_partial_body": false,
+      "partial_body_reason": "",
+      "likely_base_band": false,
+      "likely_background_panel": false,
+      "likely_clipped_subject": false,
+      "likely_squat_or_wide_subject": false,
+      "wide_armored_full_body": true,
+      "min_subject_aspect_ratio": 1.08,
+      "likely_overwide_upper_body": false,
+      "likely_top_heavy_bad_proportions": false,
+      "likely_weak_lower_body": false,
+      "max_upper_body_width_ratio": 0.98,
+      "likely_noisy_reference": false,
+      "accepted_noisy_clean_layout": true,
+      "likely_under_detailed_reference": false,
+      "likely_vertical_reference_sheet": false,
+      "absolute_edge_density": 0.04378509521484375,
+      "max_absolute_edge_density": 0.085,
+      "min_absolute_edge_density": 0.04,
+      "edge_density": 0.089996337890625,
+      "min_quality_score": 0.38,
+      "clean_layout_min_quality_score": 0.3,
+      "passed": true
+    }
+  },
+  "reconstruction_settings": {
+    "hunyuan_requested_kwargs": {
+      "num_inference_steps": 96,
+      "octree_resolution": 384
+    },
+    "hunyuan_effective_kwargs": {
+      "accepted": {
+        "num_inference_steps": 96,
+        "octree_resolution": 384
+      },
+      "dropped": []
+    },
+    "octree_resolution": 384,
+    "num_inference_steps": 96,
+    "voxel_or_sdf_raw_inspection_available": false,
+    "marching_cubes_stage": "inside Hunyuan3D and MeshMend repair passes; MeshMend records voxel repair pitch in mesh metadata when used"
+  },
+  "postprocess_quality": {
+    "faces": 799136,
+    "detail_faces_target": 300000,
+    "production_ready": false,
+    "quality_gate_issues": [
+      "large_smooth_primitive_surfaces_dominate_0.99_max_0.68",
+      "studio_quality_score_below_min_0.83_min_0.90",
+      "custom_miniature_detail_pipeline_not_applied",
+      "intricate_detail_pipeline_not_applied",
+      "geometry_upscale_not_applied"
+    ],
+    "miniature_design_language": {
+      "version": "miniature-design-language-v1",
+      "principles": [
+        "heroic_exaggerated_proportions",
+        "readable_tabletop_silhouette",
+        "layered_armor_equipment_accessory_detail",
+        "support_friendly_pose",
+        "minimum_printable_thickness_1_2mm",
+        "watertight_manifold_single_subject",
+        "consistent_high_detail_density"
+      ],
+      "issues": [
+        "mdl_no_prompt_landmark_overlay"
+      ],
+      "passed": false
+    },
+    "ai_detail_sections": [
+      "image_guided_detail"
+    ],
+    "prompt_landmark_overlay": {
+      "applied": false,
+      "disabled": "base_form_validation_mode",
+      "mdl_issues": [
+        "mdl_no_prompt_landmark_overlay"
+      ]
+    }
+  },
+  "recommended_debug_order": [
+    "Check mdl_expanded_prompt and concept_prompt differ meaningfully across Cube/Chair/Dog/Human/Space Marine.",
+    "Check concept_validation_metrics: if concepts are bad, geometry will be bad.",
+    "Check Hunyuan octree_resolution is at least 256 and studio defaults are 384+.",
+    "Check MeshMend voxel repair pitch metadata; too-coarse repair erases miniature detail.",
+    "Check ai_detail_sections contains hierarchical_semantic_detail_refinement for armored humanoid studio jobs.",
+    "Check MDL/topology gates; failed outputs should regenerate instead of exporting."
+  ]
+}

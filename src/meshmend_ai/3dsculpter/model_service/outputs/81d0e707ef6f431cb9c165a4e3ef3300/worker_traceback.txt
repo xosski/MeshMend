@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\production_worker.py", line 196, in main
+    result = run_external_engine(request, input_path, output_dir, workflow)
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\production_worker.py", line 415, in run_external_engine
+    result = run_free_local_hunyuan(request, input_path, output_dir, workflow)
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\production_worker.py", line 1041, in run_free_local_hunyuan
+    return run_hunyuan_image_to_3d(image_path, request, output_dir)
+  File "D:\MeshMend\src\meshmend_ai\3dsculpter\model_service\production_worker.py", line 3012, in run_hunyuan_image_to_3d
+    raise RuntimeError("reconstruction validation failed: " + "; ".join(raw_validation_report["validation_failures"]))
+RuntimeError: reconstruction validation failed: more_than_10_disconnected_components

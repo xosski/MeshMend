@@ -974,7 +974,7 @@ def run_free_local_hunyuan(request: dict[str, Any], input_path: Path, output_dir
                 "Prepared Hunyuan reference still contains a large rectangular/card background. "
                 "Refusing to generate a square STL; retry with a cleaner concept or provide an image reference."
             )
-        reference_metrics = concept_validation_metrics(image_path)
+        reference_metrics = concept_validation_metrics(image_path, str(request.get("_meshmend_original_prompt") or request.get("prompt") or ""))
         source_concept_passed = bool(source_concept_metrics.get("passed", False))
         # Do not let the Hunyuan reference cleanup turn a valid full-body concept
         # into a squat/partial crop. This happened with prompts such as "a high
@@ -990,7 +990,7 @@ def run_free_local_hunyuan(request: dict[str, Any], input_path: Path, output_dir
             and not reference_metrics.get("passed", False)
             and not reference_image_likely_card(source_concept_path)
         ):
-            source_metrics = concept_validation_metrics(source_concept_path)
+            source_metrics = concept_validation_metrics(source_concept_path, str(request.get("_meshmend_original_prompt") or request.get("prompt") or ""))
             hard_source_failure = any(
                 bool(source_metrics.get(flag, False))
                 for flag in (
@@ -1011,7 +1011,7 @@ def run_free_local_hunyuan(request: dict[str, Any], input_path: Path, output_dir
             denoised_path = output_dir / "concept_subject_denoised.png"
             denoised = denoise_prepared_hunyuan_reference(image_path, denoised_path)
             if denoised is not None and denoised.exists():
-                denoised_metrics = concept_validation_metrics(denoised)
+                denoised_metrics = concept_validation_metrics(denoised, str(request.get("_meshmend_original_prompt") or request.get("prompt") or ""))
                 (output_dir / "concept_subject_denoised_validation_metrics.json").write_text(
                     json.dumps(denoised_metrics, indent=2), encoding="utf-8"
                 )
@@ -1713,14 +1713,15 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
         isolated_path = output_dir / f"concept_single_subject_{index + 1}.png"
         isolate_single_subject_concept(concept_path, isolated_path)
         candidate_path = isolated_path if isolated_path.exists() else concept_path
-        metrics = concept_validation_metrics(candidate_path)
+        subject_prompt = str(request.get("_meshmend_original_prompt") or request.get("prompt") or "")
+        metrics = concept_validation_metrics(candidate_path, subject_prompt)
         if strict_quality_requested_like(request) and not metrics.get("passed", False) and (
             metrics.get("likely_base_band") or metrics.get("likely_background_panel") or metrics.get("likely_clipped_subject")
         ):
             repaired_path = output_dir / f"concept_single_subject_basefixed_{index + 1}.png"
             repaired = prepare_hunyuan_reference_image(candidate_path, repaired_path)
             if repaired is not None and repaired.exists():
-                repaired_metrics = concept_validation_metrics(repaired)
+                repaired_metrics = concept_validation_metrics(repaired, subject_prompt)
                 (output_dir / f"concept_validation_metrics_basefixed_{index + 1}.json").write_text(
                     json.dumps(repaired_metrics, indent=2), encoding="utf-8"
                 )
@@ -1767,12 +1768,12 @@ def generate_diffusers_concept_image(request: dict[str, Any], output_dir: Path) 
     if best_path is not None:
         write_progress(output_dir, 26, "concept_selecting", "Selecting best single-subject concept")
         final_path.write_bytes(Path(best_path).read_bytes())
-        final_metrics = concept_validation_metrics(final_path)
+        final_metrics = concept_validation_metrics(final_path, subject_prompt)
         if strict_quality_requested_like(request) and not final_metrics.get("passed", False):
             trimmed_path = output_dir / "concept_single_subject_trimmed.png"
             prepared = prepare_hunyuan_reference_image(final_path, trimmed_path)
             if prepared is not None and prepared.exists():
-                trimmed_metrics = concept_validation_metrics(prepared)
+                trimmed_metrics = concept_validation_metrics(prepared, subject_prompt)
                 (output_dir / "concept_validation_metrics_trimmed.json").write_text(json.dumps(trimmed_metrics, indent=2), encoding="utf-8")
                 if trimmed_metrics.get("passed", False):
                     final_path.write_bytes(prepared.read_bytes())
@@ -2205,7 +2206,7 @@ def concept_quality_score(image_path: Path) -> float:
         return 0.0
 
 
-def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
+def concept_validation_metrics(image_path: Path, subject_prompt: str = "") -> dict[str, Any]:
     """Return lightweight single-subject/detail metrics for concept selection."""
     try:
         from PIL import Image
@@ -2282,7 +2283,13 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
         clipped_bottom = bottom_width_ratio > max_bottom_width and bottom_contact > 0.12 and bottom_density > max(0.16, mid_density * 0.55)
         clipped = max(top_contact, left_contact, right_contact) > max_side_contact or clipped_bottom
         require_full_body = os.environ.get("MESHMEND_REQUIRE_FULL_BODY_CONCEPT", "1").strip().lower() not in {"0", "false", "no"}
-        likely_partial_body = bool(completeness.get("likely_partial_body", False)) if require_full_body else False
+        upright_humanoid = not subject_prompt.strip() or humanoid_reconstruction_requested(
+            {"prompt": subject_prompt, "_meshmend_original_prompt": subject_prompt}
+        )
+        # Height/leg/torso ratios describe an upright humanoid. Applying those
+        # rules to dragons, quadrupeds, vehicles, or terrain rejects correctly
+        # framed wide subjects even when they are clean, centered, and unclipped.
+        likely_partial_body = bool(completeness.get("likely_partial_body", False)) if require_full_body and upright_humanoid else False
         subject_aspect = float(completeness.get("subject_aspect_ratio", 0.0) or 0.0)
         subject_height_ratio = float(completeness.get("subject_height_ratio", 0.0) or 0.0)
         min_subject_aspect = float(os.environ.get("MESHMEND_CONCEPT_MIN_SUBJECT_ASPECT", "1.08"))
@@ -2290,21 +2297,24 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
         lower_density = float(completeness.get("lower_body_density", 0.0) or 0.0)
         lower_width_ratio = float(completeness.get("lower_body_width_ratio", 0.0) or 0.0)
         max_upper_width = float(os.environ.get("MESHMEND_CONCEPT_MAX_UPPER_BODY_WIDTH", "0.98"))
-        likely_overwide_upper_body = require_full_body and upper_width_ratio > max_upper_width and subject_aspect < 1.15
-        likely_squat_or_wide_subject = require_full_body and subject_aspect < min_subject_aspect
+        likely_overwide_upper_body = require_full_body and upright_humanoid and upper_width_ratio > max_upper_width and subject_aspect < 1.15
+        likely_squat_or_wide_subject = require_full_body and upright_humanoid and subject_aspect < min_subject_aspect
         likely_top_heavy_bad_proportions = (
             require_full_body
+            and upright_humanoid
             and upper_width_ratio > float(os.environ.get("MESHMEND_CONCEPT_MAX_TOP_HEAVY_UPPER_WIDTH", "0.82"))
             and lower_width_ratio < float(os.environ.get("MESHMEND_CONCEPT_MIN_TOP_HEAVY_LOWER_WIDTH", "0.64"))
             and subject_aspect < float(os.environ.get("MESHMEND_CONCEPT_MAX_TOP_HEAVY_ASPECT", "1.18"))
         )
         likely_weak_lower_body = (
             require_full_body
+            and upright_humanoid
             and subject_aspect < float(os.environ.get("MESHMEND_CONCEPT_MIN_BALANCED_LEG_ASPECT", "1.10"))
             and lower_width_ratio < float(os.environ.get("MESHMEND_CONCEPT_MIN_BALANCED_LOWER_WIDTH", "0.60"))
         )
         wide_armored_full_body = (
             require_full_body
+            and upright_humanoid
             and subject_aspect >= float(os.environ.get("MESHMEND_CONCEPT_MIN_WIDE_ARMORED_ASPECT", "0.92"))
             and subject_height_ratio >= float(os.environ.get("MESHMEND_CONCEPT_MIN_WIDE_ARMORED_HEIGHT", "0.62"))
             and lower_density >= float(os.environ.get("MESHMEND_CONCEPT_MIN_WIDE_ARMORED_LOWER_DENSITY", "0.32"))
@@ -2377,6 +2387,7 @@ def concept_validation_metrics(image_path: Path) -> dict[str, Any]:
             "likely_clipped_subject": clipped,
             "likely_partial_body": likely_partial_body,
             "likely_squat_or_wide_subject": likely_squat_or_wide_subject,
+            "subject_contract": "upright_humanoid" if upright_humanoid else "general_non_humanoid",
             "wide_armored_full_body": wide_armored_full_body,
             "min_subject_aspect_ratio": min_subject_aspect,
             "likely_overwide_upper_body": likely_overwide_upper_body,
@@ -2769,9 +2780,13 @@ def has_separated_subject_bands(mask: Any, left: int, right: int) -> bool:
         return False
 
 
-def normalize_reconstruction_to_origin(mesh: Any) -> Any:
+def normalize_reconstruction_to_origin(mesh: Any, *, upright_humanoid: bool = True) -> Any:
     """Center a reconstruction without independent axis scaling."""
-    normalized, source_up_axis = canonicalize_humanoid_up_axis(mesh)
+    if upright_humanoid:
+        normalized, source_up_axis = canonicalize_humanoid_up_axis(mesh)
+    else:
+        normalized = coerce_to_trimesh(mesh).copy()
+        source_up_axis = "preserved_non_humanoid"
     import numpy as np
 
     vertices = np.asarray(normalized.vertices, dtype=float)
@@ -2815,11 +2830,16 @@ def validate_reconstruction_mesh(
     model: str,
     runtime_seconds: float,
     preprocessing: dict[str, Any] | None = None,
+    upright_humanoid: bool = True,
 ) -> dict[str, Any]:
     """Reject corrupt backend geometry before any repair can disguise it."""
     import numpy as np
 
-    candidate, source_up_axis = canonicalize_humanoid_up_axis(mesh)
+    if upright_humanoid:
+        candidate, source_up_axis = canonicalize_humanoid_up_axis(mesh)
+    else:
+        candidate = coerce_to_trimesh(mesh).copy()
+        source_up_axis = "not_canonicalized_non_humanoid"
     vertices = np.asarray(candidate.vertices, dtype=float)
     faces = np.asarray(candidate.faces, dtype=np.int64)
     failures: list[str] = []
@@ -2831,12 +2851,14 @@ def validate_reconstruction_mesh(
         extents = np.asarray(candidate.extents, dtype=float)
         components = list(candidate.split(only_watertight=False))
     width, depth, height = (float(extents[0]), float(extents[1]), float(extents[2]))
-    if height <= max(width, depth):
+    if upright_humanoid and height <= max(width, depth):
         failures.append("upright_humanoid_height_not_largest_dimension")
-    if height > 0 and depth < height * 0.20:
+    if upright_humanoid and height > 0 and depth < height * 0.20:
         failures.append("depth_below_20_percent_of_height")
-    if height > 0 and width < height * 0.25:
+    if upright_humanoid and height > 0 and width < height * 0.25:
         failures.append("width_below_25_percent_of_height")
+    if not upright_humanoid and float(np.max(extents)) > 0 and float(np.min(extents) / np.max(extents)) < 0.15:
+        failures.append("non_humanoid_mesh_excessively_flat")
 
     component_faces = sorted((int(len(part.faces)) for part in components), reverse=True)
     component_count = len(component_faces)
@@ -2889,7 +2911,8 @@ def validate_reconstruction_mesh(
         "largest_component_face_fraction": largest_fraction,
         "bounding_box_dimensions": {"width": width, "depth": depth, "height": height},
         "source_up_axis": source_up_axis,
-        "canonical_up_axis": "z",
+        "canonical_up_axis": "z" if upright_humanoid else None,
+        "subject_contract": "upright_humanoid" if upright_humanoid else "general_non_humanoid",
         "manifold_status": {
             "watertight": bool(candidate.is_watertight),
             "winding_consistent": bool(candidate.is_winding_consistent),
@@ -2977,6 +3000,7 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
                 model=model_path,
                 runtime_seconds=time.perf_counter() - backend_started,
                 preprocessing=read_json_if_exists(output_dir / "preprocessing_settings.json") or {},
+                upright_humanoid=humanoid_reconstruction_requested(request),
             )
             (output_dir / f"validation_attempt_{attempt + 1}.json").write_text(
                 json.dumps(raw_validation_report, indent=2, default=str), encoding="utf-8"
@@ -2990,7 +3014,9 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
             (output_dir / "backend_result_report.json").write_text(
                 json.dumps(raw_validation_report, indent=2, default=str), encoding="utf-8"
             )
-            normalized_raw = normalize_reconstruction_to_origin(raw_mesh)
+            normalized_raw = normalize_reconstruction_to_origin(
+                raw_mesh, upright_humanoid=humanoid_reconstruction_requested(request)
+            )
             export_mesh(normalized_raw.copy(), output_dir / "normalized_mesh.ply")
             postprocess_request = dict(attempt_request)
             if production_quality_requested(postprocess_request):
@@ -3011,32 +3037,27 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
             original_workflow = str(request.get("workflow") or "text_to_3d")
             postprocess_request["_meshmend_source_workflow"] = original_workflow
             postprocess_request["_meshmend_hunyuan_text_concept"] = bool(request.get("_meshmend_generated_text_concept")) and original_workflow == "text_to_3d"
-            write_progress(output_dir, 74, "postprocessing", "Postprocessing mesh: scale, detail, cleanup, quality gates")
-            mesh, postprocess_report = postprocess_miniature(normalized_raw, postprocess_request)
-            # Decorative landmark generation stays disabled until the body gate
-            # is consistently reliable. Armor and weapon modules must later be
-            # generated and validated independently, never baked into body input.
-            prompt_landmark_overlay = {"applied": False, "disabled": "base_form_validation_mode"}
+            write_progress(output_dir, 70, "validating_base_form", "Validating reconstructed body before studio detailing")
+            postprocess_miniature(normalized_raw.copy(), postprocess_request)
+
+            # A passing body reconstruction is only the first stage. Run the
+            # final mesh from the normalized source with base-form mode disabled
+            # so geometry upscale and both miniature detail passes are actually
+            # applied before the strict studio gate evaluates the result.
+            final_request = dict(postprocess_request)
+            final_request["_meshmend_base_form_only"] = False
+            final_source, prompt_landmark_overlay = apply_prompt_landmark_overlay(
+                normalized_raw.copy(), final_request, output_dir
+            )
             if bool(prompt_landmark_overlay.get("applied")):
-                # The overlay is part of the final exported STL, so validate the
-                # final combined geometry instead of certifying only the pre-
-                # overlay body. This catches sheet/card geometry, disconnected
-                # bridge artifacts, non-watertight overlay shells, and missing
-                # post-overlay detail before export.
-                write_progress(output_dir, 88, "validating_overlay", "Validating final prompt landmarks and removing sheet artifacts")
-                overlay_postprocess_request = dict(postprocess_request)
-                overlay_postprocess_request["_meshmend_prompt_landmark_overlay_applied"] = True
-                mesh, postprocess_report = postprocess_miniature(mesh, overlay_postprocess_request)
-                prompt_landmark_overlay["postprocessed"] = True
-                mdl_issues = miniature_design_language_issues(mesh, postprocess_request, prompt_landmark_overlay)
-                prompt_landmark_overlay["mdl_issues"] = mdl_issues
-                if mdl_issues and strict_quality_requested_like(postprocess_request):
-                    raise RuntimeError("store-quality gate: miniature_design_language_failed: " + "; ".join(mdl_issues))
-            else:
-                mdl_issues = miniature_design_language_issues(mesh, postprocess_request, prompt_landmark_overlay)
-                prompt_landmark_overlay["mdl_issues"] = mdl_issues
-                if mdl_issues and strict_quality_requested_like(postprocess_request) and not bool(postprocess_request.get("_meshmend_base_form_only")):
-                    raise RuntimeError("store-quality gate: miniature_design_language_failed: " + "; ".join(mdl_issues))
+                final_request["_meshmend_prompt_landmark_overlay_applied"] = True
+            write_progress(output_dir, 82, "studio_detailing", "Applying studio miniature geometry and intricate detail")
+            mesh, postprocess_report = postprocess_miniature(final_source, final_request)
+            prompt_landmark_overlay["postprocessed"] = bool(prompt_landmark_overlay.get("applied"))
+            mdl_issues = miniature_design_language_issues(mesh, final_request, prompt_landmark_overlay)
+            prompt_landmark_overlay["mdl_issues"] = mdl_issues
+            if mdl_issues and strict_quality_requested_like(final_request):
+                raise RuntimeError("store-quality gate: miniature_design_language_failed: " + "; ".join(mdl_issues))
             accepted_attempt = attempt + 1
             break
         except RuntimeError as exc:
@@ -3094,11 +3115,11 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
             "foreground_mask",
             "body_reconstruction",
             "body_validation",
-            "armor_modules_deferred",
-            "weapon_module_deferred",
-            "pose_and_fusion_deferred",
+            "prompt_landmark_modules",
             "topology_repair",
-            "detail_pass_disabled_until_base_form_passes",
+            "studio_geometry_upscale",
+            "custom_miniature_detail_pass",
+            "intricate_detail_pass",
             "base_attachment",
             "printability_validation",
         ],
@@ -3120,6 +3141,7 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
     except Exception:
         pass
     studio_quality_certified = bool(report_info.get("production_ready")) and not bool(mdl_issues)
+    base_form_validated = bool(raw_validation_report.get("passed"))
     return {
         "model_file": model_file.name,
         "model_format": output_format,
@@ -3128,6 +3150,9 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
         "capability_tier": "strict_gated_local_hunyuan_primary",
         "store_quality_certified": studio_quality_certified,
         "studio_quality_certified": studio_quality_certified,
+        "release_tier": "studio_certified" if studio_quality_certified else "studio_rejected",
+        "base_form_only": False,
+        "base_form_validated": base_form_validated,
         "studio_quality_note": (
             "Postprocess report passed all strict store/studio-quality gates."
             if studio_quality_certified
@@ -3150,6 +3175,17 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
         },
         "consumed_credits": 0,
     }
+
+
+def humanoid_reconstruction_requested(request: dict[str, Any]) -> bool:
+    prompt = (str(request.get("_meshmend_original_prompt") or "") + " " + str(request.get("prompt") or "")).lower()
+    non_humanoid = ("dragon", "dog", "wolf", "hound", "quadruped", "vehicle", "chair", "terrain", "weapon only", "creature")
+    if any(term in prompt for term in non_humanoid):
+        return False
+    return any(term in prompt for term in (
+        "human", "humanoid", "marine", "soldier", "warrior", "knight", "orc", "ork", "elf", "dwarf",
+        "robot", "android", "samurai", "ranger", "wizard", "paladin", "rogue", "adventurer", "power armor", "power armour",
+    ))
 
 
 def build_generation_architecture_diagnostics(
@@ -3288,7 +3324,7 @@ def miniature_design_language_issues(mesh: Any, request: dict[str, Any], prompt_
                 issues.append(f"mdl_missing_{label}_landmarks")
         if part_count < int(os.environ.get("MESHMEND_MDL_MIN_POWER_ARMOR_LANDMARK_PARTS", "18")):
             issues.append(f"mdl_too_few_power_armor_landmark_parts_{part_count}")
-    elif request.get("_meshmend_mdl_expanded") and part_count == 0:
+    elif request.get("_meshmend_mdl_expanded") and humanoid_reconstruction_requested(request) and part_count == 0:
         issues.append("mdl_no_prompt_landmark_overlay")
     try:
         import numpy as np

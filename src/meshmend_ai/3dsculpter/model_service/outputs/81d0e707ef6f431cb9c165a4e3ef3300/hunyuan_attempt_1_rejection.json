@@ -1,0 +1,7 @@
+{
+  "attempt": 1,
+  "attempts": 3,
+  "reason": "reconstruction validation failed: more_than_10_disconnected_components",
+  "regenerating": true,
+  "policy": "studio outputs are never returned when topology, printability, MDL, symmetry, or quality-score gates fail"
+}

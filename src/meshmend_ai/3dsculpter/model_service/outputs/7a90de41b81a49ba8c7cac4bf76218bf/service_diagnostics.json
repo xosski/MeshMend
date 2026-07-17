@@ -1,0 +1,995 @@
+{
+  "error": "Studio-quality request completed without certification. The mesh was not released because strict studio requests must return studio_quality_certified=true or mesh_info.production_ready=true. Certification summary: {\"provider\": \"free_local_hunyuan3d\", \"studio_quality_certified\": false, \"store_quality_certified\": false, \"mesh_info_production_ready\": false, \"mesh_info_store_quality_certified\": false, \"quality_report_production_ready\": false, \"quality_gate_issues\": [\"large_smooth_primitive_surfaces_dominate_0.99_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"], \"studio_quality_note\": \"Export completed, but strict store/studio-quality gates did not certify this mesh.\"}",
+  "error_type": "RuntimeError",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\main.py\", line 593, in _run_task\n    certification = _result_studio_certification_summary(result)\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n        f\"or mesh_info.production_ready=true. Certification summary: {json.dumps(certification, default=str)}\"\n    \nRuntimeError: Studio-quality request completed without certification. The mesh was not released because strict studio requests must return studio_quality_certified=true or mesh_info.production_ready=true. Certification summary: {\"provider\": \"free_local_hunyuan3d\", \"studio_quality_certified\": false, \"store_quality_certified\": false, \"mesh_info_production_ready\": false, \"mesh_info_store_quality_certified\": false, \"quality_report_production_ready\": false, \"quality_gate_issues\": [\"large_smooth_primitive_surfaces_dominate_0.99_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"], \"studio_quality_note\": \"Export completed, but strict store/studio-quality gates did not certify this mesh.\"}\n",
+  "progress": {
+    "progress": 99,
+    "stage": "complete",
+    "message": "Worker completed model generation",
+    "updated_at": 1784122253.9644823
+  },
+  "worker_result": {
+    "model_file": "meshmend_hunyuan.stl",
+    "model_format": "stl",
+    "provider": "free_local_hunyuan3d",
+    "geometry_source": "local_hunyuan3d_primary_meshmend_postprocessed",
+    "capability_tier": "strict_gated_local_hunyuan_primary",
+    "store_quality_certified": false,
+    "studio_quality_certified": false,
+    "release_tier": "validated_base_form",
+    "base_form_only": true,
+    "base_form_validated": true,
+    "studio_quality_note": "Export completed, but strict store/studio-quality gates did not certify this mesh.",
+    "source_image": "concept_subject.png",
+    "text_concept_reference": true,
+    "model_path": "tencent/Hunyuan3D-2",
+    "subfolder": "hunyuan3d-dit-v2-0",
+    "mesh_info": {
+      "target_scale_mm": 32.0,
+      "extents_mm": [
+        23.563666043199692,
+        23.563666043199692,
+        31.999999999999996
+      ],
+      "max_extent_mm": 31.999999999999996,
+      "faces": 799136,
+      "vertices": 399554,
+      "units": "mm",
+      "single_subject_enforced": true,
+      "detail_faces_target": 300000,
+      "relief_mm": 0.025,
+      "detail_style": "postprocess_backend:single_subject+scale+sheet_guard+structured_sculpt",
+      "geometry_upscaled": false,
+      "intricate_detail_pipeline": false,
+      "custom_miniature_detail_pipeline": false,
+      "ai_definition_layer": false,
+      "production_ready": false,
+      "ai_detail_sections": [
+        "image_guided_detail"
+      ],
+      "quality_gate_issues": [
+        "large_smooth_primitive_surfaces_dominate_0.99_max_0.68",
+        "studio_quality_score_below_min_0.83_min_0.90",
+        "custom_miniature_detail_pipeline_not_applied",
+        "intricate_detail_pipeline_not_applied",
+        "geometry_upscale_not_applied"
+      ],
+      "quality_scores": {
+        "overall": 0.8320000000000001,
+        "topology_score": 1.0,
+        "printability_score": 1.0,
+        "symmetry_score": null,
+        "silhouette_score": 1.0,
+        "detail_density_score": 0.0,
+        "detail_faces_score": 1.0,
+        "connected_components_score": 0.9,
+        "component_count": 2,
+        "smooth_surface_area_ratio": 0.9919056109302417,
+        "volume_to_bbox_ratio": 0.18158188084402982,
+        "issues_considered": []
+      },
+      "prompt_landmark_overlay": {
+        "applied": false,
+        "disabled": "base_form_validation_mode",
+        "mdl_issues": [
+          "mdl_no_prompt_landmark_overlay"
+        ]
+      },
+      "miniature_design_language": {
+        "version": "miniature-design-language-v1",
+        "principles": [
+          "heroic_exaggerated_proportions",
+          "readable_tabletop_silhouette",
+          "layered_armor_equipment_accessory_detail",
+          "support_friendly_pose",
+          "minimum_printable_thickness_1_2mm",
+          "watertight_manifold_single_subject",
+          "consistent_high_detail_density"
+        ],
+        "issues": [
+          "mdl_no_prompt_landmark_overlay"
+        ],
+        "passed": false
+      },
+      "export_info": {
+        "target_scale_mm": 32.0,
+        "extents_mm": [
+          23.563666043199692,
+          23.563666043199692,
+          31.999999999999996
+        ],
+        "max_extent_mm": 31.999999999999996,
+        "faces": 799136,
+        "vertices": 399554,
+        "units": "mm",
+        "detail_style": "single_subject_crop+minimum_density+structured_grooves"
+      },
+      "text_concept_reference": true,
+      "hunyuan_used": true,
+      "detail_source": "local_hunyuan3d_primary_plus_meshmend_postprocess_and_prompt_landmarks",
+      "original_prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+      "mdl_expanded_prompt": "a dragon. production 32mm heroic-scale resin printable sculpt, target height 32mm. distinct original tabletop miniature. front-facing three-quarter orthographic sculpt reference plus consistent side and rear design cues. high-poly sculpt language, clean topology intent, sharp hard-surface edges, deep recesses, bevels readable at miniature scale. multi-pass sculpt: body anatomy, armor, equipment, accessories, surface detail, panel lines, bolts, fabric, cables, decorative motifs only when explicitly requested. boolean-cleaned fused geometry, watertight manifold STL, minimum wall thickness 1.2mm. printability validated: no floating armor, no unsupported impossible thin parts, replace fragile details with chunky printable alternatives. studio quality professional digital sculpt, unpainted matte grey clay/resin material, not a noisy AI mesh. spend extra compute in studio mode for detail preservation, reconstruction cleanup, retopology-like remesh, final polish. heroic miniature proportions: head 110 percent, hands 120 percent, weapons 140 percent, shoulders 160 percent, chest 130 percent, feet 120 percent. readable silhouette from tabletop distance. support friendly grounded pose with connected arms hands weapons and equipment. no floating geometry, no melted surfaces, no disconnected fingers, no thin antennae, no fragile thin blades.",
+      "generation_architecture_diagnostics": {
+        "architecture": [
+          "text_prompt",
+          "miniature_design_language_expansion",
+          "local_concept_image_generation",
+          "single_subject_concept_validation",
+          "local_hunyuan3d_image_to_3d_reconstruction",
+          "meshmend_voxel_solidify_and_marching_cubes_repair",
+          "meshmend_high_poly_detail_and_prompt_landmark_overlay",
+          "two_stage_hierarchical_semantic_detail_refinement",
+          "mesh_topology_printability_and_mdl_gates",
+          "final_stl_export"
+        ],
+        "underlying_model": {
+          "geometry_reconstruction": "Hunyuan3D image-to-3D",
+          "model_path": "tencent/Hunyuan3D-2",
+          "subfolder": "hunyuan3d-dit-v2-0",
+          "custom_trained_meshmend_model": false,
+          "training_loss_available": false,
+          "tiny_dataset_overfit_check_applicable": false,
+          "notes": "Current production path uses pretrained local Hunyuan3D plus MeshMend concept/detail/repair; training diagnostics apply only to a future custom MeshMend model."
+        },
+        "text_conditioning": {
+          "direct_text_to_3d_embeddings": false,
+          "text_reaches_geometry_via_concept_image": true,
+          "original_prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+          "mdl_expanded": true,
+          "mdl_expanded_prompt": "a dragon. production 32mm heroic-scale resin printable sculpt, target height 32mm. distinct original tabletop miniature. front-facing three-quarter orthographic sculpt reference plus consistent side and rear design cues. high-poly sculpt language, clean topology intent, sharp hard-surface edges, deep recesses, bevels readable at miniature scale. multi-pass sculpt: body anatomy, armor, equipment, accessories, surface detail, panel lines, bolts, fabric, cables, decorative motifs only when explicitly requested. boolean-cleaned fused geometry, watertight manifold STL, minimum wall thickness 1.2mm. printability validated: no floating armor, no unsupported impossible thin parts, replace fragile details with chunky printable alternatives. studio quality professional digital sculpt, unpainted matte grey clay/resin material, not a noisy AI mesh. spend extra compute in studio mode for detail preservation, reconstruction cleanup, retopology-like remesh, final polish. heroic miniature proportions: head 110 percent, hands 120 percent, weapons 140 percent, shoulders 160 percent, chest 130 percent, feet 120 percent. readable silhouette from tabletop distance. support friendly grounded pose with connected arms hands weapons and equipment. no floating geometry, no melted surfaces, no disconnected fingers, no thin antennae, no fragile thin blades.",
+          "concept_model": "runwayml/stable-diffusion-v1-5",
+          "concept_prompt": "complete full body head to toe centered 3 2 mm unpainted matte grey clay tabletop miniature , plain pure white background , empty white margin , small round base fully visible , a dragon . production 3 2 mm heroic - scale resin printable sculpt , target height 3 2 mm . distinct original tabletop miniature . front - facing three - quarter orthographic sculpt reference plus consistent side and rear design cues",
+          "concept_negative_prompt": "cropped , close - up , bust , portrait , cut off head , cut off feet , cropped weapon , missing legs , missing boots , outside frame , multiple characters , duplicates , lineup , squad , group , two views , three views , multi view , multiple views , triptych , front and back , rear view , side view , four views , reference sheet , turnaround",
+          "concept_metrics": {
+            "score": 0.3910179138183594,
+            "active_column_bands": 1,
+            "active_row_bands": 1,
+            "border_contact_ratio": 0.0,
+            "top_contact_ratio": 0.0,
+            "bottom_contact_ratio": 0.0,
+            "left_contact_ratio": 0.0,
+            "right_contact_ratio": 0.0,
+            "foreground_ratio": 0.21102523803710938,
+            "bottom_width_ratio": 0.29296875,
+            "bottom_density": 0.0,
+            "subject_aspect_ratio": 1.132867132867133,
+            "subject_height_ratio": 0.6328125,
+            "subject_width_ratio": 0.55859375,
+            "upper_body_width_ratio": 0.6293706293706294,
+            "torso_width_ratio": 0.9335664335664335,
+            "lower_body_width_ratio": 0.9615384615384616,
+            "lower_body_density": 0.6832782602013372,
+            "likely_partial_body": false,
+            "partial_body_reason": "",
+            "likely_base_band": false,
+            "likely_background_panel": false,
+            "likely_clipped_subject": false,
+            "likely_squat_or_wide_subject": false,
+            "wide_armored_full_body": true,
+            "min_subject_aspect_ratio": 1.08,
+            "likely_overwide_upper_body": false,
+            "likely_top_heavy_bad_proportions": false,
+            "likely_weak_lower_body": false,
+            "max_upper_body_width_ratio": 0.98,
+            "likely_noisy_reference": false,
+            "accepted_noisy_clean_layout": true,
+            "likely_under_detailed_reference": false,
+            "likely_vertical_reference_sheet": false,
+            "absolute_edge_density": 0.04378509521484375,
+            "max_absolute_edge_density": 0.085,
+            "min_absolute_edge_density": 0.04,
+            "edge_density": 0.089996337890625,
+            "min_quality_score": 0.38,
+            "clean_layout_min_quality_score": 0.3,
+            "passed": true
+          }
+        },
+        "reconstruction_settings": {
+          "hunyuan_requested_kwargs": {
+            "num_inference_steps": 96,
+            "octree_resolution": 384
+          },
+          "hunyuan_effective_kwargs": {
+            "accepted": {
+              "num_inference_steps": 96,
+              "octree_resolution": 384
+            },
+            "dropped": []
+          },
+          "octree_resolution": 384,
+          "num_inference_steps": 96,
+          "voxel_or_sdf_raw_inspection_available": false,
+          "marching_cubes_stage": "inside Hunyuan3D and MeshMend repair passes; MeshMend records voxel repair pitch in mesh metadata when used"
+        },
+        "postprocess_quality": {
+          "faces": 799136,
+          "detail_faces_target": 300000,
+          "production_ready": false,
+          "quality_gate_issues": [
+            "large_smooth_primitive_surfaces_dominate_0.99_max_0.68",
+            "studio_quality_score_below_min_0.83_min_0.90",
+            "custom_miniature_detail_pipeline_not_applied",
+            "intricate_detail_pipeline_not_applied",
+            "geometry_upscale_not_applied"
+          ],
+          "miniature_design_language": {
+            "version": "miniature-design-language-v1",
+            "principles": [
+              "heroic_exaggerated_proportions",
+              "readable_tabletop_silhouette",
+              "layered_armor_equipment_accessory_detail",
+              "support_friendly_pose",
+              "minimum_printable_thickness_1_2mm",
+              "watertight_manifold_single_subject",
+              "consistent_high_detail_density"
+            ],
+            "issues": [
+              "mdl_no_prompt_landmark_overlay"
+            ],
+            "passed": false
+          },
+          "ai_detail_sections": [
+            "image_guided_detail"
+          ],
+          "prompt_landmark_overlay": {
+            "applied": false,
+            "disabled": "base_form_validation_mode",
+            "mdl_issues": [
+              "mdl_no_prompt_landmark_overlay"
+            ]
+          }
+        },
+        "recommended_debug_order": [
+          "Check mdl_expanded_prompt and concept_prompt differ meaningfully across Cube/Chair/Dog/Human/Space Marine.",
+          "Check concept_validation_metrics: if concepts are bad, geometry will be bad.",
+          "Check Hunyuan octree_resolution is at least 256 and studio defaults are 384+.",
+          "Check MeshMend voxel repair pitch metadata; too-coarse repair erases miniature detail.",
+          "Check ai_detail_sections contains hierarchical_semantic_detail_refinement for armored humanoid studio jobs.",
+          "Check MDL/topology gates; failed outputs should regenerate instead of exporting."
+        ]
+      },
+      "generation_validation_report": {
+        "pipeline": [
+          "clean_source_image",
+          "foreground_mask",
+          "body_reconstruction",
+          "body_validation",
+          "armor_modules_deferred",
+          "weapon_module_deferred",
+          "pose_and_fusion_deferred",
+          "topology_repair",
+          "detail_pass_disabled_until_base_form_passes",
+          "base_attachment",
+          "printability_validation"
+        ],
+        "studio_mode": true,
+        "debug_mode": false,
+        "attempts_configured": 3,
+        "accepted_attempt": 1,
+        "quality_scores": {
+          "overall": 0.8320000000000001,
+          "topology_score": 1.0,
+          "printability_score": 1.0,
+          "symmetry_score": null,
+          "silhouette_score": 1.0,
+          "detail_density_score": 0.0,
+          "detail_faces_score": 1.0,
+          "connected_components_score": 0.9,
+          "component_count": 2,
+          "smooth_surface_area_ratio": 0.9919056109302417,
+          "volume_to_bbox_ratio": 0.18158188084402982,
+          "issues_considered": []
+        },
+        "quality_gate_issues": [
+          "large_smooth_primitive_surfaces_dominate_0.99_max_0.68",
+          "studio_quality_score_below_min_0.83_min_0.90",
+          "custom_miniature_detail_pipeline_not_applied",
+          "intricate_detail_pipeline_not_applied",
+          "geometry_upscale_not_applied"
+        ],
+        "miniature_design_language_issues": [
+          "mdl_no_prompt_landmark_overlay"
+        ],
+        "prompt_landmark_overlay": {
+          "applied": false,
+          "disabled": "base_form_validation_mode",
+          "mdl_issues": [
+            "mdl_no_prompt_landmark_overlay"
+          ]
+        },
+        "source_image": "concept_subject.png",
+        "expanded_prompt_file": "mdl_expanded_prompt.txt",
+        "architecture_diagnostics_file": "generation_architecture_diagnostics.json",
+        "raw_backend_validation": {
+          "stage": "body_reconstruction",
+          "backend": "hunyuan3d-mini",
+          "model": "tencent/Hunyuan3D-2",
+          "runtime_seconds": 210.662,
+          "preprocessing_settings": {
+            "background_removed": true,
+            "alpha_mask": "foreground_mask.png",
+            "subject_height_target_fraction": 0.78,
+            "centered": true,
+            "base_removed_from_mask": false,
+            "view_requirement": "neutral_front_three_quarter_not_top_down",
+            "backend_source": "backend_source_exact.png"
+          },
+          "vertex_count": 448906,
+          "face_count": 897924,
+          "connected_component_count": 1,
+          "largest_component_face_fraction": 1.0,
+          "bounding_box_dimensions": {
+            "width": 1.332118570804596,
+            "depth": 1.9925445318222046,
+            "height": 1.1073718667030334
+          },
+          "source_up_axis": "not_canonicalized_non_humanoid",
+          "canonical_up_axis": null,
+          "subject_contract": "general_non_humanoid",
+          "manifold_status": {
+            "watertight": true,
+            "winding_consistent": true,
+            "boundary_edge_count": 0
+          },
+          "duplicate_face_count": 0,
+          "depth_occupancy_fraction": 0.8435395842276323,
+          "largest_thin_plane_vertex_fraction": 0.06813230386762485,
+          "validation_failures": [],
+          "passed": true,
+          "corrupt_geometry_policy": "reject_and_reconstruct_never_repair"
+        }
+      }
+    },
+    "consumed_credits": 0,
+    "external_command_bypassed": true,
+    "external_command_bypass_reason": "studio_request_requires_learned_local_geometry_before_meshmend_postprocess"
+  },
+  "output_files": [
+    {
+      "name": "worker_command.json",
+      "size": 1156,
+      "modified": 1784121462.0
+    },
+    {
+      "name": "mdl_expanded_prompt.txt",
+      "size": 1351,
+      "modified": 1784121466.0
+    },
+    {
+      "name": "mdl_request.json",
+      "size": 2457,
+      "modified": 1784121466.0
+    },
+    {
+      "name": "prompt.txt",
+      "size": 1351,
+      "modified": 1784121678.0
+    },
+    {
+      "name": "concept_generation_settings.json",
+      "size": 998,
+      "modified": 1784121740.0
+    },
+    {
+      "name": "concept_prompt_1.txt",
+      "size": 411,
+      "modified": 1784121740.0
+    },
+    {
+      "name": "concept_1.png",
+      "size": 758849,
+      "modified": 1784121758.0
+    },
+    {
+      "name": "concept_single_subject_1.png",
+      "size": 724738,
+      "modified": 1784121760.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_1.png",
+      "size": 390610,
+      "modified": 1784121770.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_1.json",
+      "size": 1546,
+      "modified": 1784121770.0
+    },
+    {
+      "name": "concept_validation_metrics_1.json",
+      "size": 1546,
+      "modified": 1784121770.0
+    },
+    {
+      "name": "concept_prompt_2.txt",
+      "size": 399,
+      "modified": 1784121770.0
+    },
+    {
+      "name": "concept_2.png",
+      "size": 822756,
+      "modified": 1784121788.0
+    },
+    {
+      "name": "concept_single_subject_2.png",
+      "size": 785235,
+      "modified": 1784121790.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_2.png",
+      "size": 211454,
+      "modified": 1784121792.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_2.json",
+      "size": 1542,
+      "modified": 1784121792.0
+    },
+    {
+      "name": "concept_validation_metrics_2.json",
+      "size": 1578,
+      "modified": 1784121792.0
+    },
+    {
+      "name": "concept_prompt_3.txt",
+      "size": 399,
+      "modified": 1784121792.0
+    },
+    {
+      "name": "concept_3.png",
+      "size": 971528,
+      "modified": 1784121810.0
+    },
+    {
+      "name": "concept_single_subject_3.png",
+      "size": 930503,
+      "modified": 1784121812.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_3.png",
+      "size": 115088,
+      "modified": 1784121812.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_3.json",
+      "size": 1525,
+      "modified": 1784121814.0
+    },
+    {
+      "name": "concept_validation_metrics_3.json",
+      "size": 1525,
+      "modified": 1784121814.0
+    },
+    {
+      "name": "concept_prompt_4.txt",
+      "size": 395,
+      "modified": 1784121814.0
+    },
+    {
+      "name": "concept_4.png",
+      "size": 1112097,
+      "modified": 1784121830.0
+    },
+    {
+      "name": "concept_single_subject_4.png",
+      "size": 1067870,
+      "modified": 1784121832.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_4.png",
+      "size": 134763,
+      "modified": 1784121834.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_4.json",
+      "size": 1521,
+      "modified": 1784121834.0
+    },
+    {
+      "name": "concept_validation_metrics_4.json",
+      "size": 1521,
+      "modified": 1784121834.0
+    },
+    {
+      "name": "concept_prompt_5.txt",
+      "size": 395,
+      "modified": 1784121834.0
+    },
+    {
+      "name": "concept_5.png",
+      "size": 1215973,
+      "modified": 1784121850.0
+    },
+    {
+      "name": "concept_single_subject_5.png",
+      "size": 1174930,
+      "modified": 1784121852.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_5.png",
+      "size": 718962,
+      "modified": 1784121852.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_5.json",
+      "size": 1550,
+      "modified": 1784121852.0
+    },
+    {
+      "name": "concept_validation_metrics_5.json",
+      "size": 1550,
+      "modified": 1784121852.0
+    },
+    {
+      "name": "concept_prompt_6.txt",
+      "size": 386,
+      "modified": 1784121854.0
+    },
+    {
+      "name": "concept_6.png",
+      "size": 806508,
+      "modified": 1784121870.0
+    },
+    {
+      "name": "concept_single_subject_6.png",
+      "size": 524356,
+      "modified": 1784121872.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_6.png",
+      "size": 120495,
+      "modified": 1784121874.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_6.json",
+      "size": 1544,
+      "modified": 1784121874.0
+    },
+    {
+      "name": "concept_validation_metrics_6.json",
+      "size": 1544,
+      "modified": 1784121874.0
+    },
+    {
+      "name": "concept_prompt_7.txt",
+      "size": 386,
+      "modified": 1784121874.0
+    },
+    {
+      "name": "concept_7.png",
+      "size": 900378,
+      "modified": 1784121892.0
+    },
+    {
+      "name": "concept_single_subject_7.png",
+      "size": 870134,
+      "modified": 1784121892.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_7.png",
+      "size": 49140,
+      "modified": 1784121894.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_7.json",
+      "size": 1532,
+      "modified": 1784121894.0
+    },
+    {
+      "name": "concept_validation_metrics_7.json",
+      "size": 1532,
+      "modified": 1784121894.0
+    },
+    {
+      "name": "concept_prompt_8.txt",
+      "size": 386,
+      "modified": 1784121894.0
+    },
+    {
+      "name": "concept_8.png",
+      "size": 959376,
+      "modified": 1784121910.0
+    },
+    {
+      "name": "concept_single_subject_8.png",
+      "size": 936690,
+      "modified": 1784121912.0
+    },
+    {
+      "name": "concept_single_subject_basefixed_8.png",
+      "size": 203898,
+      "modified": 1784121912.0
+    },
+    {
+      "name": "concept_validation_metrics_basefixed_8.json",
+      "size": 1522,
+      "modified": 1784121912.0
+    },
+    {
+      "name": "concept_validation_metrics_8.json",
+      "size": 1522,
+      "modified": 1784121912.0
+    },
+    {
+      "name": "concept_single_subject.png",
+      "size": 203898,
+      "modified": 1784121912.0
+    },
+    {
+      "name": "concept_validation_metrics.json",
+      "size": 1522,
+      "modified": 1784121912.0
+    },
+    {
+      "name": "foreground_mask.png",
+      "size": 4303,
+      "modified": 1784121914.0
+    },
+    {
+      "name": "backend_source_exact.png",
+      "size": 240344,
+      "modified": 1784121914.0
+    },
+    {
+      "name": "preprocessing_settings.json",
+      "size": 290,
+      "modified": 1784121914.0
+    },
+    {
+      "name": "concept_subject.png",
+      "size": 240344,
+      "modified": 1784121914.0
+    },
+    {
+      "name": "concept_subject_validation_metrics.json",
+      "size": 1519,
+      "modified": 1784121914.0
+    },
+    {
+      "name": "hunyuan_generation_kwargs_attempt_1.json",
+      "size": 62,
+      "modified": 1784121944.0
+    },
+    {
+      "name": "hunyuan_generation_kwargs.json",
+      "size": 62,
+      "modified": 1784121944.0
+    },
+    {
+      "name": "hunyuan_effective_kwargs.json",
+      "size": 106,
+      "modified": 1784121944.0
+    },
+    {
+      "name": "raw_backend_mesh_attempt_1.ply",
+      "size": 17060105,
+      "modified": 1784122156.0
+    },
+    {
+      "name": "validation_attempt_1.json",
+      "size": 1253,
+      "modified": 1784122162.0
+    },
+    {
+      "name": "validation_report.json",
+      "size": 1253,
+      "modified": 1784122162.0
+    },
+    {
+      "name": "raw_backend_mesh.ply",
+      "size": 17060105,
+      "modified": 1784122162.0
+    },
+    {
+      "name": "backend_result_report.json",
+      "size": 1253,
+      "modified": 1784122162.0
+    },
+    {
+      "name": "normalized_mesh.ply",
+      "size": 17060105,
+      "modified": 1784122162.0
+    },
+    {
+      "name": "repaired_mesh.ply",
+      "size": 8781733,
+      "modified": 1784122208.0
+    },
+    {
+      "name": "decimated_mesh.ply",
+      "size": 8781733,
+      "modified": 1784122208.0
+    },
+    {
+      "name": "final_mesh.ply",
+      "size": 15191005,
+      "modified": 1784122232.0
+    },
+    {
+      "name": "meshmend_hunyuan.stl",
+      "size": 39956884,
+      "modified": 1784122254.0
+    },
+    {
+      "name": "generation_architecture_diagnostics.json",
+      "size": 7907,
+      "modified": 1784122254.0
+    },
+    {
+      "name": "generation_validation_report.json",
+      "size": 2987,
+      "modified": 1784122254.0
+    },
+    {
+      "name": "result.json",
+      "size": 17312,
+      "modified": 1784122254.0
+    },
+    {
+      "name": "progress.json",
+      "size": 134,
+      "modified": 1784122254.0
+    },
+    {
+      "name": "worker_error.txt",
+      "size": 803,
+      "modified": 1784122260.0
+    }
+  ],
+  "service_python": "C:\\Python313\\python.exe",
+  "model_worker_python": "C:\\Python313\\python.exe",
+  "hunyuan3d_path": "",
+  "production_engine": "external",
+  "backend_diagnostics": {
+    "status": "ok",
+    "backend_running": true,
+    "model_quality_acceptable": true,
+    "model_quality_note": "This diagnostic checks backend stability, not visual miniature quality.",
+    "failed_checks": [],
+    "service": {
+      "build_id": "meshmend-model-service-progress-v3",
+      "python": "C:\\Python313\\python.exe",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "cwd": "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service",
+      "pid": 27540,
+      "port": "8090",
+      "public_base_url": "http://127.0.0.1:8090",
+      "log_file": "D:\\MeshMend\\src\\meshmend_ai\\logs\\meshmend_backend.log"
+    },
+    "commands": {
+      "text_to_3d_command": "\"C:\\Python313\\python.exe\" \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\production_worker.py\" --input \"{input_json}\" --output-dir \"{output_dir}\"",
+      "image_to_3d_command": "\"C:\\Python313\\python.exe\" \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\production_worker.py\" --input \"{input_json}\" --output-dir \"{output_dir}\"",
+      "model_worker_python": "C:\\Python313\\python.exe",
+      "production_engine": "external"
+    },
+    "imports": {
+      "fastapi": {
+        "ok": true,
+        "version": "0.116.1",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\fastapi\\__init__.py"
+      },
+      "pydantic": {
+        "ok": true,
+        "version": "2.11.7",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\pydantic\\__init__.py"
+      },
+      "numpy": {
+        "ok": true,
+        "version": "2.2.5",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\numpy\\__init__.py"
+      },
+      "trimesh": {
+        "ok": true,
+        "version": "4.10.1",
+        "file": "C:\\Python313\\Lib\\site-packages\\trimesh\\__init__.py"
+      },
+      "scipy": {
+        "ok": true,
+        "version": "1.16.3",
+        "file": "C:\\Python313\\Lib\\site-packages\\scipy\\__init__.py"
+      },
+      "PIL": {
+        "ok": true,
+        "version": "11.2.1",
+        "file": "C:\\Users\\ek930\\AppData\\Roaming\\Python\\Python313\\site-packages\\PIL\\__init__.py"
+      },
+      "torch": {
+        "ok": true,
+        "version": "2.6.0+cu124",
+        "file": "C:\\Python313\\Lib\\site-packages\\torch\\__init__.py"
+      },
+      "diffusers": {
+        "ok": true,
+        "version": "0.36.0",
+        "file": "C:\\Python313\\Lib\\site-packages\\diffusers\\__init__.py"
+      },
+      "open3d": {
+        "ok": false,
+        "error": "No module named 'open3d'",
+        "traceback": "Traceback (most recent call last):\n  File \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\main.py\", line 593, in _run_task\n    certification = _result_studio_certification_summary(result)\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    ...<3 lines>...\n        f\"or mesh_info.production_ready=true. Certification summary: {json.dumps(certification, default=str)}\"\n    \nRuntimeError: Studio-quality request completed without certification. The mesh was not released because strict studio requests must return studio_quality_certified=true or mesh_info.production_ready=true. Certification summary: {\"provider\": \"free_local_hunyuan3d\", \"studio_quality_certified\": false, \"store_quality_certified\": false, \"mesh_info_production_ready\": false, \"mesh_info_store_quality_certified\": false, \"quality_report_production_ready\": false, \"quality_gate_issues\": [\"large_smooth_primitive_surfaces_dominate_0.99_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"], \"studio_quality_note\": \"Export completed, but strict store/studio-quality gates did not certify this mesh.\"}\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\main.py\", line 753, in _check_import\n  File \"C:\\Python313\\Lib\\importlib\\__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1324, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'open3d'\n"
+      },
+      "hy3dgen": {
+        "ok": true,
+        "version": "",
+        "file": "C:\\Python313\\Lib\\site-packages\\hy3dgen\\__init__.py"
+      }
+    },
+    "gpu": {
+      "torch_import_ok": true,
+      "cuda_available": true,
+      "cuda_device_count": 1,
+      "cuda_devices": [
+        "NVIDIA GeForce RTX 3060"
+      ]
+    },
+    "memory": {
+      "enabled": true,
+      "max_postprocess_faces": 350000,
+      "max_export_faces": 600000,
+      "available_gb": 38.5,
+      "total_gb": 63.92,
+      "percent_used": 39.8
+    },
+    "paths": {
+      "service_root": {
+        "path": "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service",
+        "exists": true,
+        "is_file": false,
+        "is_dir": true
+      },
+      "workspace_root": {
+        "path": "D:\\MeshMend\\src\\meshmend_ai",
+        "exists": true,
+        "is_file": false,
+        "is_dir": true
+      },
+      "model_worker_python": {
+        "path": "C:\\Python313\\python.exe",
+        "exists": true,
+        "is_file": true,
+        "is_dir": false
+      },
+      "hunyuan3d_path": {
+        "configured": false
+      },
+      "external_generator_command": {
+        "configured": false
+      }
+    },
+    "permissions": {
+      "tasks_dir": {
+        "path": "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\tasks",
+        "writable": true
+      },
+      "outputs_dir": {
+        "path": "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service\\outputs",
+        "writable": true
+      },
+      "logs_dir": {
+        "path": "D:\\MeshMend\\src\\meshmend_ai\\logs",
+        "writable": true
+      },
+      "service_root": {
+        "path": "D:\\MeshMend\\src\\meshmend_ai\\3dsculpter\\model_service",
+        "writable": true
+      }
+    },
+    "port": {
+      "host": "127.0.0.1",
+      "port": 8090,
+      "accepting_connections": true
+    },
+    "worker_python": {
+      "ok": true,
+      "stdout": "C:\\Python313\\python.exe\nWindows-11-10.0.26200-SP0",
+      "stderr": "",
+      "returncode": 0
+    },
+    "hunyuan_import": null,
+    "recent_failures": [],
+    "active_tasks": {
+      "d8b176703055400394542d9a3e5ec697": {
+        "id": "d8b176703055400394542d9a3e5ec697",
+        "workflow": "text_to_3d",
+        "status": "FAILED",
+        "progress": 100,
+        "stage": "failed",
+        "message": "Generation failed",
+        "last_progress_at": 1783824656.0532534,
+        "created_at": 1783823694.951522,
+        "started_at": 1783823695.146364,
+        "finished_at": 1783824658.3767211,
+        "prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+        "model_urls": {},
+        "thumbnail_url": null,
+        "error": "reconstruction validation failed: upright_humanoid_height_not_largest_dimension",
+        "consumed_credits": 0
+      },
+      "e748f3b60f0944d8bfd9436b8204fa3a": {
+        "id": "e748f3b60f0944d8bfd9436b8204fa3a",
+        "workflow": "text_to_3d",
+        "status": "FAILED",
+        "progress": 100,
+        "stage": "failed",
+        "message": "Generation failed",
+        "last_progress_at": 1783827062.4080822,
+        "created_at": 1783826132.2175827,
+        "started_at": 1783826132.7576718,
+        "finished_at": 1783827065.1753361,
+        "prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+        "model_urls": {},
+        "thumbnail_url": null,
+        "error": "Generated STL did not meet store-quality gate: large_smooth_primitive_surfaces_dominate_0.99_max_0.68; studio_quality_score_below_min_0.83_min_0.90; diagnostics={\"workflow\": \"text_to_3d\", \"faces\": 317632, \"vertices\": 158790, \"detail_faces_target\": 300000, \"extents_mm\": [23.5640648011782, 23.5640648011782, 31.999999999999996], \"watertight\": true, \"winding_consistent\": true, \"components\": 2, \"boundary_edges\": 0, \"nonmanifold_edges\": 0, \"euler_number\": -26, \"visual_hole_genus\": 15, \"volume\": 1687.66719655549, \"area\": 2684.7476286386145, \"metadata\": {\"processed\": true, \"meshmend_image_visual_hole_pitch_mm\": 0.24, \"meshmend_image_visual_hole_close_iterations\": 3, \"meshmend_normalized_to_origin\": true, \"meshmend_aspect_ratio_preserved\": true, \"meshmend_source_up_axis\": \"y\", \"meshmend_hunyuan_text_concept\": true, \"meshmend_background_slab_removed\": true, \"meshmend_connected_sheet_removed\": true, \"units\": \"mm\", \"meshmend_scale_mm\": 32.0, \"meshmend_scale_axis\": \"z_height\", \"meshmend_surface_denoised\": true, \"meshmend_artifact_components_removed\": 5, \"meshmend_voxel_solidified\": true, \"meshmend_pre_solidify_boundary_edges\": 82, \"meshmend_component_bridges_added\": 3, \"meshmend_image_visual_holes_sealed\": true, \"meshmend_pre_seal_genus\": 21, \"meshmend_image_guided_detail\": true, \"meshmend_image_store_density_restored\": true, \"meshmend_final_surface_polished\": true, \"meshmend_added_round_base\": true}, \"issues\": [\"large_smooth_primitive_surfaces_dominate_0.99_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"]}",
+        "consumed_credits": 0
+      },
+      "ae88ab4bb2df41d6b54a44ca56242c2d": {
+        "id": "ae88ab4bb2df41d6b54a44ca56242c2d",
+        "workflow": "text_to_3d",
+        "status": "FAILED",
+        "progress": 100,
+        "stage": "failed",
+        "message": "Generation failed",
+        "last_progress_at": 1783839632.019171,
+        "created_at": 1783838680.4405537,
+        "started_at": 1783838680.6469126,
+        "finished_at": 1783839633.8737218,
+        "prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+        "model_urls": {},
+        "thumbnail_url": null,
+        "error": "Studio-quality request completed without certification. The mesh was not released because strict studio requests must return studio_quality_certified=true or mesh_info.production_ready=true. Certification summary: {\"provider\": \"free_local_hunyuan3d\", \"studio_quality_certified\": false, \"store_quality_certified\": false, \"mesh_info_production_ready\": false, \"mesh_info_store_quality_certified\": false, \"quality_report_production_ready\": false, \"quality_gate_issues\": [\"large_smooth_primitive_surfaces_dominate_0.98_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"], \"studio_quality_note\": \"Export completed, but strict store/studio-quality gates did not certify this mesh.\"}",
+        "consumed_credits": 0
+      },
+      "7224975613564173b7dea17dbd5f793f": {
+        "id": "7224975613564173b7dea17dbd5f793f",
+        "workflow": "text_to_3d",
+        "status": "FAILED",
+        "progress": 100,
+        "stage": "failed",
+        "message": "Generation failed",
+        "last_progress_at": 1783840791.0367746,
+        "created_at": 1783839712.3369322,
+        "started_at": 1783839712.5097625,
+        "finished_at": 1783840794.1373365,
+        "prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+        "model_urls": {},
+        "thumbnail_url": null,
+        "error": "Studio-quality request completed without certification. The mesh was not released because strict studio requests must return studio_quality_certified=true or mesh_info.production_ready=true. Certification summary: {\"provider\": \"free_local_hunyuan3d\", \"studio_quality_certified\": false, \"store_quality_certified\": false, \"mesh_info_production_ready\": false, \"mesh_info_store_quality_certified\": false, \"quality_report_production_ready\": false, \"quality_gate_issues\": [\"large_smooth_primitive_surfaces_dominate_1.00_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"], \"studio_quality_note\": \"Export completed, but strict store/studio-quality gates did not certify this mesh.\"}",
+        "consumed_credits": 0
+      },
+      "3ee8d0259f164d48a704bde99e429a17": {
+        "id": "3ee8d0259f164d48a704bde99e429a17",
+        "workflow": "text_to_3d",
+        "status": "FAILED",
+        "progress": 100,
+        "stage": "failed",
+        "message": "Generation failed",
+        "last_progress_at": 1783866920.0277324,
+        "created_at": 1783866172.5919585,
+        "started_at": 1783866185.0510957,
+        "finished_at": 1783866922.1728418,
+        "prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+        "model_urls": {},
+        "thumbnail_url": null,
+        "error": "Studio-quality request completed without certification. The mesh was not released because strict studio requests must return studio_quality_certified=true or mesh_info.production_ready=true. Certification summary: {\"provider\": \"free_local_hunyuan3d\", \"studio_quality_certified\": false, \"store_quality_certified\": false, \"mesh_info_production_ready\": false, \"mesh_info_store_quality_certified\": false, \"quality_report_production_ready\": false, \"quality_gate_issues\": [\"large_smooth_primitive_surfaces_dominate_0.99_max_0.68\", \"studio_quality_score_below_min_0.83_min_0.90\", \"custom_miniature_detail_pipeline_not_applied\", \"intricate_detail_pipeline_not_applied\", \"geometry_upscale_not_applied\"], \"studio_quality_note\": \"Export completed, but strict store/studio-quality gates did not certify this mesh.\"}",
+        "consumed_credits": 0
+      },
+      "7a90de41b81a49ba8c7cac4bf76218bf": {
+        "id": "7a90de41b81a49ba8c7cac4bf76218bf",
+        "workflow": "text_to_3d",
+        "status": "IN_PROGRESS",
+        "progress": 99,
+        "stage": "complete",
+        "message": "Worker completed model generation",
+        "last_progress_at": 1784122253.9644823,
+        "created_at": 1784121461.4071004,
+        "started_at": 1784121461.6794283,
+        "finished_at": null,
+        "prompt": "a dragon\n\nCreate a production/studio-quality 32mm resin-printable tabletop miniature. This must be final sculpt geometry, not a primitive blockout: crisp facial features, fingers/claws, weapon bevels, armor trim, layered cloth/leather/metal material texture, engraved panel lines, deep recesses readable at miniature scale, watertight STL/GLB/OBJ output, and no generic block/rock/cheese forms.",
+        "model_urls": {},
+        "thumbnail_url": null,
+        "error": null,
+        "consumed_credits": 0
+      }
+    }
+  }
+}

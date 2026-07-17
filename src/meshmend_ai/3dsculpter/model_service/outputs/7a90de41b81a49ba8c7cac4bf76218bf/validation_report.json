@@ -1,0 +1,38 @@
+{
+  "stage": "body_reconstruction",
+  "backend": "hunyuan3d-mini",
+  "model": "tencent/Hunyuan3D-2",
+  "runtime_seconds": 210.662,
+  "preprocessing_settings": {
+    "background_removed": true,
+    "alpha_mask": "foreground_mask.png",
+    "subject_height_target_fraction": 0.78,
+    "centered": true,
+    "base_removed_from_mask": false,
+    "view_requirement": "neutral_front_three_quarter_not_top_down",
+    "backend_source": "backend_source_exact.png"
+  },
+  "vertex_count": 448906,
+  "face_count": 897924,
+  "connected_component_count": 1,
+  "largest_component_face_fraction": 1.0,
+  "bounding_box_dimensions": {
+    "width": 1.332118570804596,
+    "depth": 1.9925445318222046,
+    "height": 1.1073718667030334
+  },
+  "source_up_axis": "not_canonicalized_non_humanoid",
+  "canonical_up_axis": null,
+  "subject_contract": "general_non_humanoid",
+  "manifold_status": {
+    "watertight": true,
+    "winding_consistent": true,
+    "boundary_edge_count": 0
+  },
+  "duplicate_face_count": 0,
+  "depth_occupancy_fraction": 0.8435395842276323,
+  "largest_thin_plane_vertex_fraction": 0.06813230386762485,
+  "validation_failures": [],
+  "passed": true,
+  "corrupt_geometry_policy": "reject_and_reconstruct_never_repair"
+}

@@ -1,0 +1,91 @@
+{
+  "pipeline": [
+    "clean_source_image",
+    "foreground_mask",
+    "body_reconstruction",
+    "body_validation",
+    "armor_modules_deferred",
+    "weapon_module_deferred",
+    "pose_and_fusion_deferred",
+    "topology_repair",
+    "detail_pass_disabled_until_base_form_passes",
+    "base_attachment",
+    "printability_validation"
+  ],
+  "studio_mode": true,
+  "debug_mode": false,
+  "attempts_configured": 3,
+  "accepted_attempt": 1,
+  "quality_scores": {
+    "overall": 0.8320000000000001,
+    "topology_score": 1.0,
+    "printability_score": 1.0,
+    "symmetry_score": null,
+    "silhouette_score": 1.0,
+    "detail_density_score": 0.0,
+    "detail_faces_score": 1.0,
+    "connected_components_score": 0.9,
+    "component_count": 2,
+    "smooth_surface_area_ratio": 0.9919056109302417,
+    "volume_to_bbox_ratio": 0.18158188084402982,
+    "issues_considered": []
+  },
+  "quality_gate_issues": [
+    "large_smooth_primitive_surfaces_dominate_0.99_max_0.68",
+    "studio_quality_score_below_min_0.83_min_0.90",
+    "custom_miniature_detail_pipeline_not_applied",
+    "intricate_detail_pipeline_not_applied",
+    "geometry_upscale_not_applied"
+  ],
+  "miniature_design_language_issues": [
+    "mdl_no_prompt_landmark_overlay"
+  ],
+  "prompt_landmark_overlay": {
+    "applied": false,
+    "disabled": "base_form_validation_mode",
+    "mdl_issues": [
+      "mdl_no_prompt_landmark_overlay"
+    ]
+  },
+  "source_image": "concept_subject.png",
+  "expanded_prompt_file": "mdl_expanded_prompt.txt",
+  "architecture_diagnostics_file": "generation_architecture_diagnostics.json",
+  "raw_backend_validation": {
+    "stage": "body_reconstruction",
+    "backend": "hunyuan3d-mini",
+    "model": "tencent/Hunyuan3D-2",
+    "runtime_seconds": 210.662,
+    "preprocessing_settings": {
+      "background_removed": true,
+      "alpha_mask": "foreground_mask.png",
+      "subject_height_target_fraction": 0.78,
+      "centered": true,
+      "base_removed_from_mask": false,
+      "view_requirement": "neutral_front_three_quarter_not_top_down",
+      "backend_source": "backend_source_exact.png"
+    },
+    "vertex_count": 448906,
+    "face_count": 897924,
+    "connected_component_count": 1,
+    "largest_component_face_fraction": 1.0,
+    "bounding_box_dimensions": {
+      "width": 1.332118570804596,
+      "depth": 1.9925445318222046,
+      "height": 1.1073718667030334
+    },
+    "source_up_axis": "not_canonicalized_non_humanoid",
+    "canonical_up_axis": null,
+    "subject_contract": "general_non_humanoid",
+    "manifold_status": {
+      "watertight": true,
+      "winding_consistent": true,
+      "boundary_edge_count": 0
+    },
+    "duplicate_face_count": 0,
+    "depth_occupancy_fraction": 0.8435395842276323,
+    "largest_thin_plane_vertex_fraction": 0.06813230386762485,
+    "validation_failures": [],
+    "passed": true,
+    "corrupt_geometry_policy": "reject_and_reconstruct_never_repair"
+  }
+}

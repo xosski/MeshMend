@@ -27,7 +27,7 @@ SERVICE_ROOT = Path(__file__).resolve().parent
 WORKSPACE_ROOT = SERVICE_ROOT.parent.parent
 if str(WORKSPACE_ROOT) not in sys.path:
     sys.path.insert(0, str(WORKSPACE_ROOT))
-SERVICE_BUILD_ID = "meshmend-model-service-progress-v3"
+SERVICE_BUILD_ID = "meshmend-model-service-base-form-v4"
 TASKS_DIR = Path(os.environ.get("MESHMEND_MODEL_SERVICE_TASKS_DIR", SERVICE_ROOT / "tasks"))
 OUTPUTS_DIR = Path(os.environ.get("MESHMEND_MODEL_SERVICE_OUTPUTS_DIR", SERVICE_ROOT / "outputs"))
 LOGS_DIR = Path(os.environ.get("MESHMEND_BACKEND_LOG_DIR", WORKSPACE_ROOT / "logs"))
@@ -588,7 +588,8 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
 
         result = _load_worker_result(result_json, completed.stdout, output_dir)
 
-        if _store_quality_requested(payload) and not _result_studio_certified(result):
+        validated_base_form = _result_validated_base_form(result, output_dir)
+        if _store_quality_requested(payload) and not _result_studio_certified(result) and not validated_base_form:
             certification = _result_studio_certification_summary(result)
             raise RuntimeError(
                 "Studio-quality request completed without certification. "
@@ -607,7 +608,7 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
             status="SUCCEEDED",
             progress=100,
             stage="complete",
-            message="Production model ready",
+            message="Validated base form ready; decorative detail is disabled" if validated_base_form and not _result_studio_certified(result) else "Production model ready",
             finished_at=time.time(),
             model_urls=model_urls,
             thumbnail_url=result.get("thumbnail_url"),
@@ -1116,6 +1117,28 @@ def _result_studio_certified(result: dict[str, Any]) -> bool:
     if isinstance(quality_report, dict) and bool(quality_report.get("production_ready")):
         return True
     return False
+
+
+def _result_validated_base_form(result: dict[str, Any], output_dir: Path) -> bool:
+    """Accept an explicitly validated body without falsely studio-certifying it."""
+    if not bool(result.get("base_form_only")) or not bool(result.get("base_form_validated")):
+        return False
+    if str(result.get("release_tier") or "") != "validated_base_form":
+        return False
+    model_file = Path(str(result.get("model_file") or "")).name
+    if not model_file or not (output_dir / model_file).is_file():
+        return False
+    mesh_info = result.get("mesh_info") if isinstance(result.get("mesh_info"), dict) else {}
+    structural_prefixes = (
+        "empty_mesh", "degenerate_faces", "mesh_too_flat", "likely_dual_subject",
+        "likely_background_slab", "likely_horizontal_square_sheet", "likely_blocky_low_definition",
+        "mesh_not_solid_watertight", "mesh_boundary_edges", "mesh_nonmanifold_edges",
+        "too_many_disconnected_components", "zero_or_tiny_volume", "collapsed_bounding_box",
+        "image_visual_holes_unsealed", "image_low_relief_sheet", "heavy_artifact_salvage",
+        "component_bridges_visible_artifact_risk", "excessive_bilateral_asymmetry",
+    )
+    issues = [str(issue) for issue in mesh_info.get("quality_gate_issues") or []]
+    return not any(issue.startswith(structural_prefixes) for issue in issues)
 
 
 def _result_studio_certification_summary(result: dict[str, Any]) -> dict[str, Any]:
