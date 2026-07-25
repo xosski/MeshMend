@@ -239,24 +239,6 @@ class MiniatureSculptQualityGate(StudioQualityGate):
         equipment_present = sorted(tag for tag in self.required_equipment_tags if tag in present)
         sculptural_details = sorted(tag for tag in self.detail_tags if tag in present)
         critical_details = sorted(tag for tag in self.critical_detail_tags if tag in present)
-        geometry_backed_detail_pipeline = (
-            foundation_first
-            and report.components >= 12
-            and report.faces >= self.min_faces
-            and len(sculptural_details) >= 10
-            and len(critical_details) >= 3
-            and {"studio_definition_forms", "studio_definition_geometry"}.issubset(present)
-        )
-        integrated_fused_detail_pipeline = (
-            foundation_first
-            and bool(mesh.metadata.get("studio_solid_fused"))
-            and bool(mesh.metadata.get("studio_fused_surface_definition_reprojected"))
-            and report.components <= 3
-            and report.faces >= self.min_faces
-            and len(sculptural_details) >= 10
-            and len(critical_details) >= 3
-            and {"studio_definition_forms", "studio_definition_geometry"}.issubset(present)
-        )
         issues = list(report.issues)
         semantic_shoulder_equivalent = present & {"sode_shoulders", "lamellar_plate_rows", "cloak", "scale_rows", "crest_spines", "dragon_wings"}
         semantic_backpack_equivalent = present & {"waist_skirt_plates", "sashimono_back_banner", "cloak", "quiver", "long_tail", "tail", "dragon_wings", "large_back_silhouette"}
@@ -272,24 +254,11 @@ class MiniatureSculptQualityGate(StudioQualityGate):
             issues = _remove_missing_required_components(issues, allowed_missing)
         if "dragon_beast_shape" in present:
             issues = _remove_missing_required_components(issues, {"helmet", "chest_armor", "shoulder_pad", "backpack"})
-        if "sculpt_engine" in mesh.metadata:
-            # Sculpt-engine miniatures are intentionally assembled from visible
-            # raised forms. A voxel union erases those forms into a noisy blob,
-            # so do not force destructive fusion just to remove shell warnings.
-            issues = [
-                issue for issue in issues
-                if not (
-                    issue.startswith("disconnected_shells:")
-                    or issue.startswith("outlier_shells:")
-                    or issue.startswith("floating_geometry:")
-                    or issue.startswith("thin_sheet_shells_detected:")
-                    or issue.startswith("open_surfaces:")
-                )
-            ]
-
         if smooth_ratio > self.max_smooth_surface_area_ratio:
-            if len(sculptural_details) < 5 or not (geometry_backed_detail_pipeline or integrated_fused_detail_pipeline):
-                issues.append(f"large_smooth_primitive_surfaces_dominate:{smooth_ratio:.2f}>{self.max_smooth_surface_area_ratio:.2f}")
+            # Metadata, stage completion, and polygon count are not geometric
+            # evidence. A subdivided sphere or capsule remains a smooth
+            # primitive even when it carries every expected detail tag.
+            issues.append(f"large_smooth_primitive_surfaces_dominate:{smooth_ratio:.2f}>{self.max_smooth_surface_area_ratio:.2f}")
         required_equipment = list(self.required_equipment_tags)
         if present & {"high_elf_warrior_shape", "dwarf_warrior_shape", "orc_brute_shape", "human_knight_shape", "dragon_beast_shape"}:
             required_equipment = [tag for tag in required_equipment if tag != "backpack"]
@@ -449,12 +418,6 @@ class MiniatureQualityCritic:
         }
         equipment_score = min(len(set(report.equipment_tags_present or []) | semantic_equipment) / 6.0, 1.0)
         smooth_penalty = min(max(report.smooth_surface_area_ratio - 0.42, 0.0) / 0.35, 1.0)
-        if (mesh.metadata.get("sculpt_engine") or {}).get("character_foundation_first") and detail_score >= 0.9:
-            # The smooth-area heuristic intentionally catches primitive blobs,
-            # but sculpt-engine minis are built from many clean hard-surface
-            # shells where planar armor plates are expected. Do not let that
-            # single heuristic override a full character/detail pipeline.
-            smooth_penalty = min(smooth_penalty, 0.25)
         topology_score = 1.0 if report.watertight and not report.boundary_edges and not report.non_manifold_edges and not report.artifact_rejections else 0.62
         identity_score = 1.0 if present & {"high_elf_warrior_shape", "orc_brute_shape", "astra_shock_trooper_shape", "human_knight_shape", "dwarf_warrior_shape", "space_terminator_shape", "samurai_warrior_shape", "ranger_warrior_shape", "reptilian_warrior_shape", "dragon_beast_shape"} else 0.0
         # Do not force million-face meshes just to satisfy the critic. Visual
@@ -477,6 +440,8 @@ class MiniatureQualityCritic:
         return scores
 
     def require_pass(self, mesh: trimesh.Trimesh, base_report: StudioQualityReport | None = None) -> dict[str, float]:
+        if base_report is not None and not base_report.passed:
+            raise ValueError("MiniatureQualityCritic cannot certify a mesh that failed the geometric quality gate")
         scores = self.evaluate(mesh, base_report)
         if float(scores.get("overall", 0.0)) < self.minimum_score:
             raise ValueError(f"MiniatureQualityCritic score below store-ready threshold: {scores.get('overall'):.2f}<{self.minimum_score:.2f}")

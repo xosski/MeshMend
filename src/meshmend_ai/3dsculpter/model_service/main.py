@@ -69,7 +69,7 @@ class TextTo3DRequest(BaseModel):
     # faces in 4x jumps, so million-face requests can become 3-5M face meshes and
     # freeze consumer PCs. Certified external render farms can still request more
     # via MESHMEND_HOSTED_TARGET_POLYCOUNT or direct payload overrides.
-    target_polycount: int = 180_000
+    target_polycount: int = 300_000
     scale_mm: float | None = None
     workflow: str = "text_to_3d"
     product: str = "meshmend"
@@ -420,11 +420,7 @@ def _can_accept_high_detail_request(workflow: str) -> bool:
 
 
 def _strict_studio_gate_enforced() -> bool:
-    """Return true only when studio requests fail closed instead of exporting best effort meshes."""
-    if os.environ.get("MESHMEND_DISABLE_STORE_QUALITY_GATE", "0").strip().lower() in {"1", "true", "yes", "on"}:
-        return False
-    if os.environ.get("MESHMEND_ALLOW_BEST_EFFORT_EXPORT", "0").strip().lower() in {"1", "true", "yes", "on"}:
-        return False
+    """Studio requests always fail closed; best-effort settings are draft-only."""
     return True
 
 
@@ -588,13 +584,13 @@ def _run_task(task_id: str, payload: dict[str, Any]) -> None:
 
         result = _load_worker_result(result_json, completed.stdout, output_dir)
 
-        validated_base_form = _result_validated_base_form(result, output_dir)
-        if _store_quality_requested(payload) and not _result_studio_certified(result) and not validated_base_form:
+        if _store_quality_requested(payload) and not _result_studio_certified(result):
             certification = _result_studio_certification_summary(result)
             raise RuntimeError(
                 "Studio-quality request completed without certification. "
                 "The mesh was not released because strict studio requests must return studio_quality_certified=true "
-                f"or mesh_info.production_ready=true. Certification summary: {json.dumps(certification, default=str)}"
+                f"or mesh_info.production_ready=true; a validated base form is not a detailed final model. "
+                f"Certification summary: {json.dumps(certification, default=str)}"
             )
 
         progress_result = _read_worker_progress(output_dir)

@@ -30,7 +30,7 @@ from meshmend.studio.assets import (
     validate_part,
 )
 from meshmend.studio.pipeline import StudioMiniatureSpec
-from meshmend.studio.quality import MiniatureQualityCritic, MiniatureSculptQualityGate, StudioQualityGate, StudioQualityReport
+from meshmend.studio.quality import MiniatureArtifactDetector, MiniatureQualityCritic, MiniatureSculptQualityGate, StudioQualityGate, StudioQualityReport
 
 
 STAGED_CATEGORIES: tuple[PartCategory, ...] = (
@@ -2161,8 +2161,11 @@ class StagedMiniaturePipeline:
                 repaired = remesh_subdivide(repaired, max(spec.target_faces, self.quality_gate.min_faces))
                 repaired = _reproject_fused_sculpt_surface_definition(repaired, spec)
         components = len([part for part in repaired.split(only_watertight=False) if len(part.faces) > 20])
-        passed = components <= 3
-        issues = [] if passed else [f"too_many_shells_after_fusion:{components}"]
+        artifact_report = MiniatureArtifactDetector().detect(repaired)
+        issues = list(artifact_report.rejections)
+        if components > 3:
+            issues.append(f"too_many_shells_after_fusion:{components}")
+        passed = not issues
         return repaired, StageResult(
             "printability_validation",
             passed,
@@ -2170,6 +2173,7 @@ class StagedMiniaturePipeline:
             artifacts={
                 "components_before_fusion": pre_fusion_components,
                 "components_after_fusion": components,
+                "artifact_metrics": artifact_report.metrics,
                 "sculpt_engine_detail_fusion_attempted": bool(sculpted and pre_fusion_components > 3),
                 "sculpt_engine_geometry_preserved": sculpted,
                 **fusion_metadata,

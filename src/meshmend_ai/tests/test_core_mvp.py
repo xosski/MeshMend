@@ -296,6 +296,25 @@ def test_miniature_sculpt_quality_gate_rejects_forged_metadata_primitive() -> No
     assert any("large_smooth_primitive_surfaces_dominate" in issue for issue in report.issues)
 
 
+def test_miniature_sculpt_quality_gate_does_not_waive_disconnected_sculpt_shells() -> None:
+    body = trimesh.creation.icosphere(subdivisions=3, radius=8.0)
+    floating = trimesh.creation.icosphere(subdivisions=2, radius=2.0)
+    floating.apply_translation([20.0, 0.0, 0.0])
+    blockout = trimesh.util.concatenate([body, floating])
+    blockout.metadata["studio_components"] = [
+        "body", "head", "helmet", "weapon", "base", "chest_armor",
+        "shoulder_pad", "backpack", "armor_trim", "panel_line", "rivet",
+        "face_detail", "weapon_detail", "studio_definition_forms",
+        "studio_definition_geometry",
+    ]
+    blockout.metadata["sculpt_engine"] = {"character_foundation_first": True}
+
+    report = MiniatureSculptQualityGate(min_faces=1, min_vertices=1, min_height_mm=1.0, max_height_mm=30.0).evaluate(blockout)
+
+    assert not report.passed
+    assert any(issue.startswith(("disconnected_shells:", "floating_geometry:", "outlier_shells:")) for issue in report.issues)
+
+
 def test_sculpt_engine_creates_detail_maps_before_geometry() -> None:
     maps = SculptEngine().generate_detail_maps({"prompt": "original sci-fi veteran with armor trim vents cloth insignia"})
     assert maps.normal_map.shape == (512, 512, 3)

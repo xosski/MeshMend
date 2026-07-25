@@ -334,11 +334,10 @@ def _should_auto_configure_hunyuan(args: argparse.Namespace) -> bool:
         return False
     if has_external_command and os.environ.get("MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED", "0").strip().lower() in {"1", "true", "yes", "on"}:
         return False
-    # Creation workflows should configure the native MeshMend generator by
-    # default. Plain command-line repair should not need or start any model-
-    # generation stack. If a user's shell still has the old Hunyuan env var set,
-    # GUI/model-service launches intentionally override it unless Hunyuan was
-    # explicitly requested with --free-local-hunyuan.
+    # Creation workflows default to learned Hunyuan geometry. The procedural
+    # MeshMend generators are useful for blockouts and repair tests, but cannot
+    # create a studio sculpt merely by subdividing and tagging primitive parts.
+    # Plain command-line repair should not start any model-generation stack.
     return bool(args.model_service or args.sculptor or args.gui or (args.input is None and args.output is None))
 
 
@@ -375,12 +374,12 @@ def _configure_generation_backend(args: argparse.Namespace, use_hunyuan: bool) -
         if args.require_ai_sculpt_planner:
             os.environ["MESHMEND_REQUIRE_AI_SCULPT_PLANNER"] = "1"
     else:
-        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "free_local_hunyuan" if args.free_local_hunyuan else "meshmend_native"
+        os.environ["MESHMEND_PRODUCTION_ENGINE"] = "free_local_hunyuan"
     os.environ.setdefault("MESHMEND_USE_HOSTED_3D", "1")
     os.environ.setdefault("MESHMEND_HOSTED_3D_PROVIDER", "meshmend")
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_URL", f"http://127.0.0.1:{args.model_service_port}")
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_PORT", str(args.model_service_port))
-    if args.native_sculpt_backend or not args.free_local_hunyuan:
+    if args.native_sculpt_backend:
         os.environ["MESHMEND_MODEL_WORKER_PYTHON"] = sys.executable
         os.environ["MESHMEND_MODEL_SERVICE_PYTHON"] = sys.executable
         os.environ.pop("MESHMEND_HUNYUAN3D_PATH", None)
@@ -402,6 +401,13 @@ def _configure_generation_backend(args: argparse.Namespace, use_hunyuan: bool) -
 
 
 def _configure_bundled_no_api_external_backend(args: argparse.Namespace) -> bool:
+    # This runner is a procedural modular sculpt pipeline. It used to be
+    # auto-selected and advertised as a certified external backend, allowing
+    # high-face-count primitive blockouts to masquerade as studio output. Keep
+    # it available only as an explicit development opt-in; normal creation uses
+    # the learned Hunyuan path and fails closed if that backend is unavailable.
+    if os.environ.get("MESHMEND_USE_BUNDLED_PROCEDURAL_BACKEND", "0").strip().lower() not in {"1", "true", "yes", "on"}:
+        return False
     if os.environ.get("MESHMEND_FORCE_NATIVE_SCULPT_BACKEND", "0").strip().lower() in {"1", "true", "yes", "on"}:
         return False
     if args.free_local_hunyuan:
@@ -412,7 +418,7 @@ def _configure_bundled_no_api_external_backend(args: argparse.Namespace) -> bool
     if not runner.exists():
         return False
     os.environ["MESHMEND_PRODUCTION_ENGINE"] = "external"
-    os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "1"
+    os.environ["MESHMEND_EXTERNAL_STORE_QUALITY_CERTIFIED"] = "0"
     os.environ.setdefault("MESHMEND_USE_HOSTED_3D", "1")
     os.environ.setdefault("MESHMEND_HOSTED_3D_PROVIDER", "meshmend")
     os.environ.setdefault("MESHMEND_MODEL_SERVICE_URL", f"http://127.0.0.1:{args.model_service_port}")

@@ -257,9 +257,10 @@ def detail_geometry_evidence(before: trimesh.Trimesh, after: trimesh.Trimesh) ->
     strong_threshold = float(os.environ.get("MESHMEND_STRONG_DETAIL_MIN_DISPLACEMENT_MM", "0.08"))
     visible_coverage = float(np.mean(measured >= visible_threshold))
     strong_coverage = float(np.mean(measured >= strong_threshold))
-    min_coverage = float(os.environ.get("MESHMEND_MIN_VISIBLE_DETAIL_COVERAGE", "0.015"))
-    min_p99 = float(os.environ.get("MESHMEND_MIN_DETAIL_P99_MM", "0.06"))
-    passed = visible_coverage >= min_coverage and p99 >= min_p99
+    min_coverage = float(os.environ.get("MESHMEND_MIN_VISIBLE_DETAIL_COVERAGE", "0.04"))
+    min_strong_coverage = float(os.environ.get("MESHMEND_MIN_STRONG_DETAIL_COVERAGE", "0.005"))
+    min_p99 = float(os.environ.get("MESHMEND_MIN_DETAIL_P99_MM", "0.08"))
+    passed = visible_coverage >= min_coverage and strong_coverage >= min_strong_coverage and p99 >= min_p99
     score = min(1.0, 0.55 * (visible_coverage / max(min_coverage * 2.5, 1e-8)) + 0.45 * (p99 / max(min_p99 * 1.75, 1e-8)))
     return {
         "passed": bool(passed),
@@ -274,6 +275,7 @@ def detail_geometry_evidence(before: trimesh.Trimesh, after: trimesh.Trimesh) ->
         "visible_coverage": visible_coverage,
         "strong_coverage": strong_coverage,
         "minimum_visible_coverage": min_coverage,
+        "minimum_strong_coverage": min_strong_coverage,
         "minimum_p99_displacement_mm": min_p99,
     }
 
@@ -2430,7 +2432,10 @@ def strict_quality_requested(request: dict[str, Any]) -> bool:
             "store-level", "intricate",
         )
     )
-    return wants_store and os.environ.get("MESHMEND_DISABLE_STORE_QUALITY_GATE", "0").strip().lower() not in {"1", "true", "yes"}
+    # A request explicitly asking for high/studio quality must always be gated.
+    # Debug overrides may affect standard drafts, but must never turn a studio
+    # request into an unlabeled best-effort export.
+    return wants_store
 
 
 def allow_best_effort_export() -> bool:
@@ -2438,16 +2443,9 @@ def allow_best_effort_export() -> bool:
 
 
 def should_raise_quality_gate_failure(request: dict[str, Any], fatal_issues: list[str]) -> bool:
-    if allow_best_effort_export():
-        return False
-    source_workflow = str(request.get("_meshmend_source_workflow") or request.get("workflow") or "text_to_3d")
-    if source_workflow == "image_to_3d" and fatal_issues and all(issue.startswith("below_store_face_target") for issue in fatal_issues):
-        # A detailed image reconstruction can be structurally valid and still
-        # fall short of the configured density target after cleanup/solid repair.
-        # Treat this as a report warning, not a backend crash; topology/sheet/
-        # manifold/component failures remain fatal.
-        return False
-    return True
+    if strict_quality_requested(request):
+        return True
+    return not allow_best_effort_export()
 
 
 def fatal_quality_gate_issues(issues: list[str]) -> list[str]:
@@ -2477,6 +2475,11 @@ def fatal_quality_gate_issues(issues: list[str]) -> list[str]:
         "collapsed_bounding_box",
         "excessive_bilateral_asymmetry",
         "studio_quality_score_below_min",
+        "custom_miniature_detail_pipeline_not_applied",
+        "intricate_detail_pipeline_not_applied",
+        "geometry_upscale_not_applied",
+        "hierarchical_semantic_detail_refinement_not_applied",
+        "ai_training_definition_layer_not_applied",
     )
     return [issue for issue in issues if issue.startswith(fatal_prefixes)]
 
@@ -2556,13 +2559,13 @@ def quality_gate_issues(mesh: trimesh.Trimesh, request: dict[str, Any], detail_f
     if float(scores.get("overall", 0.0) or 0.0) < min_score:
         issues.append(f"studio_quality_score_below_min_{float(scores.get('overall', 0.0)):.2f}_min_{min_score:.2f}")
     issues.extend(artifact_salvage_quality_issues(mesh, source_workflow))
-    if synthetic_detail_enabled("MESHMEND_ENABLE_CUSTOM_MINIATURE_DETAIL_PIPELINE", default="1") and not bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline")):
+    if not bool(mesh.metadata.get("meshmend_custom_miniature_detail_pipeline")):
         issues.append("custom_miniature_detail_pipeline_not_applied")
-    if synthetic_detail_enabled("MESHMEND_ENABLE_INTRICATE_DETAIL_PIPELINE", default="1") and not bool(mesh.metadata.get("meshmend_intricate_detail_pipeline")):
+    if not bool(mesh.metadata.get("meshmend_intricate_detail_pipeline")):
         issues.append("intricate_detail_pipeline_not_applied")
-    if synthetic_detail_enabled("MESHMEND_ENABLE_GEOMETRY_UPSCALE", default="1") and not bool(mesh.metadata.get("meshmend_geometry_upscale")):
+    if not bool(mesh.metadata.get("meshmend_geometry_upscale")):
         issues.append("geometry_upscale_not_applied")
-    if synthetic_detail_enabled("MESHMEND_ENABLE_HIERARCHICAL_SEMANTIC_DETAIL", default="1") and humanoid_prompt_requested(request) and not bool(mesh.metadata.get("meshmend_hierarchical_semantic_detail_refinement")):
+    if humanoid_prompt_requested(request) and not bool(mesh.metadata.get("meshmend_hierarchical_semantic_detail_refinement")):
         issues.append("hierarchical_semantic_detail_refinement_not_applied")
     if os.environ.get("MESHMEND_REQUIRE_AI_DEFINITION_LAYER", "0").strip().lower() in {"1", "true", "yes"} and not bool(mesh.metadata.get("meshmend_ai_definition_layer")):
         issues.append("ai_training_definition_layer_not_applied")
@@ -2684,6 +2687,10 @@ def studio_quality_scores(
         + detail_score * weights["detail_faces"]
         + component_score * weights["connected_components"]
     ) / max(total_weight, 1e-8)
+    if not bool(evidence.get("passed")):
+        # Topology, scale, and a large subdivided face count cannot compensate
+        # for absent measurable sculpt detail.
+        overall = 0.0
     return {
         "overall": float(max(0.0, min(1.0, overall))),
         "topology_score": float(topology_score),

@@ -261,11 +261,7 @@ def certified_store_quality_engine(engine: str) -> bool:
 
 
 def strict_studio_gate_enforced() -> bool:
-    """Studio-capable local engines must fail closed instead of releasing best effort meshes."""
-    if os.environ.get("MESHMEND_DISABLE_STORE_QUALITY_GATE", "0").strip().lower() in {"1", "true", "yes", "on"}:
-        return False
-    if os.environ.get("MESHMEND_ALLOW_BEST_EFFORT_EXPORT", "0").strip().lower() in {"1", "true", "yes", "on"}:
-        return False
+    """Studio-capable local engines always fail closed; overrides are draft-only."""
     return True
 
 
@@ -2863,8 +2859,15 @@ def validate_reconstruction_mesh(
     component_faces = sorted((int(len(part.faces)) for part in components), reverse=True)
     component_count = len(component_faces)
     largest_fraction = float(component_faces[0] / len(faces)) if component_faces and len(faces) else 0.0
-    if component_count > 10:
-        failures.append("more_than_10_disconnected_components")
+    # Hunyuan commonly emits a valid dominant body plus separate weapon,
+    # armor, and tiny debris shells. Component count alone does not make the
+    # reconstruction corrupt; the postprocessor is specifically responsible
+    # for pruning and fusing those shells. Keep a generous raw safety ceiling
+    # while retaining the dominant-body check below. The old limit of 10
+    # rejected otherwise usable reconstructions before repair on every retry.
+    max_raw_components = int(os.environ.get("MESHMEND_MAX_RAW_RECONSTRUCTION_COMPONENTS", "64"))
+    if component_count > max_raw_components:
+        failures.append(f"more_than_{max_raw_components}_disconnected_components")
     if len(faces) and largest_fraction < 0.90:
         failures.append("largest_component_below_90_percent_of_faces")
 
@@ -3081,10 +3084,6 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
     if f".{output_format}" not in SUPPORTED_MODEL_SUFFIXES:
         output_format = "stl"
     model_file = output_dir / f"meshmend_hunyuan.{output_format}"
-    write_progress(output_dir, 94, "exporting", f"Exporting {output_format.upper()} model")
-    export_mesh(mesh, model_file)
-    if not model_file.exists():
-        raise RuntimeError("Hunyuan3D completed but no mesh file was exported")
     mesh_info = mesh_export_info(mesh, request)
     report_info = postprocess_report.to_dict()
     report_info["prompt_landmark_overlay"] = prompt_landmark_overlay
@@ -3141,6 +3140,15 @@ def run_hunyuan_image_to_3d(image_path: Path, request: dict[str, Any], output_di
     except Exception:
         pass
     studio_quality_certified = bool(report_info.get("production_ready")) and not bool(mdl_issues)
+    if production_quality_requested(request) and not studio_quality_certified:
+        raise RuntimeError(
+            "store-quality gate: final mesh is not detailed/certified; refusing export: "
+            + "; ".join([*list(report_info.get("quality_gate_issues") or []), *mdl_issues])
+        )
+    write_progress(output_dir, 94, "exporting", f"Exporting {output_format.upper()} model")
+    export_mesh(mesh, model_file)
+    if not model_file.exists():
+        raise RuntimeError("Hunyuan3D completed but no mesh file was exported")
     base_form_validated = bool(raw_validation_report.get("passed"))
     return {
         "model_file": model_file.name,
@@ -3555,7 +3563,8 @@ def hunyuan_generation_kwargs(request: dict[str, Any]) -> dict[str, Any]:
     wants_studio = studio_mode_requested(request)
     steps = os.environ.get("MESHMEND_HUNYUAN3D_STEPS", "").strip()
     default_steps = 96 if wants_studio else (64 if wants_8k else (36 if workflow == "image_to_3d" else 20))
-    kwargs["num_inference_steps"] = int(steps or default_steps)
+    minimum_steps = 64 if wants_studio else (48 if wants_8k else 1)
+    kwargs["num_inference_steps"] = max(minimum_steps, int(steps or default_steps))
     guidance = os.environ.get("MESHMEND_HUNYUAN3D_GUIDANCE", "").strip()
     if guidance:
         kwargs["guidance_scale"] = float(guidance)
@@ -3575,7 +3584,8 @@ def hunyuan_generation_kwargs(request: dict[str, Any]) -> dict[str, Any]:
     # density in the range MeshMend can actually repair and detail locally.
     default_octree = 512 if wants_8k and workflow == "image_to_3d" else (384 if wants_8k or workflow == "image_to_3d" else 256)
     min_octree = int(os.environ.get("MESHMEND_HUNYUAN3D_MIN_OCTREE_RESOLUTION", "256" if wants_studio else "128"))
-    kwargs["octree_resolution"] = max(min_octree, int(octree_resolution or default_octree))
+    studio_min_octree = 384 if wants_studio else (256 if wants_8k else min_octree)
+    kwargs["octree_resolution"] = max(min_octree, studio_min_octree, int(octree_resolution or default_octree))
     target_polycount = int(request.get("target_polycount") or 0)
     if target_polycount:
         # Hunyuan versions expose different names for this knob. Prefer the
